@@ -8,6 +8,7 @@ use App\Models\SgoOrigin;
 use App\Models\SgoPromotion;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class SgoProduct extends Model
 {
@@ -28,11 +29,23 @@ class SgoProduct extends Model
         'title_seo',
         'description_seo',
         'keyword_seo',
+        'image',
     ];
 
 
     public $timestamps = true;
+    public static function boot()
+    {
+        parent::boot();
 
+        static::creating(function ($model) {
+            if ($model->isDirty('name')) $model->slug = Str::slug($model->name);
+        });
+
+        static::updating(function ($model) {
+            if ($model->isDirty('name')) $model->slug = Str::slug($model->name);
+        });
+    }
     public function category()
     {
         return $this->belongsTo(SgoCategory::class, 'category_id');

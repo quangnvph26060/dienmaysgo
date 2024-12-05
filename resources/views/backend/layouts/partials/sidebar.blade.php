@@ -39,6 +39,27 @@
                 </li>
 
                 <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#product">
+                        <i class="fas fa-pen-square"></i>
+                        <p>Sản phẩm</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="product">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="{{ route('admin.product.index') }}">
+                                    <span class="sub-item">Danh sách sản phẩm</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.product.add') }}">
+                                    <span class="sub-item">Thêm mới sản phẩm</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#base">
                         <i class="fas fa-pen-square"></i>
                         <p>Danh mục</p>

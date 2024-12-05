@@ -8,6 +8,11 @@
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
 
     @include('backend.layouts.partials.styles')
+    <style>
+        table tr td:last-child {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>

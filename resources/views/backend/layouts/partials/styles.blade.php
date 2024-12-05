@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="{{ asset('backend/assets/css/bootstrap.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('backend/assets/css/plugins.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('backend/assets/css/kaiadmin.min.css') }}" />
+<link rel="stylesheet" href="{{ asset('backend/assets/css/image-uploader.min.css') }}" />
 
 <!-- CSS Just for demo purpose, don't include it in your project -->
 <link rel="stylesheet" href="{{ asset('backend/assets/css/demo.css') }}" />
