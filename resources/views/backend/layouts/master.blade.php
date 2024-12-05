@@ -64,13 +64,13 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="">Danh mục</a>
+                                <a href="">{{ $page ? $page: Dashboard }}</a>
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Thêm</a>
+                                <a href="#">{{ $title ? $title: Dashboard }}</a>
                             </li>
                         </ul>
                     </div>

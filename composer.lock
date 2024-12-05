@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d8ec0ea8d9f5e9b0240c9335611c4f6",
+    "content-hash": "416ba451632bcf2e77891b802165c37d",
     "packages": [
         {
             "name": "brick/math",
@@ -6059,6 +6059,7 @@
             ],
             "abandoned": "php-flasher/flasher-toastr-laravel",
             "time": "2022-12-25T01:08:34+00:00"
+
         }
     ],
     "packages-dev": [

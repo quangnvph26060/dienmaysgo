@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', function () {
-    return view('backend.category.create');
+    return view('backend.dashboard');
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {

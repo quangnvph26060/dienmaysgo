@@ -25,6 +25,10 @@
 <script src="{{ asset('backend/assets/js/core/popper.min.js') }}"></script>
 <script src="{{ asset('backend/assets/js/core/bootstrap.min.js') }}"></script>
 
+<!-- Toastr JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
 <!-- jQuery Scrollbar -->
 <script src="{{ asset('backend/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
 

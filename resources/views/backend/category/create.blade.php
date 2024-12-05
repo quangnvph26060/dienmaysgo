@@ -6,62 +6,89 @@
 
 <div class="card">
     <div class="card-body">
-        <form action="#" method="POST" enctype="multipart/form-data">
-            <!-- Danh mục -->
-            <h5 class="section-title">Thông tin Danh mục</h5>
-            <div class="mb-3">
-                <label for="name" class="form-label">Tên danh mục</label>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Nhập tên danh mục"
-                    required />
-            </div>
+        <form
+        action="{{ isset($category) ? route('admin.category.update', $category->id) : route('admin.category.store') }}"
+        method="POST" enctype="multipart/form-data">
+        @csrf
 
-            <div class="mb-3">
-                <label for="category_parent_id" class="form-label">Danh mục cha</label>
-                <select class="form-select" id="category_parent_id" name="category_parent_id">
-                    <option value="">----- Chọn danh mục cha -----</option>
-                    <option value="1">Danh mục 1</option>
-                    <option value="2">Danh mục 2</option>
-                </select>
-            </div>
+        <!-- Danh mục -->
+        <h5 class="section-title">Thông tin Danh mục</h5>
+        <div class="mb-3">
+            <label for="name" class="form-label">Tên danh mục</label>
+            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Nhập tên danh mục"
+                value="{{ old('name', $category->name ?? '') }}"  />
+            @error('name')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <div class="mb-3">
-                <label for="description_short" class="form-label">Mô tả ngắn</label>
-                <textarea class="form-control" id="description_short" name="description_short" rows="3"
-                    placeholder="Nhập mô tả"></textarea>
-            </div>
+        <div class="mb-3">
+            <label for="category_parent_id" class="form-label">Danh mục cha</label>
+            <select class="form-select @error('category_parent_id') is-invalid @enderror" id="category_parent_id" name="category_parent_id">
+                <option value="">----- Chọn danh mục cha -----</option>
+                @foreach($parentCategories as $parentCategory)
+                <option value="{{ $parentCategory->id }}" {{ isset($category) && $category->category_parent_id == $parentCategory->id ? 'selected' : '' }}>
+                    {{ $parentCategory->name }}
+                </option>
+                @endforeach
+            </select>
+        </div>
 
-            <div class="mb-3">
-                <label for="description" class="form-label">Mô tả chi tiết</label>
-                <textarea class="form-control" id="description" name="description" rows="3"
-                    placeholder="Nhập mô tả"></textarea>
-            </div>
+        <div class="mb-3">
+            <label for="description_short" class="form-label">Mô tả ngắn</label>
+            <textarea class="form-control @error('description_short') is-invalid @enderror" id="description_short" name="description_short" rows="3"
+                placeholder="Nhập mô tả">{{ old('description_short', $category->description_short ?? '') }}</textarea>
+            @error('description_short')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <!-- SEO -->
-            <h5 class="section-title">Thông tin SEO</h5>
-            <div class="mb-3">
-                <label for="title_seo" class="form-label">Tiêu đề SEO</label>
-                <input type="text" class="form-control" id="title_seo" name="title_seo"
-                    placeholder="Nhập tiêu đề SEO" />
-            </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Mô tả chi tiết</label>
+            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3"
+                placeholder="Nhập mô tả">{{ old('description', $category->description ?? '') }}</textarea>
+            @error('description')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <div class="mb-3">
-                <label for="description_seo" class="form-label">Mô tả SEO</label>
-                <textarea class="form-control" id="description_seo" name="description_seo" rows="2"
-                    placeholder="Nhập mô tả SEO"></textarea>
-            </div>
+        <!-- SEO -->
+        <h5 class="section-title">Thông tin SEO</h5>
+        <div class="mb-3">
+            <label for="title_seo" class="form-label">Tiêu đề SEO</label>
+            <input type="text" class="form-control @error('title_seo') is-invalid @enderror" id="title_seo" name="title_seo" placeholder="Nhập tiêu đề SEO"
+                value="{{ old('title_seo', $category->title_seo ?? '') }}" />
+            @error('title_seo')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <div class="mb-3">
-                <label for="keyword_seo" class="form-label">Tư khóa SEO</label>
-                <input type="text" class="form-control" id="keyword_seo" name="keyword_seo"
-                    placeholder="Nhập từ khóa SEO" />
-            </div>
+        <div class="mb-3">
+            <label for="description_seo" class="form-label">Mô tả SEO</label>
+            <textarea class="form-control @error('description_seo') is-invalid @enderror" id="description_seo" name="description_seo" rows="2"
+                placeholder="Nhập mô tả SEO">{{ old('description_seo', $category->description_seo ?? '') }}</textarea>
+            @error('description_seo')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <!-- Buttons -->
-            <div class="d-flex justify-content-end">
-                <button type="reset" class="btn btn-danger me-2">Hủy</button>
-                <button type="submit" class="btn btn-success">Lưu</button>
-            </div>
-        </form>
+        <div class="mb-3">
+            <label for="keyword_seo" class="form-label">Từ khóa SEO</label>
+            <input type="text" class="form-control @error('keyword_seo') is-invalid @enderror" id="keyword_seo" name="keyword_seo"
+                placeholder="Nhập từ khóa SEO" value="{{ old('keyword_seo', $category->keyword_seo ?? '') }}" />
+            @error('keyword_seo')
+            <div class="invalid-feedback">{{ $message }}</div>
+            @enderror
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-end">
+            <button type="reset" class="btn btn-danger me-2">Hủy</button>
+            <button type="submit" class="btn btn-success">{{ isset($category) ? 'Cập nhật' : 'Lưu' }}</button>
+        </div>
+    </form>
+
+
     </div>
 </div>
 
