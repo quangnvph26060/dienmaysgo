@@ -19,8 +19,8 @@
         },
     });
 </script>
-
 <!--   Core JS Files   -->
+
 <script src="{{ asset('backend/assets/js/core/jquery-3.7.1.min.js') }}"></script>
 <script src="{{ asset('backend/assets/js/core/popper.min.js') }}"></script>
 <script src="{{ asset('backend/assets/js/core/bootstrap.min.js') }}"></script>
@@ -126,8 +126,6 @@
         //In slug ra textbox có id “slug”
         $('#slug').val(slug);
     }
-
-
 </script>
 
 @include('backend/includes/alert')
