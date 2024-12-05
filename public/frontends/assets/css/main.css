@@ -1626,3 +1626,40 @@ input[type="radio"] {
 #button-contact-vr.active #gom-all-in-one .button-contact {
     margin-left: 100%;
 }
+
+.contact{
+    background: #EB0218;
+    padding: 7px 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+.contact:hover{
+    color: rgb(223, 223, 223);
+}
+
+.header-cart .cart-link {
+    position: relative;
+    color: #333; /* Màu biểu tượng */
+    text-decoration: none;
+  }
+
+  .header-cart .cart-link:hover {
+    color: #000; /* Màu biểu tượng khi hover */
+  }
+
+  .header-cart .cart-count {
+    text-align: center;
+    transform: translate(-70%, -50%);
+    background-color: #dc3545; /* Màu nền badge */
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 0.1rem 0.3rem;
+    border-radius: 50%;
+    visibility: visible; /* Luôn hiển thị */
+    opacity: 1; /* Đảm bảo không bị mờ */
+    transition: all 0.2s ease-in-out; /* Hiệu ứng khi hover */
+  }
+
+
