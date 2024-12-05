@@ -28,8 +28,18 @@ class SgoCategory extends Model
         return $this->belongsTo(SgoCategory::class, 'category_parent_id');
     }
 
-    public function child()
+    public function childrens()
     {
         return $this->hasMany(SgoCategory::class, 'category_parent_id');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(SgoProduct::class, 'category_id');
+    }
+
+    public function scopeParent()
+    {
+        return $this->whereNull('category_parent_id')->with(['childrens', 'products.promotion'])->whereHas('products')->latest()->limit(3);
     }
 }

@@ -90,6 +90,12 @@
             <!-- Right Elements -->
             <div class="flex-col hide-for-medium flex-right">
                 <ul class="header-nav header-nav-main nav nav-right nav-uppercase">
+                    <li class="header-cart relative">
+                        <a href="" class="cart-link position-relative">
+                            <i class="bi bi-cart3" style="font-size: 1.5rem"></i>
+                            <span class="cart-count rounded-pill bg-danger"> 3 </span>
+                        </a>
+                    </li>
                     <li class="html header-button-1">
                         <div class="header-button">
                             <a href="tel:0914379989" class="button primary" style="border-radius: 99px">
@@ -107,7 +113,8 @@
                         <div class="header-button">
                             <a href="https://dienmaysgo.com/gio-hang/"
                                 class="header-cart-link off-canvas-toggle nav-top-link icon primary button circle is-small"
-                                data-open="#cart-popup" data-class="off-canvas-cart" title="Cart" data-pos="right">
+                                data-open="#cart-popup" data-class="off-canvas-cart" title="Cart"
+                                data-pos="right">
                                 <i class="icon-shopping-bag" data-icon-label="0"> </i>
                             </a>
                         </div>
@@ -140,111 +147,33 @@
                         class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-21 current_page_item menu-item-1080 active menu-item-design-default">
                         <a href="https://dienmaysgo.com/" aria-current="page" class="nav-top-link">Trang chủ</a>
                     </li>
-                    <li id="menu-item-1606"
-                        class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1606 menu-item-design-default has-dropdown">
-                        <a href="https://dienmaysgo.com/may-phat-dien/" class="nav-top-link" aria-expanded="false"
-                            aria-haspopup="menu">Máy phát điện<i class="icon-angle-down"></i></a>
-                        <ul class="sub-menu nav-dropdown nav-dropdown-default">
-                            <li id="menu-item-1607"
-                                class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1607 nav-dropdown-col">
-                                <a href="https://dienmaysgo.com/may-phat-dien-elemax/">Máy phát điện Elemax</a>
-                                <ul class="sub-menu nav-column nav-dropdown-default">
-                                    <li id="menu-item-1608"
-                                        class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-1608">
-                                        <a href="https://dienmaysgo.com/may-phat-dien-honda/">Máy phát điện Honda</a>
-                                    </li>
-                                    <li id="menu-item-1609"
-                                        class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-1609">
-                                        <a href="https://dienmaysgo.com/may-phat-dien-huyndai/">Máy phát điện
-                                            Huyndai</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li id="menu-item-1610"
-                                class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1610 nav-dropdown-col">
-                                <a href="https://dienmaysgo.com/may-phat-dien-koop/">Máy phát điện Koop</a>
-                                <ul class="sub-menu nav-column nav-dropdown-default">
-                                    <li id="menu-item-1611"
-                                        class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-1611">
-                                        <a href="https://dienmaysgo.com/may-phat-dien-kubota/">Máy phát điện Kubota</a>
-                                    </li>
-                                    <li id="menu-item-1612"
-                                        class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-1612">
-                                        <a href="https://dienmaysgo.com/may-phat-dien-mitsubishi/">Máy phát điện
-                                            Mitsubishi</a>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li id="menu-item-2589"
-                                class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-2589 nav-dropdown-col">
-                                <a href="https://dienmaysgo.com/may-phat-dien-denyo/">Máy phát điện Denyo</a>
-                                <ul class="sub-menu nav-column nav-dropdown-default">
-                                    <li id="menu-item-2590"
-                                        class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2590">
-                                        <a href="https://dienmaysgo.com/may-phat-dien/?filter_nhien-lieu=diesel">Máy
-                                            phát điện chạy dầu</a>
-                                    </li>
-                                    <li id="menu-item-2591"
-                                        class="menu-item menu-item-type-custom menu-item-object-custom menu-item-2591">
-                                        <a href="https://dienmaysgo.com/may-phat-dien/?filter_nhien-lieu=xang">Máy phát
-                                            điện chạy xăng</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li id="menu-item-1615"
-                        class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1615 menu-item-design-default has-dropdown">
-                        <a href="https://dienmaysgo.com/may-nen-khi/" class="nav-top-link" aria-expanded="false"
-                            aria-haspopup="menu">Máy nén khí<i class="icon-angle-down"></i></a>
-                        <ul class="sub-menu nav-dropdown nav-dropdown-default">
-                            <li id="menu-item-1616"
-                                class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-1616">
-                                <a href="https://dienmaysgo.com/may-nen-khi-puma/">Máy nén khí Puma</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li id="menu-item-1617"
-                        class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1617 menu-item-design-default has-dropdown">
-                        <a href="https://dienmaysgo.com/dong-co/" class="nav-top-link" aria-expanded="false"
-                            aria-haspopup="menu">Động cơ<i class="icon-angle-down"></i></a>
-                        <ul class="sub-menu nav-dropdown nav-dropdown-default">
-                            <li id="menu-item-1618"
-                                class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1618 nav-dropdown-col">
-                                <a href="https://dienmaysgo.com/dong-co-honda/">Động cơ Honda</a>
-                                <ul class="sub-menu nav-column nav-dropdown-default">
-                                    <li id="menu-item-1619"
-                                        class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-1619">
-                                        <a href="https://dienmaysgo.com/dong-co-koop/">Động cơ Koop</a>
-                                    </li>
-                                    <li id="menu-item-1620"
-                                        class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-1620">
-                                        <a href="https://dienmaysgo.com/dong-co-robin/">Động cơ Robin</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li id="menu-item-1761"
-                        class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1761 menu-item-design-default has-dropdown">
-                        <a href="https://dienmaysgo.com/may-bom-nuoc/" class="nav-top-link" aria-expanded="false"
-                            aria-haspopup="menu">Máy bơm nước<i class="icon-angle-down"></i></a>
-                        <ul class="sub-menu nav-dropdown nav-dropdown-default">
-                            <li id="menu-item-1762"
-                                class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-1762">
-                                <a href="https://dienmaysgo.com/may-bom-nuoc-koop/">Máy bơm nước Koop</a>
-                            </li>
-                            <li id="menu-item-1763"
-                                class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-1763">
-                                <a href="https://dienmaysgo.com/may-bom-nuoc-tsurumi/">Máy bơm nước Tsurumi</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li id="menu-item-2165"
-                        class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-2165 menu-item-design-default">
-                        <a href="https://dienmaysgo.com/do-gia-dung-thong-minh/" class="nav-top-link">Đồ gia dụng
-                            thông minh</a>
-                    </li>
+
+
+                    @foreach ($cataloguesMenu as $item)
+                        <li
+                            class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1606 menu-item-design-default has-dropdown">
+                            <a href="https://dienmaysgo.com/may-phat-dien/" class="nav-top-link"
+                                aria-expanded="false" aria-haspopup="menu">{{ $item->name }}<i
+                                    class="icon-angle-down"></i></a>
+                            <ul class="sub-menu nav-dropdown nav-dropdown-default">
+
+                                @if ($item->childrens->isNotEmpty())
+                                    @foreach ($item->childrens as $child)
+                                        <li id="menu-item-1607"
+                                            class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1607 nav-dropdown-col">
+                                            <a
+                                                href="https://dienmaysgo.com/may-phat-dien-elemax/">{{ $child->name }}</a>
+                                            <ul class="sub-menu nav-column nav-dropdown-default">
+                                                @include('frontends.layouts.partials.menu-item', [
+                                                    'item' => $child,
+                                                ])
+                                            </ul>
+                                        </li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </li>
+                    @endforeach
                 </ul>
             </div>
 
