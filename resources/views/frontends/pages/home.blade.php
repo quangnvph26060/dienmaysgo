@@ -52,6 +52,7 @@
     </div>
 @endsection
 
+
 @push('styles')
     <style>
         #section_1222005858 {

@@ -17,6 +17,7 @@
             @include('frontends.layouts.partials.header')
         </header>
 
+        @include('frontends.layouts.partials.popup-cart')
 
         <main id="main" class="">
             @yield('content')
@@ -36,7 +37,7 @@
     <!-- if gom all in one show -->
     <div id="button-contact-vr" class="">
         @include('frontends.layouts.partials.btn-contacts')
-    <!-- end v3 class gom-all-in-one -->
+        <!-- end v3 class gom-all-in-one -->
     </div>
 
 
