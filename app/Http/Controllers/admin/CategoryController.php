@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\SgoCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 
 class CategoryController extends Controller
@@ -63,12 +64,50 @@ class CategoryController extends Controller
 
     public function store(CategoryRequest $request)
     {
-        dd($request->all());
+        try {
+            // Tạo danh mục mới
+            $category = SgoCategory::create([
+                'name' => $request->input('name'),
+                'slug' => Str::slug($request->input('name')),
+                'category_parent_id' => $request->input('category_parent_id'),
+                'description_short' => $request->input('description_short'),
+                'description' => $request->input('description'),
+                'title_seo' => $request->input('title_seo'),
+                'description_seo' => $request->input('description_seo'),
+                'keyword_seo' => $request->input('keyword_seo'),
+            ]);
+
+            // Trả về thông báo thành công
+            return redirect()->route('admin.category.index')->with('success', 'Danh mục đã được thêm thành công');
+        } catch (\Exception $e) {
+            // Nếu có lỗi, bắt và hiển thị thông báo lỗi
+            return redirect()->route('admin.category.index')->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+        }
     }
 
-    public function update(CategoryRequest $request)
+    public function update(CategoryRequest $request, $id)
     {
-        dd($request->all());
+        try {
+
+            $category = SgoCategory::find($id);
+
+            $category->update([
+                'name' => $request->input('name'),
+                'slug' => Str::slug($request->input('name')),
+                'category_parent_id' => $request->input('category_parent_id'),
+                'description_short' => $request->input('description_short'),
+                'description' => $request->input('description'),
+                'title_seo' => $request->input('title_seo'),
+                'description_seo' => $request->input('description_seo'),
+                'keyword_seo' => $request->input('keyword_seo'),
+            ]);
+
+            // Trả về thông báo thành công
+            return redirect()->route('admin.category.index')->with('success', 'Danh mục đã được sửa thành công');
+        } catch (\Exception $e) {
+            // Nếu có lỗi, bắt và hiển thị thông báo lỗi
+            return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+        }
     }
 
     public function delete($id){

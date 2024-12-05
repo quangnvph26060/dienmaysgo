@@ -23,8 +23,10 @@ class CategoryRequest extends FormRequest
      */
     public function rules()
     {
+        $categoryId = $this->route('id'); // Lấy id từ URL route (giả sử route có tên 'admin.category.update')
+
         return [
-            'name' => 'required|max:255', // Tên danh mục là bắt buộc và có độ dài tối đa 255 ký tự
+            'name' => 'required|unique:sgo_category,name,' . $categoryId . '|max:255', // Tên danh mục là bắt buộc và có độ dài tối đa 255 ký tự
             'description' => 'required',
             'title_seo' => 'required|string|max:255', // Tiêu đề SEO là tùy chọn, nếu có thì phải là chuỗi và tối đa 255 ký tự
             'description_seo' => 'required|string|max:1000', // Mô tả SEO là tùy chọn, nếu có thì phải là chuỗi và tối đa 1000 ký tự

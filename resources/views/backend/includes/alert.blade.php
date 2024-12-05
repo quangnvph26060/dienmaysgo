@@ -3,7 +3,7 @@
         //Notify
         $.notify({
             icon: '{{ session()->has('success') ? 'fa fa-check' : 'fa fa-times' }}',
-            title: 'Kaiadmin',
+            title: '{{ isset($title) ? $title : "Thông báo" }}',
             message: '{{ session()->has('success') ? session('success') : session('error') }}',
         }, {
             type: 'secondary',
