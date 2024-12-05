@@ -1,8 +1,10 @@
 <?php
 
-use App\Http\Controllers\admin\CategoryController;
-use App\Http\Controllers\admin\ProductController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,3 +41,31 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('delete/{id}', [CategoryController::class, 'delete'])->name('delete');
     });
 });
+
+Route::post('upload', function (Request $request) {
+    if ($request->hasFile('upload')) {
+        $image = $request->file('upload');
+        $filename = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+        Storage::disk('public')->put('images' . '/' . $filename, file_get_contents($image->getPathName()));
+        $path = 'images' . '/' . $filename;
+        $url = Storage::url($path);
+        $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+        $msg = 'Image uploaded successfully';
+
+        return "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg');</script>";
+    }
+})->name('ckeditor.upload');
+
+
+
+route::get('filemanager-browse', function () {
+
+    $paths = glob(public_path('storage/images/*'));
+
+    $fileName = [];
+
+    foreach ($paths as $path) {
+        $fileName[] = basename($path);
+    }
+    return view('browser-server', compact('fileName'));
+})->name('filemanager.browse');
