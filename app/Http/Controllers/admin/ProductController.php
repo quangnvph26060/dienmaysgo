@@ -28,7 +28,7 @@ class ProductController extends Controller
                 ->addColumn('action', function ($row) {
                     return '
                     <div class="btn-group">
-                        <button class="btn btn-danger btn-sm delete-product-btn" data-url="' . route('admin.product.delete', $row->id) . '">
+                        <button class="btn btn-danger btn-sm delete-btn" data-url="' . route('admin.product.delete', $row->id) . '">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
@@ -48,16 +48,6 @@ class ProductController extends Controller
         $fuels = SgoFuel::pluck('name', 'id');
         $promotions = SgoPromotion::pluck('name', 'id');
         return view('backend.product.add', compact('categories', 'origins', 'fuels', 'promotions'));
-    }
-
-    public function edit($id)
-    {
-        $categories = SgoCategory::pluck('name', 'id');
-        $origins = SgoOrigin::pluck('name', 'id');
-        $fuels = SgoFuel::pluck('name', 'id');
-        $promotions = SgoPromotion::pluck('name', 'id');
-        $product = SgoProduct::findOrFail($id);
-        return view('backend.product.edit', compact('categories', 'origins', 'fuels', 'promotions', 'product'));
     }
 
     public function store(Request $request)
@@ -95,7 +85,7 @@ class ProductController extends Controller
                 'image' => 'Ảnh sản phẩm',
             ]
         );
-
+        
         try {
 
             if ($request->hasFile('image')) {
@@ -110,86 +100,6 @@ class ProductController extends Controller
             DB::rollBack();
             Log::error('Failed to create new product: ' . $e->getMessage());
             return back();
-        }
-    }
-    public function update(Request $request, $id)
-    {
-        $product = SgoProduct::findOrFail($id);
-        $validated  = $request->validate(
-            [
-                'name' => 'required|unique:sgo_products,name,' . $id,
-                'price' => 'nullable|numeric',
-                'quantity' => 'nullable|numeric',
-                'category_id' => 'required',
-                'origin_id' => 'required',
-                'fuel_id' => 'required',
-                'promotions_id' => 'nullable',
-                'description_short' => 'required',
-                'description' => 'required',
-                'title_seo' => 'nullable',
-                'description_seo' => 'nullable',
-                'keyword_seo' => 'nullable',
-                'image' => 'required|mimes:jpeg,png,gif,svg,webp,jfif|max:2048',
-            ],
-            __('request.messages'),
-            [
-                'name' => 'Tên sản phẩm',
-                'price' => 'Giá sản phẩm',
-                'quantity' => 'Số lượng sản phẩm',
-                'category_id' => 'Danh mục sản phẩm',
-                'origin_id' => 'Xuất xứ sản phẩm',
-                'fuel_id' => 'Nhiên liệu sản phẩm',
-                'promtions_id' => 'Chương trình khuyến mãi',
-                'description_short' => 'Mô tả ngắn của sản phẩm',
-                'description' => 'Mô tả sản phẩm',
-                'title_seo' => 'Tiêu đề SEO sản phẩm',
-                'description_seo' => 'Mô tả SEO sản phẩm',
-                'keyword_seo' => 'Từ khóa SEO sản phẩm',
-                'image' => 'Ảnh sản phẩm',
-            ]
-        );
-
-        try {
-
-            if ($request->hasFile('image')) {
-                deleteImage($product->image);
-
-                $validated['image'] = saveImage($request, 'image', 'products_main_images');
-            }
-
-            $product->update($validated);
-            toastr()->success('Thêm sản phẩm mới thành công');
-
-            return redirect()->route('admin.product.index');
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::error('Failed to create new product: ' . $e->getMessage());
-            return back();
-        }
-    }
-
-    public function delete($id)
-    {
-        $product = SgoProduct::findOrFail($id);
-        DB::beginTransaction();
-
-        try {
-            if ($product->image) {
-                deleteImage($product->image);
-            }
-
-            $product->delete();
-            DB::commit();
-            return response()->json([
-                'status' => true,
-                'message' => 'Xóa sản phẩm thành công'
-            ]);
-        } catch (Exception $e) {
-            Log::error('Failed to delete this Product: ' . $e->getMessage());
-            return response()->json([
-                'success' => false,
-                'message' => 'Xóa sản phẩm thất bại',
-            ]);
         }
     }
 }
