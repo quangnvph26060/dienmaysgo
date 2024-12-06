@@ -113,7 +113,7 @@
                                 <div class="form-group mb-3">
                                     <label for="description_seo" class="form-label">Mô tả SEO</label>
 
-                                    <textarea name="description_seo" id="description_seo" cols="30" rows="6" placeholder="Nhập mô tả SEO"
+                                    <textarea style="resize: vertical;" name="description_seo" id="description_seo" cols="30" rows="6" placeholder="Nhập mô tả SEO"
                                         class="form-control">
                             </textarea>
 

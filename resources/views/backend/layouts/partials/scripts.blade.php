@@ -59,7 +59,7 @@
 
 <!-- Kaiadmin DEMO methods, don't include it in your project! -->
 <script src="{{ asset('backend/assets/js/setting-demo.js') }}"></script>
-<script src="{{ asset('backend/assets/js/demo.js') }}"></script>
+{{-- <script src="{{ asset('backend/assets/js/demo.js') }}"></script> --}}
 
 
 @include('backend/includes/alert')
