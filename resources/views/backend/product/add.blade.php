@@ -46,10 +46,10 @@
             </li>
         </ul>
 
-        <div class="tab-content" id="productTabsContent">
-            <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
-                <div class="row">
-                    <div class="col-lg-9">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="tab-content" id="productTabsContent">
+                    <div class="tab-pane fade show active" id="info" role="tabpanel" aria-labelledby="info-tab">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -102,139 +102,144 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-3">
-
+                    <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
                         <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Danh mục</h3>
-                            </div>
-
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <select class="form-select" name="category_id" id="category_id">
-                                        <option value="">Chọn danh mục</option>
-                                        @foreach ($categories as $id => $name)
-                                            <option value="{{ $id }}">{{ $name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Xuất xứ</h3>
-                            </div>
-
                             <div class="card-body">
                                 <div class="form-group mb-3">
-                                    <select class="form-select" name="origin_id" id="origin_id">
-                                        <option value="">Chọn xuất xứ</option>
-                                        @foreach ($origins as $id => $name)
-                                            <option value="{{ $id }}">{{ $name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="title_seo" class="form-label">Tiêu đề SEO</label>
+                                    <input type="text" class="form-control" name="title_seo" id="title_seo"
+                                        placeholder="Nhập tiêu đề SEO">
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Nhiên liệu</h3>
-                            </div>
-
-                            <div class="card-body">
                                 <div class="form-group mb-3">
-                                    <select class="form-select" name="fuel_id" id="fue_id">
-                                        <option value="">Chọn nhiên liệu</option>
-                                        @foreach ($fuels as $id => $name)
-                                            <option value="{{ $id }}">{{ $name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="description_seo" class="form-label">Mô tả SEO</label>
+
+                                    <textarea name="description_seo" id="description_seo" cols="30" rows="6" placeholder="Nhập mô tả SEO"
+                                        class="form-control">
+                            </textarea>
+
                                 </div>
-
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Khuyến mãi</h3>
-                            </div>
-
-                            <div class="card-body">
                                 <div class="form-group mb-3">
-                                    <select class="form-select" name="promotions_id" id="promotions_id">
-                                        <option value="">Chọn chương trình</option>
-                                        @foreach ($promotions as $id => $name)
-                                            <option value="{{ $id }}">{{ $name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="keyword_seo" class="form-label">Từ khóa SEO</label>
+
+
+                                    <input type="text" name="keyword_seo" id="keyword_seo"
+                                        class="form-control @error('keyword_seo') is-invalid @enderror" value=""
+                                        placeholder="Nhập từ khóa SEO">
+
                                 </div>
-
-                            </div>
-                        </div>
-
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Ảnh đại diện</h3>
-                            </div>
-
-                            <div class="card-body">
-                                <div class="form-group mb-0">
-                                    <img src="" alt="" id="image_main" class="img-fluid w-100 mb-3">
-                                    <a href="#" id="select_main_image" style="text-decoration: underline">Chọn ảnh
-                                        tiêu biểu</a>
-
-                                    <input type="file" name="image" id="image" class="form-control"
-                                        style="display: none">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="" >
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Xác nhận</button>
                             </div>
                         </div>
                     </div>
+
+                    <div class="tab-pane fade" id="album" role="tabpanel" aria-labelledby="album-tab">
+                        <div class="form-group mb-3">
+                            <div class="input-images pb-3"></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
-            <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
+            <div class="col-lg-3">
+
                 <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh mục</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <select class="form-select" name="category_id" id="category_id">
+                                <option value="">Chọn danh mục</option>
+                                @foreach ($categories as $id => $name)
+                                    <option value="{{ $id }}">{{ $name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Xuất xứ</h3>
+                    </div>
+
                     <div class="card-body">
                         <div class="form-group mb-3">
-                            <label for="title_seo" class="form-label">Tiêu đề SEO</label>
-                            <input type="text" class="form-control" name="title_seo" id="title_seo"
-                                placeholder="Nhập tiêu đề SEO">
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="description_seo" class="form-label">Mô tả SEO</label>
-
-                            <textarea name="description_seo" id="description_seo" cols="30" rows="6" placeholder="Nhập mô tả SEO"
-                                class="form-control">
-                    </textarea>
-
-                        </div>
-                        <div class="form-group mb-3">
-                            <label for="keyword_seo" class="form-label">Từ khóa SEO</label>
-
-
-                            <input type="text" name="keyword_seo" id="keyword_seo"
-                                class="form-control @error('keyword_seo') is-invalid @enderror" value=""
-                                placeholder="Nhập từ khóa SEO">
-
+                            <select class="form-select" name="origin_id" id="origin_id">
+                                <option value="">Chọn xuất xứ</option>
+                                @foreach ($origins as $id => $name)
+                                    <option value="{{ $id }}">{{ $name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="tab-pane fade" id="album" role="tabpanel" aria-labelledby="album-tab">
-                <div class="form-group mb-3">
-                    <div class="input-images pb-3"></div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Nhiên liệu</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <select class="form-select" name="fuel_id" id="fue_id">
+                                <option value="">Chọn nhiên liệu</option>
+                                @foreach ($fuels as $id => $name)
+                                    <option value="{{ $id }}">{{ $name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Khuyến mãi</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="form-group mb-3">
+                            <select class="form-select" name="promotions_id" id="promotions_id">
+                                <option value="">Chọn chương trình</option>
+                                @foreach ($promotions as $id => $name)
+                                    <option value="{{ $id }}">{{ $name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Ảnh đại diện</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="form-group mb-0">
+                            <img src="" alt="" id="image_main" class="img-fluid w-100 mb-3">
+                            <a href="#" id="select_main_image" style="text-decoration: underline">Chọn ảnh
+                                tiêu biểu</a>
+
+                            <input type="file" name="image" id="image" class="form-control"
+                                style="display: none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Xác nhận</button>
+                    </div>
                 </div>
             </div>
         </div>
+
+
+
+
     </form>
 
 @endsection
@@ -242,7 +247,7 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-fileinput/js/fileinput.min.js"></script>
 
-    <script src="{{asset('backend/assets/js/image-uploader.min.js')}}"></script>
+    <script src="{{ asset('backend/assets/js/image-uploader.min.js') }}"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
 
@@ -339,10 +344,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-fileinput/css/fileinput.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet" />
 
-    <link rel="stylesheet" href="{{asset('backend/assets/css/image-uploader.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('backend/assets/css/image-uploader.min.css') }}">
 
     <style>
-        .upload-text:hover{
+        .upload-text:hover {
             cursor: pointer;
         }
     </style>
