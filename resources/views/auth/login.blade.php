@@ -21,7 +21,8 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/6.0.0-beta1/css/tempus-dominus.min.css">
 
     <link rel="stylesheet" type="text/css" href="{{ asset('auth/css/style.css') }}">
-    <link rel="icon" href="https://sgomedia.vn/wp-content/uploads/2023/06/cropped-favicon-sgomedia-32x32.png" type="image/x-icon">
+    <link rel="icon" href="https://sgomedia.vn/wp-content/uploads/2023/06/cropped-favicon-sgomedia-32x32.png"
+        type="image/x-icon">
     <!-- js -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.marquee/1.5.0/jquery.marquee.min.js"></script>
@@ -131,16 +132,16 @@
                     </ul>
                 </div>
             </div>
-        {{-- 11111111 --}}
+
             <div class="ct_right">
                 <div class="ct_right_ct">
                     <!-- Nút chuyển ngôn ngữ -->
-                    <span class="login_translate pointer" onclick="changeLanguage('vi')" id="vi-language">
+                    {{-- <span class="login_translate pointer" onclick="changeLanguage('vi')" id="vi-language">
                         <img src="{{ asset('auth/images/translate-tv-icon.png') }}" style="width: 25px; ">Tiếng việt
                     </span>
                     <span class="login_translate pointer" onclick="changeLanguage('en')" id="en-language">
                         <img src="{{ asset('auth/images/lg_icon_translate.png') }}" style="width: 25px;">English
-                    </span>
+                    </span> --}}
 
                     <figure class="logo_login">
                         <a href="#"><img style="width: 210px !important"
@@ -149,23 +150,41 @@
                     </figure>
 
                     <div class="login_form">
-                        <form method="post" accept-charset="utf-8" id="form-login"
-                            action="https://id.tenten.vn/loginNavi">
+                        <form method="post" accept-charset="utf-8" id="form-login" action="">
+                            @csrf
+
                             <div class="form_group" style="display: block;">
                                 <div class="list_group">
-                                    <input type="text" name="username" autocomplete="off" required=""
-                                        placeholder="Username hoặc Email" id="username">
+                                    <input type="text" name="email" autocomplete="off" required=""
+                                        placeholder="Địa chỉ Email" id="email" value="{{ old('email') }}">
                                     <figure class="feild_icon"><img
                                             src="{{ asset('auth/images/login_user_icon.png') }}"></figure>
-                                </div>
-                                <div class="list_group">
-                                    <input type="password" name="password" autocomplete="off" required=""
-                                        placeholder="Password" id="password">
-                                    <figure class="feild_icon"><img
-                                            src="{{ asset('auth/images/login_padlock_icon.png') }}"></figure>
+                                    @error('email')
+                                        <small class="text-danger mb-2">{{ $message }}</small>
+                                    @enderror
                                 </div>
 
-                                <div class="captcha-container">
+                                <div class="list_group">
+                                    <input type="password" name="password" autocomplete="off" required=""
+                                        placeholder="Password" id="password" value="{{ old('password') }}">
+                                    <figure class="feild_icon"><img
+                                            src="{{ asset('auth/images/login_padlock_icon.png') }}"></figure>
+                                    @error('password')
+                                        <small class="text-danger mb-2">{{ $message }}</small>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-check my-3">
+                                        <input class="form-check-input" name="remember" type="checkbox" id="remember">
+                                        <label class="form-check-label" for="remember">
+                                            Lưu mật khẩu
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                                {{-- <div class="captcha-container">
                                     <div class="captcha-checkbox">
                                         <input type="checkbox" id="captcha">
                                         <label for="captcha" style="font-size: 14px" id="captcha-label">Xác minh bạn là
@@ -181,12 +200,19 @@
                                                 khoản</a>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
+
+                                {!! NoCaptcha::renderJs() !!}
+                                {!! NoCaptcha::display() !!}
+
+                                @error('g-recaptcha-response')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
 
                                 <div class="btn">
                                     <button type="submit" name="button"
                                         class="loginButton loginButtonGg remove-msg before-login disabled_button"
-                                        id="submitBtn" disabled>Đăng nhập</button>
+                                        id="submitBtn">Đăng nhập</button>
                                 </div>
                             </div>
 
@@ -215,75 +241,74 @@
 
 <script type="text/javascript">
     $(document).ready(function() {
-            $(document).on('click', '.remove-msg', function(e) {
-                $('.message').text('');
-            });
-            $(document).on('click', '.forgot-pass', function(e) {
-                $('#form-forgot-pass').find('.form_group').removeAttr('style');
-                if ($('#form-forgot-pass').find('.form_group').hasClass('active')) {
-                    $('#form-forgot-pass').find('.form_group').removeClass('active');
-                }
-                $('#form-login').addClass('hidden');
-                $('.create_forget_acc').addClass('hidden');
-                $('.other_login').addClass('hidden');
-            });
+        $(document).on('click', '.remove-msg', function(e) {
+            $('.message').text('');
+        });
+        $(document).on('click', '.forgot-pass', function(e) {
+            $('#form-forgot-pass').find('.form_group').removeAttr('style');
+            if ($('#form-forgot-pass').find('.form_group').hasClass('active')) {
+                $('#form-forgot-pass').find('.form_group').removeClass('active');
+            }
+            $('#form-login').addClass('hidden');
+            $('.create_forget_acc').addClass('hidden');
+            $('.other_login').addClass('hidden');
+        });
+        $(document).on('click', '.btn-back-login', function(e) {
+            $('#form-forgot-pass').find('.form_group').addClass('active');
+            $('#form-login').removeClass('hidden');
+            $('.create_forget_acc').removeClass('hidden');
+            $('.other_login').removeClass('hidden');
+        });
+        if (window.location.pathname == "/forgot-password-navi") {
             $(document).on('click', '.btn-back-login', function(e) {
+                $('#form-login').find('.form_group').removeAttr('style');
+                $('#form-forgot-pass').find('.form_group').removeAttr('style');
                 $('#form-forgot-pass').find('.form_group').addClass('active');
                 $('#form-login').removeClass('hidden');
-                $('.create_forget_acc').removeClass('hidden');
-                $('.other_login').removeClass('hidden');
+                $('.create_forget_acc').removeAttr('style');
+                $('.other_login').removeAttr('style');
             });
-            if (window.location.pathname == "/forgot-password-navi") {
-                $(document).on('click', '.btn-back-login', function(e) {
-                    $('#form-login').find('.form_group').removeAttr('style');
-                    $('#form-forgot-pass').find('.form_group').removeAttr('style');
-                    $('#form-forgot-pass').find('.form_group').addClass('active');
-                    $('#form-login').removeClass('hidden');
-                    $('.create_forget_acc').removeAttr('style');
-                    $('.other_login').removeAttr('style');
-                });
-            }
+        }
 
-            $(document).on('click', '.loginButtonGg', function(e) {
-                e.preventDefault();
-                jQuery(this).attr('disabled',true);
-                jQuery(this).addClass('disabled_button');
-                var form = document.getElementById('form-login');
-                form.submit();
-            });
-
-            $(document).on('click', '.forgotPasswordButton', function(e) {
-                e.preventDefault();
-                jQuery('.loginButton').attr('disabled',true);
-                jQuery('.loginButton').addClass('disabled_button');
-                var form = document.getElementById('form-forgot-pass');
-                form.submit();
-            });
+        $(document).on('click', '.loginButtonGg', function(e) {
+            e.preventDefault();
+            jQuery(this).attr('disabled', true);
+            jQuery(this).addClass('disabled_button');
+            var form = document.getElementById('form-login');
+            form.submit();
         });
 
-        function onTurnstileLoad(){
-            jQuery('.loginButton').removeClass('disabled_button');
-            jQuery('.loginButton').attr('disabled',false);
-        }
+        $(document).on('click', '.forgotPasswordButton', function(e) {
+            e.preventDefault();
+            jQuery('.loginButton').attr('disabled', true);
+            jQuery('.loginButton').addClass('disabled_button');
+            var form = document.getElementById('form-forgot-pass');
+            form.submit();
+        });
+    });
+
+    function onTurnstileLoad() {
+        jQuery('.loginButton').removeClass('disabled_button');
+        jQuery('.loginButton').attr('disabled', false);
+    }
 </script>
 
 <script>
     // Lắng nghe sự kiện thay đổi của checkbox
-document.getElementById("captcha").addEventListener("change", function() {
-    var submitBtn = document.getElementById("submitBtn");
+    document.getElementById("captcha").addEventListener("change", function() {
+        var submitBtn = document.getElementById("submitBtn");
 
-    // Kiểm tra xem checkbox đã được chọn chưa
-    if (this.checked) {
-        // Nếu đã chọn, xóa class disabled_button và kích hoạt nút
-        submitBtn.classList.remove("disabled_button");
-        submitBtn.disabled = false;  // Kích hoạt nút
-    } else {
-        // Nếu không chọn, thêm lại class disabled_button và vô hiệu hóa nút
-        submitBtn.classList.add("disabled_button");
-        submitBtn.disabled = true;  // Vô hiệu hóa nút
-    }
-});
-
+        // Kiểm tra xem checkbox đã được chọn chưa
+        if (this.checked) {
+            // Nếu đã chọn, xóa class disabled_button và kích hoạt nút
+            submitBtn.classList.remove("disabled_button");
+            submitBtn.disabled = false; // Kích hoạt nút
+        } else {
+            // Nếu không chọn, thêm lại class disabled_button và vô hiệu hóa nút
+            submitBtn.classList.add("disabled_button");
+            submitBtn.disabled = true; // Vô hiệu hóa nút
+        }
+    });
 </script>
 <script>
     function changeLanguage(language) {
@@ -321,5 +346,4 @@ document.getElementById("captcha").addEventListener("change", function() {
     window.onload = function() {
         changeLanguage('vi');
     };
-
 </script>

@@ -219,9 +219,7 @@ input[type="datetime-local"],
 input[type="month"] {
   -webkit-appearance: listbox; }
 
-textarea {
-  overflow: auto;
-  resize: vertical; }
+
 
 fieldset {
   min-width: 0;

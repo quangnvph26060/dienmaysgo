@@ -8,6 +8,7 @@
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
 
     @include('backend.layouts.partials.styles')
+
     <style>
         table tr td:last-child {
             text-align: center;
@@ -64,13 +65,17 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
+
                                 <a href="">{{ isset($page) ? $page : 'Dashboard' }}</a>
+
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
+
                                 <a href="">{{ isset($title) ? $title : 'Dashboard' }}</a>
+
                             </li>
                         </ul>
                     </div>

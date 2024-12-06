@@ -1,25 +1,25 @@
-<div class="container-fluid d-flex justify-content-between">
-    <nav class="pull-left">
+<footer class="footer">
+    <div class="container-fluid d-flex justify-content-between">
+      <nav class="pull-left">
         <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link" href="http://www.themekita.com">
-                    ThemeKita
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#"> Help </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#"> Licenses </a>
-            </li>
+          <li class="nav-item">
+            <a class="nav-link" href="3">
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">  </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">  </a>
+          </li>
         </ul>
-    </nav>
-    <div class="copyright">
+      </nav>
+      <div class="copyright">
         2024, made with <i class="fa fa-heart heart text-danger"></i> by
-        <a href="http://www.themekita.com">ThemeKita</a>
+        <a href="https://sgomedia.vn" target="_blank">SGO Việt Nam</a>
+      </div>
+      <div>
+        <a target="_blank" href="#"></a>.
+      </div>
     </div>
-    <div>
-        Distributed by
-        <a target="_blank" href="https://themewagon.com/">ThemeWagon</a>.
-    </div>
-</div>
+  </footer>

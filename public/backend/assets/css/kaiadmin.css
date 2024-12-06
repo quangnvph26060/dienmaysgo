@@ -328,7 +328,7 @@ body {
 .main-header {
   background: #ffffff;
   min-height: 60px;
-  width: calc(100% - 250px);
+  width: calc(100% - 280px);
   position: fixed;
   z-index: 1001; }
   .main-header .navbar-header {
@@ -2516,7 +2516,7 @@ label {
   font-size: 1rem;
   border-color: #ebedf2;
   padding: 0.6rem 1rem;
-  height: inherit !important;
+  /* height: inherit !important; */
   border-width: 2px; }
   .form-control:focus {
     border-color: #3e93ff; }
@@ -2690,7 +2690,9 @@ label {
   margin-bottom: 0.5rem;
   color: #495057;
   font-size: 1rem;
-  white-space: nowrap; }
+  white-space: nowrap;
+  font-weight: bold !important;
+}
 
 .form-group-default {
   background-color: #ffffff;
