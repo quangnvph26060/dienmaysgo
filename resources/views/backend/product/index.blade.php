@@ -42,10 +42,6 @@
                     {
                         data: 'name',
                         name: 'name',
-                        render: function(data, type, row) {
-                            return '<a href="' + '{{ route('admin.product.detail', '__id__') }}'
-                                .replace('__id__', row.id) + '">' + data + '</a>';
-                        }
                     },
                     {
                         data: 'quantity',
@@ -67,13 +63,8 @@
                     [0, 'desc']
                 ],
             });
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
 
-            $(document).on('click', '.delete-product-btn', function() {
+            $(document).on('click', '.delete-btn', function() {
                 let url = $(this).data('url');
 
                 Swal.fire({
@@ -83,7 +74,7 @@
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Có',
+                    confirmButtonText: 'Có, xóa!',
                     cancelButtonText: 'Không'
                 }).then((result) => {
                     if (result.isConfirmed) {
