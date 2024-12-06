@@ -14,33 +14,27 @@
                             sizes="(max-width: 680px) 100vw, 680px" />
                     </a>
                 </div>
-                <div
-                class="image-tools is-small top right show-on-hover"
-              >
-                <div class="wishlist-icon">
-                  <button
-                    class="wishlist-button button is-outline circle icon"
-                    aria-label="Wishlist"
-                  >
-                    <i class="icon-shopping-cart"></i>
-                  </button>
-                  <div class="wishlist-popup dark">
-                    <div
-                      class="yith-wcwl-add-to-wishlist add-to-wishlist-2189 wishlist-fragment on-first-load"
-                    >
-                      <!-- ADD TO WISHLIST -->
+                <div class="image-tools is-small top right show-on-hover">
+                    <div class="wishlist-icon">
+                        <button data-id="{{ $product->id }}" class="wishlist-button button is-outline circle icon add-to-cart"
+                            aria-label="Wishlist">
+                            <i class="icon-shopping-cart"></i>
+                        </button>
+                        <div class="wishlist-popup dark">
+                            <div class="yith-wcwl-add-to-wishlist add-to-wishlist-2189 wishlist-fragment on-first-load">
+                                <!-- ADD TO WISHLIST -->
 
-                      <div class="yith-wcwl-add-button">
-                          <i class="yith-wcwl-icon fa fa-heart-o"></i>
-                          <span>Thêm giỏ hàng</span>
-                        </a>
-                      </div>
+                                <div class="yith-wcwl-add-button">
+                                    <i class="yith-wcwl-icon fa fa-heart-o"></i>
+                                    <span>Thêm giỏ hàng</span>
+                                    </a>
+                                </div>
 
-                      <!-- COUNT TEXT -->
+                                <!-- COUNT TEXT -->
+                            </div>
+                        </div>
                     </div>
-                  </div>
                 </div>
-              </div>
                 <div class="image-tools grid-tools text-center hide-for-small bottom hover-slide-in show-on-hover">
                 </div>
             </div>
@@ -72,7 +66,8 @@
                                     </bdi>
                                 @endif
                             @else
-                                <a href="" class="contact">Liên hệ <span class="bi bi-telephone" style="margin-left: 3px"></span></a>
+                                <a href="" class="contact">Liên hệ <span class="bi bi-telephone"
+                                        style="margin-left: 3px"></span></a>
                             @endif
                         </span>
                     </span>
