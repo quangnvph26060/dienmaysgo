@@ -4,12 +4,12 @@
 <div class="content">
     <!-- Bảng danh sách danh mục -->
     <div class="category-list">
-        <table class="table table-striped table-hover" id="categoryTable">
+        <table class="table table-striped table-hover" id="originTable">
             <thead>
                 <tr>
-                    <th>Tên danh mục</th>
-                    <th>Mô tả</th>
-                    <th>Danh mục cha</th>
+                    <th>Tiêu đề</th>
+                    <th>Hình ảnh</th>
+                    <th>Nội dung</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -20,47 +20,53 @@
 
 @push('styles')
 <style>
-    td a{
+    td a {
         padding: 8px 11px !important;
         border-radius: 5px;
         color: white;
         display: inline-block;
     }
-    .edit{
+
+    .edit {
         background: #ffc107;
         margin: 0px 15px;
     }
-    .delete{
+
+    .delete {
         background: #dc3545;
         padding: 8px 12px !important;
     }
 </style>
-{{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+{{--
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" rel="stylesheet"> --}}
 @endpush
 
 @push('scripts')
-{{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script> --}}
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#categoryTable').DataTable({
+        $('#originTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('admin.category.index') }}',
+            ajax: '{{ route('admin.news.index') }}',
             columns: [
-                { data: 'name', name: 'name' },
-                { data: 'description', name: 'description' },
-                { data: 'parent_name', name: 'parent_name', title: 'Danh mục cha' },
+                { data: 'title', name: 'title' },
+                { data: 'image', name: 'image' },
+                { data: 'content', name: 'content', render: function(data, type, row) {
+                return data;  // Không cần xử lý thêm, vì dữ liệu đã là HTML
+            }},
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ],
             columnDefs: [
                 { width: '20%', targets: 0 }, // Cột Name chiếm 20% độ rộng bảng
-                { width: '45%', targets: 1 }, // Cột Description chiếm 30%
-                { width: '20%', targets: 2 }, // Cột Category Parent ID chiếm 25%
-                { width: '15%', targets: 3 }  // Cột Actions chiếm 25%
+                { width: '15%', targets: 1 },
+                { width: '45%', targets: 2 }, // Cột Description chiếm 30%
+                { width: '20%', targets: 3 }, // Cột Category Parent ID chiếm 25%
             ],
             pagingType: "full_numbers", // Kiểu phân trang
             language: {

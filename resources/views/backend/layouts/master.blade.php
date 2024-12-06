@@ -65,13 +65,17 @@
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                {{-- <a href="">{{ $page ? $page: Dashboard }}</a> --}}
+
+                                <a href="">{{ isset($page) ? $page : 'Dashboard' }}</a>
+
                             </li>
                             <li class="separator">
                                 <i class="icon-arrow-right"></i>
                             </li>
                             <li class="nav-item">
-                                {{-- <a href="#">{{ $title ? $title: Dashboard }}</a> --}}
+
+                                <a href="">{{ isset($title) ? $title : 'Dashboard' }}</a>
+
                             </li>
                         </ul>
                     </div>
