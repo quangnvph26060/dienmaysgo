@@ -12,6 +12,7 @@ class SgoNews extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'content',
         'image',
         'is_published',

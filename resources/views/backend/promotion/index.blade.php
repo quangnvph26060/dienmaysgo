@@ -7,9 +7,9 @@
         <table class="table table-striped table-hover" id="categoryTable">
             <thead>
                 <tr>
-                    <th>Tên danh mục</th>
+                    <th>Khuyến mãi </th>
+                    <th>Discount </th>
                     <th>Mô tả</th>
-                    <th>Danh mục cha</th>
                     <th>Hành động</th>
                 </tr>
             </thead>
@@ -40,7 +40,8 @@
 @endpush
 
 @push('scripts')
-{{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script> --}}
 
@@ -49,17 +50,17 @@
         $('#categoryTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: '{{ route('admin.category.index') }}',
+            ajax: '{{ route('admin.promotion.index') }}',
             columns: [
                 { data: 'name', name: 'name' },
+                { data: 'discount', name: 'discount' },
                 { data: 'description', name: 'description' },
-                { data: 'parent_name', name: 'parent_name', title: 'Danh mục cha' },
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ],
             columnDefs: [
                 { width: '20%', targets: 0 }, // Cột Name chiếm 20% độ rộng bảng
-                { width: '45%', targets: 1 }, // Cột Description chiếm 30%
-                { width: '20%', targets: 2 }, // Cột Category Parent ID chiếm 25%
+                { width: '20%', targets: 1 }, // Cột Description chiếm 30%
+                { width: '45%', targets: 2 }, // Cột Category Parent ID chiếm 25%
                 { width: '15%', targets: 3 }  // Cột Actions chiếm 25%
             ],
             pagingType: "full_numbers", // Kiểu phân trang
