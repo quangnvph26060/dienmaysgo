@@ -250,7 +250,7 @@
                         </li>
                         <li>
 
-                            <a class="dropdown-item" href="#">Logout</a>
+                            <a class="dropdown-item" href="{{route('admin.logout')}}">Logout</a>
                         </li>
                     </div>
                 </ul>
