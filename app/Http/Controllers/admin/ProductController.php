@@ -52,40 +52,41 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        $validated  = $request->validate(
+            [
+                'name' => 'required|unique:sgo_products',
+                'price' => 'nullable|numeric',
+                'quantity' => 'nullable|numeric',
+                'category_id' => 'required',
+                'origin_id' => 'required',
+                'fuel_id' => 'required',
+                'promotions_id' => 'nullable',
+                'description_short' => 'required',
+                'description' => 'required',
+                'title_seo' => 'nullable',
+                'description_seo' => 'nullable',
+                'keyword_seo' => 'nullable',
+                'image' => 'required|mimes:jpeg,png,gif,svg,webp,jfif|max:2048',
+            ],
+            __('request.messages'),
+            [
+                'name' => 'Tên sản phẩm',
+                'price' => 'Giá sản phẩm',
+                'quantity' => 'Số lượng sản phẩm',
+                'category_id' => 'Danh mục sản phẩm',
+                'origin_id' => 'Xuất xứ sản phẩm',
+                'fuel_id' => 'Nhiên liệu sản phẩm',
+                'promtions_id' => 'Chương trình khuyến mãi',
+                'description_short' => 'Mô tả ngắn của sản phẩm',
+                'description' => 'Mô tả sản phẩm',
+                'title_seo' => 'Tiêu đề SEO sản phẩm',
+                'description_seo' => 'Mô tả SEO sản phẩm',
+                'keyword_seo' => 'Từ khóa SEO sản phẩm',
+                'image' => 'Ảnh sản phẩm',
+            ]
+        );
+        
         try {
-            $validated  = $request->validate(
-                [
-                    'name' => 'required|unique:sgo_products',
-                    'price' => 'nullable|numeric',
-                    'quantity' => 'nullable|numeric',
-                    'category_id' => 'required',
-                    'origin_id' => 'required',
-                    'fuel_id' => 'required',
-                    'promotions_id' => 'nullable',
-                    'description_short' => 'required',
-                    'description' => 'required',
-                    'title_seo' => 'nullable',
-                    'description_seo' => 'nullable',
-                    'keyword_seo' => 'nullable',
-                    'image' => 'required|mimes:jpeg,png,gif,svg,webp,jfif|max:2048',
-                ],
-                __('request.messages'),
-                [
-                    'name' => 'Tên sản phẩm',
-                    'price' => 'Giá sản phẩm',
-                    'quantity' => 'Số lượng sản phẩm',
-                    'category_id' => 'Danh mục sản phẩm',
-                    'origin_id' => 'Xuất xứ sản phẩm',
-                    'fuel_id' => 'Nhiên liệu sản phẩm',
-                    'promtions_id' => 'Chương trình khuyến mãi',
-                    'description_short' => 'Mô tả ngắn của sản phẩm',
-                    'description' => 'Mô tả sản phẩm',
-                    'title_seo' => 'Tiêu đề SEO sản phẩm',
-                    'description_seo' => 'Mô tả SEO sản phẩm',
-                    'keyword_seo' => 'Từ khóa SEO sản phẩm',
-                    'image' => 'Ảnh sản phẩm',
-                ]
-            );
 
             if ($request->hasFile('image')) {
                 $validated['image'] = saveImage($request, 'image', 'products_main_images');
