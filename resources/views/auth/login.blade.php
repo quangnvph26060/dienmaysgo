@@ -77,6 +77,16 @@
         .login_page .ct_right {
             min-height: 625px;
         }
+
+        .add_phone {
+            display: block;
+            text-align: right;
+        }
+
+        .add_phone:first,
+        {
+        padding: 0px 26px !important;
+    }
     }
 
     @media (min-width: 375px) and (max-width: 550px) {
@@ -89,6 +99,64 @@
             width: 300%;
             height: 300%;
         }
+
+        .add_phone {
+            display: block;
+            text-align: right;
+            /* padding: 0px 29px; */
+        }
+
+        .add_phone:nth-of-type(1),
+        {
+        padding: 0px 29px;
+    }
+    }
+
+    .support-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .support-item {
+        display: flex;
+        /* justify-content: space-between; */
+        align-items: center;
+        /* margin-bottom: 20px; */
+    }
+
+    .diff_strong {
+        font-weight: bold;
+        color: #fff;
+        flex-shrink: 0;
+        margin-right: 20px;
+    }
+
+    .phone-wrapper {
+        display: flex;
+        flex-direction: column;
+        text-align: right;
+        /* Căn phải */
+    }
+
+    .phone-wrapper span {
+        display: flex;
+        justify-content: flex-end;
+        /* Căn nội dung số điện thoại và chú thích bên phải */
+        align-items: center;
+        gap: 10px;
+        /* Khoảng cách giữa số và chú thích */
+    }
+
+    .normal_strong {
+        font-weight: normal;
+        color: #fff;
+    }
+
+    p {
+        margin: 0;
+        font-size: 14px;
+        color: #ddd;
     }
 </style>
 
@@ -98,38 +166,62 @@
             <div class="ct_left">
                 <h2 class="title_login">Liên hệ với chúng tôi</h2>
                 <div class="ct_left_ct">
-                    <ul>
+                    <ul class="support-list">
                         <li>
-                            <strong class="diff_strong">Hỗ trợ kỹ thuật:</strong>
-                            <span><strong class="normal_strong">(024) 62 927 089</strong>
-                                <p>(24/7)</p>
-                            </span>
+                            <div class="support-item">
+                                <strong class="diff_strong">Hỗ trợ kỹ thuật:</strong>
+                                <div class="phone-wrapper">
+                                    <span>
+                                        <strong class="normal_strong">(024) 62 927 089</strong>
+                                        <p>(24/7)</p>
+                                    </span>
+                                    <span>
+                                        <strong class="normal_strong">0912 399 322</strong>
+                                        <p>(24/7)</p>
+                                    </span>
+                                </div>
+                            </div>
                         </li>
                         <li>
-                            <strong class="diff_strong">Hỗ trợ hoá đơn:</strong>
-                            <span><strong class="normal_strong">0912 399 322</strong>
-                                <p>(8h30 - 18h00)</p>
-                            </span>
+                            <div class="support-item">
+                                <strong class="diff_strong">Hỗ trợ hoá đơn:</strong>
+                                <div class="phone-wrapper">
+                                    <span>
+                                        <strong class="normal_strong">0912 399 322</strong>
+                                        <p>(8h30 - 18h00)</p>
+                                    </span>
+                                    <span>
+                                        <strong class="normal_strong">0912 399 322</strong>
+                                        <p>(8h30 - 18h00)</p>
+                                    </span>
+                                </div>
+                            </div>
                         </li>
                         <li>
-                            <strong class="diff_strong">Hỗ trợ gia hạn:</strong>
-                            <span><strong class="normal_strong"> 0912 399 322</strong>
-                                <p>(8h30 - 18h00)</p>
-                            </span>
+                            <div class="support-item">
+                                <strong class="diff_strong">Hỗ trợ gia hạn:</strong>
+                                <div class="phone-wrapper">
+                                    <span>
+                                        <strong class="normal_strong">0912 399 322</strong>
+                                        <p>(8h30 - 18h00)</p>
+                                    </span>
+                                    <span>
+                                        <strong class="normal_strong">0912 399 322</strong>
+                                        <p>(8h30 - 18h00)</p>
+                                    </span>
+                                </div>
+                            </div>
                         </li>
                         <li>
-                            <strong class="diff_strong">Email:</strong>
-                            <span><strong class="normal_strong">info@sgomedia.vn</strong></span>
+                            <div class="support-item">
+                                <strong class="diff_strong">Email:</strong>
+                                <span>
+                                    <strong class="normal_strong">info@sgomedia.vn</strong>
+                                </span>
+                            </div>
                         </li>
-                        {{-- <li>
-                            <span><strong class="normal_strong">Hỗ trợ đăng ký dịch vụ:</strong>(8h30 -
-                                18h00)</span>
-                            <span class="half_col">Hà Nội: <strong class="normal_strong">(024) 71 089
-                                    999</strong></span>
-                            <span class="half_col">TP.HCM: <strong class="normal_strong">(028) 73 086
-                                    086</strong></span>
-                        </li> --}}
                     </ul>
+
                 </div>
             </div>
 
@@ -160,7 +252,7 @@
                                     <figure class="feild_icon"><img
                                             src="{{ asset('auth/images/login_user_icon.png') }}"></figure>
                                     @error('email')
-                                        <small class="text-danger mb-2">{{ $message }}</small>
+                                    <small class="text-danger mb-2">{{ $message }}</small>
                                     @enderror
                                 </div>
 
@@ -170,7 +262,7 @@
                                     <figure class="feild_icon"><img
                                             src="{{ asset('auth/images/login_padlock_icon.png') }}"></figure>
                                     @error('password')
-                                        <small class="text-danger mb-2">{{ $message }}</small>
+                                    <small class="text-danger mb-2">{{ $message }}</small>
                                     @enderror
                                 </div>
 
@@ -206,7 +298,7 @@
                                 {!! NoCaptcha::display() !!}
 
                                 @error('g-recaptcha-response')
-                                    <small class="text-danger">{{ $message }}</small>
+                                <small class="text-danger">{{ $message }}</small>
                                 @enderror
 
                                 <div class="btn">

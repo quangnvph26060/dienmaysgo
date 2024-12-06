@@ -7,86 +7,111 @@
 <div class="card">
     <div class="card-body">
         <form
-        action="{{ isset($category) ? route('admin.category.update', $category->id) : route('admin.category.store') }}"
-        method="POST" enctype="multipart/form-data">
-        @csrf
+            action="{{ isset($category) ? route('admin.category.update', $category->id) : route('admin.category.store') }}"
+            method="POST" enctype="multipart/form-data">
+            @csrf
 
-        <!-- Danh mục -->
-        <h5 class="section-title">Thông tin Danh mục</h5>
-        <div class="mb-3">
-            <label for="name" class="form-label">Tên danh mục</label>
-            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Nhập tên danh mục"
-                value="{{ old('name', $category->name ?? '') }}"  />
-            @error('name')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+            <!-- Danh mục -->
+            <h5 class="section-title">Thông tin Danh mục</h5>
+            <div class="row">
 
-        <div class="mb-3">
-            <label for="category_parent_id" class="form-label">Danh mục cha</label>
-            <select class="form-select @error('category_parent_id') is-invalid @enderror" id="category_parent_id" name="category_parent_id">
-                <option value="">----- Chọn danh mục cha -----</option>
-                @foreach($parentCategories as $parentCategory)
-                <option value="{{ $parentCategory->id }}" {{ isset($category) && $category->category_parent_id == $parentCategory->id ? 'selected' : '' }}>
-                    {{ $parentCategory->name }}
-                </option>
-                @endforeach
-            </select>
-        </div>
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Tên danh mục</label>
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                            name="name" placeholder="Nhập tên danh mục"
+                            value="{{ old('name', $category->name ?? '') }}" />
+                        @error('name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-        <div class="mb-3">
-            <label for="description_short" class="form-label">Mô tả ngắn</label>
-            <textarea class="form-control @error('description_short') is-invalid @enderror" id="description_short" name="description_short" rows="3"
-                placeholder="Nhập mô tả">{{ old('description_short', $category->description_short ?? '') }}</textarea>
-            @error('description_short')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+                    <div class="mb-3">
+                        <label for="category_parent_id" class="form-label">Danh mục cha</label>
+                        <select class="form-select @error('category_parent_id') is-invalid @enderror"
+                            id="category_parent_id" name="category_parent_id">
+                            <option value="">----- Chọn danh mục cha -----</option>
+                            @foreach($parentCategories as $parentCategory)
+                            <option value="{{ $parentCategory->id }}" {{ isset($category) && $category->
+                                category_parent_id
+                                == $parentCategory->id ? 'selected' : '' }}>
+                                {{ $parentCategory->name }}
+                            </option>
+                            @endforeach
+                        </select>
+                    </div>
 
-        <div class="mb-3">
-            <label for="description" class="form-label">Mô tả chi tiết</label>
-            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3"
-                placeholder="Nhập mô tả">{{ old('description', $category->description ?? '') }}</textarea>
-            @error('description')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+                    <div class="mb-3">
+                        <label for="description_short" class="form-label">Mô tả ngắn</label>
+                        <textarea class="form-control @error('description_short') is-invalid @enderror"
+                            id="description_short" name="description_short" rows="3"
+                            placeholder="Nhập mô tả">{{ old('description_short', $category->description_short ?? '') }}</textarea>
+                        @error('description_short')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-        <!-- SEO -->
-        <h5 class="section-title">Thông tin SEO</h5>
-        <div class="mb-3">
-            <label for="title_seo" class="form-label">Tiêu đề SEO</label>
-            <input type="text" class="form-control @error('title_seo') is-invalid @enderror" id="title_seo" name="title_seo" placeholder="Nhập tiêu đề SEO"
-                value="{{ old('title_seo', $category->title_seo ?? '') }}" />
-            @error('title_seo')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Mô tả chi tiết</label>
+                        <textarea class="form-control @error('description') is-invalid @enderror" id="description"
+                            name="description" rows="3"
+                            placeholder="Nhập mô tả">{{ old('description', $category->description ?? '') }}</textarea>
+                        @error('description')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3" style="text-align: center;display: flex;
+                            flex-direction: column;
+                            align-items: center;">
+                        <label for="image" class="form-label">Ảnh</label>
+                        <input type="file" id="image" name="logo" class="form-control d-none" accept="image/*">
+                        <div id="preview-frame" style="cursor: pointer; border: 1px solid #ccc; padding: 20px; text-align: center;">
+                            <p class="text-muted">Click here to select an image</p>
+                        </div>
 
-        <div class="mb-3">
-            <label for="description_seo" class="form-label">Mô tả SEO</label>
-            <textarea class="form-control @error('description_seo') is-invalid @enderror" id="description_seo" name="description_seo" rows="2"
-                placeholder="Nhập mô tả SEO">{{ old('description_seo', $category->description_seo ?? '') }}</textarea>
-            @error('description_seo')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- SEO -->
+            <h5 class="section-title">Tối ưu SEO</h5>
+            <div class="mb-3">
+                <label for="title_seo" class="form-label">Tiêu đề SEO</label>
+                <input type="text" class="form-control @error('title_seo') is-invalid @enderror" id="title_seo"
+                    name="title_seo" placeholder="Nhập tiêu đề SEO"
+                    value="{{ old('title_seo', $category->title_seo ?? '') }}" />
+                @error('title_seo')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <div class="mb-3">
-            <label for="keyword_seo" class="form-label">Từ khóa SEO</label>
-            <input type="text" class="form-control @error('keyword_seo') is-invalid @enderror" id="keyword_seo" name="keyword_seo"
-                placeholder="Nhập từ khóa SEO" value="{{ old('keyword_seo', $category->keyword_seo ?? '') }}" />
-            @error('keyword_seo')
-            <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
+            <div class="mb-3">
+                <label for="description_seo" class="form-label">Mô tả SEO</label>
+                <textarea class="form-control @error('description_seo') is-invalid @enderror" id="description_seo"
+                    name="description_seo" rows="2"
+                    placeholder="Nhập mô tả SEO">{{ old('description_seo', $category->description_seo ?? '') }}</textarea>
+                @error('description_seo')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-        <!-- Buttons -->
-        <div class="d-flex justify-content-end">
-            <button type="reset" class="btn btn-danger me-2">Hủy</button>
-            <button type="submit" class="btn btn-success">{{ isset($category) ? 'Cập nhật' : 'Lưu' }}</button>
-        </div>
-    </form>
+            <div class="mb-3">
+                <label for="keyword_seo" class="form-label">Từ khóa SEO</label>
+                <input type="text" class="form-control @error('keyword_seo') is-invalid @enderror" id="keyword_seo"
+                    name="keyword_seo" placeholder="Nhập từ khóa SEO"
+                    value="{{ old('keyword_seo', $category->keyword_seo ?? '') }}" />
+                @error('keyword_seo')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-end">
+
+                <button type="submit" class="btn btn-success">{{ isset($category) ? 'Cập nhật' : 'Lưu' }}</button>
+            </div>
+        </form>
 
 
     </div>
@@ -96,9 +121,7 @@
 @endsection
 
 @push('styles')
-<script src="https://cdn.ckeditor.com/4.19.1/standard-all/ckeditor.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
+
 <style>
     .cke_notifications_area {
         display: none;
@@ -154,38 +177,39 @@
         padding: 10px 20px;
         border-radius: 5px;
     }
-</style>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const editorIds = ['description_short', 'description'];
+    #preview-frame {
+        width: 100%;
+        height: 300px;
+        border: 2px dashed #ddd;
+        display: flex;
+        border-radius: 10px;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        margin-top: 10px;
+    }
 
-        editorIds.forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                CKEDITOR.replace(id, {
-                    toolbar: [
-                        { name: 'document', items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
-                        { name: 'clipboard', items: [ 'Undo', 'Redo' ] },
-                        { name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt' ] },
-                        { name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
-                        '/',
-                        { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', '-', 'Subscript', 'Superscript', '-', 'Strike', 'RemoveFormat' ] },
-                        { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
-                        { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
-                        { name: 'insert', items: [ 'Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe' ] },
-                        '/',
-                        { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
-                        { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-                        { name: 'tools', items: [ 'Maximize', 'ShowBlocks', '-' ] },
-                        { name: 'about', items: [ 'About' ] }
-                    ],
-                    extraPlugins: 'font,colorbutton,justify',
-                    fontSize_sizes: '11px;12px;13px;14px;15px;16px;18px;20px;22px;24px;26px;28px;30px;32px;34px;36px',
-                });
-            }
-        });
-    });
+    #preview-frame img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+    }
+    label{
+        font-weight: 600;
+    }
+</style>
+
+@endpush
+
+@push('scripts')
+<script>
+    const BASE_URL = "{{ url('/') }}";
 </script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
+<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+
+<script src="{{ asset('ckfinder_php_3.7.0/ckfinder/ckfinder.js') }}"></script>
 
 <script>
     var $jq = jQuery.noConflict();
@@ -211,6 +235,16 @@
                 }
             }
         });
+        CKEDITOR.replace('description_short', {
+                filebrowserImageUploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
+                filebrowserUploadMethod: 'form',
+            });
+            CKEDITOR.replace('description', {
+                filebrowserImageUploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
+                filebrowserUploadMethod: 'form',
+            });
+
     });
 </script>
+
 @endpush
