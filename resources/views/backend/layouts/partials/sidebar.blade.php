@@ -137,12 +137,12 @@
                     <div class="collapse" id="news">
                         <ul class="nav nav-collapse">
                             <li>
-                                <a href="">
+                                <a href="{{ route('admin.news.index') }}">
                                     <span class="sub-item">Danh sách bài viết</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="">
+                                <a href="{{ route('admin.news.create') }}">
                                     <span class="sub-item">Thêm bài viết</span>
                                 </a>
                             </li>

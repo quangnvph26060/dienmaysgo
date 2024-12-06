@@ -52,7 +52,9 @@
             ajax: '{{ route('admin.category.index') }}',
             columns: [
                 { data: 'name', name: 'name' },
-                { data: 'description', name: 'description' },
+                { data: 'description', name: 'description', render: function(data, type, row) {
+                    return data;  // Không cần xử lý thêm, vì dữ liệu đã là HTML
+                }},
                 { data: 'parent_name', name: 'parent_name', title: 'Danh mục cha' },
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ],

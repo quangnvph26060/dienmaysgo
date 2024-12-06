@@ -52,7 +52,9 @@
             ajax: '{{ route('admin.origin.index') }}',
             columns: [
                 { data: 'name', name: 'name' },
-                { data: 'description', name: 'description' },
+                { data: 'description', name: 'description', render: function(data, type, row) {
+                    return data;  // Không cần xử lý thêm, vì dữ liệu đã là HTML
+                }},
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ],
             columnDefs: [
