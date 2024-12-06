@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\CategoryController;
+use App\Http\Controllers\admin\Auth\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,29 +19,46 @@ use App\Http\Controllers\admin\CategoryController;
 */
 
 
-Route::get('/', function () {
-    return view('backend.dashboard');
-});
+
+
+
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
-    Route::prefix('category')->name('category.')->group(function () {
-        Route::get('', [CategoryController::class, 'index'])->name('index');
-        Route::get('create', [CategoryController::class, 'create'])->name('create');
-        Route::post('create', [CategoryController::class, 'store'])->name('store');
-        Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('edit');
-        Route::post('edit/{id}', [CategoryController::class, 'update'])->name('update');
-        Route::post('delete/{id}', [CategoryController::class, 'delete'])->name('delete');
+    route::middleware('guest')->group(function () {
+        route::get('login', [AuthController::class, 'login'])->name('login');
+        route::post('login', [AuthController::class, 'authenticate']);
     });
-    Route::prefix('product')->name('product.')->group(function () {
-        Route::get('', [ProductController::class, 'index'])->name('index');
-        Route::get('add', [ProductController::class, 'add'])->name('add');
-        Route::post('store', [ProductController::class, 'store'])->name('store');
-        Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('edit');
-        Route::post('edit/{id}', [CategoryController::class, 'update'])->name('update');
-        Route::post('delete/{id}', [CategoryController::class, 'delete'])->name('delete');
+
+    route::middleware('auth')->group(function () {
+
+        Route::get('/', function () {
+            return view('backend.dashboard');
+        })->name('dashboard');
+
+        route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
+        Route::prefix('category')->name('category.')->group(function () {
+            Route::get('', [CategoryController::class, 'index'])->name('index');
+            Route::get('create', [CategoryController::class, 'create'])->name('create');
+            Route::post('create', [CategoryController::class, 'store'])->name('store');
+            Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('edit');
+            Route::post('edit/{id}', [CategoryController::class, 'update'])->name('update');
+            Route::post('delete/{id}', [CategoryController::class, 'delete'])->name('delete');
+        });
+        Route::prefix('product')->name('product.')->group(function () {
+            Route::get('', [ProductController::class, 'index'])->name('index');
+            Route::get('add', [ProductController::class, 'add'])->name('add');
+            Route::post('store', [ProductController::class, 'store'])->name('store');
+            Route::get('edit/{id}', [CategoryController::class, 'edit'])->name('edit');
+            Route::post('edit/{id}', [CategoryController::class, 'update'])->name('update');
+            Route::post('delete/{id}', [CategoryController::class, 'delete'])->name('delete');
+        });
     });
 });
+
+
+
 
 Route::post('upload', function (Request $request) {
     if ($request->hasFile('upload')) {
