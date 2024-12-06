@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\CartController;
 use App\Http\Controllers\Frontends\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 
 route::get('/', [HomeController::class, 'home']);
+
+route::controller(CartController::class)->name('carts.')->group(function () {
+    route::post('carts', 'addToCart')->name('add-to-cart');
+});

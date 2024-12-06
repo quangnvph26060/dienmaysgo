@@ -13,7 +13,7 @@ document.querySelector(".cart-link").addEventListener("click", function (e) {
 });
 
 // Tùy chọn: Đóng popup
-document.querySelector(".mfp-container").addEventListener("click", function () {
+document.querySelector(".mfp-bg").addEventListener("click", function () {
     const popup = document.querySelector(".mfp-content");
 
     console.log(popup);

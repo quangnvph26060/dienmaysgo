@@ -3686,8 +3686,9 @@ img.back-image {
   position: fixed;
   z-index: 1043;
 }
-.mfp-container,
-.mfp-wrap {
+/* ,
+.mfp-wrap */
+.mfp-container {
   height: 100%;
   left: 0;
   top: 0;
