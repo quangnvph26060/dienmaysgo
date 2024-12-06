@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\Auth\AuthController;
+use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\NewsController;
 use App\Http\Controllers\admin\OriginController;
 use App\Http\Controllers\admin\PromotionController;
@@ -87,6 +88,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('edit/{id}', [NewsController::class, 'edit'])->name('edit');
         Route::post('edit/{id}', [NewsController::class, 'update'])->name('update');
         Route::post('delete/{id}', [NewsController::class, 'delete'])->name('delete');
+    });
+    Route::prefix('home')->name('home.')->group(function () {
+        Route::get('', [HomeController::class, 'index'])->name('index');
+        Route::get('create', [HomeController::class, 'create'])->name('create');
+        Route::post('store', [HomeController::class, 'store'])->name('store');
+        Route::get('edit/{id}', [HomeController::class, 'edit'])->name('edit');
+        Route::post('edit/{id}', [HomeController::class, 'update'])->name('update');
+        Route::post('delete/{id}', [HomeController::class, 'delete'])->name('delete');
     });
 });
 
