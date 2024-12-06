@@ -13,6 +13,9 @@
         table tr td:last-child {
             text-align: center;
         }
+        #categoryTable, #originTable{
+            width: 100% !important;
+        }
     </style>
 </head>
 

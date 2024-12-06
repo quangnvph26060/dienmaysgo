@@ -1,16 +1,15 @@
 @extends('backend.layouts.master')
 
 {{-- @section('title', $title) --}}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.default.min.css" rel="stylesheet">
 @section('content')
 <div class="card">
     <div class="card-body">
 
-        <form action="{{ isset($new) ? route('admin.news.update', $new->id) : route('admin.news.store') }}" enctype="multipart/form-data"
-            method="POST">
+        <form action="{{ isset($new) ? route('admin.news.update', $new->id) : route('admin.news.store') }}"
+            enctype="multipart/form-data" method="POST">
             @csrf
             <h5 class="section-title">Thông tin bài viết</h5>
-            <div class="row">
+            <div class="row ">
                 <!-- Form Inputs -->
                 <div class="col-md-8">
                     <div class="mb-3">
@@ -39,25 +38,29 @@
                             align-items: center;">
                         <label for="image" class="form-label">Ảnh</label>
                         <input type="file" id="image" name="image" class="form-control d-none" accept="image/*">
-                        <div id="preview-frame" style="cursor: pointer; border: 1px solid #ccc; padding: 20px; text-align: center;">
+                        <div id="preview-frame"
+                            style="cursor: pointer; border: 1px solid #ccc; padding: 20px; text-align: center;">
                             <p class="text-muted">Click here to select an image</p>
                         </div>
                         @error('image')
-                        <div class="invalid-feedback" style="display: inline-block; font-weight: 600">{{ $message }}</div>
+                        <div class="invalid-feedback" style="display: inline-block; font-weight: 600">{{ $message }}
+                        </div>
                         @enderror
                     </div>
 
-                    <div class="mb-3" style="padding: 0px 30px;">
+                    <div class="mb-3" >
                         <label for="is_published" class="form-label">Trạng thái</label>
                         <select id="is_published" name="is_published" class="form-select">
-                            <option value="1" {{ old('is_published', $new->is_published ?? '') == 1 ? 'selected' : '' }}>Active</option>
-                            <option value="0" {{ old('is_published', $new->is_published ?? '') == 0 ? 'selected' : '' }}>Enabled</option>
+                            <option value="1" {{ old('is_published', $new->is_published ?? '') == 1 ? 'selected' : ''
+                                }}>Active</option>
+                            <option value="0" {{ old('is_published', $new->is_published ?? '') == 0 ? 'selected' : ''
+                                }}>Enabled</option>
                         </select>
 
                     </div>
                 </div>
 
-                <div class="col-md-12">
+                <div class="col-md-12 mt-4">
                     <h5 class="section-title" style="background: #695aec">Thông tin SEO</h5>
                     <div class="mb-3">
                         <label for="title_seo" class="form-label">Tiêu đề SEO</label>
@@ -105,9 +108,7 @@
 @endsection
 
 @push('styles')
-<script src="https://cdn.ckeditor.com/4.19.1/standard-all/ckeditor.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.default.min.css" rel="stylesheet">
 <style>
     .cke_notifications_area {
         display: none;
@@ -165,7 +166,7 @@
     }
 
     #preview-frame {
-        width: 80%;
+        width: 100%;
         height: 240px;
         border: 2px dashed #ddd;
         display: flex;
@@ -181,41 +182,24 @@
         max-height: 100%;
         object-fit: cover;
     }
-    label{
+
+    label {
         font-weight: 600;
     }
 </style>
+@endpush
+
+@push('scripts')
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const editorIds = ['content'];
+    const BASE_URL = "{{ url('/') }}";
+</script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
+<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 
-        editorIds.forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                CKEDITOR.replace(id, {
-                    toolbar: [
-                        { name: 'document', items: [ 'Source', '-', 'Save', 'NewPage', 'Preview', 'Print', '-', 'Templates' ] },
-                        { name: 'clipboard', items: [ 'Undo', 'Redo' ] },
-                        { name: 'editing', items: [ 'Find', 'Replace', '-', 'SelectAll', '-', 'SpellChecker', 'Scayt' ] },
-                        { name: 'forms', items: [ 'Form', 'Checkbox', 'Radio', 'TextField', 'Textarea', 'Select', 'Button', 'ImageButton', 'HiddenField' ] },
-                        '/',
-                        { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', '-', 'Subscript', 'Superscript', '-', 'Strike', 'RemoveFormat' ] },
-                        { name: 'paragraph', items: [ 'NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl', 'Language' ] },
-                        { name: 'links', items: [ 'Link', 'Unlink', 'Anchor' ] },
-                        { name: 'insert', items: [ 'Image', 'Flash', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak', 'Iframe' ] },
-                        '/',
-                        { name: 'styles', items: [ 'Styles', 'Format', 'Font', 'FontSize' ] },
-                        { name: 'colors', items: [ 'TextColor', 'BGColor' ] },
-                        { name: 'tools', items: [ 'Maximize', 'ShowBlocks', '-' ] },
-                        { name: 'about', items: [ 'About' ] }
-                    ],
-                    extraPlugins: 'font,colorbutton,justify',
-                    fontSize_sizes: '11px;12px;13px;14px;15px;16px;18px;20px;22px;24px;26px;28px;30px;32px;34px;36px',
-                });
-            }
-        });
-    });
+<script src="{{ asset('ckfinder_php_3.7.0/ckfinder/ckfinder.js') }}"></script>
 
+<script>
     document.addEventListener("DOMContentLoaded", function() {
     const imageInput = document.getElementById('image');
     const previewFrame = document.getElementById('preview-frame');
@@ -271,8 +255,11 @@
                 }
             }
         });
+
+        CKEDITOR.replace('content', {
+                filebrowserImageUploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
+                filebrowserUploadMethod: 'form',
+            });
     });
 </script>
-
-
 @endpush

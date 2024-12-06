@@ -58,8 +58,8 @@
                 { data: 'title', name: 'title' },
                 { data: 'image', name: 'image' },
                 { data: 'content', name: 'content', render: function(data, type, row) {
-                return data;  // Không cần xử lý thêm, vì dữ liệu đã là HTML
-            }},
+                    return data;  // Không cần xử lý thêm, vì dữ liệu đã là HTML
+                }},
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ],
             columnDefs: [

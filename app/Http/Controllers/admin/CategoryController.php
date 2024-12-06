@@ -24,6 +24,10 @@ class CategoryController extends Controller
 
                     return $row->parent ? $row->parent->name : '--------';
                 })
+                ->addColumn('description', function ($row) {
+                    // Trả về nội dung HTML từ cột content
+                    return $row->description;
+                })
                 ->addColumn('action', function ($row) {
                     return '<div style="display: flex;">
                                 <a href="' . route('admin.category.edit', $row->id) . '" class="btn btn-primary btn-sm edit">
@@ -38,7 +42,7 @@ class CategoryController extends Controller
 
                                 </form>
                             </div>';
-                })->rawColumns(['action'])
+                })->rawColumns(['action', 'description'])
                 ->make(true);
         }
         $page = 'Danh mục';
@@ -70,6 +74,7 @@ class CategoryController extends Controller
                 'name' => $request->input('name'),
                 'slug' => Str::slug($request->input('name')),
                 'category_parent_id' => $request->input('category_parent_id'),
+                'logo' => saveImage($request, 'logo', 'category_images'),
                 'description_short' => $request->input('description_short'),
                 'description' => $request->input('description'),
                 'title_seo' => $request->input('title_seo'),
@@ -91,16 +96,9 @@ class CategoryController extends Controller
 
             $category = SgoCategory::find($id);
 
-            $category->update([
-                'name' => $request->input('name'),
-                'slug' => Str::slug($request->input('name')),
-                'category_parent_id' => $request->input('category_parent_id'),
-                'description_short' => $request->input('description_short'),
-                'description' => $request->input('description'),
-                'title_seo' => $request->input('title_seo'),
-                'description_seo' => $request->input('description_seo'),
-                'keyword_seo' => $request->input('keyword_seo'),
-            ]);
+            $credentials = $request->validated();
+            if ($request->hasFile('logo')) $credentials['logo'] =  saveImage($request, 'logo', 'category_images');
+            $category->update($credentials);
 
             // Trả về thông báo thành công
             return redirect()->route('admin.category.index')->with('success', 'Danh mục đã được sửa thành công');

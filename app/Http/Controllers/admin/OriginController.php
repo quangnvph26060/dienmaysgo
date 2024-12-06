@@ -19,6 +19,10 @@ class OriginController extends Controller
 
             $data = SgoOrigin::select('id', 'name', 'slug', 'description');
             return DataTables::of($data)
+            ->addColumn('description', function ($row) {
+                // Trả về nội dung HTML từ cột content
+                return $row->description;
+            })
                ->addColumn('action', function ($row) {
                     return '<div style="display: flex;">
                                 <a href="' . route('admin.origin.edit', $row->id) . '" class="btn btn-primary btn-sm edit">
@@ -33,7 +37,7 @@ class OriginController extends Controller
 
                                 </form>
                             </div>';
-                })->rawColumns(['action'])
+                })->rawColumns(['action', 'description'])
                 ->make(true);
         }
         $page = 'Xuất xứ';
