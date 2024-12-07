@@ -22,6 +22,8 @@
 <script src="{{ asset('frontends/assets/js/jquery.prettyPhoto.min.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/jquery.yith-wcwl.min.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/custom.js') }}"></script>
+<script src="{{ asset('frontends/assets/js/toastr.min.js') }}"></script>
+
 
 <script>
     jQuery.ajaxSetup({
@@ -65,12 +67,46 @@
         jQuery('.cart_list.product_list_widget').html(_html);
     };
 
-    $(document).on('click', '.remove_from_cart_button', function(e) {
+    const addToCart = () => {
+        jQuery(document).ready(function() {
+            jQuery(document).on('click', '.add-to-cart', function() {
+                const id = jQuery(this).data('id');
+
+
+                jQuery.ajax({
+                    url: "{{ route('carts.add-to-cart') }}",
+                    type: 'POST',
+                    data: {
+                        id: id,
+                    },
+                    success: function(response) {
+                        if (response.status) {
+
+                            toastr.success(response.message);
+                            jQuery('.cart-count').html(response.count)
+                            cartResponse(response.carts)
+                            jQuery('.woocommerce-Price-amount.amount bdi .total').html(
+                                response.total)
+
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        toastr.error('Có lỗi xảy ra! Vui lòng thử lại.');
+                    }
+                });
+
+            });
+        });
+    }
+
+    jQuery(document).on('click', '.remove_from_cart_button', function(e) {
         e.preventDefault();
 
         // Lấy `rowId` từ thuộc tính của nút
-        let rowId = $(this).data('row-id');
-        let parentElement = $(this).closest('li');
+        let rowId = jQuery(this).data('row-id');
+        let parentElement = jQuery(this).closest('li');
 
         console.log(rowId);
 

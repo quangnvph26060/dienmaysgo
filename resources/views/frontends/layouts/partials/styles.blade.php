@@ -7,6 +7,8 @@
 <link rel="stylesheet" href="{{asset('frontends/assets/css/themes/style.css')}}" />
 <link rel="stylesheet" href="{{asset('frontends/assets/css/wc-blocks.css')}}" />
 <link rel="stylesheet" href="{{asset('frontends/assets/css/main.css')}}" />
+<link rel="stylesheet" href="{{asset('frontends/assets/css/toastr.min.css')}}">
+
 
 {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"> --}}
 <link

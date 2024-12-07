@@ -1,8 +1,9 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\CartController;
 use App\Http\Controllers\Frontends\HomeController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Frontends\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +22,9 @@ route::get('/', [HomeController::class, 'home']);
 
 route::controller(CartController::class)->name('carts.')->group(function () {
     route::post('carts', 'addToCart')->name('add-to-cart');
+});
+
+route::controller(ProductController::class)->name('products.')->group(function () {
+    route::get('danh-muc-san-pham/{slug}', 'list')->name('list');
+    route::get('san-pham/{slug}', 'detail')->name('detail');
 });

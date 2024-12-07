@@ -55,41 +55,13 @@
 @push('scripts')
     <script src="{{ asset('frontends/assets/js/toastr.min.js') }}"></script>
     <script>
-        jQuery(document).ready(function() {
-            jQuery(document).on('click', '.add-to-cart', function() {
-                const id = jQuery(this).data('id');
-
-                jQuery.ajax({
-                    url: "{{ route('carts.add-to-cart') }}",
-                    type: 'POST',
-                    data: {
-                        id: id,
-                    },
-                    success: function(response) {
-                        if (response.status) {
-
-                            toastr.success(response.message);
-                            jQuery('.cart-count').html(response.count)
-                            cartResponse(response.carts)
-                            jQuery('.woocommerce-Price-amount.amount bdi .total').html(response.total)
-
-                        } else {
-                            toastr.error(response.message);
-                        }
-                    },
-                    error: function(xhr) {
-                        toastr.error('Có lỗi xảy ra! Vui lòng thử lại.');
-                    }
-                });
-
-            });
-        });
+        addToCart();
     </script>
 @endpush
 
 
 @push('styles')
-    <link rel="stylesheet" href="frontends/assets/css/toastr.min.css">
+    <link rel="stylesheet" href="{{asset('frontends/assets/css/toastr.min.css')}}">
     <style>
         #section_1222005858 {
             padding-top: 0px;

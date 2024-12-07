@@ -4,37 +4,40 @@
         <div class="product-small box has-hover box-normal box-text-bottom">
             <div class="box-image">
                 <div class="image-zoom image-cover" style="padding-top: 100%">
-                    <a href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sh1900/"
+                    <a href="{{ route('products.detail', $product->slug) }}"
                         aria-label="Máy Phát Điện Chạy Xăng Elemax SH1900">
                         <img fetchpriority="high" decoding="async" width="680" height="680"
-                            src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20680%20680%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3C%2Fsvg%3E"
-                            data-src="https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900.jpg"
+                            src="{{ $product->image }}" data-src="{{ $product->image }}"
                             class="lazy-load attachment-original size-original" alt="" srcset=""
-                            data-srcset="https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900.jpg 680w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-300x300.jpg 300w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-100x100.jpg 100w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-600x600.jpg 600w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-150x150.jpg 150w"
                             sizes="(max-width: 680px) 100vw, 680px" />
                     </a>
                 </div>
-                <div class="image-tools is-small top right show-on-hover">
-                    <div class="wishlist-icon">
-                        <button data-id="{{ $product->id }}" class="wishlist-button button is-outline circle icon add-to-cart"
-                            aria-label="Wishlist">
-                            <i class="icon-shopping-cart"></i>
-                        </button>
-                        <div class="wishlist-popup dark">
-                            <div class="yith-wcwl-add-to-wishlist add-to-wishlist-2189 wishlist-fragment on-first-load">
-                                <!-- ADD TO WISHLIST -->
 
-                                <div class="yith-wcwl-add-button">
-                                    <i class="yith-wcwl-icon fa fa-heart-o"></i>
-                                    <span>Thêm giỏ hàng</span>
-                                    </a>
+
+                @if ($product->price > 0)
+                    <div class="image-tools is-small top right show-on-hover">
+                        <div class="wishlist-icon">
+                            <button data-id="{{ $product->id }}"
+                                class="wishlist-button button is-outline circle icon add-to-cart" aria-label="Wishlist">
+                                <i class="icon-shopping-cart"></i>
+                            </button>
+                            <div class="wishlist-popup dark">
+                                <div
+                                    class="yith-wcwl-add-to-wishlist add-to-wishlist-2189 wishlist-fragment on-first-load">
+                                    <!-- ADD TO WISHLIST -->
+
+                                    <div class="yith-wcwl-add-button">
+                                        <i class="yith-wcwl-icon fa fa-heart-o"></i>
+                                        <span>Thêm giỏ hàng</span>
+                                        </a>
+                                    </div>
+
+                                    <!-- COUNT TEXT -->
                                 </div>
-
-                                <!-- COUNT TEXT -->
                             </div>
                         </div>
                     </div>
-                </div>
+                @endif
                 <div class="image-tools grid-tools text-center hide-for-small bottom hover-slide-in show-on-hover">
                 </div>
             </div>
