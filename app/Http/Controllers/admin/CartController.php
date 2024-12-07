@@ -23,7 +23,7 @@ class CartController extends Controller
 
             $requestedQty = $request->qty ?? 1;
 
-            if ($requestedQty > $product->quantity ) {
+            if ($requestedQty > $product->quantity) {
                 return response()->json([
                     'status' => false,
                     'message' => 'Số lượng sản phẩm không đủ!'
@@ -38,11 +38,17 @@ class CartController extends Controller
                         'message' => 'Số lượng sản phẩm không đủ!'
                     ]);
                 }
-
                 Cart::instance('shopping')->update($cartItem->rowId, $cartItem->qty + $requestedQty);
             } else {
-
-                Cart::instance('shopping')->add($product->id, $product->name, $requestedQty, $product->price);
+                Cart::instance('shopping')->add([
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'qty' => $requestedQty,
+                    'price' => $product->price,
+                    'options' => [
+                        'image' => $product->image
+                    ]
+                ]);
             }
 
             $carts = Cart::instance('shopping');

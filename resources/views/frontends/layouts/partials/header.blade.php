@@ -32,7 +32,7 @@
             <!-- Logo -->
             <div id="logo" class="flex-col logo">
                 <!-- Header logo -->
-                <a href="https://dienmaysgo.com/" title="dienmaysgo.com" rel="home">
+                <a href="{{url('/')}}" title="dienmaysgo.com" rel="home">
                     <img width="1020" height="422"
                         src="https://dienmaysgo.com/wp-content/uploads/2023/05/dienmaysgo-1024x424.png"
                         class="header_logo header-logo" alt="dienmaysgo.com" /><img width="1020" height="422"
@@ -61,15 +61,14 @@
                     <li class="header-search-form search-form html relative has-icon">
                         <div class="header-search-form-wrapper">
                             <div class="searchform-wrapper ux-search-box relative form-flat is-normal">
-                                <form role="search" method="get" class="searchform" action="https://dienmaysgo.com/">
+                                <form role="search" method="get" class="searchform" action="{{url('/')}}">
                                     <div class="flex-row relative">
                                         <div class="flex-col flex-grow">
                                             <label class="screen-reader-text"
                                                 for="woocommerce-product-search-field-0">Search for:</label>
                                             <input type="search" id="woocommerce-product-search-field-0"
                                                 class="search-field mb-0" placeholder="Nhập từ khóa tìm kiếm..."
-                                                value="" name="s" />
-                                            <input type="hidden" name="post_type" value="product" />
+                                                value="{{request()->s}}" name="s" />
                                         </div>
                                         <div class="flex-col">
                                             <button type="submit" value="Search"

@@ -1024,7 +1024,7 @@ form {
 }
 .product-info .price ins bdi,
 .product-info .price span.amount {
-    font-size: 20px;
+    font-size: 18px;
     color: #ea0303;
 }
 .product-info .price,
@@ -1628,6 +1628,7 @@ input[type="radio"] {
 }
 
 .contact {
+    font-size: 1rem;
     background: #eb0218;
     padding: 7px 10px;
     border-radius: 5px;
