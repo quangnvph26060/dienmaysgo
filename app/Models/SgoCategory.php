@@ -13,6 +13,7 @@ class SgoCategory extends Model
         'name',
         'slug',
         'description',
+        'description_short',
         'logo',
         'category_parent_id',
         'title_seo',

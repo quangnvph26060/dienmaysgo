@@ -8,7 +8,7 @@
         <form action="{{ isset($new) ? route('admin.news.update', $new->id) : route('admin.news.store') }}"
             enctype="multipart/form-data" method="POST">
             @csrf
-            <h5 class="section-title">Thông tin bài viết</h5>
+            <h5 class="section-title">Thông tin bài viết{{ isset($new)  ? ' : '.$new->titles : ''}}</h5>
             <div class="row ">
                 <!-- Form Inputs -->
                 <div class="col-md-8">

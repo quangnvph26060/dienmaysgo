@@ -12,7 +12,7 @@
             @csrf
 
             <!-- Danh mục -->
-            <h5 class="section-title">Thông tin Danh mục</h5>
+            <h5 class="section-title">Thông tin Danh mục {{ isset($category)  ? ' : '.$category->name : ''}}</h5>
             <div class="row">
 
                 <div class="col-md-8">
@@ -41,15 +41,7 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="description_short" class="form-label">Mô tả ngắn</label>
-                        <textarea class="form-control @error('description_short') is-invalid @enderror"
-                            id="description_short" name="description_short" rows="3"
-                            placeholder="Nhập mô tả">{{ old('description_short', $category->description_short ?? '') }}</textarea>
-                        @error('description_short')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+
 
                     <div class="mb-3">
                         <label for="description" class="form-label">Mô tả chi tiết</label>
@@ -62,15 +54,22 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="mb-3" style="text-align: center;display: flex;
-                            flex-direction: column;
-                            align-items: center;">
-                        <label for="image" class="form-label">Ảnh</label>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Ảnh danh mục</label>
                         <input type="file" id="image" name="logo" class="form-control d-none" accept="image/*">
                         <div id="preview-frame" style="cursor: pointer; border: 1px solid #ccc; padding: 20px; text-align: center;">
                             <p class="text-muted">Click here to select an image</p>
                         </div>
 
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description_short" class="form-label">Mô tả hình ảnh</label>
+                        <textarea class="form-control @error('description_short') is-invalid @enderror" name="description_short" rows="3"
+                            placeholder="Nhập mô tả">{{ old('description_short', $category->description_short ?? '') }}</textarea>
+                        @error('description_short')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
                 </div>
             </div>
@@ -210,7 +209,37 @@
 <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 
 <script src="{{ asset('ckfinder_php_3.7.0/ckfinder/ckfinder.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const imageInput = document.getElementById('image');
+    const previewFrame = document.getElementById('preview-frame');
 
+    // Khi click vào khung preview, kích hoạt input file
+    previewFrame.addEventListener('click', () => {
+        imageInput.click();
+    });
+
+    // Khi chọn file, hiển thị ảnh
+    imageInput.addEventListener('change', function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewFrame.innerHTML = `<img src="${e.target.result}" alt="Selected Image" style="max-width: 100%; height: auto;">`;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewFrame.innerHTML = '<p class="text-muted">Click here to select an image</p>';
+        }
+    });
+
+    // Nếu có ảnh được chọn sẵn (ví dụ: từ trước khi tải lại trang), hiển thị ảnh
+    const currentImageSrc = '{{ old("image", asset("storage/" . ($category->logo ?? ""))) }}'; // Thay đổi này theo cách bạn lấy ảnh cũ từ server
+    if (currentImageSrc) {
+        previewFrame.innerHTML = `<img src="${currentImageSrc}" alt="Selected Image" style="max-width: 100%; height: auto;">`;
+    }
+});
+</script>
 <script>
     var $jq = jQuery.noConflict();
     $jq(document).ready(function() {
@@ -235,10 +264,6 @@
                 }
             }
         });
-        CKEDITOR.replace('description_short', {
-                filebrowserImageUploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
-                filebrowserUploadMethod: 'form',
-            });
             CKEDITOR.replace('description', {
                 filebrowserImageUploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
                 filebrowserUploadMethod: 'form',

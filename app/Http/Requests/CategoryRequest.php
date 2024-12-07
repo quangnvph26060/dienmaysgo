@@ -28,6 +28,7 @@ class CategoryRequest extends FormRequest
         return [
             'name' => 'required|unique:sgo_category,name,' . $categoryId . '|max:255', // Tên danh mục là bắt buộc và có độ dài tối đa 255 ký tự
             'description' => 'required',
+            'description_short' => 'required',
             'title_seo' => 'required|string|max:255', // Tiêu đề SEO là tùy chọn, nếu có thì phải là chuỗi và tối đa 255 ký tự
             'description_seo' => 'required|string|max:1000', // Mô tả SEO là tùy chọn, nếu có thì phải là chuỗi và tối đa 1000 ký tự
             'keyword_seo' => 'required|string|max:255', // Từ khóa SEO là tùy chọn, nếu có thì phải là chuỗi và tối đa 255 ký tự
@@ -54,6 +55,7 @@ class CategoryRequest extends FormRequest
         return [
             'name' => 'Tên danh mục',
             'description' => 'Mô tả',
+            'description_short' => 'Mô tả hình ảnh',
             'title_seo' => 'Tiêu đề SEO',
             'description_seo' => 'Mô tả SEO',
             'keyword_seo' => 'Từ khóa SEO',

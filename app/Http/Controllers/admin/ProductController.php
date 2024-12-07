@@ -17,6 +17,8 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
+        $page = 'Sản phẩm';
+        $title = 'Danh sách bài viết';
         if ($request->ajax()) {
             return datatables()->of(SgoProduct::select(['id', 'name', 'price', 'quantity'])->get())
                 ->addColumn('price', function ($row) {
@@ -38,26 +40,30 @@ class ProductController extends Controller
                 ->addIndexColumn()
                 ->make(true);
         }
-        return view('backend.product.index');
+        return view('backend.product.index', compact('page', 'title'));
     }
 
     public function add()
     {
+        $page = 'Sản phẩm';
+        $title = 'Thêm bài viết';
         $categories = SgoCategory::pluck('name', 'id');
         $origins = SgoOrigin::pluck('name', 'id');
         $fuels = SgoFuel::pluck('name', 'id');
         $promotions = SgoPromotion::pluck('name', 'id');
-        return view('backend.product.add', compact('categories', 'origins', 'fuels', 'promotions'));
+        return view('backend.product.add', compact('categories', 'origins', 'fuels', 'promotions' ,'page', 'title'));
     }
 
     public function edit($id)
     {
+        $page = 'Sản phẩm';
+        $title = 'Sửa bài viết';
         $categories = SgoCategory::pluck('name', 'id');
         $origins = SgoOrigin::pluck('name', 'id');
         $fuels = SgoFuel::pluck('name', 'id');
         $promotions = SgoPromotion::pluck('name', 'id');
         $product = SgoProduct::findOrFail($id);
-        return view('backend.product.edit', compact('categories', 'origins', 'fuels', 'promotions', 'product'));
+        return view('backend.product.edit', compact('categories', 'origins', 'fuels', 'promotions', 'product','page', 'title'));
     }
 
     public function store(Request $request)

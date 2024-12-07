@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\Auth\AuthController;
+use App\Http\Controllers\admin\ConfigController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\NewsController;
 use App\Http\Controllers\admin\OriginController;
@@ -40,7 +41,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     route::middleware('auth')->group(function () {
 
         Route::get('/', function () {
-            return view('backend.dashboard');
+            $title = ' Dashboard';
+            return view('backend.dashboard', compact('title'));
         })->name('dashboard');
 
         route::get('logout', [AuthController::class, 'logout'])->name('logout');
@@ -96,6 +98,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('edit/{id}', [HomeController::class, 'edit'])->name('edit');
         Route::post('edit/{id}', [HomeController::class, 'update'])->name('update');
         Route::post('delete/{id}', [HomeController::class, 'delete'])->name('delete');
+    });
+
+    Route::prefix('config')->name('config.')->group(function () {
+        Route::get('', [ConfigController::class, 'index'])->name('index');
+        Route::post('update', [ConfigController::class, 'update'])->name('update');
     });
 });
 

@@ -11,7 +11,7 @@
             @csrf
 
             <!-- Thông tin chung -->
-            <h5 class="section-title">Thông tin khuyến mãi</h5>
+            <h5 class="section-title">Thông tin khuyến mãi {{ isset($promotion)  ? ' : '.$promotion->name : ''}}</h5>
 
             <!-- Tên -->
             <div class="mb-3">
