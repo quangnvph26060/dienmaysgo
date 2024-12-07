@@ -12,13 +12,18 @@ class SgoConfig extends Model
     protected $fillable = [
         'company_name',
         'address',
+        'warehouse',
         'phone',
         'email',
         'tax_code',
         'link_fb',
         'link_ig',
         'zalo_number',
-        'path'
+        'path',
+        'title_seo',
+        'description_seo',
+        'keywords_seo',
+        'url',
     ];
 
     public $timestamps = true;
