@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\OrderFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,6 +26,14 @@ class SgoOrder extends Model
         'payment_method',
         'status',
     ];
+    protected static function newFactory()
+    {
+        return OrderFactory::new();
+    }
 
+    public function orderDetails()
+    {
+        return $this->hasMany(SgoOrderDetail::class, 'order_id');
+    }
     public $timestamps = true;
 }
