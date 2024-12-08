@@ -37,7 +37,12 @@
                     </span>
                     <h4 class="text-section">Components</h4>
                 </li>
-
+                <li class="nav-item">
+                    <a href="{{ route('admin.order.index') }}">
+                        <i class="fas fa-sign"></i>
+                        <p>Đơn hàng</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#product">
                         <i class="fas fa-pen-square"></i>

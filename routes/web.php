@@ -16,6 +16,7 @@ use App\Http\Controllers\admin\NewsController;
 use App\Http\Controllers\admin\OriginController;
 use App\Http\Controllers\admin\PromotionController;
 use App\Models\SgoFuel;
+use App\Http\Controllers\admin\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('detail/{id}', [ProductController::class, 'edit'])->name('detail');
             Route::post('update/{id}', [ProductController::class, 'update'])->name('update');
             Route::post('delete/{id}', [ProductController::class, 'delete'])->name('delete');
+        });
+        Route::prefix('order')->name('order.')->group(function () {
+            Route::get('', [OrderController::class, 'index'])->name('index');
+            Route::get('detail/{id}', [OrderController::class, 'detail'])->name('detail');
+            Route::post('updateStatus', [OrderController::class, 'updateOrderStatus'])->name('updateOrderStatus');
         });
     });
 
