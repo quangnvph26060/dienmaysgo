@@ -3,27 +3,27 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\OriginRequest;
-use App\Models\SgoOrigin;
+use App\Models\SgoFuel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 
-class OriginController extends Controller
+class FuelController extends Controller
 {
     public function index(Request $request)
     {
-        $title = "Xuất xứ";
+        $title = "Nhiên liệu";
         if ($request->ajax()) {
-            $data = SgoOrigin::select('id', 'name', 'slug', 'description');
+            $data = SgoFuel::select('id', 'name', 'slug', 'description');
 
             return DataTables::of($data)
                 ->addColumn('description', function ($row) {
                     return $row->description; // Trả về nội dung mô tả
                 })
                 ->addColumn('action', function ($row) {
-                    $editUrl = route('admin.origin.edit', $row->id);
-                    $deleteUrl = route('admin.origin.delete', $row->id);
+                    $editUrl = route('admin.fuel.edit', $row->id);
+                    $deleteUrl = route('admin.fuel.delete', $row->id);
 
                     // Nút Sửa và Xóa
                     $actions = '<div style="display: flex; gap: 10px;">
@@ -45,14 +45,14 @@ class OriginController extends Controller
                 ->make(true);
         }
 
-        $page = 'Xuất xứ';
-        return view('backend.origin.index', compact('title', 'page'));
+        $page = 'Nhiên liệu';
+        return view('backend.fuel.index', compact('title', 'page'));
     }
 
     public function edit($id)
     {
-        $origin = SgoOrigin::findOrFail($id);
-        return response()->json($origin);
+        $fuel = SgoFuel::findOrFail($id);
+        return response()->json($fuel);
     }
     public function store(Request $request)
     {
@@ -62,50 +62,51 @@ class OriginController extends Controller
             'description' => 'required|string',
         ]);
 
-        // Tạo mới bản ghi origin
-        $origin = new SgoOrigin();
-        $origin->name = $validated['name'];
-        $origin->slug = Str::slug($validated['name']);
-        $origin->description = $validated['description'];
-        $origin->save();
+        // Tạo mới bản ghi Fuel
+        $fuel = new SgoFuel();
+        $fuel->name = $validated['name'];
+        $fuel->slug = Str::slug($validated['name']);
+        $fuel->description = $validated['description'];
+        $fuel->save();
 
         // Trả về phản hồi JSON
         return response()->json([
             'success' => true,
-            'message' => 'Thêm xuất xứ thành công!',
-            'data' => $origin
+            'message' => 'Thêm nhiên liệu thành công!',
+            'data' => $fuel
         ]);
     }
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:sgo_origin,name,' . $id,
+            'name' => 'required|string|max:255|unique:sgo_fuel,name,' . $id,
             'description' => 'required|string',
         ]);
 
-        // Tìm origin cần sửa
-        $origin = SgoOrigin::findOrFail($id);
-        $origin->name = $validated['name'];
-        $origin->slug = Str::slug($validated['name']);
-        $origin->description = $validated['description'];
-        $origin->save();
+        // Tìm Fuel cần sửa
+        $fuel = SgoFuel::findOrFail($id);
+        $fuel->name = $validated['name'];
+        $fuel->slug = Str::slug($validated['name']);
+        $fuel->description = $validated['description'];
+        $fuel->save();
 
         // Trả về phản hồi JSON
         return response()->json([
             'success' => true,
-            'message' => 'Cập nhật xuất xứ thành công!',
-            'data' => $origin
+            'message' => 'Cập nhật nhiên liệu thành công!',
+            'data' => $fuel
         ]);
     }
 
     public function delete($id)
     {
-        $origin = SgoOrigin::findOrFail($id);
+        Log::info($id);
+        $fuel = SgoFuel::findOrFail($id);
 
-        $origin->delete();
+        $fuel->delete();
         return response()->json([
             'success' => true,
-            'message' => 'Xuất xứ đã được xóa thành công!'
+            'message' => 'Nhiên liệu đã được xóa thành công!'
         ]);
     }
 }

@@ -10,10 +10,12 @@ use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\Auth\AuthController;
 use App\Http\Controllers\admin\ConfigController;
+use App\Http\Controllers\admin\FuelController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\NewsController;
 use App\Http\Controllers\admin\OriginController;
 use App\Http\Controllers\admin\PromotionController;
+use App\Models\SgoFuel;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,8 +72,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('create', [OriginController::class, 'create'])->name('create');
         Route::post('store', [OriginController::class, 'store'])->name('store');
         Route::get('edit/{id}', [OriginController::class, 'edit'])->name('edit');
-        Route::post('edit/{id}', [OriginController::class, 'update'])->name('update');
-        Route::post('delete/{id}', [OriginController::class, 'delete'])->name('delete');
+        Route::PUT('edit/{id}', [OriginController::class, 'update'])->name('update');
+        Route::delete('delete/{id}', [OriginController::class, 'delete'])->name('delete');
     });
 
     Route::prefix('promotion')->name('promotion.')->group(function () {
@@ -103,6 +105,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::prefix('config')->name('config.')->group(function () {
         Route::get('', [ConfigController::class, 'index'])->name('index');
         Route::post('update', [ConfigController::class, 'update'])->name('update');
+    });
+
+    Route::prefix('fuel')->name('fuel.')->group(function () {
+        Route::get('', [FuelController::class, 'index'])->name('index');
+        Route::get('create', [FuelController::class, 'create'])->name('create');
+        Route::post('store', [FuelController::class, 'store'])->name('store');
+        Route::get('edit/{id}', [FuelController::class, 'edit'])->name('edit');
+        Route::PUT('edit/{id}', [FuelController::class, 'update'])->name('update');
+        Route::delete('delete/{id}', [FuelController::class, 'delete'])->name('delete');
     });
 });
 
