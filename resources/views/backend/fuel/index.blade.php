@@ -10,7 +10,7 @@
                 <table class="table table-striped table-hover" id="originTable">
                     <thead>
                         <tr>
-                            <th>Xuất xứ</th>
+                            <th>Nhiên liệu</th>
                             <th>Mô tả</th>
                             <th>Hành động</th>
                         </tr>
@@ -23,7 +23,7 @@
         <div class="col-md-4">
             <div id="formContainer" class="card">
                 <div class="card-header">
-                    <span id="formTitle">Thêm mới xuất xứ</span>
+                    <span id="formTitle">Thêm mới nhiên liệu</span>
                 </div>
                 <div class="card-body">
                     <form id="fuelForm">
@@ -31,7 +31,7 @@
                         <input type="hidden" id="itemId" name="id">
 
                         <div class="mb-3">
-                            <label for="fuelName" class="form-label">Quốc gia</label>
+                            <label for="fuelName" class="form-label">Tên nhiên liệu</label>
                             <input type="text" class="form-control" id="fuelName" name="name" required>
                         </div>
 
@@ -82,7 +82,7 @@
     let table = $('#originTable').DataTable({
     processing: true,
     serverSide: true,
-    ajax: '{{ route('admin.origin.index') }}',
+    ajax: '{{ route('admin.fuel.index') }}',
     columns: [
         { data: 'name', name: 'name' },
         { data: 'description', name: 'description' },
@@ -126,7 +126,7 @@
     function resetForm() {
         $('#fuelForm')[0].reset();
         $('#itemId').val('');
-        $('#formTitle').text('Thêm mới xuất xứ');
+        $('#formTitle').text('Thêm mới nhiên liệu');
         $('#submitButton').text('Thêm mới');
     }
 
@@ -135,8 +135,8 @@
         e.preventDefault();
         const id = $('#itemId').val();
         const url = id
-            ? `{{ route('admin.origin.update', ':id') }}`.replace(':id', id)
-            : '{{ route('admin.origin.store') }}';
+            ? `{{ route('admin.fuel.update', ':id') }}`.replace(':id', id)
+            : '{{ route('admin.fuel.store') }}';
         const method = id ? 'PUT' : 'POST';
 
         $.ajax({
@@ -157,10 +157,10 @@
     $('#originTable').on('click', '.edit', function () {
         const id = $(this).data('id');
         $.ajax({
-            url: `{{ route('admin.origin.edit', ':id') }}`.replace(':id', id),
+            url: `{{ route('admin.fuel.edit', ':id') }}`.replace(':id', id),
             method: 'GET',
             success: function (data) {
-                $('#formTitle').text('Sửa xuất xứ');
+                $('#formTitle').text('Sửa nhiên liệu');
                 $('#submitButton').text('Cập nhật');
                 $('#itemId').val(data.id);
                 $('#fuelName').val(data.name);
@@ -193,7 +193,7 @@
             if (result.isConfirmed) {
                 // Nếu người dùng xác nhận
                 $.ajax({
-                    url: `{{ route('admin.origin.delete', ':id') }}`.replace(':id', id),
+                    url: `{{ route('admin.fuel.delete', ':id') }}`.replace(':id', id),
                     method: 'DELETE',
                     data: {
                         _token: '{{ csrf_token() }}' // CSRF token bảo vệ
