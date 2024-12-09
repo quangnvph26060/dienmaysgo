@@ -13,15 +13,15 @@
                 <ul class="nav top-bar-nav nav-right nav-small nav-divided">
                     <li id="menu-item-2011"
                         class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2011 menu-item-design-default">
-                        <a href="https://dienmaysgo.com/gioi-thieu/" class="nav-top-link">Giới thiệu</a>
+                        <a href="{{ route('introduce') }}" class="nav-top-link">Giới thiệu</a>
                     </li>
                     <li id="menu-item-2008"
                         class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2008 menu-item-design-default">
-                        <a href="https://dienmaysgo.com/category/tin-tuc/" class="nav-top-link">Tin tức</a>
+                        <a href="{{ route('news.list') }}" class="nav-top-link">Tin tức</a>
                     </li>
                     <li id="menu-item-2010"
                         class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2010 menu-item-design-default">
-                        <a href="https://dienmaysgo.com/lien-he/" class="nav-top-link">Liên hệ</a>
+                        <a href="{{route('contact')}}" class="nav-top-link">Liên hệ</a>
                     </li>
                 </ul>
             </div>
@@ -32,7 +32,7 @@
             <!-- Logo -->
             <div id="logo" class="flex-col logo">
                 <!-- Header logo -->
-                <a href="{{url('/')}}" title="dienmaysgo.com" rel="home">
+                <a href="{{ url('/') }}" title="dienmaysgo.com" rel="home">
                     <img width="1020" height="422"
                         src="https://dienmaysgo.com/wp-content/uploads/2023/05/dienmaysgo-1024x424.png"
                         class="header_logo header-logo" alt="dienmaysgo.com" /><img width="1020" height="422"
@@ -61,14 +61,14 @@
                     <li class="header-search-form search-form html relative has-icon">
                         <div class="header-search-form-wrapper">
                             <div class="searchform-wrapper ux-search-box relative form-flat is-normal">
-                                <form role="search" method="get" class="searchform" action="{{url('/')}}">
+                                <form role="search" method="get" class="searchform" action="{{ url('/') }}">
                                     <div class="flex-row relative">
                                         <div class="flex-col flex-grow">
                                             <label class="screen-reader-text"
                                                 for="woocommerce-product-search-field-0">Search for:</label>
                                             <input type="search" id="woocommerce-product-search-field-0"
                                                 class="search-field mb-0" placeholder="Nhập từ khóa tìm kiếm..."
-                                                value="{{request()->s}}" name="s" />
+                                                value="{{ request()->s }}" name="s" />
                                         </div>
                                         <div class="flex-col">
                                             <button type="submit" value="Search"
@@ -92,7 +92,8 @@
                     <li class="header-cart relative">
                         <a href="" class="cart-link position-relative">
                             <i class="bi bi-cart3" style="font-size: 1.5rem"></i>
-                            <span class="cart-count rounded-pill bg-danger"> {{\Cart::instance('shopping')->count()}} </span>
+                            <span class="cart-count rounded-pill bg-danger"> {{ \Cart::instance('shopping')->count() }}
+                            </span>
                         </a>
                     </li>
                     <li class="html header-button-1">
@@ -161,7 +162,7 @@
                                         <li id="menu-item-1607"
                                             class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1607 nav-dropdown-col">
                                             <a
-                                                href="https://dienmaysgo.com/may-phat-dien-elemax/">{{ $child->name }}</a>
+                                                href="{{ route('products.list', $child->slug) }}">{{ $child->name }}</a>
                                             <ul class="sub-menu nav-column nav-dropdown-default">
                                                 @include('frontends.layouts.partials.menu-item', [
                                                     'item' => $child,

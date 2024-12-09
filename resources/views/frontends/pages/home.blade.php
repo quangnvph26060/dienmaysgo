@@ -25,10 +25,11 @@
                                             @foreach ($catalogue->childrens->take(5) as $child)
                                                 <li class="hdevvn_cats">
                                                     <a
-                                                        href="https://dienmaysgo.com/may-phat-dien-elemax/">{{ $child->name }}</a>
+                                                        href="{{ route('products.list', $child->slug) }}">{{ $child->name }}</a>
                                                 </li>
                                             @endforeach
-                                        </span><b></b><a href="https://dienmaysgo.com/may-phat-dien/" target="">Xem
+                                        </span><b></b><a href="{{ route('products.list', $catalogue->slug) }}"
+                                            target="">Xem
                                             thêm<i class="icon-angle-right"></i></a>
                                     </h2>
                                 </div>
@@ -61,7 +62,7 @@
 
 
 @push('styles')
-    <link rel="stylesheet" href="{{asset('frontends/assets/css/toastr.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('frontends/assets/css/toastr.min.css') }}">
     <style>
         #section_1222005858 {
             padding-top: 0px;

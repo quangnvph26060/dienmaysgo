@@ -10,24 +10,23 @@
                     <h3>LIÊN HỆ VỚI CHÚNG TÔI</h3>
                     <ul>
                         <li>
-                            <span style="font-size: 90%"><strong>CÔNG TY CP CÔNG NGHỆ VÀ TRUYỀN THÔNG SGO
-                                    VIỆT
-                                    NAM</strong></span>
+                            <span style="font-size: 90%"><strong>{{ $settings->company_name }}</strong></span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">Kho hàng: Khu Công Nghệp Vừa và Nhỏ Ngọc Hồi -
-                                Thanh
-                                Trì - Hà Nội</span>
+                            <span style="font-size: 90%">Địa chỉ: {{ $settings->address }}</span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">Điện thoại: 0912.399.322
+                            <span style="font-size: 90%">Kho hàng: {{ $settings->warehouse }}</span>
+                        </li>
+                        <li>
+                            <span style="font-size: 90%">Điện thoại: {{ $settings->phone }}
                             </span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">MST: 0108806638 cấp ngày 05/07/2019</span>
+                            <span style="font-size: 90%">MST: {{ $settings->tax_code }}</span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">Email: dienmaysgo@gmail.com</span>
+                            <span style="font-size: 90%">Email: {{ $settings->email }}</span>
                         </li>
                     </ul>
                 </div>
@@ -83,19 +82,29 @@
                 <div class="col-inner">
                     <h3>KẾT NỐI VỚI CHÚNG TÔI</h3>
                     <div class="social-icons follow-icons full-width text-left">
-                        <a href="https://www.facebook.com/dienmaysgocom" target="_blank" data-label="Facebook"
+                        <a href="{{ $settings->link_fb }}" target="_blank" data-label="Facebook"
                             rel="noopener noreferrer nofollow" class="icon primary button circle facebook tooltip"
-                            title="Follow on Facebook" aria-label="Follow on Facebook"><i
-                                class="icon-facebook"></i></a><a href="#" target="_blank"
-                            rel="noopener noreferrer nofollow" data-label="Instagram"
-                            class="icon primary button circle instagram tooltip" title="Follow on Instagram"
-                            aria-label="Follow on Instagram"><i class="icon-instagram"></i></a><a
-                            href="mailto:info@dienmaysgo.com" data-label="E-mail" rel="nofollow"
+                            title="Follow on Facebook" aria-label="Follow on Facebook">
+                            <i class="icon-facebook"></i>
+                        </a>
+
+                        <a href="{{ $settings->link_ig }}" target="_blank" rel="noopener noreferrer nofollow"
+                            data-label="Instagram" class="icon primary button circle instagram tooltip"
+                            title="Follow on Instagram" aria-label="Follow on Instagram">
+                            <i class="icon-instagram"> </i>
+                        </a>
+
+                        <a href="mailto:info@dienmaysgo.com" data-label="E-mail" rel="nofollow"
                             class="icon primary button circle email tooltip" title="Send us an email"
-                            aria-label="Send us an email"><i class="icon-envelop"></i></a><a href="tel:0912399322"
-                            target="_blank" data-label="Phone" rel="noopener noreferrer nofollow"
-                            class="icon primary button circle phone tooltip" title="Call us" aria-label="Call us"><i
-                                class="icon-phone"></i></a>
+                            aria-label="Send us an email">
+                            <i class="icon-envelop"></i>
+                        </a>
+
+                        <a href="tel:0912399322" target="_blank" data-label="Phone" rel="noopener noreferrer nofollow"
+                            class="icon primary button circle phone tooltip" title="Call us" aria-label="Call us">
+                            <i class="icon-phone"></i>
+                        </a>
+
                     </div>
 
                     <div class="img has-hover x md-x lg-x y md-y lg-y" id="image_1190465660">
@@ -146,10 +155,10 @@
 </section>
 
 <div class="absolute-footer light medium-text-center small-text-center">
-    <div class="container clearfix">
-        <div class="footer-primary pull-left">
+    <div class="container clearfix" style="text-align: center">
+        <div class="footer-primary ">
             <div class="copyright-footer">
-                © 2019-2024 - Bản quyền thuộc dienmaysgo.com
+                {{ $settings->copyright }}
             </div>
         </div>
     </div>
