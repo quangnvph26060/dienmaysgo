@@ -65,4 +65,9 @@ class SgoProduct extends Model
     {
         return $this->belongsTo(SgoFuel::class, 'fuel_id');
     }
+
+    public function images()
+    {
+        return $this->hasMany(SgoProductImages::class, 'product_id', 'id');
+    }
 }

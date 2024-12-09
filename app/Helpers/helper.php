@@ -118,3 +118,14 @@ if (!function_exists('generateRandomString')) {
         return $randomString;
     }
 }
+
+function saveImageNew($image, string $inputName, string $directory = 'images')
+{
+    if ($image) {
+        $filename = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+        Storage::disk('public')->put($directory . '/' . $filename, file_get_contents($image->getPathName()));
+        return $directory . '/' . $filename;
+    }
+
+    return null; // Trả về null nếu không có ảnh
+}

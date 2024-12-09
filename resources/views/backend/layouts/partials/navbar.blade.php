@@ -231,7 +231,7 @@
                     </div>
                     <span class="profile-username">
                         <span class="op-7">Hi,</span>
-                        <span class="fw-bold">Admin</span>
+                        <span class="fw-bold">{{ Auth::user()->name }}</span>
                     </span>
                 </a>
                 <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -243,8 +243,9 @@
                                         class="avatar-img rounded" />
                                 </div>
                                 <div class="u-text">
-                                    <h4>Admin</h4>
-                                    <p class="text-muted">admin@gmail.com</p>
+                                    <h4>{{ Auth::user()->name }}</h4>
+                                    <p class="text-muted">{{ Auth::user()->email }}</p>
+                                    <a href="#" >View Profile</a>
                                 </div>
                             </div>
                         </li>

@@ -87,25 +87,20 @@
                 </li>
 
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#origin">
+                    <a href="{{ route('admin.origin.index') }}">
                         <i class="fas fa-pen-square"></i>
                         <p>Xuất xứ</p>
                         <span class="caret"></span>
                     </a>
-                    <div class="collapse" id="origin">
-                        <ul class="nav nav-collapse">
-                            <li>
-                                <a href="{{ route('admin.origin.index') }}">
-                                    <span class="sub-item">Danh sách xuất xứ</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ route('admin.origin.create') }}">
-                                    <span class="sub-item">Thêm mới xuất xứ</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('admin.fuel.index') }}">
+                        <i class="fas fa-pen-square"></i>
+                        <p>Nhiên liệu</p>
+                        <span class="caret"></span>
+                    </a>
+
                 </li>
 
                 <li class="nav-item">
