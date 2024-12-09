@@ -1,21 +1,7 @@
 @extends('backend.layouts.master')
 @section('content')
     <div class="page-inner">
-        <div class="page-header">
-            <ul class="breadcrumbs mb-3">
-                <li class="nav-home">
-                    <a href="{{ route('admin.dashboard') }}">
-                        <i class="icon-home"></i>
-                    </a>
-                </li>
-                <li class="separator">
-                    <i class="icon-arrow-right"></i>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.order.index') }}">Danh sách đơn hàng</a>
-                </li>
-            </ul>
-        </div>
+
         <div class="row">
             <div class="col-md-12">
                 <div class="card shadow-lg">
@@ -29,7 +15,7 @@
                                 <table class="table table-bordered table-hover">
                                     <tbody>
                                         <tr>
-                                            <th scope="row"><i class="fas fa-user"></i> Tên khách hàng</th>
+                                            <th scope="row" style="white-space: nowrap"><i class="fas fa-user"></i> Tên khách hàng</th>
                                             <td>
                                                 <div class="nowrap">{{ $order->first_name . ', ' . $order->last_name }}
                                                 </div>
