@@ -9,7 +9,10 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 
 class CartController extends Controller
 {
-    public function list() {}
+    public function list()
+    {
+        return view('frontends.pages.cart');
+    }
 
     public function addToCart(Request $request)
     {

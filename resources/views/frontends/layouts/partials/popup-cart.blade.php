@@ -39,7 +39,7 @@
                         </p>
 
                         <p class="woocommerce-mini-cart__buttons buttons">
-                            <a href="https://dienmaysgo.com/gio-hang/" class="button wc-forward">View cart</a><a
+                            <a href="{{route('carts.list')}}" class="button wc-forward">View cart</a><a
                                 href="https://dienmaysgo.com/thanh-toan/"
                                 class="button checkout wc-forward">Checkout</a>
                         </p>

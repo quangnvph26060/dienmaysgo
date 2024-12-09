@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\SgoCategory;
+use App\Models\SgoConfig;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,7 +25,13 @@ class AppServiceProvider extends ServiceProvider
         View::composer('frontends.layouts.master', function ($view) {
 
             $view->with([
-                'cataloguesMenu' => SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->get()
+                'cataloguesMenu' => SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->get(),
+            ]);
+        });
+
+        View::composer('*', function ($view) {
+            $view->with([
+                'settings' => SgoConfig::query()->first(),
             ]);
         });
     }
