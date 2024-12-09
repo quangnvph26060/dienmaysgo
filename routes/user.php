@@ -25,7 +25,10 @@ route::get('/', [HomeController::class, 'home']);
 
 route::controller(CartController::class)->name('carts.')->group(function () {
     route::get('carts', 'list')->name('list');
+    route::get('thanh-toan', 'InfoPayment')->name('thanh-toan');
     route::post('carts', 'addToCart')->name('add-to-cart');
+    route::post('del-cart/{id}', 'delItemCart')->name('del-to-cart');
+    route::post('update-cart/{id}/{qty}', 'updateQtyCart')->name('update-to-cart');
 });
 
 route::controller(ProductController::class)->name('products.')->group(function () {

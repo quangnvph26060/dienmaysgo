@@ -11,9 +11,40 @@ class CartController extends Controller
 {
     public function list()
     {
-        return view('frontends.pages.cart');
+        $title = 'Đơn hàng';
+        $carts = session()->get('cart')['shopping'];
+        return view('frontends.pages.cart',compact('carts','title'));
     }
 
+    public function InfoPayment(){
+        $title = "Thanh toán";
+        return view('frontends.pages.payment',compact('title'));
+    }
+
+    public function delItemCart($id){
+        if(!$id){
+            return redirect()->back(['status'=>'errors']);
+        }
+        $cart = session()->get('cart');
+
+        if (isset($cart['shopping'])) {
+            foreach ($cart['shopping'] as $key => $item) {
+                if ($item->id == $id) {
+                    unset($cart['shopping'][$key]);
+                    break;
+                }
+            }
+    
+           session()->put('cart', $cart);
+           $count = count($cart['shopping']);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Xóa sản phẩm thành công',
+                'count' => $count,
+                ]);
+        }
+        return response()->json(['status' => 'error', 'message' => 'Giỏ hàng không tồn tại']);
+    }
     public function addToCart(Request $request)
     {
         if ($request->ajax()) {
@@ -65,4 +96,44 @@ class CartController extends Controller
             ]);
         }
     }
+    public function updateQtyCart($id, $qty) {
+        if (!$id) {
+            return redirect()->back()->withErrors(['status' => 'errors', 'message' => "Không tìm thấy sản phẩm"]);
+        }
+    
+        $product = SgoProduct::where('id', $id)->first();
+    
+        if (!$product) {
+            return redirect()->back()->withErrors(['status' => 'errors', 'message' => "Không tìm thấy sản phẩm"]);
+        }
+        if ($product->quantity < $qty) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Sản phẩm vượt quá'
+            ]);
+        }
+    
+        $cart = session()->get('cart');
+    
+        if (isset($cart['shopping'])) {
+            foreach ($cart['shopping'] as $key => $item) {
+                if ($item->id == $id) {
+                    $item->qty = $qty;
+                    break;
+                }
+            }
+    
+            session()->put('cart', $cart);
+            $count = count($cart['shopping']);
+    
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Cập nhật sản phẩm thành công',
+                'count' => $count,
+            ]);
+        }
+    
+        return response()->json(['status' => 'error', 'message' => 'Giỏ hàng không tồn tại']);
+    }
+    
 }

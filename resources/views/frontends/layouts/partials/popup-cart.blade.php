@@ -33,15 +33,15 @@
                         </ul>
 
                         <p class="woocommerce-mini-cart__total total">
-                            <strong>Subtotal:</strong>
+                            <strong>Tổng cộng:</strong>
                             <span class="woocommerce-Price-amount amount"><bdi><span class="total">{{ Cart::instance('shopping')->subTotal() }}</span><span
                                         class="woocommerce-Price-currencySymbol">₫</span></bdi></span>
                         </p>
 
                         <p class="woocommerce-mini-cart__buttons buttons">
-                            <a href="{{route('carts.list')}}" class="button wc-forward">View cart</a><a
+                            <a href="{{route('carts.list')}}" class="button wc-forward">Xem giỏ hàng</a><a
                                 href="https://dienmaysgo.com/thanh-toan/"
-                                class="button checkout wc-forward">Checkout</a>
+                                class="button checkout wc-forward">Thanh toán</a>
                         </p>
                     </div>
                     <div class="cart-sidebar-content relative"></div>

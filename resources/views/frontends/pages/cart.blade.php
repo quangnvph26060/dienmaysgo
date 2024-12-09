@@ -1,5 +1,5 @@
 @extends('frontends.layouts.master')
-
+@section('title',$title)
 @section('content')
     <div id="content" class="content-area page-wrapper" role="main">
         <div class="row row-main">
@@ -17,88 +17,97 @@
                                             <thead>
                                                 <tr>
                                                     <th class="product-name" colspan="3">
-                                                        Product
+                                                        Sản phẩm
                                                     </th>
-                                                    <th class="product-price">Price</th>
-                                                    <th class="product-quantity">Quantity</th>
-                                                    <th class="product-subtotal">Subtotal</th>
+                                                    <th class="product-price">Giá</th>
+                                                    <th class="product-quantity white-space-nowrap">Số lượng</th>
+                                                    <th class="product-subtotal white-space-nowrap">Tổng cộng</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr class="woocommerce-cart-form__cart-item cart_item">
-                                                    <td class="product-remove">
-                                                        <a href="https://dienmaysgo.com/gio-hang/?remove_item=b59c67bf196a4758191e42f76670ceba&#038;_wpnonce=a80326973f"
-                                                            class="remove" aria-label="Remove this item"
-                                                            data-product_id="1111" data-product_sku="">&times;</a>
-                                                    </td>
+                                                @forelse ($carts as $item)
+                                                    <tr class="woocommerce-cart-form__cart-item cart_item"
+                                                        data-row-id="{{ $item->id }}">
+                                                        <td class="product-remove">
+                                                            <a class="remove btn-remove-product"
+                                                                aria-label="Remove this item"
+                                                                data-product_id="{{ $item->id }}">&times;</a>
+                                                        </td>
 
-                                                    <td class="product-thumbnail">
-                                                        <a
-                                                            href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sh1900/"><img
-                                                                fetchpriority="high" decoding="async" width="300"
-                                                                height="300"
-                                                                src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20300%20300%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3C%2Fsvg%3E"
-                                                                data-src="https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-300x300.jpg"
-                                                                class="lazy-load attachment-woocommerce_thumbnail size-woocommerce_thumbnail"
-                                                                alt="" srcset=""
-                                                                data-srcset="https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-300x300.jpg 300w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-100x100.jpg 100w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-600x600.jpg 600w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-150x150.jpg 150w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900.jpg 680w"
-                                                                sizes="(max-width: 300px) 100vw, 300px" /></a>
-                                                    </td>
+                                                        <td class="product-thumbnail">
+                                                            <a
+                                                                href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sh1900/"><img
+                                                                    fetchpriority="high" decoding="async" width="300"
+                                                                    height="300"
+                                                                    src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20300%20300%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3C%2Fsvg%3E"
+                                                                    data-src="https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-300x300.jpg"
+                                                                    class="lazy-load attachment-woocommerce_thumbnail size-woocommerce_thumbnail"
+                                                                    alt="" srcset=""
+                                                                    data-srcset="https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-300x300.jpg 300w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-100x100.jpg 100w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-600x600.jpg 600w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-150x150.jpg 150w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900.jpg 680w"
+                                                                    sizes="(max-width: 300px) 100vw, 300px" /></a>
+                                                        </td>
 
-                                                    <td class="product-name" data-title="Product">
-                                                        <a
-                                                            href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sh1900/">Máy
-                                                            Phát Điện Chạy Xăng Elemax SH1900</a>
-                                                        <div class="show-for-small mobile-product-price">
-                                                            <span class="mobile-product-price__qty">1 x
-                                                            </span>
-                                                            <span class="woocommerce-Price-amount amount"><bdi>11.800.000<span
+                                                        <td class="product-name" data-title="Sản phẩm">
+                                                            <a
+                                                                href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sh1900/">{{ $item->name }}
+                                                            </a>
+                                                            {{-- <div class="show-for-small mobile-product-price">
+                                                                <span class="mobile-product-price__qty">1 x
+                                                                </span>
+                                                                <span class="woocommerce-Price-amount amount"><bdi>11.800.000<span
+                                                                            class="woocommerce-Price-currencySymbol">&#8363;</span></bdi></span>
+                                                            </div> --}}
+                                                        </td>
+
+                                                        <td class="product-price" data-title="Price">
+                                                            <span class="woocommerce-Price-amount amount"><bdi>{{ formatAmount($item->price) }}
+                                                                    <span
                                                                         class="woocommerce-Price-currencySymbol">&#8363;</span></bdi></span>
-                                                        </div>
-                                                    </td>
+                                                        </td>
 
-                                                    <td class="product-price" data-title="Price">
-                                                        <span class="woocommerce-Price-amount amount"><bdi>11.800.000<span
-                                                                    class="woocommerce-Price-currencySymbol">&#8363;</span></bdi></span>
-                                                    </td>
+                                                        <td class="product-quantity" data-title="Quantity">
+                                                            <div class="quantity buttons_added form-flat">
+                                                                <input type="button" value="-"
+                                                                    class="minus button is-form" />
+                                                                {{-- <label class="screen-reader-text"
+                                                                    for="quantity_674fdef6c0aaa">Máy Phát Điện Chạy Xăng
+                                                                    Elemax
+                                                                    SH1900
+                                                                    quantity</label> --}}
+                                                                <input data-price="{{ $item->price }}"
+                                                                    data-id="{{ $item->id }}" type="number"
+                                                                    id=""
+                                                                    class="input-text qty text quantity_product"
+                                                                    step="1" min="0" max=""
+                                                                    name="cart[b59c67bf196a4758191e42f76670ceba][qty]"
+                                                                    value="{{ $item->qty }}" title="Qty"
+                                                                    size="4" placeholder="" inputmode="numeric" />
+                                                                <input type="button" value="+"
+                                                                    class="plus button is-form" />
+                                                            </div>
+                                                        </td>
 
-                                                    <td class="product-quantity" data-title="Quantity">
-                                                        <div class="quantity buttons_added form-flat">
-                                                            <input type="button" value="-"
-                                                                class="minus button is-form" />
-                                                            <label class="screen-reader-text"
-                                                                for="quantity_674fdef6c0aaa">Máy Phát Điện Chạy Xăng Elemax
-                                                                SH1900
-                                                                quantity</label>
-                                                            <input type="number" id="quantity_674fdef6c0aaa"
-                                                                class="input-text qty text" step="1" min="0"
-                                                                max=""
-                                                                name="cart[b59c67bf196a4758191e42f76670ceba][qty]"
-                                                                value="1" title="Qty" size="4" placeholder=""
-                                                                inputmode="numeric" />
-                                                            <input type="button" value="+"
-                                                                class="plus button is-form" />
-                                                        </div>
-                                                    </td>
-
-                                                    <td class="product-subtotal" data-title="Subtotal">
-                                                        <span class="woocommerce-Price-amount amount"><bdi>11.800.000<span
-                                                                    class="woocommerce-Price-currencySymbol">&#8363;</span></bdi></span>
-                                                    </td>
-                                                </tr>
+                                                        <td class="product-subtotal" data-title="Subtotal">
+                                                            <span
+                                                                class="woocommerce-Price-amount amount quantity-price-{{ $item->price }} quantity-price-sum">{{ formatAmount($item->price) }}
+                                                                ₫</span>
+                                                        </td>
+                                                    </tr>
+                                                @empty
+                                                @endforelse
 
                                                 <tr>
                                                     <td colspan="6" class="actions clear">
                                                         <div class="continue-shopping pull-left text-left">
                                                             <a class="button-continue-shopping button primary is-outline"
                                                                 href="https://dienmaysgo.com/cua-hang/">
-                                                                &#8592;&nbsp;Continue shopping
+                                                                &#8592;&nbsp;Tiếp tục mua sắm
                                                             </a>
                                                         </div>
 
                                                         <button type="submit" class="button primary mt-0 pull-left small"
                                                             name="update_cart" value="Update cart">
-                                                            Update cart
+                                                            Cập nhật giỏ hàng
                                                         </button>
 
                                                         <input type="hidden" id="woocommerce-cart-nonce"
@@ -119,7 +128,7 @@
                                             <thead>
                                                 <tr>
                                                     <th class="product-name" colspan="2">
-                                                        Cart totals
+                                                        Tổng số giỏ hàng
                                                     </th>
                                                 </tr>
                                             </thead>
@@ -129,27 +138,26 @@
 
                                         <table cellspacing="0" class="shop_table shop_table_responsive">
                                             <tr class="cart-subtotal">
-                                                <th>Subtotal</th>
+                                                <th>Tổng cộng</th>
                                                 <td data-title="Subtotal">
-                                                    <span class="woocommerce-Price-amount amount"><bdi>11.800.000<span
-                                                                class="woocommerce-Price-currencySymbol">&#8363;</span></bdi></span>
+                                                    <span
+                                                        class="woocommerce-Price-amount amount price-product-total"></span>
                                                 </td>
                                             </tr>
 
                                             <tr class="order-total">
-                                                <th>Total</th>
+                                                <th>Tổng cộng</th>
                                                 <td data-title="Total">
                                                     <strong><span
-                                                            class="woocommerce-Price-amount amount"><bdi>11.800.000<span
-                                                                    class="woocommerce-Price-currencySymbol">&#8363;</span></bdi></span></strong>
+                                                            class="woocommerce-Price-amount amount price-product-total"></span></strong>
                                                 </td>
                                             </tr>
                                         </table>
 
                                         <div class="wc-proceed-to-checkout">
-                                            <a href="https://dienmaysgo.com/thanh-toan/"
+                                            <a href="{{ route('carts.thanh-toan') }}"
                                                 class="checkout-button button alt wc-forward">
-                                                Proceed to checkout</a>
+                                                Tiến hành thanh toán</a>
                                         </div>
                                     </div>
                                     <div class="cart-sidebar-content relative"></div>
@@ -164,3 +172,191 @@
         </div>
     </div>
 @endsection
+@push('scripts')
+    <script>
+        function formatCurrency(amount) {
+            const formattedAmount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+            return formattedAmount + " ₫";
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".quantity_product").forEach(element => {
+                let price = element.getAttribute("data-price");
+                let qty = element.value;
+                let priceElement = document.querySelector(`.quantity-price-${price}`);
+                let totalPrice = parseInt(price) * parseInt(qty);
+                priceElement.innerHTML = `${formatCurrency(totalPrice)}`;
+            });
+
+
+            function updateTotalPrice() {
+                let prices = [];
+
+                // Lấy giá trị từ các phần tử có class 'quantity-price-sum'
+                document.querySelectorAll(".quantity-price-sum").forEach(element => {
+                    prices.push(element.textContent.trim());
+                });
+
+                // Chuyển đổi các giá trị này thành số và tính tổng
+                let numericValues = prices.map(value => {
+                    return parseInt(value.replace(/[^\d]/g, ''));
+                });
+
+                let total = numericValues.reduce((sum, current) => sum + current, 0);
+
+                // Cập nhật giá trị tổng vào các phần tử có class 'price-product-total'
+                document.querySelectorAll('.price-product-total').forEach(element => {
+                    element.innerHTML = `${formatCurrency(total)}`;
+                });
+            }
+
+            
+            updateTotalPrice();
+
+
+
+
+            document.querySelectorAll(".plus").forEach(button => {
+                button.addEventListener("click", function() {
+                    let input = this.previousElementSibling;
+                    if (input && input.type === "number") {
+                        let currentValue = parseInt(input.value) + 1 || 0;
+                        let price = parseFloat(input.getAttribute("data-price")) || 0;
+                        let totalPrice = currentValue * price;
+                        let priceElement = document.querySelector(`.quantity-price-${price}`);
+                        priceElement.innerHTML = `${formatCurrency(totalPrice)}`;
+                        let csrfToken = document.querySelector('meta[name="csrf-token"]')
+                            .getAttribute('content');
+                        let productId = input.getAttribute("data-id");
+
+                        var url =
+                            "{{ route('carts.update-to-cart', ['id' => ':id', 'qty' => ':qty']) }}"
+                            .replace(':id', productId).replace(':qty', currentValue);
+                        updateProduct(url, currentValue, csrfToken);
+
+                    }
+                });
+            });
+
+            function updateProduct(url, qty, csrfToken) {
+                fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Đã xảy ra lỗi khi gửi yêu cầu.');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.status === 'success') {
+                            updateTotalPrice();
+                            toastr.success(data.message);
+                            jQuery('.cart-count').html(data.count)
+                        } else {
+                            toastr.success(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                    });
+            }
+            document.querySelectorAll(".minus").forEach(button => {
+                button.addEventListener("click", function() {
+                    let input = this.nextElementSibling;
+                    if (input && input.type === "number") {
+                        let price = parseFloat(input.getAttribute("data-price")) || 0;
+                        let currentValue = parseInt(input.value) - 1 || 0;
+                        let priceElement = document.querySelector(`.quantity-price-${price}`);
+
+                        if (currentValue === -1) {
+                            return;
+                            priceElement.innerHTML = `${formatCurrency(priceElement.textContent)}`;
+
+                        } else {
+                            let cleanPrice = priceElement.textContent.replace(/[^\d]/g, '');
+                            let priceValue = parseInt(cleanPrice);
+                            let resultPrice = priceValue - price;
+                            priceElement.innerHTML = `${formatCurrency(resultPrice)}`;
+
+                            let csrfToken = document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content');
+                            let productId = input.getAttribute("data-id");
+
+                            var url =
+                                "{{ route('carts.update-to-cart', ['id' => ':id', 'qty' => ':qty']) }}"
+                                .replace(':id', productId).replace(':qty', currentValue);
+                            updateProduct(url, currentValue, csrfToken);
+                        }
+
+
+                    }
+                });
+            });
+            document.querySelectorAll("input[type='number']").forEach(input => {
+                input.addEventListener("change", function() {
+                    let currentValue = parseInt(this.value) || 0;
+                    let price = parseFloat(this.getAttribute("data-price")) || 0;
+                    let id = this.getAttribute("data-id");
+                    let totalPrice = currentValue * price;
+                    let priceElement = document.querySelector(`.quantity-price-${price}`);
+                    priceElement.innerHTML = `${formatCurrency(totalPrice)}`;
+                    let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute(
+                        'content');
+                    var url =
+                        "{{ route('carts.update-to-cart', ['id' => ':id', 'qty' => ':qty']) }}"
+                        .replace(':id', id).replace(':qty', currentValue);
+                    updateProduct(url, currentValue, csrfToken);
+
+                });
+            });
+
+            document.querySelectorAll(".remove").forEach(button => {
+                button.addEventListener("click", function(event) {
+                    event.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
+
+                    let productId = this.getAttribute("data-product_id");
+                    let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute(
+                        'content');
+                    let row = document.querySelector(`tr[data-row-id='${productId}']`);
+                    var url = "{{ route('carts.del-to-cart', ['id' => ':id']) }}".replace(':id',
+                        productId);
+
+                    fetch(url, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': csrfToken
+                            },
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Đã xảy ra lỗi khi gửi yêu cầu.');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.status === 'success') {
+                                row.remove();
+                                toastr.success(data.message);
+                                jQuery('.cart-count').html(data.count)
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                        });
+                });
+            });
+        });
+    </script>
+@endpush
+<style scoped>
+    .white-space-nowrap {
+        white-space: nowrap;
+    }
+</style>
