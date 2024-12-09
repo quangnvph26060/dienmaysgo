@@ -12,6 +12,8 @@ class OrderController extends Controller
 {
     public function index(Request $request)
     {
+        $page = 'Đơn hàng';
+        $title = 'Danh sách dơn hàng';
         if ($request->ajax()) {
             return datatables()->of(SgoOrder::select(['id', 'first_name', 'last_name', 'address', 'city', 'country', 'phone', 'total_price', 'status'])->get())
                 ->addColumn('total_price', function ($row) {
@@ -49,11 +51,13 @@ class OrderController extends Controller
                 ->addIndexColumn()
                 ->make(true);
         }
-        return view('backend.order.index');
+        return view('backend.order.index', compact('page', 'title'));
     }
 
     public function detail($id)
     {
+        $page = 'Đơn hàng';
+        $title = 'Thông tin đơn hàng';
         // Lấy đơn hàng từ bảng sgo_orders
         $order = SgoOrder::findOrFail($id);
 
@@ -61,7 +65,7 @@ class OrderController extends Controller
         $orderDetails = $order->orderDetails()->select('product_name', 'price', 'quantity')->get();
 
         // Trả về thông tin chi tiết sản phẩm dưới dạng JSON
-        return view('backend.order.detail', compact('order'));
+        return view('backend.order.detail', compact('order', 'page', 'title'));
     }
 
     public function updateOrderStatus(Request $request)
