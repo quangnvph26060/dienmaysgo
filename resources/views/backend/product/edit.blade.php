@@ -271,7 +271,9 @@
             //     let preloaded = [];
             // @endif
 
-            let preloaded = [];
+            const preloaded = @json($images->pluck('image')->map(function($image) {
+                return asset('storage/' . $image); // Đường dẫn đầy đủ của ảnh cũ
+            }));
 
             $('.input-images').imageUploader({
                 preloaded: preloaded,

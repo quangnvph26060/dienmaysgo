@@ -7,6 +7,7 @@ use App\Models\SgoCategory;
 use App\Models\SgoFuel;
 use App\Models\SgoOrigin;
 use App\Models\SgoProduct;
+use App\Models\SgoProductImages;
 use App\Models\SgoPromotion;
 use Exception;
 use Illuminate\Http\Request;
@@ -63,7 +64,8 @@ class ProductController extends Controller
         $fuels = SgoFuel::pluck('name', 'id');
         $promotions = SgoPromotion::pluck('name', 'id');
         $product = SgoProduct::findOrFail($id);
-        return view('backend.product.edit', compact('categories', 'origins', 'fuels', 'promotions', 'product','page', 'title'));
+        $images = $product->images;
+        return view('backend.product.edit', compact('categories', 'origins', 'fuels', 'promotions', 'product','page', 'title', 'images'));
     }
 
     public function store(Request $request)
@@ -108,7 +110,23 @@ class ProductController extends Controller
                 $validated['image'] = saveImage($request, 'image', 'products_main_images');
             }
 
-            SgoProduct::create($validated);
+
+            $product = SgoProduct::create($validated);
+            if ($request->hasFile('images')) {
+                $images = $request->file('images');
+                Log::info($images);
+                foreach ($images as $image) {
+                    $imagePath = saveImageNew($image, 'image', 'products_images');
+
+                    if ($imagePath) {
+                        Log::info($imagePath);
+                        SgoProductImages::create([
+                            'product_id' => $product->id,
+                            'image' => $imagePath,
+                        ]);
+                    }
+                }
+            }
             toastr()->success('Thêm sản phẩm mới thành công');
 
             return redirect()->route('admin.product.index');
@@ -120,6 +138,8 @@ class ProductController extends Controller
     }
     public function update(Request $request, $id)
     {
+        dd($request->all());
+
         $product = SgoProduct::findOrFail($id);
         $validated  = $request->validate(
             [
@@ -135,7 +155,7 @@ class ProductController extends Controller
                 'title_seo' => 'nullable',
                 'description_seo' => 'nullable',
                 'keyword_seo' => 'nullable',
-                'image' => 'required|mimes:jpeg,png,gif,svg,webp,jfif|max:2048',
+                'image' => 'nullable|mimes:jpeg,png,gif,svg,webp,jfif|max:2048',
             ],
             __('request.messages'),
             [
@@ -163,13 +183,30 @@ class ProductController extends Controller
                 $validated['image'] = saveImage($request, 'image', 'products_main_images');
             }
 
+            if ($request->hasFile('images')) {
+                $images = $request->file('images');
+                Log::info($images);
+                foreach ($images as $image) {
+                    $imagePath = saveImageNew($image, 'image', 'products_images');
+
+                    if ($imagePath) {
+                        Log::info($imagePath);
+                        SgoProductImages::create([
+                            'product_id' => $id, // Liên kết với sản phẩm
+                            'image' => $imagePath, // Đường dẫn file ảnh đã lưu
+                        ]);
+                    }
+                }
+            }
+
+
             $product->update($validated);
-            toastr()->success('Thêm sản phẩm mới thành công');
+            toastr()->success('Cập nhập phẩm mới thành công');
 
             return redirect()->route('admin.product.index');
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error('Failed to create new product: ' . $e->getMessage());
+            Log::error('Failed to update product: ' . $e->getMessage());
             return back();
         }
     }
