@@ -19,7 +19,7 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $page = 'Sản phẩm';
-        $title = 'Danh sách bài viết';
+        $title = 'Danh sách sản phẩm';
         if ($request->ajax()) {
             return datatables()->of(SgoProduct::select(['id', 'name', 'price', 'quantity'])->get())
                 ->addColumn('price', function ($row) {
@@ -47,7 +47,7 @@ class ProductController extends Controller
     public function add()
     {
         $page = 'Sản phẩm';
-        $title = 'Thêm bài viết';
+        $title = 'Thêm sản phẩm';
         $categories = SgoCategory::pluck('name', 'id');
         $origins = SgoOrigin::pluck('name', 'id');
         $fuels = SgoFuel::pluck('name', 'id');
@@ -58,7 +58,7 @@ class ProductController extends Controller
     public function edit($id)
     {
         $page = 'Sản phẩm';
-        $title = 'Sửa bài viết';
+        $title = 'Sửa sản phẩm';
         $categories = SgoCategory::pluck('name', 'id');
         $origins = SgoOrigin::pluck('name', 'id');
         $fuels = SgoFuel::pluck('name', 'id');
