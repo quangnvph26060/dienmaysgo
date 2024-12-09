@@ -158,7 +158,7 @@
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#home">
                         <i class="fas fa-newspaper"></i>
-                        <p>Home</p>
+                        <p>Cấu hình page</p>
                         <span class="caret"></span>
                     </a>
                     <div class="collapse" id="home">

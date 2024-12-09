@@ -140,7 +140,7 @@
     }
 
     .phone-wrapper span {
-        display: flex;
+        /* display: flex; */
         justify-content: flex-end;
         /* Căn nội dung số điện thoại và chú thích bên phải */
         align-items: center;
@@ -176,7 +176,7 @@
                                         <p>(24/7)</p>
                                     </span>
                                     <span>
-                                        <strong class="normal_strong">0912 399 322</strong>
+                                        <strong class="normal_strong">0981 185 620</strong>
                                         <p>(24/7)</p>
                                     </span>
                                 </div>
@@ -187,7 +187,7 @@
                                 <strong class="diff_strong">Hỗ trợ hoá đơn:</strong>
                                 <div class="phone-wrapper">
                                     <span>
-                                        <strong class="normal_strong">0912 399 322</strong>
+                                        <strong class="normal_strong">(024) 62 927 089</strong>
                                         <p>(8h30 - 18h00)</p>
                                     </span>
                                     <span>
@@ -202,11 +202,11 @@
                                 <strong class="diff_strong">Hỗ trợ gia hạn:</strong>
                                 <div class="phone-wrapper">
                                     <span>
-                                        <strong class="normal_strong">0912 399 322</strong>
+                                        <strong class="normal_strong">(024) 62 927 089</strong>
                                         <p>(8h30 - 18h00)</p>
                                     </span>
                                     <span>
-                                        <strong class="normal_strong">0912 399 322</strong>
+                                        <strong class="normal_strong">0981 185 620</strong>
                                         <p>(8h30 - 18h00)</p>
                                     </span>
                                 </div>
