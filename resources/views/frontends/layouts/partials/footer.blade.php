@@ -10,23 +10,23 @@
                     <h3>LIÊN HỆ VỚI CHÚNG TÔI</h3>
                     <ul>
                         <li>
-                            <span style="font-size: 90%"><strong>{{ $settings->company_name }}</strong></span>
+                            <span style="font-size: 90%"><strong>{{ $settings->company_name ?? "" }}</strong></span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">Địa chỉ: {{ $settings->address }}</span>
+                            <span style="font-size: 90%">Địa chỉ: {{ $settings->address ?? "" }}</span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">Kho hàng: {{ $settings->warehouse }}</span>
+                            <span style="font-size: 90%">Kho hàng: {{ $settings->warehouse ?? "" }}</span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">Điện thoại: {{ $settings->phone }}
+                            <span style="font-size: 90%">Điện thoại: {{ $settings->phone ?? "" }}
                             </span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">MST: {{ $settings->tax_code }}</span>
+                            <span style="font-size: 90%">MST: {{ $settings->tax_code ?? "" }}</span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">Email: {{ $settings->email }}</span>
+                            <span style="font-size: 90%">Email: {{ $settings->email ?? "" }}</span>
                         </li>
                     </ul>
                 </div>
@@ -82,13 +82,13 @@
                 <div class="col-inner">
                     <h3>KẾT NỐI VỚI CHÚNG TÔI</h3>
                     <div class="social-icons follow-icons full-width text-left">
-                        <a href="{{ $settings->link_fb }}" target="_blank" data-label="Facebook"
+                        <a href="{{ $settings->link_fb ?? "" }}" target="_blank" data-label="Facebook"
                             rel="noopener noreferrer nofollow" class="icon primary button circle facebook tooltip"
                             title="Follow on Facebook" aria-label="Follow on Facebook">
                             <i class="icon-facebook"></i>
                         </a>
 
-                        <a href="{{ $settings->link_ig }}" target="_blank" rel="noopener noreferrer nofollow"
+                        <a href="{{ $settings->link_ig ?? "" }}" target="_blank" rel="noopener noreferrer nofollow"
                             data-label="Instagram" class="icon primary button circle instagram tooltip"
                             title="Follow on Instagram" aria-label="Follow on Instagram">
                             <i class="icon-instagram"> </i>
@@ -158,7 +158,7 @@
     <div class="container clearfix" style="text-align: center">
         <div class="footer-primary ">
             <div class="copyright-footer">
-                {{ $settings->copyright }}
+                {{ $settings->copyright ?? "" }}
             </div>
         </div>
     </div>

@@ -98,7 +98,7 @@
                     </li>
                     <li class="html header-button-1">
                         <div class="header-button">
-                            <a href="tel:0914379989" class="button primary" style="border-radius: 99px">
+                            <a href="tel:0914379989" class="button primary wh-main-tel">
                                 <span>Hotline: 0914379989</span>
                             </a>
                         </div>
@@ -216,3 +216,8 @@
         <div class="header-bg-color fill"></div>
     </div>
 </div>
+<style>
+    .wh-main-tel{
+        border-radius: 99px;display: flex;justify-content: center;align-items: center
+    }
+</style>
