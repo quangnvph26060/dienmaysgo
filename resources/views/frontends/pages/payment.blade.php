@@ -21,7 +21,7 @@
 
                                     <div id="customer_details">
                                         <div class="clear">
-                                           
+
                                             <div class="woocommerce-billing-fields">
 
                                                 <h3>Chi tiết thanh toán</h3>
@@ -47,8 +47,8 @@
                                                                 id="billing_last_name" placeholder="" value=""
                                                                 aria-required="true" autocomplete="family-name"></span>
                                                     </p>
-                                                   
-                                              
+
+
 
                                                     <p class="form-row address-field validate-required form-row-first"
                                                         id="billing_address_1_field" data-priority="50"><label
@@ -176,21 +176,27 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr class="cart_item">
-                                                            <td class="product-name">
-                                                                Máy Phát Điện Chạy Xăng Elemax SV2800&nbsp; <strong
-                                                                    class="product-quantity">×&nbsp;1</strong> </td>
-                                                            <td class="product-total">
-                                                                <span class="woocommerce-Price-amount amount"><bdi>13.000.000<span
-                                                                            class="woocommerce-Price-currencySymbol">₫</span></bdi></span>
-                                                            </td>
-                                                        </tr>
+                                                    {{-- @dd($carts) --}}
+                                                        @forelse ($carts as $item)
+                                                            <tr class="cart_item">
+                                                                <td class="product-name">
+                                                                    {{ $item->name }} &nbsp; <strong
+                                                                        class="product-quantity">×&nbsp; {{ $item->qty }}</strong> </td>
+                                                                <td class="product-total">
+                                                                    <span class="woocommerce-Price-amount amount"><bdi>{{ number_format($item->price * $item->qty , 0, '', '.') }}                                                                        <span
+                                                                                class="woocommerce-Price-currencySymbol">₫</span></bdi></span>
+                                                                </td>
+                                                            </tr>
+                                                        @empty
+
+                                                        @endforelse
+
                                                     </tbody>
                                                     <tfoot>
 
                                                         <tr class="cart-subtotal">
                                                             <th>Tổng cộng</th>
-                                                            <td><span class="woocommerce-Price-amount amount"><bdi>13.000.000<span
+                                                            <td><span class="woocommerce-Price-amount amount"><bdi>{{ number_format($total, 0, '', '.') }}<span
                                                                             class="woocommerce-Price-currencySymbol">₫</span></bdi></span>
                                                             </td>
                                                         </tr>
@@ -203,7 +209,7 @@
                                                         <tr class="order-total">
                                                             <th>Tổng cộng</th>
                                                             <td><strong><span
-                                                                        class="woocommerce-Price-amount amount"><bdi>13.000.000<span
+                                                                        class="woocommerce-Price-amount amount"><bdi>{{ number_format($total, 0, '', '.') }}<span
                                                                                 class="woocommerce-Price-currencySymbol">₫</span></bdi></span></strong>
                                                             </td>
                                                         </tr>
@@ -295,7 +301,7 @@
                                                             name="woocommerce_checkout_place_order" id="place_order"
                                                             value="Place order" data-value="Place order">
                                                             Đặt hàng</button>
-                                                           
+
 
                                                         <input type="hidden" id="woocommerce-process-checkout-nonce"
                                                             name="woocommerce-process-checkout-nonce"

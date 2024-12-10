@@ -145,7 +145,7 @@
                 <ul class="nav header-nav header-bottom-nav nav-center nav-uppercase">
                     <li id="menu-item-1080"
                         class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-21 current_page_item menu-item-1080 active menu-item-design-default">
-                        <a href="https://dienmaysgo.com/" aria-current="page" class="nav-top-link">Trang chủ</a>
+                        <a href="{{ route('home') }}" aria-current="page" class="nav-top-link">Trang chủ</a>
                     </li>
 
 

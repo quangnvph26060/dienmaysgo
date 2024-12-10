@@ -15,8 +15,7 @@
 
                             @foreach (Cart::instance('shopping')->content() as $cart)
                                 <li class="woocommerce-mini-cart-item mini_cart_item">
-                                    <a href="https://dienmaysgo.com/gio-hang/?remove_item=9c3b1830513cc3b8fc4b76635d32e692&amp;_wpnonce=a80326973f"
-                                        class="remove remove_from_cart_button" data-row-id="{{ $cart->rowId }}">×</a>
+                                    <a class="remove remove_from_cart_button" data-row-id="{{ $cart->id }}" data-product_id="{{ $cart->id }}">×</a>
                                     <a href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sv2800/">
                                         <img width="300" height="300"
                                             src="https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-elemax-sv2800-1-300x300.jpg"
@@ -28,13 +27,14 @@
                                     <span class="quantity">{{$cart->qty}} ×
                                         <span class="woocommerce-Price-amount amount"><bdi>{{ formatAmount($cart->price)}}<span
                                                     class="woocommerce-Price-currencySymbol">₫</span></bdi></span></span>
+                                        <p class="sum_total" style="display: none">{{ formatAmount($cart->subtotal)}}</p>
                                 </li>
                             @endforeach
                         </ul>
 
                         <p class="woocommerce-mini-cart__total total">
                             <strong>Tổng cộng:</strong>
-                            <span class="woocommerce-Price-amount amount"><bdi><span class="total">{{ Cart::instance('shopping')->subTotal() }}</span><span
+                            <span class="woocommerce-Price-amount amount"><bdi><span class="total_cart">{{ Cart::instance('shopping')->subTotal() }}</span><span
                                         class="woocommerce-Price-currencySymbol">₫</span></bdi></span>
                         </p>
 
@@ -59,3 +59,105 @@
         </svg>
     </button>
 </div>
+
+<style>
+    .remove.loading {
+    position: relative;
+    pointer-events: none; /* Ngăn người dùng nhấn thêm lần nữa */
+}
+
+.remove.loading::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-top: 2px solid #000; /* Màu của vòng xoay */
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+</style>
+
+<script>
+
+
+
+    function updateTotalPrice() {
+                let prices = [];
+
+                // Lấy giá trị từ các phần tử có class 'quantity-price-sum'
+                document.querySelectorAll(".sum_total").forEach(element => {
+                    prices.push(element.textContent.trim());
+                });
+
+                // Chuyển đổi các giá trị này thành số và tính tổng
+                let numericValues = prices.map(value => {
+                    return parseInt(value.replace(/[^\d]/g, ''));
+                });
+
+                let total = numericValues.reduce((sum, current) => sum + current, 0);
+
+                // Cập nhật giá trị tổng vào các phần tử có class 'price-product-total'
+                document.querySelectorAll('.total_cart').forEach(element => {
+                    element.innerHTML = `${formatCurrency(total)}`;
+                });
+    }
+ document.querySelectorAll(".remove").forEach(button => {
+        button.addEventListener("click", function(event) {
+            event.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
+
+            let productId = this.getAttribute("data-product_id");
+            let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            let row = event.target.closest('li');
+            console.log(row);
+            this.classList.add("loading");
+
+            var url = "{{ route('carts.del-to-cart', ['id' => ':id']) }}".replace(':id', productId);
+            fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Đã xảy ra lỗi khi gửi yêu cầu.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        row.remove();
+                        updateTotalPrice();
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                })
+                .finally(() => {
+                    // Xóa lớp xoay sau khi xử lý xong
+                    this.classList.remove("loading");
+                });
+        });
+    });
+    function formatCurrency(amount) {
+            const formattedAmount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+            return formattedAmount ;
+    }
+
+</script>

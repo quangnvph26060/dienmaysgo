@@ -1,7 +1,61 @@
 @extends('frontends.layouts.master')
 @section('title',$title)
 @section('content')
-    <div id="content" class="content-area page-wrapper" role="main">
+    <div id="content" class="content-area page-wrapper cart_none" style="display: none;" role="main">
+        <div class="row row-main">
+            <div class="large-12 col">
+                <div class="col-inner">
+                    <div class="woocommerce">
+                        <div class="woocommerce-notices-wrapper" id="lastDeletedProduct">
+
+                                {{-- @php
+                                    $lastDeletedProduct = $lastDeletedProduct;
+                                @endphp
+                                <div class="woocommerce-message message-wrapper" role="alert">
+                                    <div class="message-container container success-color medium-text-center">
+                                        <i class="icon-checkmark"></i>
+                                        “{{ $lastDeletedProduct->name }}” đã bị xóa.
+                                        <a href="{{ route('carts.restore', ['rowId' => $lastDeletedProduct->rowId]) }}" class="restore-item">
+                                            Undo?
+                                        </a>
+
+                                    </div>
+                                </div> --}}
+
+                            <div class="woocommerce-info message-wrapper">
+                                <div class="message-container container medium-text-center">
+                                    <font style="vertical-align: inherit;">
+                                        <font style="vertical-align: inherit;">
+                                            Giỏ hàng của bạn hiện đang trống.
+                                        </font>
+                                    </font>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="woocommerce">
+                            <div class="text-center pt pb">
+                                <div class="woocommerce-notices-wrapper"></div>
+                                <div class="wc-empty-cart-message"></div>
+                                <p class="return-to-shop">
+                                    <a class="button primary wc-backward" href="{{ route('home') }}">
+                                        <font style="vertical-align: inherit;">
+                                            <font style="vertical-align: inherit;">
+                                                Quay lại cửa hàng
+                                            </font>
+                                        </font>
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="cart-footer-content after-cart-content relative">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="content" class="content-area page-wrapper cart_have" role="main">
         <div class="row row-main">
             <div class="large-12 col">
                 <div class="col-inner">
@@ -100,15 +154,15 @@
                                                     <td colspan="6" class="actions clear">
                                                         <div class="continue-shopping pull-left text-left">
                                                             <a class="button-continue-shopping button primary is-outline"
-                                                                href="https://dienmaysgo.com/cua-hang/">
+                                                                href="{{ route('home') }}">
                                                                 &#8592;&nbsp;Tiếp tục mua sắm
                                                             </a>
                                                         </div>
 
-                                                        <button type="submit" class="button primary mt-0 pull-left small"
+                                                        {{-- <button type="submit" class="button primary mt-0 pull-left small"
                                                             name="update_cart" value="Update cart">
                                                             Cập nhật giỏ hàng
-                                                        </button>
+                                                        </button> --}}
 
                                                         <input type="hidden" id="woocommerce-cart-nonce"
                                                             name="woocommerce-cart-nonce" value="a80326973f" /><input
@@ -174,6 +228,9 @@
 @endsection
 @push('scripts')
     <script>
+     const csrfToken = "{{ csrf_token() }}";
+
+
         function formatCurrency(amount) {
             const formattedAmount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
@@ -211,8 +268,29 @@
                 });
             }
 
-            
+
             updateTotalPrice();
+
+            function updateCartDisplay() {
+                const cartNone = document.querySelector(".cart_none");
+                const cartHave = document.querySelector(".cart_have");
+
+                if (cartNone && cartHave) {
+                    if (document.querySelectorAll(".quantity-price-sum").length === 0) {
+                        cartNone.style.display = "block";
+                        cartHave.style.display = "none";
+                    } else {
+                        cartNone.style.display = "none";
+                        cartHave.style.display = "block";
+                    }
+                } else {
+                    console.error("Phần tử cart_none hoặc cart_have không tồn tại trong DOM.");
+                }
+            }
+
+            // Gọi hàm khi cần cập nhật trạng thái
+            updateCartDisplay();
+
 
 
 
@@ -256,6 +334,7 @@
                     .then(data => {
                         if (data.status === 'success') {
                             updateTotalPrice();
+                            updateCartDisplay();
                             toastr.success(data.message);
                             jQuery('.cart-count').html(data.count)
                         } else {
@@ -327,6 +406,7 @@
                     var url = "{{ route('carts.del-to-cart', ['id' => ':id']) }}".replace(':id',
                         productId);
 
+
                     fetch(url, {
                             method: 'POST',
                             headers: {
@@ -343,8 +423,41 @@
                         .then(data => {
                             if (data.status === 'success') {
                                 row.remove();
+                                updateTotalPrice();
+                                updateCartDisplay();
                                 toastr.success(data.message);
                                 jQuery('.cart-count').html(data.count)
+                                if (data.lastDeletedProduct) {
+                                    let lastDeletedProduct = document.querySelector('#lastDeletedProduct');
+                                    console.log(data.lastDeletedProduct);
+                                    const lastProduct = data.lastDeletedProduct;
+                                    const restoreUrl = "{{ route('carts.restore') }}";
+                                    lastDeletedProduct.innerHTML = `
+                                    <div class="woocommerce-message message-wrapper" role="alert">
+                                        <div class="message-container container success-color medium-text-center" style="display:flex">
+                                            <i class="icon-checkmark"></i>
+                                            “${lastProduct.name}” đã bị xóa.
+                                            <form action="${restoreUrl}" method="POST" class="restore-form">
+                                                <input type="hidden" name="_token" value="${csrfToken}">
+                                                <input type="hidden" name="rowId" value="${lastProduct.rowId}">
+                                                <button type="submit" >
+                                                    Undo?
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                        <div class="woocommerce-info message-wrapper">
+                                            <div class="message-container container medium-text-center">
+                                                <font style="vertical-align: inherit;">
+                                                    <font style="vertical-align: inherit;">
+                                                        Giỏ hàng của bạn hiện đang trống.
+                                                    </font>
+                                                </font>
+                                            </div>
+                                        </div>
+                                        `;
+                                }
+
                             }
                         })
                         .catch(error => {
