@@ -30,6 +30,7 @@ class SgoProduct extends Model
         'description_seo',
         'keyword_seo',
         'image',
+        'import_price'
     ];
 
 

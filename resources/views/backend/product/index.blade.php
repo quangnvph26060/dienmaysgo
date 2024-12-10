@@ -17,6 +17,7 @@
                         <th>Tên</th>
                         <th>Số lượng</th>
                         <th>Giá</th>
+                        <th>Giá bán</th>
                         <th style="text-align: center">Hành động</th>
                     </thead>
 
@@ -57,6 +58,10 @@
                     {
                         data: 'price',
                         name: 'price'
+                    },
+                    {
+                        data: 'import_price',
+                        name: 'import_price'
                     },
                     {
                         data: 'action',
