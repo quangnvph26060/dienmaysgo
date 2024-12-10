@@ -92,7 +92,7 @@
                     <li class="header-cart relative">
                         <a href="" class="cart-link position-relative">
                             <i class="bi bi-cart3" style="font-size: 1.5rem"></i>
-                            <span class="cart-count rounded-pill bg-danger"> {{ \Cart::instance('shopping')->count() }}
+                            <span class="cart-count rounded-pill bg-danger"> {{ \Cart::instance('shopping')->count() ?? 0 }}
                             </span>
                         </a>
                     </li>
