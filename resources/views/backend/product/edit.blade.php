@@ -53,7 +53,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <!-- Cột bên trái -->
-                                    <div class="col-lg-12 add_product">
+                                    <div class="col-lg-6 add_product">
                                         <!-- Tên sản phẩm -->
                                         <div class="form-group mb-3">
                                             <label for="name" class="form-label">Tên sản phẩm</label>
@@ -76,9 +76,18 @@
 
                                     <div class="col-lg-6">
                                         <div class="form-group mb-3">
-                                            <label for="price" class="form-label">Giá</label>
-                                            <input value="{{ $product->price }}" type="number" class="form-control"
-                                                name="price" id="price" placeholder="Nhập giá khuyến mãi sản phẩm">
+                                            <label for="price" class="form-label">Giá bán</label>
+                                            <input value="{{ $product->price ?? 0 }}" type="number" class="form-control"
+                                                name="price" id="price" placeholder="Nhập giá bán sản phẩm">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group mb-3">
+                                            <label for="import_price" class="form-label">Giá nhập</label>
+                                            <input value="{{ $product->import_price ?? 0 }}" type="number"
+                                                class="form-control" name="import_price" id="import_price"
+                                                placeholder="Nhập giá nhập sản phẩm">
                                         </div>
                                     </div>
 

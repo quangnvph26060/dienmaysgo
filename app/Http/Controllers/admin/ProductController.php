@@ -21,9 +21,12 @@ class ProductController extends Controller
         $page = 'Sản phẩm';
         $title = 'Danh sách sản phẩm';
         if ($request->ajax()) {
-            return datatables()->of(SgoProduct::select(['id', 'name', 'price', 'quantity'])->get())
+            return datatables()->of(SgoProduct::select(['id', 'name', 'price', 'quantity', 'import_price'])->get())
                 ->addColumn('price', function ($row) {
                     return number_format($row->price, 0, ',', '.') . ' VND';
+                })
+                ->addColumn('import_price', function ($row) {
+                    return number_format($row->import_price, 0, ',', '.') . ' VND';
                 })
                 ->addColumn('quantity', function ($row) {
                     return number_format($row->quantity, 0, ',', '.');
@@ -74,6 +77,7 @@ class ProductController extends Controller
             [
                 'name' => 'required|unique:sgo_products',
                 'price' => 'nullable|numeric',
+                'import_price' => 'nullable|numeric',
                 'quantity' => 'nullable|numeric',
                 'category_id' => 'required',
                 'origin_id' => 'required',
@@ -90,6 +94,7 @@ class ProductController extends Controller
             [
                 'name' => 'Tên sản phẩm',
                 'price' => 'Giá sản phẩm',
+                'import_price' => 'Giá nhập sản phẩm',
                 'quantity' => 'Số lượng sản phẩm',
                 'category_id' => 'Danh mục sản phẩm',
                 'origin_id' => 'Xuất xứ sản phẩm',
@@ -145,6 +150,7 @@ class ProductController extends Controller
             [
                 'name' => 'required|unique:sgo_products,name,' . $id,
                 'price' => 'nullable|numeric',
+                'import_price' => 'nullable|numeric',
                 'quantity' => 'nullable|numeric',
                 'category_id' => 'required',
                 'origin_id' => 'required',
@@ -160,7 +166,7 @@ class ProductController extends Controller
             __('request.messages'),
             [
                 'name' => 'Tên sản phẩm',
-                'price' => 'Giá sản phẩm',
+                'import_price' => 'Giá nhập sản phẩm',
                 'quantity' => 'Số lượng sản phẩm',
                 'category_id' => 'Danh mục sản phẩm',
                 'origin_id' => 'Xuất xứ sản phẩm',
