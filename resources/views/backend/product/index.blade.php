@@ -5,6 +5,9 @@
     <div class="card">
         <div class="card-header d-flex justify-content-between">
             <h4 class="card-title">Danh sách sản phẩm</h4>
+            <div class="card-tools">
+                <a href="{{ route('admin.product.add') }}" class="btn btn-primary btn-sm">Thêm mới sản phẩm (+)</a>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">

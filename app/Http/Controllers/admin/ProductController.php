@@ -52,7 +52,7 @@ class ProductController extends Controller
         $origins = SgoOrigin::pluck('name', 'id');
         $fuels = SgoFuel::pluck('name', 'id');
         $promotions = SgoPromotion::pluck('name', 'id');
-        return view('backend.product.add', compact('categories', 'origins', 'fuels', 'promotions' ,'page', 'title'));
+        return view('backend.product.add', compact('categories', 'origins', 'fuels', 'promotions', 'page', 'title'));
     }
 
     public function edit($id)
@@ -65,7 +65,7 @@ class ProductController extends Controller
         $promotions = SgoPromotion::pluck('name', 'id');
         $product = SgoProduct::findOrFail($id);
         $images = $product->images;
-        return view('backend.product.edit', compact('categories', 'origins', 'fuels', 'promotions', 'product','page', 'title', 'images'));
+        return view('backend.product.edit', compact('categories', 'origins', 'fuels', 'promotions', 'product', 'page', 'title', 'images'));
     }
 
     public function store(Request $request)
@@ -138,7 +138,7 @@ class ProductController extends Controller
     }
     public function update(Request $request, $id)
     {
-        dd($request->all());
+        // dd($request->all());
 
         $product = SgoProduct::findOrFail($id);
         $validated  = $request->validate(
@@ -183,9 +183,19 @@ class ProductController extends Controller
                 $validated['image'] = saveImage($request, 'image', 'products_main_images');
             }
 
+            $oldImages = $request->input('old', []);
+
+            SgoProductImages::where('product_id', $id)
+                ->whereNotIn('id', $oldImages)
+                ->get()
+                ->each(function ($image) {
+                    deleteImage($image->image);
+                    $image->delete();
+                });
+
             if ($request->hasFile('images')) {
                 $images = $request->file('images');
-                Log::info($images);
+                // dd($images);
                 foreach ($images as $image) {
                     $imagePath = saveImageNew($image, 'image', 'products_images');
 
