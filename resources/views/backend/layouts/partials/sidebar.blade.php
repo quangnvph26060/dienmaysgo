@@ -25,7 +25,7 @@
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
                 <li class="nav-item active">
-                    <a href="{{ route('admin.dashboard') }}" class="collapsed" >
+                    <a href="{{ route('admin.dashboard') }}" class="collapsed">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
@@ -57,52 +57,23 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.product.add') }}">
-                                    <span class="sub-item">Thêm mới sản phẩm</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#base">
-                        <i class="fas fa-pen-square"></i>
-                        <p>Danh mục</p>
-                        <span class="caret"></span>
-                    </a>
-                    <div class="collapse" id="base">
-                        <ul class="nav nav-collapse">
-                            <li>
                                 <a href="{{ route('admin.category.index') }}">
-                                    <span class="sub-item">Danh sách danh mục</span>
+                                    <span class="sub-item">Danh mục sản phẩm</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.category.create') }}">
-                                    <span class="sub-item">Thêm mới danh mục</span>
+                                <a href="{{ route('admin.origin.index') }}">
+                                    <span class="sub-item">Xuất xứ</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.fuel.index') }}">
+                                    <span class="sub-item">Nhiên liệu</span>
                                 </a>
                             </li>
                         </ul>
                     </div>
                 </li>
-
-                <li class="nav-item">
-                    <a href="{{ route('admin.origin.index') }}">
-                        <i class="fas fa-pen-square"></i>
-                        <p>Xuất xứ</p>
-                        <span class="caret"></span>
-                    </a>
-
-                </li>
-                <li class="nav-item">
-                    <a href="{{ route('admin.fuel.index') }}">
-                        <i class="fas fa-pen-square"></i>
-                        <p>Nhiên liệu</p>
-                        <span class="caret"></span>
-                    </a>
-
-                </li>
-
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#promotion">
                         <i class="fas fa-pen-square"></i>
