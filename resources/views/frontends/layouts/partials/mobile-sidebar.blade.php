@@ -27,7 +27,7 @@
         </li>
         <li
             class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home current-menu-item page_item page-item-21 current_page_item menu-item-1080">
-            <a href="https://dienmaysgo.com/" aria-current="page">Trang chủ</a>
+            <a href="{{ route('home') }}" aria-current="page">Trang chủ</a>
         </li>
         <li
             class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1606">

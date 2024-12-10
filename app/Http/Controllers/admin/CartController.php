@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\SgoProduct;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Log;
 
 class CartController extends Controller
 {
@@ -13,35 +14,50 @@ class CartController extends Controller
     {
         $title = 'Đơn hàng';
         $carts = session()->get('cart')['shopping'];
-        return view('frontends.pages.cart',compact('carts','title'));
+        $deletedItem = session()->get('last_deleted_product');
+        Log::info($carts);
+        return view('frontends.pages.cart', compact('carts', 'title'));
     }
 
-    public function InfoPayment(){
+    public function InfoPayment()
+    {
         $title = "Thanh toán";
-        return view('frontends.pages.payment',compact('title'));
+        $carts = Cart::instance('shopping')->content();
+        $total = $this->sumCarts();
+        return view('frontends.pages.payment', compact('title', 'carts', 'total'));
     }
 
-    public function delItemCart($id){
-        if(!$id){
-            return redirect()->back(['status'=>'errors']);
+    public function delItemCart($id)
+    {
+        if (!$id) {
+            return redirect()->back(['status' => 'errors']);
         }
+        Log::info('xóa');
         $cart = session()->get('cart');
-
+        $lastDeletedProduct = null;
         if (isset($cart['shopping'])) {
             foreach ($cart['shopping'] as $key => $item) {
                 if ($item->id == $id) {
+
+                    if (count($cart['shopping']) == 1) {
+                        // Lưu thông tin sản phẩm cuối cùng vào session để khôi phục
+                        $lastDeletedProduct = $item;
+                        session()->put('last_deleted_product', $item);
+                    }
+
                     unset($cart['shopping'][$key]);
                     break;
                 }
             }
-    
-           session()->put('cart', $cart);
-           $count = count($cart['shopping']);
+            Log::info($lastDeletedProduct);
+            session()->put('cart', $cart);
+            $count = count($cart['shopping']);
             return response()->json([
                 'status' => 'success',
                 'message' => 'Xóa sản phẩm thành công',
                 'count' => $count,
-                ]);
+                'lastDeletedProduct' => $lastDeletedProduct
+            ]);
         }
         return response()->json(['status' => 'error', 'message' => 'Giỏ hàng không tồn tại']);
     }
@@ -96,13 +112,14 @@ class CartController extends Controller
             ]);
         }
     }
-    public function updateQtyCart($id, $qty) {
+    public function updateQtyCart($id, $qty)
+    {
         if (!$id) {
             return redirect()->back()->withErrors(['status' => 'errors', 'message' => "Không tìm thấy sản phẩm"]);
         }
-    
+
         $product = SgoProduct::where('id', $id)->first();
-    
+
         if (!$product) {
             return redirect()->back()->withErrors(['status' => 'errors', 'message' => "Không tìm thấy sản phẩm"]);
         }
@@ -112,9 +129,9 @@ class CartController extends Controller
                 'message' => 'Sản phẩm vượt quá'
             ]);
         }
-    
+
         $cart = session()->get('cart');
-    
+
         if (isset($cart['shopping'])) {
             foreach ($cart['shopping'] as $key => $item) {
                 if ($item->id == $id) {
@@ -122,18 +139,61 @@ class CartController extends Controller
                     break;
                 }
             }
-    
+
             session()->put('cart', $cart);
             $count = count($cart['shopping']);
-    
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Cập nhật sản phẩm thành công',
                 'count' => $count,
             ]);
         }
-    
+
         return response()->json(['status' => 'error', 'message' => 'Giỏ hàng không tồn tại']);
     }
-    
+
+    public function sumCarts()
+    {
+        $carts = session()->get('cart')['shopping'] ?? [];
+        $total = 0;
+
+        foreach ($carts as $item) {
+            $total += $item->subtotal;
+        }
+        return $total;
+    }
+
+    public function restore()
+{
+    // Lấy thông tin sản phẩm cuối cùng đã xóa từ session
+    $lastProduct = session()->get('last_deleted_product');
+
+    // Kiểm tra xem thông tin sản phẩm có tồn tại không
+    if ($lastProduct) {
+        // Thêm sản phẩm vào giỏ hàng
+        Cart::instance('shopping')->add([
+            'id' => $lastProduct->id, // Truy cập mảng thay vì đối tượng
+            'name' => $lastProduct->name,
+            'qty' => $lastProduct->qty,
+            'price' => $lastProduct->price,
+            'options' => [
+                'image' => $lastProduct->image ?? null, // Kiểm tra nếu key tồn tại
+            ],
+        ]);
+
+        // Xóa sản phẩm đã khôi phục khỏi session
+        session()->forget('last_deleted_product');
+
+        // Ghi log để kiểm tra
+
+
+        return redirect()->back()->with('success', 'Khôi phục sản phẩm thành công');
+    }
+
+    // Nếu không có sản phẩm nào để khôi phục
+    return redirect()->back()->with('error', 'Không có sản phẩm nào để khôi phục');
+}
+
+
 }
