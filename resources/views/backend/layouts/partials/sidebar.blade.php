@@ -143,6 +143,15 @@
                     </div>
                 </li>
 
+                <li class="nav-item">
+                    <a  href="{{ route('admin.config.index') }}">
+                        <i class="fas fa-newspaper"></i>
+                        <p>Cấu hình</p>
+                        <span class="caret"></span>
+                    </a>
+
+                </li>
+
             </ul>
         </div>
     </div>

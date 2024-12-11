@@ -79,7 +79,9 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+
                                                 @forelse ($carts as $item)
+
                                                     <tr class="woocommerce-cart-form__cart-item cart_item"
                                                         data-row-id="{{ $item->id }}">
                                                         <td class="product-remove">
@@ -93,11 +95,11 @@
                                                                 href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sh1900/"><img
                                                                     fetchpriority="high" decoding="async" width="300"
                                                                     height="300"
-                                                                    src="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20300%20300%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3C%2Fsvg%3E"
-                                                                    data-src="https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-300x300.jpg"
+                                                                    src="{{ asset('storage/'.$item->options->image) }}"
+                                                                    data-src="{{ asset('storage/'.$item->options->image) }}"
                                                                     class="lazy-load attachment-woocommerce_thumbnail size-woocommerce_thumbnail"
                                                                     alt="" srcset=""
-                                                                    data-srcset="https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-300x300.jpg 300w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-100x100.jpg 100w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-600x600.jpg 600w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900-150x150.jpg 150w, https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-chay-xang-1-6kva-elemax-sh1900.jpg 680w"
+                                                                    data-srcset="{{ asset('storage/'.$item->options->image) }}"
                                                                     sizes="(max-width: 300px) 100vw, 300px" /></a>
                                                         </td>
 
