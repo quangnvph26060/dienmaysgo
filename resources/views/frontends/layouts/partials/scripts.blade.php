@@ -35,7 +35,7 @@
     });
 
     function formatAmount(amount) {
-    // Chuyển đổi giá trị thành chuỗi và thêm dấu phân cách hàng nghìn bằng dấu chấm
+        // Chuyển đổi giá trị thành chuỗi và thêm dấu phân cách hàng nghìn bằng dấu chấm
         let formattedAmount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
         return formattedAmount;
@@ -73,7 +73,7 @@
                 </span>
             </li>
         `;
-        total += cart.price * cart.qty; // Tính t��ng tiền
+            total += cart.price * cart.qty; // Tính t��ng tiền
         });
 
         // Gắn HTML vào danh sách sản phẩm trong giỏ hàng
@@ -99,7 +99,7 @@
                             toastr.success(response.message);
                             jQuery('.cart-count').html(response.count)
                             cartResponse(response.carts)
-
+                            jQuery('#cart-links').css('display', 'inline-block')
                             // jQuery('.woocommerce-Price-amount.amount bdi').html(response.total)
                         } else {
                             toastr.error(response.message);
@@ -115,7 +115,7 @@
     }
 
     jQuery(document).ready(function() {
-    // Lắng nghe sự kiện click vào nút xóa sản phẩm trong giỏ hàng
+        // Lắng nghe sự kiện click vào nút xóa sản phẩm trong giỏ hàng
         jQuery(document).on('click', '.remove_from_cart_button', function(event) {
             event.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
             const productId = jQuery(this).data('product_id');
@@ -144,7 +144,11 @@
                         toastr.success(response.message);
 
                         row.remove();
+                        if (response.count == 0) {
+                            jQuery('#cart-links').css('display', 'none');
+                        }
                         jQuery('.cart-count').html(response.count);
+
                         updateTotalPrice();
                     } else {
                         toastr.error(response.message);
@@ -171,17 +175,18 @@
 
             // Chuyển đổi các giá trị này thành số sau khi loại bỏ dấu chấm và chuyển thành số
             let numericValues = prices.map(value => {
-                return parseFloat(value.replace(/[^\d]/g, ''));  // Loại bỏ tất cả các ký tự không phải số
+                return parseFloat(value.replace(/[^\d]/g,
+                    '')); // Loại bỏ tất cả các ký tự không phải số
             });
 
-            console.log(numericValues);  // Hiển thị các giá trị đã chuyển thành số
+            console.log(numericValues); // Hiển thị các giá trị đã chuyển thành số
 
             // Tính tổng
             let total = numericValues.reduce((sum, current) => sum + current, 0);
 
             // Hiển thị tổng trong các phần tử có class 'total_cart'
             document.querySelectorAll('.total_cart').forEach(element => {
-                element.innerHTML = formatCurrency(total);  // Định dạng lại tổng
+                element.innerHTML = formatCurrency(total); // Định dạng lại tổng
             });
         }
 
@@ -193,7 +198,6 @@
             return formattedAmount; // Định dạng tiền Việt Nam
         }
     });
-
 </script>
 
 @stack('scripts')

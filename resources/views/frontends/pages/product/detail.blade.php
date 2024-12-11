@@ -3,228 +3,234 @@
 
 @section('content')
 
-<main id="main" class="">
-    <div class="shop-container">
-        <div class="container">
-            <div class="woocommerce-notices-wrapper"></div>
-        </div>
-        <div id="product-1113"
-            class="product type-product post-1113 status-publish first instock product_cat-may-phat-dien-elemax has-post-thumbnail shipping-taxable purchasable product-type-simple">
-            <div class="row content-row row-divided row-large row-reverse">
-                <div id="product-sidebar" class="col large-3 hide-for-medium shop-sidebar"></div>
+    <main id="main" class="">
+        <div class="shop-container">
+            <div class="container">
+                <div class="woocommerce-notices-wrapper"></div>
+            </div>
+            <div id="product-1113"
+                class="product type-product post-1113 status-publish first instock product_cat-may-phat-dien-elemax has-post-thumbnail shipping-taxable purchasable product-type-simple">
+                <div class="row content-row row-divided row-large row-reverse">
+                    <div id="product-sidebar" class="col large-3 hide-for-medium shop-sidebar"></div>
 
-                <div class="col large-9">
-                    <div class="product-main">
-                        <div class="row">
-                            <div class="large-5 col">
-                                <div class="product-images relative mb-half has-hover woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images"
-                                    data-columns="4">
-                                    <!-- Badge container -->
-                                    <div class="badge-container is-larger absolute left top z-1"></div>
+                    <div class="col large-9">
+                        <div class="product-main">
+                            <div class="row">
+                                <div class="large-5 col">
+                                    <div class="product-images relative mb-half has-hover woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images"
+                                        data-columns="4">
+                                        <!-- Badge container -->
+                                        <div class="badge-container is-larger absolute left top z-1"></div>
 
-                                    <!-- Wishlist button -->
-                                    @if ($product->price)
-                                    <div class="image-tools absolute top show-on-hover right z-3">
-                                        <div class="wishlist-icon">
-                                            <button data-id="{{ $product->id }}"
-                                                class="wishlist-button button is-outline circle icon add-to-cart"
-                                                aria-label="Wishlist">
-                                                <i class="icon-shopping-cart"></i>
-                                            </button>
+                                        <!-- Wishlist button -->
+                                        @if ($product->price)
+                                            <div class="image-tools absolute top show-on-hover right z-3">
+                                                <div class="wishlist-icon">
+                                                    <button data-id="{{ $product->id }}"
+                                                        class="wishlist-button button is-outline circle icon add-to-cart"
+                                                        aria-label="Wishlist">
+                                                        <i class="icon-shopping-cart"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        @endif
+
+
+                                        <!-- Main image -->
+                                        <figure
+                                            class="woocommerce-product-gallery__wrapper product-gallery-slider slider slider-nav-small mb-half">
+                                            <div class="woocommerce-product-gallery__image slide first">
+                                                <a href="{{ asset('storage/' . $product->image) }}"
+                                                    data-lightbox="product-gallery"
+                                                    data-title="Máy phát điện Elemax SV2800">
+                                                    <img id="main-image" width="458" height="458"
+                                                        src="{{ asset('storage/' . $product->image) }}" alt=""
+                                                        title="{{ $product->slug }}" decoding="async" fetchpriority="high"
+                                                        sizes="(max-width: 458px) 100vw, 458px" />
+                                                </a>
+                                            </div>
+                                        </figure>
+
+                                        <!-- Gallery images -->
+                                        <div class="product-gallery-thumbnails swiper-container">
+                                            <div class="swiper-wrapper">
+                                                @if ($product->images->isNotEmpty())
+                                                    @foreach ($product->images as $index => $image)
+                                                        <div class="swiper-slide">
+                                                            <img class="gallery-thumb"
+                                                                src="{{ asset('storage/' . $image->image) }}"
+                                                                data-large-src="{{ asset('storage/' . $image->image) }}"
+                                                                alt="Thumbnail {{ $index + 1 }}" />
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                @endif
+                                                <!-- Add more thumbnails as needed -->
+                                            </div>
+                                            <!-- Navigation buttons -->
                                         </div>
                                     </div>
+                                </div>
+
+                                <div class="product-info summary entry-summary col col-fit product-summary form-flat">
+                                    <h1 class="product-title product_title entry-title">
+                                        {{ $product->name }}
+                                    </h1>
+
+                                    <div class="price-wrapper">
+                                        <p class="price product-page-price">
+                                            <span class="woocommerce-Price-amount amount"
+                                                style="display: block; margin: 20px 0;">
+                                                @if ($product->price)
+                                                    @if (hasDiscount($product->promotion))
+                                                        <bdi>{{ formatAmount(calculateAmount($product->price, $product->promotion->discount)) }}
+                                                            <span class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                        </bdi>
+                                                        <del
+                                                            style="font-size: 14px;color: black !important;font-weight: 500;">
+                                                            {{ formatAmount($product->price) }}
+                                                            <span class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                        </del>
+                                                    @else
+                                                        <bdi>{{ formatAmount($product->price) }}
+                                                            <span class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                        </bdi>
+                                                    @endif
+                                                @else
+                                                    <a href="" class="contact">Liên hệ <span class="bi bi-telephone"
+                                                            style="margin-left: 3px"></span></a>
+                                                @endif
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="product-short-description">
+                                        {!! $product->description_short !!}
+                                    </div>
+                                    <section class="section" id="section_1960688269">
+                                        <div class="bg section-bg fill bg-fill bg-loaded"></div>
+
+                                        <div class="section-content relative">
+                                            <div class="row" id="row-2038915585">
+                                                <div id="col-454331129" class="col small-12 large-12">
+                                                    <div class="col-inner">
+                                                        <p>
+                                                            <em><strong>Lưu ý:</strong> Giá bán sản phẩm
+                                                                mang tính chất tham khảo, vui lòng liên hệ
+                                                                trực tiếp để được có giá tốt nhất với số
+                                                                lượng hàng trong kho. Xin cảm ơn!</em>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </section>
+
+
+                                    @if ($product->price)
+                                        <p class="stock in-stock">Còn hàng</p>
+                                        <form class="cart" action="" method="post" enctype="multipart/form-data">
+                                            <div class="sticky-add-to-cart-wrapper">
+                                                <div class="sticky-add-to-cart">
+                                                    <div class="sticky-add-to-cart__product">
+                                                        <img src="{{ showImage($product->image) }}" alt=""
+                                                            class="sticky-add-to-cart-img" />
+                                                        <div class="product-title-small hide-for-small">
+                                                            <strong>{{ $product->name }}</strong>
+                                                        </div>
+                                                        <div class="price-wrapper">
+                                                            <p class="price product-page-price">
+                                                                <span class="woocommerce-Price-amount amount">
+                                                                    <bdi>{{ number_format($product->price, 0, ',', '.') }}
+                                                                        <span
+                                                                            class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                                    </bdi>
+                                                                </span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="quantity buttons_added form-flat">
+                                                        <input type="button" value="-" class="minus button is-form" />
+                                                        <label class="screen-reader-text" for="quantity_674f195d66f6f">
+                                                            {{ $product->name }}
+                                                        </label>
+                                                        <input type="number" id="quantity_674f195d66f6f"
+                                                            class="input-text qty text" step="1" min="1"
+                                                            name="quantity" value="1" title="Qty" size="4"
+                                                            placeholder="" inputmode="numeric" />
+                                                        <input type="button" value="+"
+                                                            class="plus button is-form" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <button type="button" name="add-to-cart" data-product-id="{{ $product->id }}"
+                                            class="single_add_to_cart_button button alt">
+                                            Add to cart
+                                        </button>
                                     @endif
 
 
-                                    <!-- Main image -->
-                                    <figure
-                                        class="woocommerce-product-gallery__wrapper product-gallery-slider slider slider-nav-small mb-half">
-                                        <div class="woocommerce-product-gallery__image slide first">
-                                            <a href="{{ asset('storage/'.$product->image) }}"
-                                                data-lightbox="product-gallery"
-                                                data-title="Máy phát điện Elemax SV2800">
-                                                <img id="main-image" width="458" height="458"
-                                                    src="{{ asset('storage/'.$product->image) }}" alt=""
-                                                    title="{{ $product->slug}}" decoding="async" fetchpriority="high"
-                                                    sizes="(max-width: 458px) 100vw, 458px" />
-                                            </a>
-                                        </div>
-                                    </figure>
 
-                                    <!-- Gallery images -->
-                                    <div class="product-gallery-thumbnails swiper-container">
-                                        <div class="swiper-wrapper">
-                                            @if($product->images->isNotEmpty())
-                                                @foreach($product->images as $index => $image)
-                                                <div class="swiper-slide">
-                                                    <img class="gallery-thumb"
-                                                        src="{{ asset('storage/' . $image->image) }}"
-                                                        data-large-src="{{ asset('storage/' . $image->image) }}"
-                                                        alt="Thumbnail {{ $index + 1 }}" />
-                                                </div>
-                                                @endforeach
-                                            @else
-
-                                            @endif
-                                            <!-- Add more thumbnails as needed -->
-                                        </div>
-                                        <!-- Navigation buttons -->
+                                    <div class="product_meta">
+                                        <span class="posted_in">Danh mục:
+                                            <a href="{{ route('products.list', $product->category->slug) }}"
+                                                rel="tag">{{ $product->category->name }}</a></span>
                                     </div>
-                                </div>
-                            </div>
-
-                            <div class="product-info summary entry-summary col col-fit product-summary form-flat">
-                                <h1 class="product-title product_title entry-title">
-                                    {{ $product->name }}
-                                </h1>
-
-                                <div class="price-wrapper">
-                                    <p class="price product-page-price">
-                                        <span class="woocommerce-Price-amount amount"
-                                            style="display: block; margin: 20px 0;">
-                                            @if ($product->price)
-                                            @if (hasDiscount($product->promotion))
-                                            <bdi>{{ formatAmount(calculateAmount($product->price,
-                                                $product->promotion->discount)) }}
-                                                <span class="woocommerce-Price-currencySymbol">&#8363;</span>
-                                            </bdi>
-                                            <del style="font-size: 14px;color: black !important;font-weight: 500;">
-                                                {{ formatAmount($product->price) }}
-                                                <span class="woocommerce-Price-currencySymbol">&#8363;</span>
-                                            </del>
-                                            @else
-                                            <bdi>{{ formatAmount($product->price) }}
-                                                <span class="woocommerce-Price-currencySymbol">&#8363;</span>
-                                            </bdi>
-                                            @endif
-                                            @else
-                                            <a href="" class="contact">Liên hệ <span class="bi bi-telephone"
-                                                    style="margin-left: 3px"></span></a>
-                                            @endif
-                                        </span>
-                                    </p>
-                                </div>
-                                <div class="product-short-description">
-                                    {!! $product->description_short !!}
-                                </div>
-                                <section class="section" id="section_1960688269">
-                                    <div class="bg section-bg fill bg-fill bg-loaded"></div>
-
-                                    <div class="section-content relative">
-                                        <div class="row" id="row-2038915585">
-                                            <div id="col-454331129" class="col small-12 large-12">
-                                                <div class="col-inner">
-                                                    <p>
-                                                        <em><strong>Lưu ý:</strong> Giá bán sản phẩm
-                                                            mang tính chất tham khảo, vui lòng liên hệ
-                                                            trực tiếp để được có giá tốt nhất với số
-                                                            lượng hàng trong kho. Xin cảm ơn!</em>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </section>
-
-
-                                @if ($product->price)
-                                <p class="stock in-stock">Còn hàng</p>
-                                <form class="cart" action="" method="post" enctype="multipart/form-data">
-                                    <div class="sticky-add-to-cart-wrapper">
-                                        <div class="sticky-add-to-cart">
-                                            <div class="sticky-add-to-cart__product">
-                                                <img src="{{ showImage($product->image) }}" alt=""
-                                                    class="sticky-add-to-cart-img" />
-                                                <div class="product-title-small hide-for-small">
-                                                    <strong>{{ $product->name }}</strong>
-                                                </div>
-                                                <div class="price-wrapper">
-                                                    <p class="price product-page-price">
-                                                        <span class="woocommerce-Price-amount amount"><bdi>{{
-                                                                number_format($product->price, 0, ',', '.') }}<span
-                                                                    class="woocommerce-Price-currencySymbol">&#8363;</span></bdi></span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="quantity buttons_added form-flat">
-                                                <input type="button" value="-" class="minus button is-form" />
-                                                <label class="screen-reader-text" for="quantity_674f195d66f6f">
-                                                    {{ $product->name }}</label>
-                                                <input type="number" id="quantity_674f195d66f6f"
-                                                    class="input-text qty text" step="1" min="1" max="" name="quantity"
-                                                    value="1" title="Qty" size="4" placeholder="" inputmode="numeric" />
-                                                <input type="button" value="+" class="plus button is-form" />
-                                            </div>
-
-                                            <button type="submit" name="add-to-cart" value="1113"
-                                                class="single_add_to_cart_button button alt">
-                                                Add to cart
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                                @endif
-
-
-                                <div class="product_meta">
-                                    <span class="posted_in">Danh mục:
-                                        <a href="{{ route('products.list', $product->category->slug) }}" rel="tag">{{
-                                            $product->category->name }}</a></span>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="product-footer">
-                        <div class="woocommerce-tabs wc-tabs-wrapper container tabbed-content">
-                            <ul class="tabs wc-tabs product-tabs small-nav-collapse nav nav-uppercase nav-tabs nav-normal nav-left"
-                                role="tablist">
-                                <li class="description_tab active" id="tab-title-description" role="presentation">
-                                    <a href="#tab-description" role="tab" aria-selected="true"
-                                        aria-controls="tab-description">
-                                        Thông tin chi tiết
-                                    </a>
-                                </li>
-                                <li class="additional_information_tab" id="tab-title-additional_information"
-                                    role="presentation">
-                                    <a href="#tab-additional_information" role="tab" aria-selected="false"
-                                        aria-controls="tab-additional_information" tabindex="-1">
-                                        Thông tin bổ sung
-                                    </a>
-                                </li>
-                                {{-- <li class="reviews_tab" id="tab-title-reviews" role="presentation">
+                        <div class="product-footer">
+                            <div class="woocommerce-tabs wc-tabs-wrapper container tabbed-content">
+                                <ul class="tabs wc-tabs product-tabs small-nav-collapse nav nav-uppercase nav-tabs nav-normal nav-left"
+                                    role="tablist">
+                                    <li class="description_tab active" id="tab-title-description" role="presentation">
+                                        <a href="#tab-description" role="tab" aria-selected="true"
+                                            aria-controls="tab-description">
+                                            Thông tin chi tiết
+                                        </a>
+                                    </li>
+                                    <li class="additional_information_tab" id="tab-title-additional_information"
+                                        role="presentation">
+                                        <a href="#tab-additional_information" role="tab" aria-selected="false"
+                                            aria-controls="tab-additional_information" tabindex="-1">
+                                            Thông tin bổ sung
+                                        </a>
+                                    </li>
+                                    {{-- <li class="reviews_tab" id="tab-title-reviews" role="presentation">
                                     <a href="#tab-reviews" role="tab" aria-selected="false" aria-controls="tab-reviews"
                                         tabindex="-1">
                                         Bình luận &amp; đánh giá
                                     </a>
                                 </li> --}}
-                            </ul>
-                            <div class="tab-panels">
-                                <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content active"
-                                    id="tab-description" role="tabpanel" aria-labelledby="tab-title-description">
-                                    {!! $product->description !!}
-                                </div>
-                                <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--additional_information panel entry-content"
-                                    id="tab-additional_information" role="tabpanel"
-                                    aria-labelledby="tab-title-additional_information">
-                                    <table class="woocommerce-product-attributes shop_attributes"
-                                        aria-label="Product Details">
-                                        <tr
-                                            class="woocommerce-product-attributes-item woocommerce-product-attributes-item--attribute_pa_xuat-xu">
-                                            <th class="woocommerce-product-attributes-item__label" scope="row">
-                                                Xuất xứ
-                                            </th>
-                                            <td class="woocommerce-product-attributes-item__value">
-                                                <p>
-                                                    <a href="https://dienmaysgo.com/xuat-xu/nhat-ban/" rel="tag">Nhật
-                                                        Bản</a>
-                                                </p>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                                {{-- <div
+                                </ul>
+                                <div class="tab-panels">
+                                    <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content active"
+                                        id="tab-description" role="tabpanel" aria-labelledby="tab-title-description">
+                                        {!! $product->description !!}
+                                    </div>
+                                    <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--additional_information panel entry-content"
+                                        id="tab-additional_information" role="tabpanel"
+                                        aria-labelledby="tab-title-additional_information">
+                                        <table class="woocommerce-product-attributes shop_attributes"
+                                            aria-label="Product Details">
+                                            <tr
+                                                class="woocommerce-product-attributes-item woocommerce-product-attributes-item--attribute_pa_xuat-xu">
+                                                <th class="woocommerce-product-attributes-item__label" scope="row">
+                                                    Xuất xứ
+                                                </th>
+                                                <td class="woocommerce-product-attributes-item__value">
+                                                    <p>
+                                                        <a href="https://dienmaysgo.com/xuat-xu/nhat-ban/"
+                                                            rel="tag">Nhật
+                                                            Bản</a>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    {{-- <div
                                     class="woocommerce-Tabs-panel woocommerce-Tabs-panel--reviews panel entry-content"
                                     id="tab-reviews" role="tabpanel" aria-labelledby="tab-title-reviews">
                                     <div id="reviews" class="woocommerce-Reviews row">
@@ -309,40 +315,40 @@
                                         </div>
                                     </div>
                                 </div> --}}
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="related related-products-wrapper product-section">
-                            <h3
-                                class="product-section-title container-width product-section-title-related pt-half pb-half uppercase">
-                                Sản phẩm liên quan
-                            </h3>
+                            <div class="related related-products-wrapper product-section">
+                                <h3
+                                    class="product-section-title container-width product-section-title-related pt-half pb-half uppercase">
+                                    Sản phẩm liên quan
+                                </h3>
 
-                            <div class="row has-equal-box-heights equalize-box large-columns-4 medium-columns-3 small-columns-2 row-small slider row-slider slider-nav-reveal slider-nav-push"
-                                data-flickity-options='{"imagesLoaded": true, "groupCells": "100%", "dragThreshold" : 5, "cellAlign": "left","wrapAround": true,"prevNextButtons": true,"percentPosition": true,"pageDots": false, "rightToLeft": false, "autoPlay" : false}'>
+                                <div class="row has-equal-box-heights equalize-box large-columns-4 medium-columns-3 small-columns-2 row-small slider row-slider slider-nav-reveal slider-nav-push"
+                                    data-flickity-options='{"imagesLoaded": true, "groupCells": "100%", "dragThreshold" : 5, "cellAlign": "left","wrapAround": true,"prevNextButtons": true,"percentPosition": true,"pageDots": false, "rightToLeft": false, "autoPlay" : false}'>
 
-                                @foreach ($relatedProducts as $item)
-                                <x-product-item :product="$item" />
-                                @endforeach
+                                    @foreach ($relatedProducts as $item)
+                                        <x-product-item :product="$item" />
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- shop container -->
-</main>
+        <!-- shop container -->
+    </main>
 @endsection
 
 @push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/raty/2.7.1/jquery.raty.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script src="{{ asset('frontends/assets/js/toastr.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raty/2.7.1/jquery.raty.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="{{ asset('frontends/assets/js/toastr.min.js') }}"></script>
 
-<script>
-    jQuery.noConflict();
+    <script>
+        jQuery.noConflict();
 
         addToCart();
 
@@ -424,145 +430,178 @@
                     document.querySelector(".mfp-bg").style.display = "none";
                 }, 300);
             });
-</script>
+    </script>
+    <script>
+        jQuery(document).ready(function() {
+            jQuery(document).on('click', '.single_add_to_cart_button', function() {
+                const id = jQuery(this).data('product-id'); // Lấy ID sản phẩm từ data attribute
+                const quantity = jQuery('#quantity_674f195d66f6f').val(); // Lấy số lượng từ input
+
+                jQuery.ajax({
+                    url: "{{ route('carts.add-to-cart') }}", // Route xử lý giỏ hàng
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        qty: quantity, // Truyền số lượng
+                        _token: "{{ csrf_token() }}" // Token bảo mật
+                    },
+                    success: function(response) {
+                        if (response.status) {
+                            toastr.success(response.message); // Hiển thị thông báo thành công
+                            jQuery('.cart-count').html(response
+                            .count); // Cập nhật số lượng giỏ hàng
+                            cartResponse(response.carts); // Cập nhật giao diện giỏ hàng
+                            jQuery('#cart-links').css('display',
+                            'inline-block'); // Hiển thị nút giỏ hàng
+                        } else {
+                            toastr.error(response.message); // Hiển thị lỗi từ server
+                        }
+                    },
+                    error: function(xhr) {
+                        toastr.error('Có lỗi xảy ra! Vui lòng thử lại.'); // Thông báo lỗi chung
+                    }
+                });
+            });
+        });
+    </script>
 @endpush
 
 @push('styles')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/raty/2.7.1/jquery.raty.min.css" />
-<link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/raty/2.7.1/jquery.raty.min.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet" />
 
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-<style>
-    .has-equal-box-heights .box-image {
-        padding-top: 10% !important;
-    }
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <style>
+        .has-equal-box-heights .box-image {
+            padding-top: 10% !important;
+        }
 
-    div#star-rating i {
-        font-size: 2rem;
-        /* Kích thước sao */
-        color: #ccc;
-        /* Màu sao mặc định */
-    }
+        div#star-rating i {
+            font-size: 2rem;
+            /* Kích thước sao */
+            color: #ccc;
+            /* Màu sao mặc định */
+        }
 
-    div#star-rating i {
-        color: #f5c518;
-        /* Màu sao khi được chọn */
+        div#star-rating i {
+            color: #f5c518;
+            /* Màu sao khi được chọn */
 
-        cursor: pointer;
-    }
+            cursor: pointer;
+        }
 
-    div#star-rating i.hover {
-        color: #ffa726;
-        /* Màu sao khi hover */
-    }
+        div#star-rating i.hover {
+            color: #ffa726;
+            /* Màu sao khi hover */
+        }
 
-    .header-cart .cart-link {
-        position: relative;
-        color: #333;
-        /* Màu biểu tượng */
-        text-decoration: none;
-    }
+        .header-cart .cart-link {
+            position: relative;
+            color: #333;
+            /* Màu biểu tượng */
+            text-decoration: none;
+        }
 
-    .header-cart .cart-link:hover {
-        color: #000;
-        /* Màu biểu tượng khi hover */
-    }
+        .header-cart .cart-link:hover {
+            color: #000;
+            /* Màu biểu tượng khi hover */
+        }
 
-    .header-cart .cart-count {
-        text-align: center;
-        transform: translate(-70%, -50%);
-        background-color: #dc3545;
-        /* Màu nền badge */
-        color: #fff;
-        font-size: 0.75rem;
-        font-weight: bold;
-        padding: 0.1rem 0.3rem;
-        border-radius: 50%;
-        visibility: visible;
-        /* Luôn hiển thị */
-        opacity: 1;
-        /* Đảm bảo không bị mờ */
-        transition: all 0.2s ease-in-out;
-        /* Hiệu ứng khi hover */
-    }
+        .header-cart .cart-count {
+            text-align: center;
+            transform: translate(-70%, -50%);
+            background-color: #dc3545;
+            /* Màu nền badge */
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 0.1rem 0.3rem;
+            border-radius: 50%;
+            visibility: visible;
+            /* Luôn hiển thị */
+            opacity: 1;
+            /* Đảm bảo không bị mờ */
+            transition: all 0.2s ease-in-out;
+            /* Hiệu ứng khi hover */
+        }
 
-    .product-gallery-thumbnails {
-        margin-top: 10px;
-        gap: 10px;
-    }
+        .product-gallery-thumbnails {
+            margin-top: 10px;
+            gap: 10px;
+        }
 
-    .gallery-thumb {
-        width: 80px;
-        height: 80px;
-        object-fit: cover;
-        cursor: pointer;
-        border: 2px solid transparent;
-        transition: border 0.3s ease;
-    }
+        .gallery-thumb {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border 0.3s ease;
+        }
 
-    .gallery-thumb:hover {
-        border: 2px solid #0071e3;
-    }
+        .gallery-thumb:hover {
+            border: 2px solid #0071e3;
+        }
 
-    .product-gallery-thumbnails {
-        width: 100%;
-        max-width: 500px;
-        margin: auto;
-    }
+        .product-gallery-thumbnails {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+        }
 
-    .swiper-slide {
-        text-align: center;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: auto;
-        /* Điều chỉnh tự động */
-    }
+        .swiper-slide {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: auto;
+            /* Điều chỉnh tự động */
+        }
 
-    .gallery-thumb {
-        width: 80px;
-        height: 80px;
-        object-fit: cover;
-        cursor: pointer;
-        border: 2px solid transparent;
-        transition: border 0.3s ease;
-    }
+        .gallery-thumb {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border 0.3s ease;
+        }
 
-    .gallery-thumb:hover {
-        border: 2px solid #0071e3;
-    }
+        .gallery-thumb:hover {
+            border: 2px solid #0071e3;
+        }
 
-    .swiper-container {
-        width: 100%;
-        max-width: 600px;
-        /* Giới hạn chiều rộng */
-        margin: auto;
-        overflow: hidden;
-    }
+        .swiper-container {
+            width: 100%;
+            max-width: 600px;
+            /* Giới hạn chiều rộng */
+            margin: auto;
+            overflow: hidden;
+        }
 
-    .mfp-content.open {
-        display: block;
-        /* Hiển thị popup */
-        right: 0;
-        /* Trượt vào từ bên phải */
-        transition: left 0.3s ease;
-    }
+        .mfp-content.open {
+            display: block;
+            /* Hiển thị popup */
+            right: 0;
+            /* Trượt vào từ bên phải */
+            transition: left 0.3s ease;
+        }
 
-    #section_1960688269 {
-        padding-top: 30px;
-        padding-bottom: 30px;
-    }
+        #section_1960688269 {
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
 
-    #section_1960688269 .ux-shape-divider--top svg {
-        height: 150px;
-        --divider-top-width: 100%;
-    }
+        #section_1960688269 .ux-shape-divider--top svg {
+            height: 150px;
+            --divider-top-width: 100%;
+        }
 
-    #section_1960688269 .ux-shape-divider--bottom svg {
-        height: 150px;
-        --divider-width: 100%;
-    }
-</style>
+        #section_1960688269 .ux-shape-divider--bottom svg {
+            height: 150px;
+            --divider-width: 100%;
+        }
+    </style>
 @endpush
