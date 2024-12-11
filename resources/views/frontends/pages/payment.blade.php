@@ -11,13 +11,12 @@
                     <div class="woocommerce">
                         <div class="woocommerce-notices-wrapper"></div>
                         <div class="woocommerce-notices-wrapper"></div>
-                        <form name="checkout" method="post" class="checkout woocommerce-checkout "
+                        <form name="checkout" id="billingForm" method="post" class="checkout woocommerce-checkout "
                             action="#" enctype="multipart/form-data"
                             novalidate="novalidate" data-gtm-form-interact-id="0">
 
                             <div class="row pt-0 ">
                                 <div class="large-7 col  ">
-
 
                                     <div id="customer_details">
                                         <div class="clear">
@@ -25,8 +24,6 @@
                                             <div class="woocommerce-billing-fields">
 
                                                 <h3>Chi tiết thanh toán</h3>
-
-
 
                                                 <div class="woocommerce-billing-fields__field-wrapper">
                                                     <p class="form-row form-row-first validate-required"
@@ -327,4 +324,37 @@
             </div>
         </div>
     </div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        alert('ok');
+        $('#billingForm').on('submit', function (e) {
+            e.preventDefault();
+
+            let formData = $(this).serialize();
+            console.log(formData);
+            $.ajax({
+                url: '{{ route('carts.checkout') }}',
+                type: 'POST',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                    } else {
+                        alert('Đã xảy ra lỗi, vui lòng thử lại!');
+                    }
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText); // In lỗi ra console để kiểm tra
+                    alert('Lỗi trong khi gửi dữ liệu!');
+                },
+            });
+        });
+    });
+
+</script>
 @endsection

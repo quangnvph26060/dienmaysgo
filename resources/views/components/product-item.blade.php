@@ -7,7 +7,7 @@
                     <a href="{{ route('products.detail', $product->slug) }}"
                         aria-label="Máy Phát Điện Chạy Xăng Elemax SH1900">
                         <img fetchpriority="high" decoding="async" width="680" height="680"
-                            src="{{ $product->image }}" data-src="{{ $product->image }}"
+                            src="{{ asset('storage/'.$product->image) }}" data-src="{{ asset('storage/'.$product->image) }}"
                             class="lazy-load attachment-original size-original" alt="" srcset=""
                             sizes="(max-width: 680px) 100vw, 680px" />
                     </a>
