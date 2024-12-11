@@ -33,6 +33,7 @@ route::controller(CartController::class)->name('carts.')->group(function () {
 
     // Route::post('restore/{rowId}', [CartController::class, 'restoreLastDeletedProduct'])->name('restore');
     Route::post('restore', [CartController::class, 'restore'])->name('restore');
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
 
 });
 

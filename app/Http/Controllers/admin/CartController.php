@@ -165,35 +165,56 @@ class CartController extends Controller
     }
 
     public function restore()
-{
-    // Lấy thông tin sản phẩm cuối cùng đã xóa từ session
-    $lastProduct = session()->get('last_deleted_product');
+    {
+        // Lấy thông tin sản phẩm cuối cùng đã xóa từ session
+        $lastProduct = session()->get('last_deleted_product');
 
-    // Kiểm tra xem thông tin sản phẩm có tồn tại không
-    if ($lastProduct) {
-        // Thêm sản phẩm vào giỏ hàng
-        Cart::instance('shopping')->add([
-            'id' => $lastProduct->id, // Truy cập mảng thay vì đối tượng
-            'name' => $lastProduct->name,
-            'qty' => $lastProduct->qty,
-            'price' => $lastProduct->price,
-            'options' => [
-                'image' => $lastProduct->image ?? null, // Kiểm tra nếu key tồn tại
-            ],
-        ]);
+        // Kiểm tra xem thông tin sản phẩm có tồn tại không
+        if ($lastProduct) {
+            // Thêm sản phẩm vào giỏ hàng
+            Cart::instance('shopping')->add([
+                'id' => $lastProduct->id, // Truy cập mảng thay vì đối tượng
+                'name' => $lastProduct->name,
+                'qty' => $lastProduct->qty,
+                'price' => $lastProduct->price,
+                'options' => [
+                    'image' => $lastProduct->image ?? null, // Kiểm tra nếu key tồn tại
+                ],
+            ]);
 
-        // Xóa sản phẩm đã khôi phục khỏi session
-        session()->forget('last_deleted_product');
+            // Xóa sản phẩm đã khôi phục khỏi session
+            session()->forget('last_deleted_product');
 
-        // Ghi log để kiểm tra
+            // Ghi log để kiểm tra
 
 
-        return redirect()->back()->with('success', 'Khôi phục sản phẩm thành công');
+            return redirect()->back()->with('success', 'Khôi phục sản phẩm thành công');
+        }
+
+        // Nếu không có sản phẩm nào để khôi phục
+        return redirect()->back()->with('error', 'Không có sản phẩm nào để khôi phục');
     }
 
-    // Nếu không có sản phẩm nào để khôi phục
-    return redirect()->back()->with('error', 'Không có sản phẩm nào để khôi phục');
-}
+    public function checkout(Request $request)
+    {
+        Log::info($request->all());
+        $validatedData = $request->validate([
+            'billing_first_name' => 'required|string|max:255',
+            'billing_last_name' => 'required|string|max:255',
+            'billing_address_1' => 'required|string|max:255',
+            'billing_phone' => 'required|string|max:15',
+            'billing_email' => 'required|email|max:255',
+        ]);
+
+        // Thực hiện xử lý dữ liệu
+        // Billing::create($validatedData);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Thông tin đã được gửi thành công!',
+        ]);
+
+    }
 
 
 }
