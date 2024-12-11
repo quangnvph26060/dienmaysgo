@@ -26,6 +26,8 @@
 
 
 <script>
+    const BASE_URL = "{{ url('/') }}";
+
     jQuery.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
@@ -53,7 +55,7 @@
                     <img
                         width="300"
                         height="300"
-                        src="https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-elemax-sv2800-1-300x300.jpg"
+                        src="${BASE_URL + '/storage/' + cart.options.image}"
                         class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail"
                         alt="${cart.name}"
                         decoding="async"
@@ -93,7 +95,7 @@
                     },
                     success: function(response) {
                         if (response.status) {
-
+                            console.log(response.count);
                             toastr.success(response.message);
                             jQuery('.cart-count').html(response.count)
                             cartResponse(response.carts)
@@ -138,25 +140,21 @@
                     id: productId, // ID sản phẩm
                 },
                 success: function(response) {
-                    // Nếu xóa thành công
                     if (response.status) {
-                        toastr.success(response.message); // Hiển thị thông báo thành công
+                        toastr.success(response.message);
 
-                        // Xóa sản phẩm khỏi giỏ hàng
                         row.remove();
-
-                        // Cập nhật lại giá trị tổng giỏ hàng
-                        updateTotalPrice(); // Truyền giá trị tổng mới từ server
+                        jQuery('.cart-count').html(response.count);
+                        updateTotalPrice();
                     } else {
-                        toastr.error(response.message); // Hiển thị thông báo lỗi nếu có
+                        toastr.error(response.message);
                     }
                 },
                 error: function(xhr) {
-                    // Nếu có lỗi trong quá trình gửi yêu cầu
                     toastr.error('Có lỗi xảy ra! Vui lòng thử lại.');
                 },
                 complete: function() {
-                    // Xóa lớp "loading" sau khi xử lý xong
+
                     jQuery(this).removeClass("loading");
                 }
             });

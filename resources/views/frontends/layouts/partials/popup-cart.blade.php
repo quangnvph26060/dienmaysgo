@@ -18,8 +18,8 @@
                                     <a class="remove remove_from_cart_button" data-row-id="{{ $cart->id }}" data-product_id="{{ $cart->id }}">×</a>
                                     <a href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sv2800/">
                                         <img width="300" height="300"
-                                            src="https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-elemax-sv2800-1-300x300.jpg"
-                                            data-src="https://dienmaysgo.com/wp-content/uploads/2023/01/may-phat-dien-elemax-sv2800-1-300x300.jpg"
+                                            src="{{ asset('storage/'.$cart->options->image) }}"
+                                            data-src="{{ asset('storage/'.$cart->options->image) }}"
                                             class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail lazy-load-active"
                                             alt="" decoding="async" fetchpriority="high"
                                             sizes="(max-width: 300px) 100vw, 300px" />{{$cart->name}}
