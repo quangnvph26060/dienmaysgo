@@ -14,7 +14,7 @@ class ProductController extends Controller
     {
         $category = SgoCategory::where('slug', $slug)->with('products')->firstOrFail();
 
-     
+
         $orderby = request('orderby');
 
 
@@ -51,7 +51,8 @@ class ProductController extends Controller
 
     public function detail($slug)
     {
-        $product = SgoProduct::where('slug', $slug)->firstOrFail();
+        $product = SgoProduct::with('images')->where('slug', $slug)->firstOrFail();
+
         $relatedProducts = SgoProduct::where('category_id', $product->category_id)->where('id', '!=', $product->id)->latest()->limit(8)->get();
 
         return view('frontends.pages.product.detail', compact('product', 'relatedProducts'));

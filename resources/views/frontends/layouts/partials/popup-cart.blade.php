@@ -34,7 +34,10 @@
 
                         <p class="woocommerce-mini-cart__total total">
                             <strong>Tổng cộng:</strong>
-                            <span class="woocommerce-Price-amount amount"><bdi><span class="total_cart">{{ Cart::instance('shopping')->subTotal() }}</span><span
+                            <span class="woocommerce-Price-amount amount"><bdi><span class="total_cart">{{ number_format((float) str_replace([',', '.'], ['', '.'], Cart::instance('shopping')->subTotal()), 0, ',', '.') }}
+
+
+                            </span><span
                                         class="woocommerce-Price-currencySymbol">₫</span></bdi></span>
                         </p>
 
@@ -115,14 +118,13 @@
                     element.innerHTML = `${formatCurrency(total)}`;
                 });
     }
- document.querySelectorAll(".remove").forEach(button => {
+    document.querySelectorAll(".remove").forEach(button => {
         button.addEventListener("click", function(event) {
             event.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
 
             let productId = this.getAttribute("data-product_id");
             let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
             let row = event.target.closest('li');
-            console.log(row);
             this.classList.add("loading");
 
             var url = "{{ route('carts.del-to-cart', ['id' => ':id']) }}".replace(':id', productId);
@@ -154,6 +156,7 @@
                 });
         });
     });
+
     function formatCurrency(amount) {
             const formattedAmount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 
