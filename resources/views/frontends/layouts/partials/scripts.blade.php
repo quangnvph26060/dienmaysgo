@@ -162,25 +162,30 @@
 
         // Cập nhật giá trị tổng giỏ hàng
         function updateTotalPrice() {
-                let prices = [];
+            let prices = [];
 
-                // Lấy giá trị từ các phần tử có class 'quantity-price-sum'
-                document.querySelectorAll(".sum_total").forEach(element => {
-                    prices.push(element.textContent.trim());
-                });
+            // Lấy giá trị từ các phần tử có class 'sum_total'
+            document.querySelectorAll(".sum_total").forEach(element => {
+                prices.push(element.textContent.trim());
+            });
 
-                // Chuyển đổi các giá trị này thành số và tính tổng
-                let numericValues = prices.map(value => {
-                    return parseInt(value.split('.')[0].replace(/[^\d]/g, ''));
-                });
-                console.log(prices);
-                let total = numericValues.reduce((sum, current) => sum + current, 0);
-                console.log(total);
-                // Cập nhật giá trị tổng vào các phần tử có class 'price-product-total'
-                document.querySelectorAll('.total_cart').forEach(element => {
-                    element.innerHTML = `${formatCurrency(total)}`;
-                });
-    }
+            // Chuyển đổi các giá trị này thành số sau khi loại bỏ dấu chấm và chuyển thành số
+            let numericValues = prices.map(value => {
+                return parseFloat(value.replace(/[^\d]/g, ''));  // Loại bỏ tất cả các ký tự không phải số
+            });
+
+            console.log(numericValues);  // Hiển thị các giá trị đã chuyển thành số
+
+            // Tính tổng
+            let total = numericValues.reduce((sum, current) => sum + current, 0);
+
+            // Hiển thị tổng trong các phần tử có class 'total_cart'
+            document.querySelectorAll('.total_cart').forEach(element => {
+                element.innerHTML = formatCurrency(total);  // Định dạng lại tổng
+            });
+        }
+
+
 
         // Hàm định dạng tiền tệ
         function formatCurrency(amount) {
