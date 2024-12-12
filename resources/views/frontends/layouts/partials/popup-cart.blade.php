@@ -14,12 +14,11 @@
                         <ul class="woocommerce-mini-cart cart_list product_list_widget">
                             @foreach (Cart::instance('shopping')->content() as $cart)
                                 <li class="woocommerce-mini-cart-item mini_cart_item">
-                                    <a class="remove remove_from_cart_button" data-row-id="{{ $cart->id }}"
+                                    <a class="remove remove_from_cart_button" data-row-id="{{ $cart->rowId }}"
                                         data-product_id="{{ $cart->id }}">×</a>
-                                    <a href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sv2800/">
-                                        <img width="300" height="300"
-                                            src="{{ asset('storage/' . $cart->options->image) }}"
-                                            data-src="{{ asset('storage/' . $cart->options->image) }}"
+                                    <a href="{{ route('products.detail', $cart->options->slug) }}">
+                                        <img width="300" height="300" src="{{ showImage($cart->options->image) }}"
+                                            data-src="{{ showImage($cart->options->image) }}"
                                             class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail lazy-load-active"
                                             alt="" decoding="async" fetchpriority="high"
                                             sizes="(max-width: 300px) 100vw, 300px" />{{ $cart->name }}
@@ -39,13 +38,17 @@
                                     </span><span class="woocommerce-Price-currencySymbol">₫</span></bdi></span>
                         </p>
 
-                        @if (Cart::instance('shopping')->count() > 0)
-                            <p class="woocommerce-mini-cart__buttons buttons" id="cart-links">
-                                <a href="{{ route('carts.list') }}" class="button wc-forward">Xem giỏ hàng</a>
-                                <a href="https://dienmaysgo.com/thanh-toan/" class="button checkout wc-forward">Thanh
-                                    toán</a>
-                            </p>
-                        @endif
+
+                        <p class="woocommerce-mini-cart__buttons buttons" id="cart-links">
+                            <a href="{{ route('carts.list') }}" class="button wc-forward">Xem giỏ hàng</a>
+
+                            <a href="https://dienmaysgo.com/thanh-toan/"
+                                class="button checkout wc-forward
+                                @if (Cart::instance('shopping')->count() <= 0) d-none @endif">
+                                Thanh toán
+                            </a>
+
+                        </p>
                     </div>
 
                     <div class="cart-sidebar-content relative"></div>
@@ -118,44 +121,45 @@
             element.innerHTML = `${formatCurrency(total)}`;
         });
     }
-    document.querySelectorAll(".remove").forEach(button => {
-        button.addEventListener("click", function(event) {
-            event.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
 
-            let productId = this.getAttribute("data-product_id");
-            let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-            let row = event.target.closest('li');
-            this.classList.add("loading");
+    // document.querySelectorAll(".remove").forEach(button => {
+    //     button.addEventListener("click", function(event) {
+    //         event.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
 
-            var url = "{{ route('carts.del-to-cart', ['id' => ':id']) }}".replace(':id', productId);
-            fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
-                    },
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Đã xảy ra lỗi khi gửi yêu cầu.');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.status === 'success') {
-                        row.remove();
-                        updateTotalPrice();
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                })
-                .finally(() => {
-                    // Xóa lớp xoay sau khi xử lý xong
-                    this.classList.remove("loading");
-                });
-        });
-    });
+    //         let productId = this.getAttribute("data-product_id");
+    //         let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    //         let row = event.target.closest('li');
+    //         this.classList.add("loading");
+
+    //         var url = "{{ route('carts.del-to-cart', ['id' => ':id']) }}".replace(':id', productId);
+    //         fetch(url, {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     'X-CSRF-TOKEN': csrfToken
+    //                 },
+    //             })
+    //             .then(response => {
+    //                 if (!response.ok) {
+    //                     throw new Error('Đã xảy ra lỗi khi gửi yêu cầu.');
+    //                 }
+    //                 return response.json();
+    //             })
+    //             .then(data => {
+    //                 if (data.status === 'success') {
+    //                     row.remove();
+    //                     updateTotalPrice();
+    //                 }
+    //             })
+    //             .catch(error => {
+    //                 console.error(error);
+    //             })
+    //             .finally(() => {
+    //                 // Xóa lớp xoay sau khi xử lý xong
+    //                 this.classList.remove("loading");
+    //             });
+    //     });
+    // });
 
     function formatCurrency(amount) {
         const formattedAmount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");

@@ -403,34 +403,10 @@
             });
         });
 
-        document
-            .querySelector(".cart-link")
-            .addEventListener("click", function(e) {
-                e.preventDefault();
-                const popup = document.querySelector(".mfp-content");
 
-                // Hiển thị popup với animation
-
-                setTimeout(() => {
-                    popup.classList.add("open");
-                    document.querySelector("#cart-popup").style.display = "block"; // Đảm bảo nó hiện trước
-                    document.querySelector(".mfp-bg").style.display = "block";
-                }, 300); // Thêm một chút thời gian để áp dụng hiệu ứng trượt
-            });
-
-        // Tùy chọn: Đóng popup
-        document
-            .querySelector(".mfp-container")
-            .addEventListener("click", function() {
-                const popup = document.querySelector(".mfp-content");
-                popup.classList.remove("open");
-                setTimeout(() => {
-                    document.querySelector("#cart-popup").style.display =
-                        "none"; // Ẩn sau khi hiệu ứng hoàn tất
-                    document.querySelector(".mfp-bg").style.display = "none";
-                }, 300);
-            });
+       
     </script>
+
     <script>
         jQuery(document).ready(function() {
             jQuery(document).on('click', '.single_add_to_cart_button', function() {
@@ -449,10 +425,10 @@
                         if (response.status) {
                             toastr.success(response.message); // Hiển thị thông báo thành công
                             jQuery('.cart-count').html(response
-                            .count); // Cập nhật số lượng giỏ hàng
+                                .count); // Cập nhật số lượng giỏ hàng
                             cartResponse(response.carts); // Cập nhật giao diện giỏ hàng
                             jQuery('#cart-links').css('display',
-                            'inline-block'); // Hiển thị nút giỏ hàng
+                                'inline-block'); // Hiển thị nút giỏ hàng
                         } else {
                             toastr.error(response.message); // Hiển thị lỗi từ server
                         }

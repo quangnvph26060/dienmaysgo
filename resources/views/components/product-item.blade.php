@@ -7,7 +7,7 @@
                     <a href="{{ route('products.detail', $product->slug) }}"
                         aria-label="Máy Phát Điện Chạy Xăng Elemax SH1900">
                         <img fetchpriority="high" decoding="async" width="680" height="680"
-                            src="{{ asset('storage/'.$product->image) }}" data-src="{{ asset('storage/'.$product->image) }}"
+                            src="{{ showImage($product->image) }}" data-src="{{ showImage($product->image) }}"
                             class="lazy-load attachment-original size-original" alt="" srcset=""
                             sizes="(max-width: 680px) 100vw, 680px" />
                     </a>
@@ -45,7 +45,7 @@
             <div class="box-text text-left">
                 <div class="title-wrapper">
                     <p class="name product-title woocommerce-loop-product__title">
-                        <a href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sh1900/"
+                        <a href="{{ route('products.detail', $product->slug) }}"
                             class="woocommerce-LoopProduct-link woocommerce-loop-product__link">{{ $product->name }}
                         </a>
                     </p>

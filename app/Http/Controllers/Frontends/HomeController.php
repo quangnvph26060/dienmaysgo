@@ -6,6 +6,7 @@ use App\Models\SgoProduct;
 use App\Models\SgoCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Gloudemans\Shoppingcart\Facades\Cart;
 
 class HomeController extends Controller
 {

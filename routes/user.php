@@ -28,8 +28,8 @@ route::controller(CartController::class)->name('carts.')->group(function () {
     route::get('thanh-toan', 'InfoPayment')->name('thanh-toan');
     route::post('carts', 'addToCart')->name('add-to-cart');
     route::post('del-cart/{id}', 'delItemCart')->name('del-to-cart');
-    route::post('update-cart/{id}/{qty}', 'updateQtyCart')->name('update-to-cart');
-    route::post('update-cart/{id}/{qty}', 'updateQtyCart')->name('update-to-cart');
+    route::post('update-cart/{id}', 'updateQtyCart')->name('update-to-cart');
+    // route::post('update-cart/{id}/{qty}', 'updateQtyCart')->name('update-to-cart');
 
     // Route::post('restore/{rowId}', [CartController::class, 'restoreLastDeletedProduct'])->name('restore');
     Route::post('restore', [CartController::class, 'restore'])->name('restore');

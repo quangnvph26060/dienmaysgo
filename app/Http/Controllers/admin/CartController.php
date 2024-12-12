@@ -27,45 +27,27 @@ class CartController extends Controller
         return view('frontends.pages.payment', compact('title', 'carts', 'total'));
     }
 
-    public function delItemCart($id)
+    public function delItemCart($rowId)
     {
-        if (!$id) {
-            return redirect()->back(['status' => 'errors']);
-        }
-        Log::info('xóa');
-        $cart = session()->get('cart');
-        $lastDeletedProduct = null;
-        if (isset($cart['shopping'])) {
-            foreach ($cart['shopping'] as $key => $item) {
-                if ($item->id == $id) {
 
-                    if (count($cart['shopping']) == 1) {
-                        // Lưu thông tin sản phẩm cuối cùng vào session để khôi phục
-                        $lastDeletedProduct = $item;
-                        session()->put('last_deleted_product', $item);
-                    }
+        Cart::instance('shopping')->remove($rowId);
 
-                    unset($cart['shopping'][$key]);
-                    break;
-                }
-            }
-            Log::info($lastDeletedProduct);
-            session()->put('cart', $cart);
-            $count = count($cart['shopping']);
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Xóa sản phẩm thành công',
-                'count' => $count,
-                'lastDeletedProduct' => $lastDeletedProduct
-            ]);
-        }
-        return response()->json(['status' => 'error', 'message' => 'Giỏ hàng không tồn tại']);
+        $carts = Cart::instance('shopping');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Xóa thành công.',
+            'carts' => $carts->content(),
+            'count' => $carts->count(),
+            'total' =>  strtok($carts->subTotal(), '.')
+        ]);
     }
+
     public function addToCart(Request $request)
     {
         if ($request->ajax()) {
 
-            $product = SgoProduct::findOrFail($request->id);
+            $product = SgoProduct::findOrFail($request->productId);
 
             $cartItem = Cart::instance('shopping')->search(function ($data) use ($product) {
                 return $data->id === $product->id;
@@ -96,7 +78,8 @@ class CartController extends Controller
                     'qty' => $requestedQty,
                     'price' => $product->price,
                     'options' => [
-                        'image' => $product->image
+                        'image' => $product->image,
+                        'slug' => $product->slug,
                     ]
                 ]);
             }
@@ -108,50 +91,75 @@ class CartController extends Controller
                 'message' => 'Thêm giỏ hàng thành công.',
                 'carts' => $carts->content(),
                 'count' => $carts->count(),
-                'total' => $carts->subTotal()
+                'total' =>  strtok($carts->subTotal(), '.')
             ]);
         }
     }
-    public function updateQtyCart($id, $qty)
+
+    public function updateQtyCart($id)
     {
-        if (!$id) {
-            return redirect()->back()->withErrors(['status' => 'errors', 'message' => "Không tìm thấy sản phẩm"]);
-        }
+        if (request()->ajax()) {
+            if (!$id) {
+                return response()->json([
+                    'message' => "ID sản phẩm không hợp lệ.",
+                ], 400);
+            }
 
-        $product = SgoProduct::where('id', $id)->first();
+            $cartItem = Cart::instance('shopping')->get($id);
 
-        if (!$product) {
-            return redirect()->back()->withErrors(['status' => 'errors', 'message' => "Không tìm thấy sản phẩm"]);
-        }
-        if ($product->quantity < $qty) {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Sản phẩm vượt quá'
-            ]);
-        }
+            if (!$cartItem) {
+                return response()->json([
+                    'message' => "Sản phẩm không tồn tại trong giỏ hàng.",
+                ], 404);
+            }
 
-        $cart = session()->get('cart');
+            $product = SgoProduct::find($cartItem->id);
 
-        if (isset($cart['shopping'])) {
-            foreach ($cart['shopping'] as $key => $item) {
-                if ($item->id == $id) {
-                    $item->qty = $qty;
-                    break;
+
+            $currentQuantity = $cartItem->qty;
+
+            $newQuantity = $currentQuantity;
+
+            if (request()->type == 'minus') {
+                // Giảm số lượng sản phẩm
+                if ($currentQuantity > 1) { // Đảm bảo số lượng không giảm xuống dưới 1
+                    $newQuantity = $currentQuantity - 1;
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'message' => "Số lượng sản phẩm không thể nhỏ hơn 1.",
+                    ]);
+                }
+            } else {
+                // Tăng số lượng sản phẩm
+                if ($currentQuantity < $product->quantity) { // Kiểm tra số lượng tồn kho
+                    $newQuantity = $currentQuantity + 1;
+                } else {
+                    return response()->json([
+                        'status' => false,
+                        'message' => "Số lượng sản phẩm trong kho không đủ.",
+                    ]);
                 }
             }
 
-            session()->put('cart', $cart);
-            $count = count($cart['shopping']);
+            Cart::instance('shopping')->update($id, $newQuantity);
+
+            $carts = Cart::instance('shopping');
 
             return response()->json([
-                'status' => 'success',
-                'message' => 'Cập nhật sản phẩm thành công',
-                'count' => $count,
+                'status' => true,
+                'message' => 'Cập nhật giỏ hàng thành công.',
+                'carts' => $carts->content(),
+                'count' => $carts->count(),
+                'total' =>  strtok($carts->subTotal(), '.')
             ]);
         }
 
-        return response()->json(['status' => 'error', 'message' => 'Giỏ hàng không tồn tại']);
+        return response()->json([
+            'message' => "Yêu cầu không hợp lệ.",
+        ], 400);
     }
+
 
     public function sumCarts()
     {
@@ -213,8 +221,5 @@ class CartController extends Controller
             'success' => true,
             'message' => 'Thông tin đã được gửi thành công!',
         ]);
-
     }
-
-
 }
