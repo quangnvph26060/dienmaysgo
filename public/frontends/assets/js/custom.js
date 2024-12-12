@@ -16,8 +16,6 @@ document.querySelector(".cart-link").addEventListener("click", function (e) {
 document.querySelector(".mfp-bg").addEventListener("click", function () {
     const popup = document.querySelector(".mfp-content");
 
-    console.log(popup);
-
     popup.classList.remove("open");
     setTimeout(() => {
         document.querySelector(".off-canvas#cart-popup").style.display = "none"; // Ẩn sau khi hiệu ứng hoàn tất

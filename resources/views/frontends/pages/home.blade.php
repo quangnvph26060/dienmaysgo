@@ -1,6 +1,13 @@
 @extends('frontends.layouts.master')
 
 @section('content')
+
+@php
+//   $carts =  Cart::instance('shopping')->content();
+//   dd($carts);
+// Cart::instance('shopping')->destroy();
+@endphp
+
     <div id="content" role="main" class="content-area">
 
 
