@@ -1,5 +1,5 @@
 @extends('frontends.layouts.master')
-@section('title',$title)
+@section('title', $title)
 @section('content')
     <div id="content" class="content-area page-wrapper" role="main">
         <div class="row row-main">
@@ -12,8 +12,8 @@
                         <div class="woocommerce-notices-wrapper"></div>
                         <div class="woocommerce-notices-wrapper"></div>
                         <form name="checkout" id="billingForm" method="post" class="checkout woocommerce-checkout "
-                            action="#" enctype="multipart/form-data"
-                            novalidate="novalidate" data-gtm-form-interact-id="0">
+                            action="#" enctype="multipart/form-data" novalidate="novalidate"
+                            data-gtm-form-interact-id="0">
 
                             <div class="row pt-0 ">
                                 <div class="large-7 col  ">
@@ -28,8 +28,8 @@
                                                 <div class="woocommerce-billing-fields__field-wrapper">
                                                     <p class="form-row form-row-first validate-required"
                                                         id="billing_first_name_field" data-priority="10"><label
-                                                            for="billing_first_name" class="">Họ&nbsp;<abbr class="required"
-                                                                title="required">*</abbr></label><span
+                                                            for="billing_first_name" class="">Họ&nbsp;<abbr
+                                                                class="required" title="required">*</abbr></label><span
                                                             class="woocommerce-input-wrapper"><input type="text"
                                                                 class="input-text " name="billing_first_name"
                                                                 id="billing_first_name" placeholder="" value=""
@@ -71,27 +71,7 @@
                                                                 value="" autocomplete="address-line2"
                                                                 data-placeholder="Apartment, suite, unit, etc. (optional)"></span>
                                                     </p>
-                                                    {{-- <p class="form-row address-field validate-postcode form-row-wide"
-                                                        id="billing_postcode_field" data-priority="65"
-                                                        data-o_class="form-row form-row-wide address-field validate-postcode">
-                                                        <label for="billing_postcode" class="">Postcode /
-                                                            ZIP&nbsp;<span class="optional">(optional)</span></label><span
-                                                            class="woocommerce-input-wrapper"><input type="text"
-                                                                class="input-text " name="billing_postcode"
-                                                                id="billing_postcode" placeholder="" value=""
-                                                                autocomplete="postal-code"></span>
-                                                    </p>
-                                                    <p class="form-row address-field validate-required form-row-wide"
-                                                        id="billing_city_field" data-priority="70"
-                                                        data-o_class="form-row form-row-wide address-field validate-required">
-                                                        <label for="billing_city" class="">Town /
-                                                            City&nbsp;<abbr class="required"
-                                                                title="required">*</abbr></label><span
-                                                            class="woocommerce-input-wrapper"><input type="text"
-                                                                class="input-text " name="billing_city" id="billing_city"
-                                                                placeholder="" value="" aria-required="true"
-                                                                autocomplete="address-level2"></span>
-                                                    </p> --}}
+
                                                     <p class="form-row address-field validate-state form-row-wide"
                                                         id="billing_state_field" style="display: none"
                                                         data-o_class="form-row form-row-wide address-field validate-state">
@@ -138,12 +118,13 @@
 
                                                 <div class="woocommerce-additional-fields__field-wrapper">
                                                     <p class="form-row notes" id="order_comments_field" data-priority="">
-                                                        <label for="order_comments" class="">Ghi chú đơn hàng&nbsp;<span
-                                                                class="optional">(tùy chọn)</span></label><span
+                                                        <label for="order_comments" class="">Ghi chú đơn
+                                                            hàng&nbsp;<span class="optional">(tùy chọn)</span></label><span
                                                             class="woocommerce-input-wrapper">
-                                                            <textarea name="order_comments" class="input-text " id="order_comments"
-                                                                placeholder="Ghi chú đơn hàng" rows="2" cols="5"></textarea>
-                                                        </span></p>
+                                                            <textarea name="order_comments" class="input-text " id="order_comments" placeholder="Ghi chú đơn hàng"
+                                                                rows="2" cols="5"></textarea>
+                                                        </span>
+                                                    </p>
                                                 </div>
 
 
@@ -173,19 +154,20 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                    {{-- @dd($carts) --}}
+                                                        {{-- @dd($carts) --}}
                                                         @forelse ($carts as $item)
                                                             <tr class="cart_item">
                                                                 <td class="product-name">
                                                                     {{ $item->name }} &nbsp; <strong
-                                                                        class="product-quantity">×&nbsp; {{ $item->qty }}</strong> </td>
+                                                                        class="product-quantity">×&nbsp;
+                                                                        {{ $item->qty }}</strong> </td>
                                                                 <td class="product-total">
-                                                                    <span class="woocommerce-Price-amount amount"><bdi>{{ number_format($item->price * $item->qty , 0, '', '.') }}                                                                        <span
+                                                                    <span class="woocommerce-Price-amount amount"><bdi>{{ number_format($item->price * $item->qty, 0, '', '.') }}
+                                                                            <span
                                                                                 class="woocommerce-Price-currencySymbol">₫</span></bdi></span>
                                                                 </td>
                                                             </tr>
                                                         @empty
-
                                                         @endforelse
 
                                                     </tbody>
@@ -203,13 +185,7 @@
 
 
 
-                                                        <tr class="order-total">
-                                                            <th>Tổng cộng</th>
-                                                            <td><strong><span
-                                                                        class="woocommerce-Price-amount amount"><bdi>{{ number_format($total, 0, '', '.') }}<span
-                                                                                class="woocommerce-Price-currencySymbol">₫</span></bdi></span></strong>
-                                                            </td>
-                                                        </tr>
+                                                       
 
 
                                                     </tfoot>
@@ -246,11 +222,7 @@
                                                             <div class="payment_box payment_method_alepay" style="">
                                                                 <p>Chọn một phương thức</p>
 
-                                                                <!--<div id="custom_input">
-                                <p class="form-row form-row-wide">
-                                <label style="font-weight: normal;"><input type="checkbox" name="isCardLink"  /> Ghi nhớ thông tin thẻ cho các lần thanh toán tiếp theo</label>
-                                </p>
-                            </div>-->
+
 
                                                                 <div id="custom_input">
                                                                     <p class="form-row form-row-wide">
@@ -324,37 +296,36 @@
             </div>
         </div>
     </div>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-        alert('ok');
-        $('#billingForm').on('submit', function (e) {
-            e.preventDefault();
+    <script>
+        $(document).ready(function() {
+            // alert('ok');
+            $('#billingForm').on('submit', function(e) {
+                e.preventDefault();
 
-            let formData = $(this).serialize();
-            console.log(formData);
-            $.ajax({
-                url: '{{ route('carts.checkout') }}',
-                type: 'POST',
-                data: formData,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function (response) {
-                    if (response.success) {
-                        alert(response.message);
-                    } else {
-                        alert('Đã xảy ra lỗi, vui lòng thử lại!');
-                    }
-                },
-                error: function (xhr) {
-                    console.log(xhr.responseText); // In lỗi ra console để kiểm tra
-                    alert('Lỗi trong khi gửi dữ liệu!');
-                },
+                let formData = $(this).serialize();
+                console.log(formData);
+                $.ajax({
+                    url: '{{ route('carts.checkout') }}',
+                    type: 'POST',
+                    data: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            alert(response.message);
+                        } else {
+                            alert('Đã xảy ra lỗi, vui lòng thử lại!');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText); // In lỗi ra console để kiểm tra
+                        alert('Lỗi trong khi gửi dữ liệu!');
+                    },
+                });
             });
         });
-    });
-
-</script>
+    </script>
 @endsection

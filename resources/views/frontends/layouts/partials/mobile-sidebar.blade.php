@@ -116,10 +116,6 @@
         <li class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-2165">
             <a href="https://dienmaysgo.com/do-gia-dung-thong-minh/">Đồ gia dụng thông minh</a>
         </li>
-        <li class="account-item has-icon menu-item">
-            <a href="https://dienmaysgo.com/tai-khoan/" class="nav-top-link nav-top-not-logged-in">
-                <span class="header-account-title"> Login </span>
-            </a>
-        </li>
+        
     </ul>
 </div>
