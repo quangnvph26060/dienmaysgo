@@ -5,9 +5,9 @@
             <div class="box-image">
                 <div class="image-zoom image-cover" style="padding-top: 100%">
                     <a href="{{ route('products.detail', $product->slug) }}"
-                        aria-label="Máy Phát Điện Chạy Xăng Elemax SH1900">
+                        aria-label="{{ $product->name }}">
                         <img fetchpriority="high" decoding="async" width="680" height="680"
-                            src="{{ showImage($product->image) }}" data-src="{{ showImage($product->image) }}"
+                            src="{{ asset('storage/'. $product->image) }}" data-src="{{ asset('storage/'. $product->image) }}"
                             class="lazy-load attachment-original size-original" alt="" srcset=""
                             sizes="(max-width: 680px) 100vw, 680px" />
                     </a>
