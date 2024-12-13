@@ -14,8 +14,13 @@
                         <ul class="woocommerce-mini-cart cart_list product_list_widget">
                             @foreach (Cart::instance('shopping')->content() as $cart)
                                 <li class="woocommerce-mini-cart-item mini_cart_item">
-                                    <a class="remove remove_from_cart_button" data-row-id="{{ $cart->rowId }}"
-                                        data-product_id="{{ $cart->id }}">×</a>
+
+                                    @if (!request()->routeIs('carts.thanh-toan'))
+                                        <a class="remove remove_from_cart_button" data-row-id="{{ $cart->rowId }}"
+                                            data-product_id="{{ $cart->id }}">×</a>
+                                    @endif
+
+
                                     <a href="{{ route('products.detail', $cart->options->slug) }}">
                                         <img width="300" height="300" src="{{ showImage($cart->options->image) }}"
                                             data-src="{{ showImage($cart->options->image) }}"
@@ -42,7 +47,7 @@
                         <p class="woocommerce-mini-cart__buttons buttons" id="cart-links">
                             <a href="{{ route('carts.list') }}" class="button wc-forward">Xem giỏ hàng</a>
 
-                            <a href="https://dienmaysgo.com/thanh-toan/"
+                            <a href="{{ route('carts.thanh-toan') }}"
                                 class="button checkout wc-forward
                                 @if (Cart::instance('shopping')->count() <= 0) d-none @endif">
                                 Thanh toán
@@ -122,44 +127,7 @@
         });
     }
 
-    // document.querySelectorAll(".remove").forEach(button => {
-    //     button.addEventListener("click", function(event) {
-    //         event.preventDefault(); // Ngừng hành động mặc định của thẻ <a>
-
-    //         let productId = this.getAttribute("data-product_id");
-    //         let csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    //         let row = event.target.closest('li');
-    //         this.classList.add("loading");
-
-    //         var url = "{{ route('carts.del-to-cart', ['id' => ':id']) }}".replace(':id', productId);
-    //         fetch(url, {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                     'X-CSRF-TOKEN': csrfToken
-    //                 },
-    //             })
-    //             .then(response => {
-    //                 if (!response.ok) {
-    //                     throw new Error('Đã xảy ra lỗi khi gửi yêu cầu.');
-    //                 }
-    //                 return response.json();
-    //             })
-    //             .then(data => {
-    //                 if (data.status === 'success') {
-    //                     row.remove();
-    //                     updateTotalPrice();
-    //                 }
-    //             })
-    //             .catch(error => {
-    //                 console.error(error);
-    //             })
-    //             .finally(() => {
-    //                 // Xóa lớp xoay sau khi xử lý xong
-    //                 this.classList.remove("loading");
-    //             });
-    //     });
-    // });
+    
 
     function formatCurrency(amount) {
         const formattedAmount = amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");

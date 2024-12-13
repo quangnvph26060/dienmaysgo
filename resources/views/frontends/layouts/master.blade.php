@@ -30,6 +30,7 @@
 
     </div>
 
+
     <div id="main-menu" class="mobile-sidebar no-scrollbar mfp-hide mobile-sidebar-slide mobile-sidebar-levels-1"
         data-levels="1">
         @include('frontends.layouts.partials.mobile-sidebar')
