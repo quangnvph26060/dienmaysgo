@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderStatus;
 use App\Models\SgoOrder;
+use App\Models\SgoOrderDetail;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -72,12 +75,15 @@ class OrderController extends Controller
     {
         try {
             $order = SgoOrder::findOrFail($request->id);
+            $orderDetails = SgoOrderDetail::where('order_id', $order->id)->first();
             $order->status = $request->input('order_status');
+            Mail::to($order->email)->send(new OrderStatus($order, $orderDetails));
+            Log::info('Status changing mail sent successfully');
             $order->save();
 
             return response()->json(['success' => true]);
         } catch (Exception $e) {
-            Log::error("Failed to change this order's status" . $e->getMessage());
+            Log::error("Failed to change this order's status: " . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Cập nhật trạng thái đơn hàng thất bại', 'error' => $e->getMessage()]);
         }
     }

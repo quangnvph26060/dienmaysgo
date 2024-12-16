@@ -15,7 +15,8 @@
                                 <table class="table table-bordered table-hover">
                                     <tbody>
                                         <tr>
-                                            <th scope="row" style="white-space: nowrap"><i class="fas fa-user"></i> Tên khách hàng</th>
+                                            <th scope="row" style="white-space: nowrap"><i class="fas fa-user"></i> Tên
+                                                khách hàng</th>
                                             <td>
                                                 <div class="nowrap">{{ $order->first_name . ', ' . $order->last_name }}
                                                 </div>
@@ -134,11 +135,19 @@
     <script>
         $(document).ready(function() {
             $('#orderStatusDropdown').change(function() {
-                const orderId = {{ $order->id }}; // Replace with dynamic order ID
+                const orderId = {{ $order->id }}; // Thay bằng ID đơn hàng động
                 const newStatus = $(this).val();
 
+                // Hiển thị overlay loading với spinner
+                $('body').append(`
+            <div id="loading-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+                <div class="spinner"></div>
+                <div style="color: #fff; font-size: 18px; margin-top: 10px;">Đang cập nhật, vui lòng chờ...</div>
+            </div>
+        `);
+
                 $.ajax({
-                    url: '{{ route('admin.order.updateOrderStatus') }}', // Sử dụng route Laravel
+                    url: '{{ route('admin.order.updateOrderStatus') }}', // Route Laravel
                     method: 'POST',
                     data: {
                         id: orderId,
@@ -146,6 +155,8 @@
                         _token: '{{ csrf_token() }}' // CSRF token để bảo mật
                     },
                     success: function(response) {
+                        $('#loading-overlay').remove(); // Xóa overlay khi hoàn thành
+
                         if (response.success) {
                             Swal.fire({
                                 title: 'Thành công',
@@ -164,6 +175,8 @@
                         }
                     },
                     error: function(xhr) {
+                        $('#loading-overlay').remove(); // Xóa overlay khi xảy ra lỗi
+
                         Swal.fire({
                             title: 'Lỗi',
                             text: 'Không thể cập nhật trạng thái đơn hàng. Vui lòng thử lại.',
@@ -178,6 +191,25 @@
 @endsection
 
 <style>
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #3498db;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
     .card {
         border-radius: 15px;
         overflow: hidden;
