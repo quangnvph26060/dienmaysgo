@@ -1,6 +1,7 @@
 <script src="{{ asset('frontends/assets/js/chunk.countup.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/chunk.sticky-sidebar.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/chunk.tooltips.js') }}"></script>
+<script src="{{ asset('frontends/assets/js/chunk.vendors-popups.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/chunk.vendors-slider.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/jquery.min.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/jquery.blockUI.min.js') }}"></script>
@@ -21,7 +22,7 @@
 <script src="{{ asset('frontends/assets/js/jquery.selectBox.min.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/jquery.prettyPhoto.min.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/jquery.yith-wcwl.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/custom.js') }}"></script>
+{{-- <script src="{{ asset('frontends/assets/js/custom.js') }}"></script> --}}
 <script src="{{ asset('frontends/assets/js/toastr.min.js') }}"></script>
 
 
@@ -59,7 +60,7 @@
             _html += `
             <li class="woocommerce-mini-cart-item mini_cart_item">
                 <a class="remove remove_from_cart_button" data-row-id="${cart.rowId}" data-product_id="${cart.id}">×</a>
-                <a href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sv2800/">
+                <a href="${BASE_URL + '/san-pham/' + cart.options['slug']}">
                     <img
                         width="300"
                         height="300"
@@ -81,17 +82,24 @@
                 </span>
             </li>
         `;
-            total += cart.price * cart.qty; // Tính t��ng tiền
+            total += cart.price * cart.qty;
         });
 
 
-        jQuery('.cart-count').html(data.count);
 
-        jQuery('.cart_list.product_list_widget').html(_html);
-        jQuery('.total_cart').html(formatCurrency(total));
-        jQuery('.button.checkout.wc-forward').css('display', 'block')
+
+        var count = data.count;
+
+        jQuery('.icon-shopping-bag').attr('data-icon-label', count);
+
+        jQuery('.woocommerce-mini-cart.cart_list.product_list_widget').html(_html);
+
+        jQuery('.woocommerce-mini-cart__total .woocommerce-Price-amount.amount bdi').html(formatCurrency(total));
+
+        jQuery('.woocommerce-mini-cart__buttons.buttons .checkout').css('display', 'block')
+
         if (data.count == 0) {
-            jQuery('.button.checkout.wc-forward').css('display', 'none');
+            jQuery('.woocommerce-mini-cart__buttons.buttons .checkout').css('display', 'none');
         }
     };
 
@@ -114,7 +122,7 @@
                     </td>
 
                     <td class="product-thumbnail">
-                        <a href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sh1900/"
+                        <a href="${BASE_URL + '/san-pham/' + cart.options['slug']}"
                             ><img
                                 fetchpriority="high"
                                 decoding="async"
@@ -131,7 +139,7 @@
                     </td>
 
                     <td class="product-name" data-title="Sản phẩm">
-                        <a href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sh1900/"
+                        <a href="${BASE_URL + '/san-pham/' + cart.options['slug']}"
                             >${ cart.name }
                         </a>
 
@@ -262,6 +270,7 @@
                     rowId
                 },
                 success: function(response) {
+
 
                     if (response.status) {
                         toastr.success(response.message);

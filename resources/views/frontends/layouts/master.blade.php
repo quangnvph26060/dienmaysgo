@@ -18,7 +18,7 @@
             @include('frontends.layouts.partials.header')
         </header>
 
-        @include('frontends.layouts.partials.popup-cart')
+        {{-- @include('frontends.layouts.partials.popup-cart') --}}
 
         <main id="main" class="">
             @yield('content')
