@@ -88,28 +88,29 @@
             </div>
 
             <div id="col-970340967" class="col cot4 medium-3 small-12 large-3">
+
                 <div class="col-inner">
                     <h3>KẾT NỐI VỚI CHÚNG TÔI</h3>
                     <div class="social-icons follow-icons full-width text-left">
-                        <a href="{{ $settings->link_fb ?? "" }}" target="_blank" data-label="Facebook"
+                        <a href="{{ $settings->link_fb ?? route('hone') }}" target="_blank" data-label="Facebook"
                             rel="noopener noreferrer nofollow" class="icon primary button circle facebook tooltip"
                             title="Follow on Facebook" aria-label="Follow on Facebook">
                             <i class="icon-facebook"></i>
                         </a>
 
-                        <a href="{{ $settings->link_ig ?? "" }}" target="_blank" rel="noopener noreferrer nofollow"
+                        <a href="{{ $settings->link_ig ?? route('hone') }}" target="_blank" rel="noopener noreferrer nofollow"
                             data-label="Instagram" class="icon primary button circle instagram tooltip"
                             title="Follow on Instagram" aria-label="Follow on Instagram">
                             <i class="icon-instagram"> </i>
                         </a>
 
-                        <a href="mailto:info@dienmaysgo.com" data-label="E-mail" rel="nofollow"
+                        <a href="mailto:{{ $settings->email ?? route('hone') }}" data-label="E-mail" rel="nofollow"
                             class="icon primary button circle email tooltip" title="Send us an email"
                             aria-label="Send us an email">
                             <i class="icon-envelop"></i>
                         </a>
 
-                        <a href="tel:0912399322" target="_blank" data-label="Phone" rel="noopener noreferrer nofollow"
+                        <a href="tel:{{ $settings->phone ?? '' }}" target="_blank" data-label="Phone" rel="noopener noreferrer nofollow"
                             class="icon primary button circle phone tooltip" title="Call us" aria-label="Call us">
                             <i class="icon-phone"></i>
                         </a>

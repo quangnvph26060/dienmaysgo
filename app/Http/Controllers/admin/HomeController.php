@@ -94,6 +94,7 @@ class HomeController extends Controller
         try {
             $credentials = $request->validated();
             $home = SgoHome::find($id);
+            $credentials['slug'] = Str::slug($request->input('name'));
             $home->update($credentials);
 
             // Trả về thông báo thành công
