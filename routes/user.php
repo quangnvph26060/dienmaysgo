@@ -41,12 +41,14 @@ route::controller(ProductController::class)->name('products.')->group(function (
     route::get('danh-muc-san-pham/{slug}', 'list')->name('list');
     route::get('san-pham/{slug}', 'detail')->name('detail');
 });
+Route::prefix('home')->group(function () {
+    route::get('{slug}', [IntroduceController::class, 'introduce'])->name('introduce');
+});
 
-route::get('gioi-thieu', [IntroduceController::class, 'introduce'])->name('introduce');
 
 route::controller(NewsController::class)->name('news.')->group(function () {
-    route::get('tin-tuc', 'list')->name('list');
-    route::get('tin-tuc/{slug}', 'detail')->name('detail');
+    route::get('tin-tuc/{slug?}', 'list')->name('list');
+    // route::get('tin-tuc/{slug}', 'detail')->name('detail');
 });
 
 route::get('contact', [ContactController::class, 'contact'])->name('contact');

@@ -36,7 +36,7 @@ class ConfigRequest extends FormRequest
             'description_seo' => 'required|string',
             'keywords_seo' => 'required|string',
             'url' => 'required|url',
-            'description' => 'required',
+            'content' => 'required',
         ];
     }
     public function messages()
@@ -66,7 +66,7 @@ class ConfigRequest extends FormRequest
             'description_seo' => 'Mô tả SEO',
             'keywords_seo' => 'Từ khóa SEO',
             'url' => 'Đường dẫn URL',
-            'description' => 'Giới thiệu',
+            'content' => 'Giới thiệu',
         ];
     }
 }

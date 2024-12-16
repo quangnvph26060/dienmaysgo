@@ -24,7 +24,7 @@ class SgoConfig extends Model
         'description_seo',
         'keywords_seo',
         'url',
-        'description'
+        'content'
     ];
 
     public $timestamps = true;

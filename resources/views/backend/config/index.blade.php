@@ -98,11 +98,11 @@
 
                 <div class="col-md-12">
                     <div class="mb-3">
-                        <label for="description" class="form-label">Nội dung</label>
-                        <textarea id="content" name="description"
-                            class="form-control @error('description') is-invalid @enderror" rows="5"
-                            placeholder="Enter content">{{ old('description', $config->description ?? '') }}</textarea>
-                        @error('description')
+                        <label for="content" class="form-label">Nội dung</label>
+                        <textarea id="content" name="content"
+                            class="form-control @error('content') is-invalid @enderror" rows="5"
+                            placeholder="Enter content">{{ old('content', $config->content ?? '') }}</textarea>
+                        @error('content')
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
