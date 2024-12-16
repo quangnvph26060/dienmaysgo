@@ -96,6 +96,18 @@
                     </div>
                 </div>
 
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Nội dung</label>
+                        <textarea id="content" name="content"
+                            class="form-control @error('content') is-invalid @enderror" rows="5"
+                            placeholder="Enter content">{{ old('content', $config->content ?? '') }}</textarea>
+                        @error('content')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+
                 <!-- SEO Information -->
                 <div class="col-md-12 mt-4">
                     <h5 class="section-title" style="background: #695aec">Thông tin SEO</h5>
@@ -234,7 +246,13 @@
 </script>
 @endpush
 @push('scripts')
-<script src="https://cdn.ckeditor.com/4.19.1/standard-all/ckeditor.js"></script>
+<script>
+    const BASE_URL = "{{ url('/') }}";
+</script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
+
+<script src="{{ asset('ckfinder_php_3.7.0/ckfinder/ckfinder.js') }}"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
 <script>
@@ -261,6 +279,10 @@
                 }
             }
         });
+        CKEDITOR.replace('content', {
+                filebrowserImageUploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
+                filebrowserUploadMethod: 'form',
+            });
     });
 </script>
 @endpush

@@ -37,13 +37,22 @@
                     <div class="bg-ft">
                         <h3 class="heading">HỖ TRỢ KHÁCH HÀNG</h3>
                         <div class="bg-ft">
+                            <?php
+                                $lishhome = \App\Models\SgoHome::get();
+                                // dd($lishhome)
+                            ?>
                             <ul class="list-mn">
+                                @forelse ($lishhome as $item )
                                 <li>
                                     <span style="font-size: 90%"><a
-                                            href="https://dienmaysgo.com/quy-dinh-truy-cap-website/">Quy
-                                            định truy cập website</a></span>
+                                            href="{{ route('introduce', ['slug' => $item->slug]) }}">
+                                            {{ $item->name }}
+                                        </a></span>
                                 </li>
-                                <li>
+                                @empty
+
+                                @endforelse
+                                {{-- <li>
                                     <span style="font-size: 90%"><a
                                             href="https://dienmaysgo.com/chinh-sach-ban-hang/">Chính sách
                                             bán hàng</a></span>
@@ -71,7 +80,7 @@
                                 <li>
                                     <a href="https://dienmaysgo.com/chinh-sach-tra-hang/"><span
                                             style="font-size: 90%">Chính sách trả hàng</span></a>
-                                </li>
+                                </li> --}}
                             </ul>
                         </div>
                     </div>

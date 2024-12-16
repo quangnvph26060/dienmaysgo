@@ -17,6 +17,7 @@ use App\Http\Controllers\admin\OriginController;
 use App\Http\Controllers\admin\PromotionController;
 use App\Models\SgoFuel;
 use App\Http\Controllers\admin\OrderController;
+use App\Http\Controllers\admin\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +36,9 @@ use App\Http\Controllers\admin\OrderController;
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
-
+    Route::get('detail/{id}', [UserController::class, 'getUserInfor'])->name('getUserInfor');
+    Route::post('update/{id}', [UserController::class, 'updateUserInfor'])->name('updateUserInfor');
+    Route::post('change-password', [UserController::class, 'changePassword'])->name('changePassword');
     route::middleware('guest')->group(function () {
         route::get('login', [AuthController::class, 'login'])->name('login');
         route::post('login', [AuthController::class, 'authenticate']);

@@ -116,7 +116,7 @@
                         <a
                             class="remove btn-remove-product"
                             aria-label="Remove this item"
-                            data-product_id="${ cart.id }"
+                            data-product_id="${ cart.id }" data-row-id="${cart.rowId}"
                             >&times;</a
                         >
                     </td>
