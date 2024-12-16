@@ -1,4 +1,3 @@
-
 <header id="header" class="header has-sticky sticky-jump">
     <div class="header-wrapper">
         <div id="top-bar" class="header-top hide-for-sticky nav-dark hide-for-medium">
@@ -16,7 +15,8 @@
                     <ul class="nav top-bar-nav nav-right nav-small nav-divided">
                         <li id="menu-item-2011"
                             class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2011 menu-item-design-default">
-                            <a href="{{ route('introduce') }}" class="nav-top-link">Giới thiệu</a>
+                            <a href="{{ route('introduce', 'gioi-thieu') }}" class="nav-top-link">Giới
+                                thiệu</a>
                         </li>
                         <li id="menu-item-2008"
                             class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2008 menu-item-design-default">
