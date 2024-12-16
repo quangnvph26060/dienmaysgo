@@ -56,9 +56,27 @@
             columns: [
                 { data: 'name', name: 'name' },
 
-                { data: 'content', name: 'content', render: function(data, type, row) {
-                    return data;  // Không cần xử lý thêm, vì dữ liệu đã là HTML
-                }},
+                {
+                    data: 'content',
+                    name: 'content',
+                    render: function(data, type, row) {
+                        const maxLength = 150; // Độ dài tối đa
+                        const parser = new DOMParser();
+                        const decodedData = parser.parseFromString(data, 'text/html').body.textContent || '';
+
+                        const isLongText = decodedData.length > maxLength;
+                        const previewText = isLongText ? decodedData.substring(0, maxLength) + '...' : decodedData;
+
+                        return `
+                            <div class="content-wrapper">
+                                <div class="content-preview">
+                                    ${previewText}
+                                </div>
+
+                            </div>
+                        `;
+                    }
+                },
                 { data: 'action', name: 'action', orderable: false, searchable: false }
             ],
             columnDefs: [

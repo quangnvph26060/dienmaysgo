@@ -12,13 +12,13 @@
 
                 <div class="page-title-inner container align-center flex-row medium-flex-wrap">
                     <div class="title-wrapper flex-col text-left medium-text-center">
-                        <h1 class="entry-title mb-0">Giới thiệu</h1>
+                        <h1 class="entry-title mb-0">{{ $title }}</h1>
                     </div>
                     <div class="title-content flex-col flex-right text-right medium-text-center">
                         <div class="title-breadcrumbs pb-half pt-half">
                             <nav class="woocommerce-breadcrumb breadcrumbs">
                                 <a href="{{url('/')}}">Home</a>
-                                <span class="divider">&#47;</span> Giới thiệu
+                                <span class="divider">&#47;</span> {{ $title }}
                             </nav>
                         </div>
                     </div>
@@ -39,7 +39,8 @@
                 <div class="row" id="row-611813157">
                     <div id="col-874962407" class="col small-12 large-12">
                         <div class="col-inner">
-                           {!! $introduce->description !!}
+
+                           {!! $introduce->content !!}
                         </div>
                     </div>
                 </div>
