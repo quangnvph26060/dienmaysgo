@@ -2544,7 +2544,6 @@ input[type="submit"] {
 }
 .button span {
     display: inline-block;
-    line-height: 1.6;
 }
 .button.is-outline {
     line-height: 2.19em;
@@ -3226,7 +3225,6 @@ i[class^="icon-"] {
     font-style: normal !important;
     font-variant: normal !important;
     font-weight: 400 !important;
-    line-height: 1.2;
     margin: 0;
     padding: 0;
     position: relative;
@@ -3459,7 +3457,7 @@ span + .image-icon {
 }
 .button [data-icon-label]:after {
     right: -12px;
-    top: -12px;
+    top: -8px;
 }
 .reveal-icon i {
     width: 1em;
@@ -4231,7 +4229,7 @@ img.mfp-img {
 }
 .off-canvas-right .mfp-content {
     left: auto;
-    right: -100%;
+    right: 0;
     transform: translateX(0px);
     transition: right 0.3s ease; /* Hiệu ứng trượt */
 }

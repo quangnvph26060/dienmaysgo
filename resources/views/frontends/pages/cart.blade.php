@@ -81,6 +81,7 @@
                                             <tbody>
 
                                                 @forelse ($carts as $item)
+                                        
                                                     <tr class="woocommerce-cart-form__cart-item cart_item"
                                                         data-row-id="{{ $item->id }}">
                                                         <td class="product-remove">
@@ -91,7 +92,7 @@
 
                                                         <td class="product-thumbnail">
                                                             <a
-                                                                href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sh1900/"><img
+                                                                href="{{ route('products.detail', $item->options['slug']) }}"><img
                                                                     fetchpriority="high" decoding="async" width="300"
                                                                     height="300"
                                                                     src="{{ asset('storage/' . $item->options->image) }}"
@@ -104,7 +105,7 @@
 
                                                         <td class="product-name" data-title="Sản phẩm">
                                                             <a
-                                                                href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sh1900/">{{ $item->name }}
+                                                                href="{{ route('products.detail', $item->options['slug']) }}">{{ $item->name }}
                                                             </a>
                                                             <div class="show-for-small mobile-product-price">
                                                                 <span class="mobile-product-price__qty">{{ $item->qty }}
