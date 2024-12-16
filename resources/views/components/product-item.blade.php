@@ -4,10 +4,9 @@
         <div class="product-small box has-hover box-normal box-text-bottom">
             <div class="box-image">
                 <div class="image-zoom image-cover" style="padding-top: 100%">
-                    <a href="{{ route('products.detail', $product->slug) }}"
-                        aria-label="{{ $product->name }}">
+                    <a href="{{ route('products.detail', $product->slug) }}" aria-label="{{ $product->name }}">
                         <img fetchpriority="high" decoding="async" width="680" height="680"
-                            src="{{ asset('storage/'. $product->image) }}" data-src="{{ asset('storage/'. $product->image) }}"
+                            src="{{ showImage($product->image) }}" data-src="{{ showImage($product->image) }}"
                             class="lazy-load attachment-original size-original" alt="" srcset=""
                             sizes="(max-width: 680px) 100vw, 680px" />
                     </a>
