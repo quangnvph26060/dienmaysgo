@@ -41,6 +41,8 @@ route::controller(ProductController::class)->name('products.')->group(function (
     route::get('danh-muc-san-pham/{slug}', 'list')->name('list');
     route::get('san-pham/{slug}', 'detail')->name('detail');
 });
+
+
 Route::prefix('home')->group(function () {
     route::get('{slug}', [IntroduceController::class, 'introduce'])->name('introduce');
 });

@@ -226,8 +226,8 @@
                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                     aria-expanded="false">
                     <div class="avatar-sm">
-                        <img src="{{ asset('backend/assets/img/profile.jpg') }}" alt="..."
-                            class="avatar-img rounded-circle" />
+                        <img src="{{ isset(Auth::user()->image) && !empty(Auth::user()->image) ? asset('storage/' . Auth::user()->image) : asset('images/avatar2.jpg') }}"
+                            alt="..." class="avatar-img rounded-circle" />
                     </div>
                     <span class="profile-username">
                         <span class="op-7">Hi,</span>
@@ -239,19 +239,20 @@
                         <li>
                             <div class="user-box">
                                 <div class="avatar-lg">
-                                    <img src="{{ asset('backend/assets/img/profile.jpg') }}" alt="image profile"
-                                        class="avatar-img rounded" />
+                                    <img src="{{ isset(Auth::user()->image) && !empty(Auth::user()->image) ? asset('storage/' . Auth::user()->image) : asset('images/avatar2.jpg') }}"
+                                        alt="image profile" class="avatar-img rounded" />
                                 </div>
                                 <div class="u-text">
                                     <h4>{{ Auth::user()->name }}</h4>
                                     <p class="text-muted">{{ Auth::user()->email }}</p>
-                                    <a href="#" >View Profile</a>
+                                    <a href="{{ route('admin.getUserInfor', ['id' => Auth::user()->id]) }}">View
+                                        Profile</a>
                                 </div>
                             </div>
                         </li>
                         <li>
 
-                            <a class="dropdown-item" href="{{route('admin.logout')}}">Logout</a>
+                            <a class="dropdown-item" href="{{ route('admin.logout') }}">Logout</a>
                         </li>
                     </div>
                 </ul>
