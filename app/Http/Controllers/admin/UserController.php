@@ -70,7 +70,7 @@ class UserController extends Controller
             if (!Hash::check($currentPassword, $admin->password)) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Mật khẩu hiện tại không đúng !'
+                    'message' => 'Mật khẩu hiện tại không đúng!'
                 ]);
             }
 
@@ -86,7 +86,7 @@ class UserController extends Controller
             if ($newPassword !== $confirmPassword) {
                 return response()->json([
                     'status' => 'error',
-                    'message' => 'Xác nhận mật khẩu không đúng !'
+                    'message' => 'Xác nhận mật khẩu không đúng!'
                 ]);
             }
 

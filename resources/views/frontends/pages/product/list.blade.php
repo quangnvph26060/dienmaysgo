@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="row category-page-row">
-        <div class="col large-3 hide-for-medium">
+        {{-- <div class="col large-3 hide-for-medium">
             <div id="shop-sidebar" class="sidebar-inner col-inner">
                 <aside id="woocommerce_layered_nav-2"
                     class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
@@ -21,9 +21,9 @@
                     </ul>
                 </aside>
             </div>
-        </div>
+        </div> --}}
 
-        <div class="col large-9">
+        <div class="col large-12">
             <div class="shop-container">
                 <div class="title_page">
                     <h1>{{ $category->name ?? 'Kết quả tìm kiếm' . '"' . request()->s . '"' }}</h1>
@@ -72,7 +72,7 @@
                     </form>
                 </div>
                 @isset($category)
-                    <div class="term-description">
+                    <div class="term-description" style="margin-top: 30px">
                         {!! $category->description !!}
                     </div>
                 @endisset

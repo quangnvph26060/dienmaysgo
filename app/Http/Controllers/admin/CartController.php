@@ -13,7 +13,7 @@ class CartController extends Controller
     public function list()
     {
         $title = 'Đơn hàng';
-        $carts = session()->get('cart')['shopping'];
+        $carts = Cart::instance('shopping')->content();
         $deletedItem = session()->get('last_deleted_product');
         Log::info($carts);
         return view('frontends.pages.cart', compact('carts', 'title'));
