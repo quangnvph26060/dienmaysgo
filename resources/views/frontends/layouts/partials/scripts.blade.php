@@ -90,6 +90,8 @@
 
         var count = data.count;
 
+
+
         jQuery('.icon-shopping-bag').attr('data-icon-label', count);
 
         jQuery('.woocommerce-mini-cart.cart_list.product_list_widget').html(_html);
