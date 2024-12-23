@@ -162,13 +162,14 @@
                                                         <input type="button" value="+"
                                                             class="plus button is-form" />
                                                     </div>
+                                                    <button type="button" name="add-to-cart" data-product-id="{{ $product->id }}"
+                                                        class="single_add_to_cart_button button alt">
+                                                        Add to cart
+                                                    </button>
                                                 </div>
                                             </div>
+
                                         </form>
-                                        <button type="button" name="add-to-cart" data-product-id="{{ $product->id }}"
-                                            class="single_add_to_cart_button button alt">
-                                            Add to cart
-                                        </button>
                                     @endif
 
 
@@ -404,7 +405,7 @@
         });
 
 
-       
+
     </script>
 
     <script>
@@ -417,18 +418,15 @@
                     url: "{{ route('carts.add-to-cart') }}", // Route xử lý giỏ hàng
                     type: 'POST',
                     data: {
-                        id: id,
+                        productId: id,
                         qty: quantity, // Truyền số lượng
                         _token: "{{ csrf_token() }}" // Token bảo mật
                     },
                     success: function(response) {
                         if (response.status) {
                             toastr.success(response.message); // Hiển thị thông báo thành công
-                            jQuery('.cart-count').html(response
-                                .count); // Cập nhật số lượng giỏ hàng
-                            cartResponse(response.carts); // Cập nhật giao diện giỏ hàng
-                            jQuery('#cart-links').css('display',
-                                'inline-block'); // Hiển thị nút giỏ hàng
+
+                            cartResponse(response); // Cập nhật giao diện giỏ hàng
                         } else {
                             toastr.error(response.message); // Hiển thị lỗi từ server
                         }
