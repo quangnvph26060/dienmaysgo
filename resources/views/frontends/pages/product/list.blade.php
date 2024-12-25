@@ -2,28 +2,26 @@
 
 @section('content')
     <div class="row category-page-row">
-        {{-- <div class="col large-3 hide-for-medium">
+        <div class="col large-3 hide-for-medium">
             <div id="shop-sidebar" class="sidebar-inner col-inner">
                 <aside id="woocommerce_layered_nav-2"
                     class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
                     <span class="widget-title shop-sidebar">Nhiên liệu sử dụng</span>
                     <div class="is-divider small"></div>
                     <ul class="woocommerce-widget-layered-nav-list">
-                        <li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term">
-                            <a rel="nofollow"
-                                href="https://dienmaysgo.com/may-phat-dien/?filter_nhien-lieu=diesel">Diesel</a>
-                            <span class="count">(1)</span>
-                        </li>
-                        <li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term">
-                            <a rel="nofollow" href="https://dienmaysgo.com/may-phat-dien/?filter_nhien-lieu=xang">Xăng</a>
-                            <span class="count">(1)</span>
-                        </li>
+
+                        @foreach ($fuels as $key => $count)
+                            <li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term">
+                                <a rel="nofollow" href="?filter_nhien-lieu={{ $key }}">{{ $key }}</a>
+                                <span class="count">({{ $count }})</span>
+                            </li>
+                        @endforeach
                     </ul>
                 </aside>
             </div>
-        </div> --}}
+        </div>
 
-        <div class="col large-12">
+        <div class="col large-9">
             <div class="shop-container">
                 <div class="title_page">
                     <h1>{{ $category->name ?? 'Kết quả tìm kiếm' . '"' . request()->s . '"' }}</h1>
@@ -33,6 +31,9 @@
                     <form id="pricedesc">
                         @if (request('s'))
                             <input type="hidden" name="s" value="{{ request('s') }}">
+                        @endif
+                        @if (request('filter_nhien-lieu'))
+                            <input type="hidden" name="filter_nhien-lieu" value="{{ request('filter_nhien-lieu') }}">
                         @endif
                         <div class="range-check">
                             <input class="pt-checkbox" @checked(request()->orderby == 'price-desc') type="checkbox" value="price-desc"
@@ -44,6 +45,9 @@
                         @if (request('s'))
                             <input type="hidden" name="s" value="{{ request('s') }}">
                         @endif
+                        @if (request('filter_nhien-lieu'))
+                            <input type="hidden" name="filter_nhien-lieu" value="{{ request('filter_nhien-lieu') }}">
+                        @endif
                         <div class="range-check">
                             <input class="pt-checkbox" @checked(request()->orderby == 'price') type="checkbox" value="price"
                                 id="price" name="orderby" onChange="this.form.submit()" />
@@ -54,6 +58,9 @@
                         @if (request('s'))
                             <input type="hidden" name="s" value="{{ request('s') }}">
                         @endif
+                        @if (request('filter_nhien-lieu'))
+                            <input type="hidden" name="filter_nhien-lieu" value="{{ request('filter_nhien-lieu') }}">
+                        @endif
                         <div class="range-check">
                             <input class="pt-checkbox" @checked(request()->orderby == 'date') type="checkbox" value="date"
                                 id="date" name="orderby" onChange="this.form.submit()" />
@@ -63,6 +70,9 @@
                     <form id="oldproduct">
                         @if (request('s'))
                             <input type="hidden" name="s" value="{{ request('s') }}">
+                        @endif
+                        @if (request('filter_nhien-lieu'))
+                            <input type="hidden" name="filter_nhien-lieu" value="{{ request('filter_nhien-lieu') }}">
                         @endif
                         <div class="range-check">
                             <input class="pt-checkbox" @checked(request()->orderby == 'old-product') type="checkbox" value="old-product"
