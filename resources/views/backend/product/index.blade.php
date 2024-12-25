@@ -97,7 +97,7 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             url: url,
-                            type: 'DELETE',
+                            type: 'POST',
                             success: function(response) {
                                 if (response.status) {
                                     $('#myTable').DataTable().ajax.reload();

@@ -11,9 +11,9 @@
             <div id="product-1113"
                 class="product type-product post-1113 status-publish first instock product_cat-may-phat-dien-elemax has-post-thumbnail shipping-taxable purchasable product-type-simple">
                 <div class="row content-row row-divided row-large row-reverse">
-                    <div id="product-sidebar" class="col large-3 hide-for-medium shop-sidebar"></div>
+                    {{-- <div id="product-sidebar" class="col large-3 hide-for-medium shop-sidebar"></div> --}}
 
-                    <div class="col large-9">
+                    <div class="col large-12">
                         <div class="product-main">
                             <div class="row">
                                 <div class="large-5 col">
@@ -54,17 +54,22 @@
                                         <!-- Gallery images -->
                                         <div class="product-gallery-thumbnails swiper-container">
                                             <div class="swiper-wrapper">
-                                                @if ($product->images->isNotEmpty())
-                                                    @foreach ($product->images as $index => $image)
-                                                        <div class="swiper-slide">
-                                                            <img class="gallery-thumb"
-                                                                src="{{ asset('storage/' . $image->image) }}"
-                                                                data-large-src="{{ asset('storage/' . $image->image) }}"
-                                                                alt="Thumbnail {{ $index + 1 }}" />
-                                                        </div>
-                                                    @endforeach
-                                                @else
-                                                @endif
+                                                @php
+                                                    $images = array_merge(
+                                                        [$product->image],
+                                                        $product->images->pluck('image')->toArray() ?? [],
+                                                    );
+                                                @endphp
+                                                {{-- @if ($product->images->isNotEmpty()) --}}
+                                                @foreach ($images as $index => $image)
+                                                    <div class="swiper-slide">
+                                                        <img class="gallery-thumb" src="{{ asset('storage/' . $image) }}"
+                                                            data-large-src="{{ asset('storage/' . $image) }}"
+                                                            alt="Thumbnail {{ $index + 1 }}" />
+                                                    </div>
+                                                @endforeach
+                                                {{-- @else
+                                                @endif --}}
                                                 <!-- Add more thumbnails as needed -->
                                             </div>
                                             <!-- Navigation buttons -->
@@ -142,10 +147,29 @@
                                                         <div class="price-wrapper">
                                                             <p class="price product-page-price">
                                                                 <span class="woocommerce-Price-amount amount">
-                                                                    <bdi>{{ number_format($product->price, 0, ',', '.') }}
-                                                                        <span
-                                                                            class="woocommerce-Price-currencySymbol">&#8363;</span>
-                                                                    </bdi>
+                                                                    @if ($product->price)
+                                                                        @if (hasDiscount($product->promotion))
+                                                                            <bdi>{{ formatAmount(calculateAmount($product->price, $product->promotion->discount)) }}
+                                                                                <span
+                                                                                    class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                                            </bdi>
+                                                                            <del
+                                                                                style="font-size: 14px;color: black !important;font-weight: 500;">
+                                                                                {{ formatAmount($product->price) }}
+                                                                                <span
+                                                                                    class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                                            </del>
+                                                                        @else
+                                                                            <bdi>{{ formatAmount($product->price) }}
+                                                                                <span
+                                                                                    class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                                            </bdi>
+                                                                        @endif
+                                                                    @else
+                                                                        <a href="" class="contact">Liên hệ <span
+                                                                                class="bi bi-telephone"
+                                                                                style="margin-left: 3px"></span></a>
+                                                                    @endif
                                                                 </span>
                                                             </p>
                                                         </div>
@@ -162,7 +186,8 @@
                                                         <input type="button" value="+"
                                                             class="plus button is-form" />
                                                     </div>
-                                                    <button type="button" name="add-to-cart" data-product-id="{{ $product->id }}"
+                                                    <button type="button" name="add-to-cart"
+                                                        data-product-id="{{ $product->id }}"
                                                         class="single_add_to_cart_button button alt">
                                                         Add to cart
                                                     </button>
@@ -349,6 +374,24 @@
     <script src="{{ asset('frontends/assets/js/toastr.min.js') }}"></script>
 
     <script>
+        jQuery(function() {
+
+            const images = document.querySelectorAll('.woocommerce-Tabs-panel img');
+
+            images.forEach(img => {
+                // Lấy giá trị alt của từng ảnh
+                const altText = img.alt;
+
+                // Tạo thẻ div để hiển thị alt
+                const altDiv = document.createElement('div');
+                altDiv.classList.add('image-alt');
+                altDiv.textContent = altText;
+
+                // Thêm thẻ altDiv bên dưới ảnh
+                img.parentElement.appendChild(altDiv);
+            });
+        });
+
         jQuery.noConflict();
 
         addToCart();
@@ -369,7 +412,6 @@
         document.addEventListener("DOMContentLoaded", () => {
             const swiper = new Swiper(".swiper-container", {
                 slidesPerView: 4, // Hiển thị 4 ảnh
-                spaceBetween: 10, // Khoảng cách giữa các ảnh
                 navigation: {
                     nextEl: ".swiper-button-next",
                     prevEl: ".swiper-button-prev",
@@ -403,9 +445,6 @@
                 });
             });
         });
-
-
-
     </script>
 
     <script>
@@ -448,6 +487,13 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
+        .image-alt {
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+            color: #555;
+            background: rgba(128, 128, 128, .3)
+        }
         .has-equal-box-heights .box-image {
             padding-top: 10% !important;
         }
@@ -507,11 +553,12 @@
         }
 
         .gallery-thumb {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             object-fit: cover;
             cursor: pointer;
-            border: 2px solid transparent;
+            border: 2px solid gray;
+
             transition: border 0.3s ease;
         }
 
@@ -534,24 +581,11 @@
             /* Điều chỉnh tự động */
         }
 
-        .gallery-thumb {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            cursor: pointer;
-            border: 2px solid transparent;
-            transition: border 0.3s ease;
-        }
-
-        .gallery-thumb:hover {
-            border: 2px solid #0071e3;
-        }
-
         .swiper-container {
             width: 100%;
             max-width: 600px;
             /* Giới hạn chiều rộng */
-            margin: auto;
+            margin: 10px auto;
             overflow: hidden;
         }
 
