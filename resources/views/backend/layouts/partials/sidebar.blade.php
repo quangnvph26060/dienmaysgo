@@ -24,28 +24,21 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <a href="{{ route('admin.dashboard') }}" class="collapsed">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
-
-                <li class="nav-section">
-                    <span class="sidebar-mini-icon">
-                        <i class="fa fa-ellipsis-h"></i>
-                    </span>
-                    <h4 class="text-section">Components</h4>
-                </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.order.index') }}">
-                        <i class="fas fa-sign"></i>
+                        <i class="fas fa-receipt"></i>
                         <p>Đơn hàng</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#product">
-                        <i class="fas fa-pen-square"></i>
+                        <i class="fas fa-box-open"></i>
                         <p>Sản phẩm</p>
                         <span class="caret"></span>
                     </a>
@@ -58,17 +51,17 @@
                             </li>
                             <li>
                                 <a href="{{ route('admin.category.index') }}">
-                                    <span class="sub-item">Danh mục sản phẩm</span>
+                                    <span class="sub-item">Danh sách danh mục</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.origin.index') }}">
-                                    <span class="sub-item">Xuất xứ</span>
+                                <a href="{{ route('admin.attributes.index') }}">
+                                    <span class="sub-item">Danh sách thuộc tính</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('admin.fuel.index') }}">
-                                    <span class="sub-item">Nhiên liệu</span>
+                                <a href="{{ route('admin.brands.index') }}">
+                                    <span class="sub-item">Danh sách thương hiệu</span>
                                 </a>
                             </li>
                         </ul>
@@ -76,7 +69,7 @@
                 </li>
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#promotion">
-                        <i class="fas fa-pen-square"></i>
+                        <i class="fab fa-salesforce"></i>
                         <p>Khuyến mãi</p>
                         <span class="caret"></span>
                     </a>
@@ -144,10 +137,9 @@
                 </li>
 
                 <li class="nav-item">
-                    <a  href="{{ route('admin.config.index') }}">
-                        <i class="fas fa-newspaper"></i>
+                    <a href="{{ route('admin.config.index') }}">
+                        <i class="fas fa-cogs"></i>
                         <p>Cấu hình</p>
-                        <span class="caret"></span>
                     </a>
 
                 </li>

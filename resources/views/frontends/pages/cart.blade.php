@@ -63,7 +63,7 @@
                         <div class="woocommerce-notices-wrapper"></div>
                         <div class="woocommerce row row-large row-divided">
                             <div class="col large-7 pb-0">
-                                <form class="woocommerce-cart-form" action="https://dienmaysgo.com/gio-hang/"
+                                <form class="woocommerce-cart-form" action=""
                                     method="post">
                                     <div class="cart-wrapper sm-touch-scroll">
                                         <table class="shop_table shop_table_responsive cart woocommerce-cart-form__contents"
@@ -81,7 +81,7 @@
                                             <tbody>
 
                                                 @forelse ($carts as $item)
-                                        
+
                                                     <tr class="woocommerce-cart-form__cart-item cart_item"
                                                         data-row-id="{{ $item->id }}">
                                                         <td class="product-remove">

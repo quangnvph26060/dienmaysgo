@@ -53,7 +53,7 @@ class CategoryController extends Controller
     {
         $page = 'Danh mục';
         $title = 'Thêm danh mục';
-        $parentCategories = SgoCategory::whereNull('category_parent_id')->get();
+        $parentCategories = SgoCategory::query()->get();
         return view('backend.category.create', compact('parentCategories', 'title', 'page'));
     }
 
@@ -97,6 +97,7 @@ class CategoryController extends Controller
             $category = SgoCategory::find($id);
 
             $credentials = $request->validated();
+
             if ($request->hasFile('logo')) $credentials['logo'] =  saveImage($request, 'logo', 'category_images');
             $category->update($credentials);
 

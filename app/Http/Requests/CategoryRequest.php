@@ -26,12 +26,13 @@ class CategoryRequest extends FormRequest
         $categoryId = $this->route('id'); // Lấy id từ URL route (giả sử route có tên 'admin.category.update')
 
         return [
-            'name' => 'required|unique:sgo_category,name,' . $categoryId . '|max:255', // Tên danh mục là bắt buộc và có độ dài tối đa 255 ký tự
-            'description' => 'required',
-            'description_short' => 'required',
-            'title_seo' => 'required|string|max:255', // Tiêu đề SEO là tùy chọn, nếu có thì phải là chuỗi và tối đa 255 ký tự
-            'description_seo' => 'required|string|max:1000', // Mô tả SEO là tùy chọn, nếu có thì phải là chuỗi và tối đa 1000 ký tự
-            'keyword_seo' => 'required|string|max:255', // Từ khóa SEO là tùy chọn, nếu có thì phải là chuỗi và tối đa 255 ký tự
+            'name' => 'nullable|unique:sgo_category,name,' . $categoryId . '|max:255', // Tên danh mục là bắt buộc và có độ dài tối đa 255 ký tự
+            'description' => 'nullable',
+            'description_short' => 'nullable',
+            'title_seo' => 'nullable|string|max:255', // Tiêu đề SEO là tùy chọn, nếu có thì phải là chuỗi và tối đa 255 ký tự
+            'description_seo' => 'nullable|string|max:1000', // Mô tả SEO là tùy chọn, nếu có thì phải là chuỗi và tối đa 1000 ký tự
+            'keyword_seo' => 'nullable|string|max:255', // Từ khóa SEO là tùy chọn, nếu có thì phải là chuỗi và tối đa 255 ký tự
+            'category_parent_id' => 'nullable|exists:sgo_category,id', // Danh mục cha là tùy chọn và phải tồn tại trong bảng sog_category với id là số nguyên
         ];
     }
 

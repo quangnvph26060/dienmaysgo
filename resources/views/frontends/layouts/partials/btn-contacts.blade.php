@@ -6,8 +6,8 @@
         <div class="phone-vr">
             <div class="phone-vr-circle-fill"></div>
             <div class="phone-vr-img-circle">
-                <a target="_blank" href="https://zalo.me/0981185620">
-                    <img alt="Zalo" src="https://dienmaysgo.com/wp-content/plugins/button-contact-vr/img/zalo.png" />
+                <a target="_blank" href="https://zalo.me/{{ $settings->zalo_number }}">
+                    <img alt="Zalo" src="{{ asset('frontends/assets/image/zalo.png') }}" />
                 </a>
             </div>
         </div>
@@ -19,9 +19,8 @@
         <div class="phone-vr">
             <div class="phone-vr-circle-fill"></div>
             <div class="phone-vr-img-circle">
-                <a href="tel:0914379989">
-                    <img alt="Phone"
-                        src="https://dienmaysgo.com/wp-content/plugins/button-contact-vr/img/phone.png" />
+                <a href="tel:{{ $settings->phone }}">
+                    <img alt="Phone" src="{{ asset('frontends/assets/image/phone.png') }}" />
                 </a>
             </div>
         </div>

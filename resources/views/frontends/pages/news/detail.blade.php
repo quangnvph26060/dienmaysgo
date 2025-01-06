@@ -10,7 +10,7 @@
                         <header class="entry-header">
                             <div class="entry-header-text entry-header-text-top text-left">
                                 <h6 class="entry-category is-xsmall">
-                                    <a href="https://dienmaysgo.com/category/tin-tuc/" rel="category tag">Tin tức</a>
+                                    <a href="" rel="category tag">Tin tức</a>
                                 </h6>
                                 <h1 class="entry-title">
                                     {{ $news->title }}

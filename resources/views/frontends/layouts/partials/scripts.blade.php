@@ -25,7 +25,28 @@
 {{-- <script src="{{ asset('frontends/assets/js/custom.js') }}"></script> --}}
 <script src="{{ asset('frontends/assets/js/toastr.min.js') }}"></script>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const masthead = document.getElementById("masthead");
 
+        // Hàm kiểm tra và áp dụng lớp `fixed`
+        const checkScroll = () => {
+            if (window.scrollY > 100) {
+                document.querySelector(".header-wrapper").classList.add("stuck")
+                masthead.classList.add("fixed");
+            } else {
+                document.querySelector(".header-wrapper").classList.remove("stuck")
+                masthead.classList.remove("fixed");
+            }
+        };
+
+        // Kiểm tra ngay khi tải trang
+        checkScroll();
+
+        // Lắng nghe sự kiện cuộn
+        window.addEventListener("scroll", checkScroll);
+    });
+</script>
 <script>
     const BASE_URL = "{{ url('/') }}";
 
@@ -235,7 +256,7 @@
                     },
                     success: function(response) {
                         if (response.status) {
-                            toastr.success(response.message);
+                            // toastr.success(response.message);
                             cartResponse(response)
                             // jQuery('#cart-links').css('display', 'inline-block')
                             // jQuery('.woocommerce-Price-amount.amount bdi').html(response.total)
@@ -275,7 +296,7 @@
 
 
                     if (response.status) {
-                        toastr.success(response.message);
+                        // toastr.success(response.message);
 
                         row.remove();
 
