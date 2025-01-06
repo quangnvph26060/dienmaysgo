@@ -2,7 +2,7 @@
 
 
 @section('content')
-
+    @include('components.breadcrumb_V2', compact('product'))
     <main id="main" class="">
         <div class="shop-container">
             <div class="container">
@@ -12,11 +12,10 @@
                 class="product type-product post-1113 status-publish first instock product_cat-may-phat-dien-elemax has-post-thumbnail shipping-taxable purchasable product-type-simple">
                 <div class="row content-row row-divided row-large row-reverse">
                     {{-- <div id="product-sidebar" class="col large-3 hide-for-medium shop-sidebar"></div> --}}
-
                     <div class="col large-12">
                         <div class="product-main">
                             <div class="row">
-                                <div class="large-5 col">
+                                <div class="large-6 col">
                                     <div class="product-images relative mb-half has-hover woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images"
                                         data-columns="4">
                                         <!-- Badge container -->
@@ -78,63 +77,76 @@
                                 </div>
 
                                 <div class="product-info summary entry-summary col col-fit product-summary form-flat">
-                                    <h1 class="product-title product_title entry-title">
+                                    <h1 class="product-title product_title entry-title" style="margin-bottom: 5px">
                                         {{ $product->name }}
                                     </h1>
 
-                                    <div class="price-wrapper">
-                                        <p class="price product-page-price">
-                                            <span class="woocommerce-Price-amount amount"
-                                                style="display: block; margin: 20px 0;">
-                                                @if ($product->price)
+                                    <p style="margin-bottom: 0; font-size: .8rem">
+                                        Thương hiệu: {{ implode(' | ', $product->brands->pluck('name')->toArray()) }}
+
+                                    </p>
+
+                                    <hr>
+
+                                    @if ($product->price > 0)
+                                        <div class="price-wrapper">
+                                            <p class="price product-page-price">
+                                                <span class="woocommerce-Price-amount amount" style="display: block;">
+
                                                     @if (hasDiscount($product->promotion))
-                                                        <bdi>{{ formatAmount(calculateAmount($product->price, $product->promotion->discount)) }}
-                                                            <span class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                        <bdi style=" font-size: 25px">{{ formatAmount(calculateAmount($product->price, $product->promotion->discount)) }}
+                                                            ₫
                                                         </bdi>
+
                                                         <del
-                                                            style="font-size: 14px;color: black !important;font-weight: 500;">
+                                                            style="font-size: 14px;color: black !important;font-weight: 500; margin: 0 10px">
                                                             {{ formatAmount($product->price) }}
-                                                            <span class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                            ₫
                                                         </del>
+
+                                                        <span
+                                                            style="color: black; font-size: 14px; font-weight: 500">-{{ number_format($product->promotion->discount, 0) }}%</span>
                                                     @else
                                                         <bdi>{{ formatAmount($product->price) }}
-                                                            <span class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                            ₫
                                                         </bdi>
                                                     @endif
-                                                @else
-                                                    <a href="" class="contact">Liên hệ <span class="bi bi-telephone"
-                                                            style="margin-left: 3px"></span></a>
-                                                @endif
-                                            </span>
-                                        </p>
-                                    </div>
-                                    <div class="product-short-description">
-                                        {!! $product->description_short !!}
-                                    </div>
-                                    <section class="section" id="section_1960688269">
-                                        <div class="bg section-bg fill bg-fill bg-loaded"></div>
 
-                                        <div class="section-content relative">
-                                            <div class="row" id="row-2038915585">
-                                                <div id="col-454331129" class="col small-12 large-12">
-                                                    <div class="col-inner">
-                                                        <p>
-                                                            <em><strong>Lưu ý:</strong> Giá bán sản phẩm
-                                                                mang tính chất tham khảo, vui lòng liên hệ
-                                                                trực tiếp để được có giá tốt nhất với số
-                                                                lượng hàng trong kho. Xin cảm ơn!</em>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
+                                                </span>
+                                            </p>
                                         </div>
+                                    @endif
 
-                                    </section>
+
 
 
                                     @if ($product->price)
-                                        <p class="stock in-stock">Còn hàng</p>
+
+                                        <div style="margin-bottom: 10px">
+
+                                            @if ($product->tags)
+                                                <div style="display: flex; align-items: center; font-size: .8rem">
+                                                    <p class="status" style="margin: 0">Tags: </p>
+                                                    <p class="" style="margin: 0 0 0 60px">
+                                                        {{ formatString($product->tags) }}</p>
+                                                </div>
+                                            @endif
+
+
+                                            <div class="product_meta">
+                                                <span class="posted_in" style="font-size: .8rem">Danh mục:
+                                                    <a style="margin: 0 0 0 25px"
+                                                        href="{{ route('products.list', $product->category->slug) }}"
+                                                        rel="tag">{{ $product->category->name }}</a></span>
+                                            </div>
+
+                                            <div style="display: flex; align-items: center; font-size: .8rem">
+                                                <p class="status" style="margin: 0">Trạng thái: </p>
+                                                <p class="stock in-stock" style="margin: 0 0 0 30px">
+                                                    {{ $product->quantity == 0 ? 'Hết hàng' : 'Còn hàng' }}</p>
+                                            </div>
+                                        </div>
+
                                         <form class="cart" action="" method="post" enctype="multipart/form-data">
                                             <div class="sticky-add-to-cart-wrapper">
                                                 <div class="sticky-add-to-cart">
@@ -144,65 +156,95 @@
                                                         <div class="product-title-small hide-for-small">
                                                             <strong>{{ $product->name }}</strong>
                                                         </div>
-                                                        <div class="price-wrapper">
-                                                            <p class="price product-page-price">
-                                                                <span class="woocommerce-Price-amount amount">
-                                                                    @if ($product->price)
+                                                        @if ($product->price > 0)
+                                                            <div class="price-wrapper">
+                                                                <p class="price product-page-price">
+                                                                    <span class="woocommerce-Price-amount amount">
                                                                         @if (hasDiscount($product->promotion))
                                                                             <bdi>{{ formatAmount(calculateAmount($product->price, $product->promotion->discount)) }}
-                                                                                <span
-                                                                                    class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                                                ₫
                                                                             </bdi>
                                                                             <del
                                                                                 style="font-size: 14px;color: black !important;font-weight: 500;">
                                                                                 {{ formatAmount($product->price) }}
-                                                                                <span
-                                                                                    class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                                                ₫
                                                                             </del>
                                                                         @else
                                                                             <bdi>{{ formatAmount($product->price) }}
-                                                                                <span
-                                                                                    class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                                                ₫
                                                                             </bdi>
                                                                         @endif
-                                                                    @else
-                                                                        <a href="" class="contact">Liên hệ <span
-                                                                                class="bi bi-telephone"
-                                                                                style="margin-left: 3px"></span></a>
-                                                                    @endif
-                                                                </span>
-                                                            </p>
+                                                                    </span>
+                                                                </p>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+
+                                                    @if ($product->price > 0)
+                                                        <div class="quantity buttons_added form-flat">
+                                                            <label class="screen-reader-text" for="quantity_674f195d66f6f">
+                                                                {{ $product->name }}
+                                                            </label>
+
+                                                            <input type="button" value="-"
+                                                                class="minus button is-form" />
+                                                            <input type="number" id="quantity_674f195d66f6f"
+                                                                class="input-text qty text" step="1" min="1"
+                                                                name="quantity" value="1" title="Qty" size="4"
+                                                                placeholder="" inputmode="numeric" />
+                                                            <input type="button" value="+"
+                                                                class="plus button is-form" />
                                                         </div>
-                                                    </div>
-                                                    <div class="quantity buttons_added form-flat">
-                                                        <input type="button" value="-" class="minus button is-form" />
-                                                        <label class="screen-reader-text" for="quantity_674f195d66f6f">
-                                                            {{ $product->name }}
-                                                        </label>
-                                                        <input type="number" id="quantity_674f195d66f6f"
-                                                            class="input-text qty text" step="1" min="1"
-                                                            name="quantity" value="1" title="Qty" size="4"
-                                                            placeholder="" inputmode="numeric" />
-                                                        <input type="button" value="+"
-                                                            class="plus button is-form" />
-                                                    </div>
-                                                    <button type="button" name="add-to-cart"
-                                                        data-product-id="{{ $product->id }}"
-                                                        class="single_add_to_cart_button button alt">
-                                                        Add to cart
-                                                    </button>
+
+                                                        <button type="button" name="add-to-cart"
+                                                            data-product-id="{{ $product->id }}"
+                                                            class="single_add_to_cart_button button alt"
+                                                            style="margin-right: 5px">
+                                                            Thêm giỏ hàng
+                                                        </button>
+                                                    @endif
+
+
+                                                    <a href="{{ route('contact', ['product' => $product->slug]) }}"
+                                                        class="single_add_to_cart_button button alt"
+                                                        style="background: #ec1c24 !important; padding-left: 40px; padding-right: 40px; padding-bottom: 1px;">Liên
+                                                        hệ <span class="bi bi-telephone"
+                                                            style="margin-left: 3px"></span></a>
                                                 </div>
                                             </div>
 
                                         </form>
                                     @endif
 
+                                    <div class="hotline-box">
+                                        <p class="meta-title">
+                                            {{ $settings->introduct_title }}
+                                        </p>
+                                        <div class="hotline-content">
+                                            <div>
+                                                <i class="bi bi-telephone-fill"></i> Hotline:
+                                            </div>
+                                            <div>
+                                                @foreach ($settings->introduction['phone'] ?? [] as $key => $item)
+                                                    <p>
+                                                        <span class="hotline-number">{{ $item }}</span>
+                                                        <span
+                                                            class="hotline-region">{{ $settings->introduction['facility'][$key] ?? '' }}</span>
+                                                    </p>
+                                                @endforeach
 
+                                            </div>
 
-                                    <div class="product_meta">
-                                        <span class="posted_in">Danh mục:
-                                            <a href="{{ route('products.list', $product->category->slug) }}"
-                                                rel="tag">{{ $product->category->name }}</a></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="Service-freeship">
+                                        <p><i class="bi bi-car-front"></i>Miễn phí giao hàng trong nội thành Hà Nội và
+                                            nội
+                                            thành TP. Hồ Chí Minh.</p>
+                                        <p><i class="bi bi-hand-index-thumb"></i>Hàng Chính Hãng</p>
+                                        <p><i class="bi bi-shield-check"></i>Bảo hành chính hãng, có người đến tận nhà.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -214,14 +256,14 @@
                                     <li class="description_tab active" id="tab-title-description" role="presentation">
                                         <a href="#tab-description" role="tab" aria-selected="true"
                                             aria-controls="tab-description">
-                                            Thông tin chi tiết
+                                            Mô tả chi tiết
                                         </a>
                                     </li>
                                     <li class="additional_information_tab" id="tab-title-additional_information"
                                         role="presentation">
                                         <a href="#tab-additional_information" role="tab" aria-selected="false"
                                             aria-controls="tab-additional_information" tabindex="-1">
-                                            Thông tin bổ sung
+                                            Thông số kỹ thuật
                                         </a>
                                     </li>
                                     {{-- <li class="reviews_tab" id="tab-title-reviews" role="presentation">
@@ -239,108 +281,10 @@
                                     <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--additional_information panel entry-content"
                                         id="tab-additional_information" role="tabpanel"
                                         aria-labelledby="tab-title-additional_information">
-                                        <table class="woocommerce-product-attributes shop_attributes"
-                                            aria-label="Product Details">
-                                            <tr
-                                                class="woocommerce-product-attributes-item woocommerce-product-attributes-item--attribute_pa_xuat-xu">
-                                                <th class="woocommerce-product-attributes-item__label" scope="row">
-                                                    Xuất xứ
-                                                </th>
-                                                <td class="woocommerce-product-attributes-item__value">
-                                                    <p>
-                                                        <a href="https://dienmaysgo.com/xuat-xu/nhat-ban/"
-                                                            rel="tag">Nhật
-                                                            Bản</a>
-                                                    </p>
-                                                </td>
-                                            </tr>
-                                        </table>
+                                        {!! $product->description_short !!}
+
                                     </div>
-                                    {{-- <div
-                                    class="woocommerce-Tabs-panel woocommerce-Tabs-panel--reviews panel entry-content"
-                                    id="tab-reviews" role="tabpanel" aria-labelledby="tab-title-reviews">
-                                    <div id="reviews" class="woocommerce-Reviews row">
-                                        <div id="comments" class="col large-12">
-                                            <h3 class="woocommerce-Reviews-title normal">
-                                                Đánh giá
-                                            </h3>
 
-                                        </div>
-
-                                        <div id="review_form_wrapper" class="large-12 col">
-                                            <div id="review_form" class="col-inner">
-                                                <div class="review-form-inner has-border">
-                                                    <div id="respond" class="comment-respond">
-                                                        <h3 id="reply-title" class="comment-reply-title">
-                                                            Sản phẩm &ldquo;{{ $product->name }}&rdquo;
-                                                            <small><a rel="nofollow" id="cancel-comment-reply-link"
-                                                                    href="/may-phat-dien-chay-xang-elemax-sv2800/#respond"
-                                                                    style="display: none">Hủy</a></small>
-                                                        </h3>
-                                                        <form action="https://dienmaysgo.com/wp-comments-post.php"
-                                                            method="post" id="commentform" class="comment-form"
-                                                            novalidate>
-                                                            <div class="comment-form-rating">
-                                                                <label for="rating">Đánh giá của bạn&nbsp;<span
-                                                                        class="required">*</span></label>
-                                                                <div id="star-rating"></div>
-                                                                <input type="hidden" id="rating-value" name="rating" />
-                                                            </div>
-                                                            <p class="comment-form-comment">
-                                                                <label for="comment">Bình luận của bạn&nbsp;<span
-                                                                        class="required">*</span></label>
-                                                                <textarea id="comment" name="comment" cols="45" rows="8"
-                                                                    required></textarea>
-                                                            </p>
-                                                            <p class="comment-form-author">
-                                                                <label for="author">Tên&nbsp;<span
-                                                                        class="required">*</span></label><input
-                                                                    id="author" name="author" type="text" value=""
-                                                                    size="30" required />
-                                                            </p>
-                                                            <p class="comment-form-email">
-                                                                <label for="email">Email&nbsp;<span
-                                                                        class="required">*</span></label><input
-                                                                    id="email" name="email" type="email" value=""
-                                                                    size="30" required />
-                                                            </p>
-
-                                                            <p class="form-submit">
-                                                                <input name="submit" type="submit" id="submit"
-                                                                    class="submit" value="Submit" />
-                                                                <input type="hidden" name="comment_post_ID" value="1113"
-                                                                    id="comment_post_ID" />
-                                                                <input type="hidden" name="comment_parent"
-                                                                    id="comment_parent" value="0" />
-                                                            </p>
-                                                            <p style="display: none">
-                                                                <input type="hidden" id="akismet_comment_nonce"
-                                                                    name="akismet_comment_nonce" value="e93fbc0b00" />
-                                                            </p>
-                                                            <p style="display: none !important"
-                                                                class="akismet-fields-container" data-prefix="ak_">
-                                                                <label>&#916;
-                                                                    <textarea name="ak_hp_textarea" cols="45" rows="8"
-                                                                        maxlength="100"></textarea>
-                                                                </label><input type="hidden" id="ak_js_1" name="ak_js"
-                                                                    value="115" />
-                                                                <script>
-                                                                    document
-                                                                            .getElementById("ak_js_1")
-                                                                            .setAttribute(
-                                                                                "value",
-                                                                                new Date().getTime()
-                                                                            );
-                                                                </script>
-                                                            </p>
-                                                        </form>
-                                                    </div>
-                                                    <!-- #respond -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> --}}
                                 </div>
                             </div>
 
@@ -353,9 +297,9 @@
                                 <div class="row has-equal-box-heights equalize-box large-columns-4 medium-columns-3 small-columns-2 row-small slider row-slider slider-nav-reveal slider-nav-push"
                                     data-flickity-options='{"imagesLoaded": true, "groupCells": "100%", "dragThreshold" : 5, "cellAlign": "left","wrapAround": true,"prevNextButtons": true,"percentPosition": true,"pageDots": false, "rightToLeft": false, "autoPlay" : false}'>
 
-                                    @foreach ($relatedProducts as $item)
-                                        <x-product-item :product="$item" />
-                                    @endforeach
+
+                                    <x-products :products="$relatedProducts" />
+
                                 </div>
                             </div>
                         </div>
@@ -411,26 +355,26 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             const swiper = new Swiper(".swiper-container", {
-                slidesPerView: 4, // Hiển thị 4 ảnh
+                slidesPerView: 5, // Hiển thị 4 ảnh
                 navigation: {
                     nextEl: ".swiper-button-next",
                     prevEl: ".swiper-button-prev",
                 },
-                // breakpoints: {
-                //   // Responsive settings
-                //   640: {
-                //     slidesPerView: 4,
-                //     spaceBetween: 10,
-                //   },
-                //   768: {
-                //     slidesPerView: 4,
-                //     spaceBetween: 15,
-                //   },
-                //   1024: {
-                //     slidesPerView: 5,
-                //     spaceBetween: 20,
-                //   },
-                // },
+                breakpoints: {
+                    // Responsive settings
+                    640: {
+                        slidesPerView: 5,
+                        spaceBetween: 10,
+                    },
+                    768: {
+                        slidesPerView: 5,
+                        spaceBetween: 15,
+                    },
+                    1024: {
+                        slidesPerView: 5,
+                        spaceBetween: 20,
+                    },
+                },
             });
 
             // Thay đổi ảnh chính khi bấm vào gallery
@@ -487,6 +431,67 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
+        .Service-freeship {
+            padding: 10px;
+            margin-top: 15px;
+            border: 1px solid #ddd;
+        }
+
+        .Service-freeship p {
+            margin: 0;
+            font-size: .8rem;
+        }
+
+        .Service-freeship p i {
+            color: #ec1c24;
+            margin-right: 10px;
+        }
+
+        #main-image {
+            height: 400px;
+        }
+
+        .hotline-box {
+            border: 1px solid #ddd;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            margin-top: 10px;
+        }
+
+        .meta-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: .8rem;
+            margin-bottom: 10px;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 6px;
+        }
+
+        .hotline-content {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .hotline-content p {
+            margin: 0;
+            font-size: .8rem;
+            color: #333;
+            line-height: 2
+        }
+
+        .hotline-number {
+            color: red;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .hotline-region {
+            color: #333;
+        }
+
         .image-alt {
             text-align: center;
             margin-top: 10px;
@@ -494,6 +499,7 @@
             color: #555;
             background: rgba(128, 128, 128, .3)
         }
+
         .has-equal-box-heights .box-image {
             padding-top: 10% !important;
         }
@@ -569,7 +575,7 @@
         .product-gallery-thumbnails {
             width: 100%;
             max-width: 500px;
-            margin: auto;
+            /* margin: auto; */
         }
 
         .swiper-slide {
@@ -585,7 +591,7 @@
             width: 100%;
             max-width: 600px;
             /* Giới hạn chiều rộng */
-            margin: 10px auto;
+            /* margin: 10px auto; */
             overflow: hidden;
         }
 

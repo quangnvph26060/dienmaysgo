@@ -23,8 +23,14 @@ class SgoConfig extends Model
         'title_seo',
         'description_seo',
         'keywords_seo',
-        'url',
-        'content'
+        'content',
+        'introduct_title',
+        'introduction',
+        'icon'
+    ];
+
+    protected $casts = [
+        'introduction' => 'array',
     ];
 
     public $timestamps = true;

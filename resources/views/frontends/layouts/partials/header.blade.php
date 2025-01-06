@@ -1,260 +1,336 @@
-<header id="header" class="header has-sticky sticky-jump">
-    <div class="header-wrapper">
-        <div id="top-bar" class="header-top hide-for-sticky nav-dark hide-for-medium">
-            <div class="flex-row container">
-                <div class="flex-col hide-for-medium flex-left">
-                    <ul class="nav nav-left medium-nav-center nav-small nav-divided"></ul>
-                </div>
-
-                <div class="flex-col hide-for-medium flex-center">
-                    <ul class="nav nav-center nav-small nav-divided"></ul>
-                </div>
-
-
-                <div class="flex-col hide-for-medium flex-right">
-                    <ul class="nav top-bar-nav nav-right nav-small nav-divided">
-                        <li id="menu-item-2011"
-                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2011 menu-item-design-default">
-                            <a href="{{ route('introduce', 'gioi-thieu') }}" class="nav-top-link">Giới
-                                thiệu</a>
-                        </li>
-                        <li id="menu-item-2008"
-                            class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2008 menu-item-design-default">
-                            <a href="{{ route('news.list') }}" class="nav-top-link">Tin tức</a>
-                        </li>
-                        <li id="menu-item-2010"
-                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2010 menu-item-design-default">
-                            <a href="{{ route('contact') }}" class="nav-top-link">Liên hệ</a>
-                        </li>
-                    </ul>
-                </div>
-
+<div class="header-wrapper">
+    <div id="top-bar" class="header-top hide-for-sticky nav-dark hide-for-medium">
+        <div class="flex-row container">
+            <div class="flex-col hide-for-medium flex-left">
+                <ul class="nav nav-left medium-nav-center nav-small nav-divided"></ul>
             </div>
-        </div>
-        <div id="masthead" class="header-main hide-for-sticky">
-            <div class="header-inner flex-row container logo-left medium-logo-center" role="navigation">
-                <!-- Logo -->
-                <div id="logo" class="flex-col logo">
-                    <!-- Header logo -->
-                    <a href="{{ url('/') }}" title="{{ request()->getHost() }}" rel="home">
-                        <img width="1020" height="422"
-                            src="https://dienmaysgo.com/wp-content/uploads/2023/05/dienmaysgo-1024x424.png"
-                            class="header_logo header-logo" alt="dienmaysgo.com" />
-                        <img width="1020" height="422"
-                            src="https://dienmaysgo.com/wp-content/uploads/2023/05/dienmaysgo-1024x424.png"
-                            class="header-logo-dark" alt="dienmaysgo.com" />
-                    </a>
-                </div>
 
-                <!-- Mobile Left Elements -->
-                <div class="flex-col show-for-medium flex-left">
-                    <ul class="mobile-nav nav nav-left">
-                        <li class="nav-icon has-icon">
-                            <div class="header-button">
-                                <a href="#" data-open="#main-menu" data-pos="left" data-bg="main-menu-overlay"
-                                    data-color="" class="icon primary button round is-small" aria-label="Menu"
-                                    aria-controls="main-menu" aria-expanded="false">
-                                    <i class="icon-menu"></i>
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Left Elements -->
-                <div class="flex-col hide-for-medium flex-left flex-grow">
-                    <ul class="header-nav header-nav-main nav nav-left nav-uppercase">
-                        <li class="header-search-form search-form html relative has-icon">
-                            <div class="header-search-form-wrapper">
-                                <div class="searchform-wrapper ux-search-box relative form-flat is-normal">
-                                    <form role="search" method="get" class="searchform" action="{{ url('/') }}">
-                                        <div class="flex-row relative">
-                                            <div class="flex-col flex-grow">
-                                                <label class="screen-reader-text"
-                                                    for="woocommerce-product-search-field-0">Search for:</label>
-                                                <input type="search" id="woocommerce-product-search-field-0"
-                                                    class="search-field mb-0" placeholder="Nhập từ khóa tìm kiếm..."
-                                                    value="{{ request()->s }}" name="s" />
-                                            </div>
-                                            <div class="flex-col">
-                                                <button type="submit" value="Search"
-                                                    class="ux-search-submit submit-button secondary button icon mb-0"
-                                                    aria-label="Submit">
-                                                    <i class="icon-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="live-search-results text-left z-top"></div>
-                                    </form>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Right Elements -->
-                <div class="flex-col hide-for-medium flex-right">
-                    <ul class="header-nav header-nav-main nav nav-right nav-uppercase">
-                        <li class="html header-button-1">
-                            <div class="header-button">
-                                <a href="tel:0914379989" class="button primary" style="border-radius: 99px">
-                                    <span>Hotline: 0914379989</span>
-                                </a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- Mobile Right Elements -->
-                <div class="flex-col  flex-right">
-                    <ul class="mobile-nav nav nav-right">
-                        <li class="cart-item has-icon">
-                            <div class="header-button">
-                                <a href="{{ route('carts.list') }}"
-                                    class="header-cart-link off-canvas-toggle nav-top-link icon primary button circle is-small"
-                                    data-open="#cart-popup" data-class="off-canvas-cart" title="Cart"
-                                    data-pos="right">
-                                    <i class="icon-shopping-bag"
-                                        data-icon-label="{{ Cart::instance('shopping')->count() }}"> </i>
-                                </a>
-                            </div>
-
-                            <!-- Cart Sidebar Popup -->
-                            <div id="cart-popup" class="mfp-hide widget_shopping_cart">
-                                <div class="cart-popup-inner inner-padding">
-                                    <div class="cart-popup-title text-center">
-                                        <h4 class="uppercase">Cart</h4>
-                                        <div class="is-divider"></div>
-                                    </div>
-                                    <div class="widget_shopping_cart_content">
-                                        <ul class="woocommerce-mini-cart cart_list product_list_widget">
-                                            @foreach (Cart::instance('shopping')->content() as $cart)
-                                                <li class="woocommerce-mini-cart-item mini_cart_item">
-
-                                                    @if (!request()->routeIs('carts.thanh-toan'))
-                                                        <a class="remove remove_from_cart_button"
-                                                            data-row-id="{{ $cart->rowId }}"
-                                                            data-product_id="{{ $cart->id }}">×</a>
-                                                    @endif
-
-
-                                                    <a href="{{ route('products.detail', $cart->options->slug) }}">
-                                                        <img width="300" height="300"
-                                                            src="{{ showImage($cart->options->image) }}"
-                                                            data-src="{{ showImage($cart->options->image) }}"
-                                                            class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail lazy-load-active"
-                                                            alt="" decoding="async" fetchpriority="high"
-                                                            sizes="(max-width: 300px) 100vw, 300px" />{{ $cart->name }}
-                                                    </a>
-                                                    <span class="quantity">{{ $cart->qty }} ×
-                                                        <span class="woocommerce-Price-amount amount"><bdi>{{ formatAmount($cart->price) }}<span
-                                                                    class="woocommerce-Price-currencySymbol">₫</span></bdi></span></span>
-                                                    <p class="sum_total" style="display: none">
-                                                        {{ formatAmount($cart->subtotal) }}</p>
-                                                </li>
-                                            @endforeach
-
-
-                                        </ul>
-
-                                        <p class="woocommerce-mini-cart__total total">
-                                            <strong>Subtotal:</strong>
-                                            <span class="woocommerce-Price-amount amount"><bdi>{{ number_format((float) str_replace([',', '.'], ['', '.'], Cart::instance('shopping')->subTotal()), 0, ',', '.') }}<span
-                                                        class="woocommerce-Price-currencySymbol">&#8363;</span></bdi></span>
-                                        </p>
-
-                                        <p class="woocommerce-mini-cart__buttons buttons" id="cart-links">
-                                            <a href="{{ route('carts.list') }}" class="button wc-forward">Xem giỏ
-                                                hàng</a>
-
-                                            <a href="{{ route('carts.thanh-toan') }}"
-                                                class="button checkout wc-forward
-                                                @if (Cart::instance('shopping')->count() <= 0) d-none @endif">
-                                                Thanh toán
-                                            </a>
-
-                                        </p>
-                                    </div>
-                                    <div class="cart-sidebar-content relative"></div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+            <div class="flex-col hide-for-medium flex-center">
+                <ul class="nav nav-center nav-small nav-divided"></ul>
             </div>
-        </div>
-        <div id="wide-nav" class="header-bottom wide-nav nav-dark flex-has-center">
-            <div class="flex-row container">
-                <div class="flex-col hide-for-medium flex-center">
-                    <ul class="nav header-nav header-bottom-nav nav-center nav-uppercase">
-                        <li id="menu-item-1080"
-                            class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-1080 menu-item-design-default">
-                            <a href="{{ url('/') }}" class="nav-top-link">Trang chủ</a>
-                        </li>
-                        @foreach ($cataloguesMenu as $item)
-                            <li
-                                class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1606 menu-item-design-default has-dropdown">
-                                <a href="{{ route('products.list', $item->slug) }}" class="nav-top-link"
-                                    aria-expanded="false" aria-haspopup="menu">{{ $item->name }}<i
-                                        class="icon-angle-down"></i></a>
-                                <ul class="sub-menu nav-dropdown nav-dropdown-default">
 
-                                    @if ($item->childrens->isNotEmpty())
-                                        @foreach ($item->childrens as $child)
-                                            <li id="menu-item-1607"
-                                                class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1607 nav-dropdown-col">
-                                                <a
-                                                    href="{{ route('products.list', $child->slug) }}">{{ $child->name }}</a>
-                                                <ul class="sub-menu nav-column nav-dropdown-default">
-                                                    @include('frontends.layouts.partials.menu-item', [
-                                                        'item' => $child,
-                                                    ])
-                                                </ul>
-                                            </li>
-                                        @endforeach
-                                    @endif
-                                </ul>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
 
-                <div class="flex-col show-for-medium flex-grow">
-                    <ul class="nav header-bottom-nav nav-center mobile-nav nav-uppercase">
-                        <li class="header-search-form search-form html relative has-icon">
-                            <div class="header-search-form-wrapper">
-                                <div class="searchform-wrapper ux-search-box relative form-flat is-normal">
-                                    <form role="search" method="get" class="searchform"
-                                        action="{{ url('/') }}">
-                                        <div class="flex-row relative">
-                                            <div class="flex-col flex-grow">
-                                                <label class="screen-reader-text"
-                                                    for="woocommerce-product-search-field-0">Search for:</label>
-                                                <input type="search" id="woocommerce-product-search-field-0"
-                                                    class="search-field mb-0" placeholder="Nhập từ khóa tìm kiếm..."
-                                                    value="{{ request()->s }}" name="s" />
-                                            </div>
-                                            <div class="flex-col">
-                                                <button type="submit" value="Search"
-                                                    class="ux-search-submit submit-button secondary button icon mb-0"
-                                                    aria-label="Submit">
-                                                    <i class="icon-search"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <div class="live-search-results text-left z-top"></div>
-                                    </form>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+            <div class="flex-col hide-for-medium flex-right">
+                <ul class="nav top-bar-nav nav-right nav-small nav-divided">
+                    <li id="menu-item-2011"
+                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2011 menu-item-design-default">
+                        <a href="{{ route('introduce', 'gioi-thieu') }}" class="nav-top-link">Giới
+                            thiệu</a>
+                    </li>
+                    <li id="menu-item-2008"
+                        class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-2008 menu-item-design-default">
+                        <a href="{{ route('news.list') }}" class="nav-top-link">Tin tức</a>
+                    </li>
+                    <li id="menu-item-2010"
+                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2010 menu-item-design-default">
+                        <a href="{{ route('contact') }}" class="nav-top-link">Liên hệ</a>
+                    </li>
+                </ul>
             </div>
-        </div>
 
-        <div class="header-bg-container fill">
-            <div class="header-bg-image fill"></div>
-            <div class="header-bg-color fill"></div>
         </div>
     </div>
-</header>
+
+    <div id="masthead" class="header-main">
+        <div class="header-inner flex-row container logo-left medium-logo-center" role="navigation">
+            <!-- Logo -->
+            <div id="logo" class="flex-col logo">
+                <!-- Header logo -->
+                <a href="{{ url('/') }}" title="{{ request()->getHost() }}" rel="home">
+                    <img width="820" height="222"
+                        src="{{ showImage($settings->path) }}"
+                        class="header_logo header-logo" alt="" />
+                    <img width="820" height="222"
+                        src="{{ showImage($settings->path) }}"
+                        class="header-logo-dark" alt="{{ request()->getHost() }}" />
+                </a>
+            </div>
+
+            <!-- Mobile Left Elements -->
+            <div class="flex-col show-for-medium flex-left">
+                <ul class="mobile-nav nav nav-left">
+                    <li class="nav-icon has-icon">
+                        <div class="header-button">
+                            <a href="#" data-open="#main-menu" data-pos="left" data-bg="main-menu-overlay"
+                                data-color="" class="icon primary button round is-small" aria-label="Menu"
+                                aria-controls="main-menu" aria-expanded="false">
+                                <i class="icon-menu"></i>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Left Elements -->
+            <div class="flex-col hide-for-medium flex-left flex-grow">
+                <ul class="header-nav header-nav-main nav nav-left nav-uppercase">
+                    <li class="header-search-form search-form html relative has-icon">
+                        <div class="header-search-form-wrapper">
+                            <div class="searchform-wrapper ux-search-box relative form-flat is-normal">
+                                <form role="search" method="get" class="searchform" action="{{ url('/') }}">
+                                    <div class="flex-row relative">
+                                        <div class="flex-col flex-grow">
+                                            <label class="screen-reader-text"
+                                                for="woocommerce-product-search-field-0">Search for:</label>
+                                            <input type="search" id="woocommerce-product-search-field-0"
+                                                class="search-field mb-0" placeholder="Nhập từ khóa tìm kiếm..."
+                                                value="{{ request()->s }}" name="s" />
+                                        </div>
+                                        <div class="flex-col">
+                                            <button type="submit" value="Search"
+                                                class="ux-search-submit submit-button secondary button icon mb-0"
+                                                aria-label="Submit">
+                                                <i class="icon-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="live-search-results text-left z-top"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Right Elements -->
+            <div class="flex-col hide-for-medium flex-right">
+                <ul class="header-nav header-nav-main nav nav-right nav-uppercase">
+                    <li class="html header-button-1">
+                        <div class="header-button">
+                            <a href="tel:0914379989" class="button primary" style="border-radius: 99px">
+                                <span>Hotline: 0914379989</span>
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Mobile Right Elements -->
+            <div class="flex-col  flex-right">
+                <ul class="mobile-nav nav nav-right">
+                    <li class="cart-item has-icon">
+                        <div class="header-button">
+                            <a href="{{ route('carts.list') }}"
+                                class="header-cart-link off-canvas-toggle nav-top-link icon primary button circle is-small"
+                                data-open="#cart-popup" data-class="off-canvas-cart" title="Cart" data-pos="right">
+                                <i class="icon-shopping-bag"
+                                    data-icon-label="{{ Cart::instance('shopping')->count() }}"> </i>
+                            </a>
+                        </div>
+
+                        <!-- Cart Sidebar Popup -->
+                        <div id="cart-popup" class="mfp-hide widget_shopping_cart">
+                            <div class="cart-popup-inner inner-padding">
+                                <div class="cart-popup-title text-center">
+                                    <h4 class="uppercase">Cart</h4>
+                                    <div class="is-divider"></div>
+                                </div>
+                                <div class="widget_shopping_cart_content">
+                                    <ul class="woocommerce-mini-cart cart_list product_list_widget">
+                                        @foreach (Cart::instance('shopping')->content() as $cart)
+                                            <li class="woocommerce-mini-cart-item mini_cart_item">
+
+                                                @if (!request()->routeIs('carts.thanh-toan'))
+                                                    <a class="remove remove_from_cart_button"
+                                                        data-row-id="{{ $cart->rowId }}"
+                                                        data-product_id="{{ $cart->id }}">×</a>
+                                                @endif
+
+
+                                                <a href="{{ route('products.detail', $cart->options->slug) }}">
+                                                    <img width="300" height="300"
+                                                        src="{{ showImage($cart->options->image) }}"
+                                                        data-src="{{ showImage($cart->options->image) }}"
+                                                        class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail lazy-load-active"
+                                                        alt="" decoding="async" fetchpriority="high"
+                                                        sizes="(max-width: 300px) 100vw, 300px" />{{ $cart->name }}
+                                                </a>
+                                                <span class="quantity">{{ $cart->qty }} ×
+                                                    <span class="woocommerce-Price-amount amount"><bdi>{{ formatAmount($cart->price) }}<span
+                                                                class="woocommerce-Price-currencySymbol">₫</span></bdi></span></span>
+                                                <p class="sum_total" style="display: none">
+                                                    {{ formatAmount($cart->subtotal) }}</p>
+                                            </li>
+                                        @endforeach
+
+
+                                    </ul>
+
+                                    <p class="woocommerce-mini-cart__total total">
+                                        <strong>Subtotal:</strong>
+                                        <span class="woocommerce-Price-amount amount"><bdi>{{ number_format((float) str_replace([',', '.'], ['', '.'], Cart::instance('shopping')->subTotal()), 0, ',', '.') }}<span
+                                                    class="woocommerce-Price-currencySymbol">&#8363;</span></bdi></span>
+                                    </p>
+
+                                    <p class="woocommerce-mini-cart__buttons buttons" id="cart-links">
+                                        <a href="{{ route('carts.list') }}" class="button wc-forward">Xem giỏ
+                                            hàng</a>
+
+                                        <a href="{{ route('carts.thanh-toan') }}"
+                                            class="button checkout wc-forward
+                                                @if (Cart::instance('shopping')->count() <= 0) d-none @endif">
+                                            Thanh toán
+                                        </a>
+
+                                    </p>
+                                </div>
+                                <div class="cart-sidebar-content relative"></div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    {{-- <div id="wide-nav" class="header-bottom wide-nav nav-dark flex-has-center">
+        <div class="flex-row container">
+            <div class="flex-col hide-for-medium flex-center">
+                <ul class="nav header-nav header-bottom-nav nav-center nav-uppercase">
+                    <li id="menu-item-1080"
+                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-1080 menu-item-design-default">
+                        <a href="{{ url('/') }}" class="nav-top-link">Trang chủ</a>
+                    </li>
+                    @foreach ($cataloguesMenu as $item)
+                        <li
+                            class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1606 menu-item-design-default   @if ($item->childrens->isNotEmpty()) has-dropdown @endif">
+                            <a href="{{ route('products.list', $item->slug) }}" class="nav-top-link"
+                                aria-expanded="false" aria-haspopup="menu">{{ $item->name }}
+                                @if ($item->childrens->isNotEmpty()) <i class="icon-angle-down"></i> @endif</a>
+                            <ul class="sub-menu nav-dropdown nav-dropdown-default">
+
+                                @if ($item->childrens->isNotEmpty())
+                                    @foreach ($item->childrens as $child)
+                                        <li id="menu-item-1607"
+                                            class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1607 nav-dropdown-col">
+                                            <a
+                                                href="{{ route('products.list', $child->slug) }}">{{ $child->name }}</a>
+                                            <ul class="sub-menu nav-column nav-dropdown-default">
+                                                @include('frontends.layouts.partials.menu-item', [
+                                                    'item' => $child,
+                                                ])
+                                            </ul>
+                                        </li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+
+            <div class="flex-col show-for-medium flex-grow">
+                <ul class="nav header-bottom-nav nav-center mobile-nav nav-uppercase">
+                    <li class="header-search-form search-form html relative has-icon">
+                        <div class="header-search-form-wrapper">
+                            <div class="searchform-wrapper ux-search-box relative form-flat is-normal">
+                                <form role="search" method="get" class="searchform"
+                                    action="{{ url('/') }}">
+                                    <div class="flex-row relative">
+                                        <div class="flex-col flex-grow">
+                                            <label class="screen-reader-text"
+                                                for="woocommerce-product-search-field-1">Search for:</label>
+                                            <input type="search" id="woocommerce-product-search-field-1"
+                                                class="search-field mb-0" placeholder="Nhập từ khóa tìm kiếm..."
+                                                value="{{ request()->s }}" name="s" />
+                                        </div>
+                                        <div class="flex-col">
+                                            <button type="submit" value="Search"
+                                                class="ux-search-submit submit-button secondary button icon mb-0"
+                                                aria-label="Submit">
+                                                <i class="icon-search"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="live-search-results text-left z-top"></div>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div> --}}
+
+    <div class="header-bg-container fill">
+        <div class="header-bg-image fill"></div>
+        <div class="header-bg-color fill"></div>
+    </div>
+</div>
+
+
+{{-- @if (request()->routeIs('home'))
+    <div class="row container">
+        <nav class="large-2">
+            <p class="block button-home-nav"><i class="icon-menu" style="color: #9f2323; font-size: 20px"></i>Danh
+                sách danh mục</p>
+            <div class="flex-col hide-for-medium flex-center">
+                <ul class="nav header-nav header-bottom-nav nav-uppercase">
+                    @foreach ($cataloguesMenu as $item)
+                        <li
+                            class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1606 menu-item-design-default has-dropdown">
+                            <a href="{{ route('products.list', $item->slug) }}" class="nav-top-link"
+                                aria-expanded="false" aria-haspopup="menu">{{ $item->name }}
+                                @if ($item->childrens->isNotEmpty())
+                                    <i class="icon-angle-down"></i>
+                                @endif
+                            </a>
+                            <ul class="sub-menu nav-dropdown nav-dropdown-default">
+
+                                @if ($item->childrens->isNotEmpty())
+                                    @foreach ($item->childrens as $child)
+                                        <li id="menu-item-1607"
+                                            class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1607 nav-dropdown-col">
+                                            <a
+                                                href="{{ route('products.list', $child->slug) }}">{{ $child->name }}</a>
+                                            <ul class="sub-menu nav-column nav-dropdown-default">
+                                                @include('frontends.layouts.partials.menu-item', [
+                                                    'item' => $child,
+                                                ])
+                                            </ul>
+                                        </li>
+                                    @endforeach
+                                @endif
+                            </ul>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </nav>
+        <div class="large-9">
+            <div class="swiper">
+                <div class="swiper-wrapper">
+
+                    @foreach ($images as $image)
+                        <div class="swiper-slide">
+                            <img src="{{ showImage($image) }}" alt="{{ showImage($image) }}">
+                        </div>
+                    @endforeach
+                    <!-- Thêm nhiều slide nếu cần -->
+                </div>
+                <!-- Thêm nút điều hướng (nếu cần) -->
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <!-- Thêm phân trang (nếu cần) -->
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const swiper = new Swiper('.swiper', {
+            loop: true, // Bật vòng lặp
+            autoplay: {
+                delay: 3000, // Thời gian chờ giữa các slide
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+    </script>
+@endif --}}

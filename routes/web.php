@@ -1,15 +1,17 @@
 <?php
 
-
-
-
+use App\Http\Controllers\admin\AttributeController;
+use App\Http\Controllers\admin\AttributeValueController;
+use App\Http\Controllers\admin\BulkActionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\Auth\AuthController;
+use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\ConfigController;
+use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\FuelController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\NewsController;
@@ -46,10 +48,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     route::middleware('auth')->group(function () {
 
-        Route::get('/', function () {
-            $title = ' Dashboard';
-            return view('backend.dashboard', compact('title'));
-        })->name('dashboard');
+        // Route::get('/', function () {
+        //     $title = ' Dashboard';
+        //     return view('backend.dashboard', compact('title'));
+        // })->name('dashboard');
+        route::get('/', [DashboardController::class, 'getRevenueChart'])->name('dashboard');
 
         route::get('logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -67,14 +70,41 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('store', [ProductController::class, 'store'])->name('store');
             Route::get('detail/{id}', [ProductController::class, 'edit'])->name('detail');
             Route::post('update/{id}', [ProductController::class, 'update'])->name('update');
-            Route::post('delete/{id}', [ProductController::class, 'delete'])->name('delete');
+            Route::delete('delete/{id}', [ProductController::class, 'delete'])->name('delete');
+            route::post('change-select', [ProductController::class, 'changeSelect'])->name('changeSelect');
+            route::post('update-price/{id}', [ProductController::class, 'handleChangePrice'])->name('handle-change-price');
         });
-        Route::prefix('order')->name('order.')->group(function () {
-            Route::get('', [OrderController::class, 'index'])->name('index');
-            Route::get('detail/{id}', [OrderController::class, 'detail'])->name('detail');
-            Route::post('updateStatus', [OrderController::class, 'updateOrderStatus'])->name('updateOrderStatus');
+
+        // Route::prefix('order')->name('order.')->group(function () {
+        //     Route::get('', [OrderController::class, 'index'])->name('index');
+        //     Route::get('detail/{id}', [OrderController::class, 'detail'])->name('detail');
+        //     Route::post('updateStatus', [OrderController::class, 'updateOrderStatus'])->name('updateOrderStatus');
+        //     Route::post('export-pdf', [OrderController::class, 'exportPDF'])->name('exportPDF');
+        //     route::post('change-status', )
+        // });
+
+        Route::prefix('order')->name('order.')->controller(OrderController::class)->group(function () {
+            Route::get('',  'index')->name('index');
+            Route::get('detail/{id}',  'detail')->name('detail');
+            Route::post('updateStatus',  'updateOrderStatus')->name('updateOrderStatus');
+            Route::post('export-pdf',  'exportPDF')->name('exportPDF');
+            route::post('change-status', 'changeOrderStatus')->name('change-order-status');
+            route::post('cancel-order/{id}', 'cancelOrder')->name('cancel-order');
+            route::get('confirm-payment/{id}', 'confirmPayment')->name('confirm-payment');
         });
     });
+
+    // Attribute Route
+    route::resource('attributes', AttributeController::class);
+
+    // Brand Route
+    route::resource('brands', BrandController::class);
+
+    // Attribute Value Route
+    route::resource('attribute-values', AttributeValueController::class);
+
+    Route::post('/delete-items', [BulkActionController::class, 'deleteItems'])->name('delete.items');
+
 
     Route::prefix('origin')->name('origin.')->group(function () {
         Route::get('', [OriginController::class, 'index'])->name('index');
@@ -114,6 +144,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::prefix('config')->name('config.')->group(function () {
         Route::get('', [ConfigController::class, 'index'])->name('index');
         Route::post('update', [ConfigController::class, 'update'])->name('update');
+        route::get('config-payment', [ConfigController::class, 'configPayment'])->name('config-payment');
+        route::post('config-payment', [ConfigController::class, 'configPaymentPost']);
+        route::put('config-payment', [ConfigController::class, 'handleChangePublishPayment'])->name('handle-change-publish-payment');
+        route::get('config-slider', [ConfigController::class, 'configSlider'])->name('config-slider');
+        route::post('config-slider', [ConfigController::class, 'handleSubmitSlider'])->name('handle-submit-slider');
+        route::get('config-filter', [ConfigController::class, 'configFilter'])->name('config-filter');
+        route::post('config-filter', [ConfigController::class, 'handleSubmitFilter']);
     });
 
     Route::prefix('fuel')->name('fuel.')->group(function () {

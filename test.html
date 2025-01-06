@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Giao Diện Menu và Slider</title>
+        <style>
+            body {
+                display: flex;
+                font-family: Arial, sans-serif;
+                margin: 0;
+                height: 100vh;
+                background-color: #eef2f3;
+            }
+            .menu {
+                width: 250px;
+                color: black;
+                position: relative;
+                box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+            }
+            .menu-item {
+                padding: 15px;
+                cursor: pointer;
+                position: relative;
+                transition: background-color 0.3s ease;
+            }
+            .menu-item:hover {
+                background-color: #357abd;
+            }
+            .popup {
+                display: none;
+                position: absolute;
+                left: 250px; /* Đẩy popup ra ngoài menu */
+                top: 0;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+                z-index: 1;
+                white-space: nowrap;
+            }
+            .menu-item:hover .popup {
+                display: flex;
+                flex-direction: column; /* Sắp xếp theo cột cho danh mục cấp 2 */
+            }
+            .submenu {
+                display: flex;
+                flex-wrap: wrap; /* Cho phép xuống dòng */
+            }
+            .submenu-item {
+                border: 1px solid #357abd;
+                padding: 15px 25px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+                position: relative; /* Để định vị popup cấp 3 */
+            }
+            .submenu-item:hover {
+                background-color: #6ba4ff;
+            }
+            .popup-level-3 {
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 100%; /* Đẩy submenu cấp 3 sang bên phải ngang hàng với cấp 2 */
+                z-index: 2;
+                white-space: nowrap;
+            }
+            .submenu-item:hover .popup-level-3 {
+                display: block; /* Hiện submenu cấp 3 khi hover vào danh mục cấp 2 */
+            }
+            .popup-level-3 .submenu-item:hover {
+                background-color: #6ba4ff;
+            }
+
+            .arrow {
+                margin-left: 8px;
+                font-size: 12px;
+                color: black;
+                transition: transform 0.3s ease;
+                display: inline-block; /* Để đảm bảo mũi tên nằm trong dòng với văn bản */
+            }
+
+            /* Xoay mũi tên khi hover vào menu-item hoặc mũi tên */
+            .menu-item:hover > .arrow,
+            .submenu-item:hover > .arrow,
+            .menu-item:hover .submenu-item:hover > .arrow {
+                transform: rotate(90deg); /* Xoay mũi tên khi hover */
+            }
+
+            @keyframes fadeSlideIn {
+                0% {
+                    opacity: 0;
+                    transform: translateY(-10px); /* Dịch lên trên */
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .popup,
+            .popup-level-3 {
+                opacity: 0;
+                transform: translateY(-10px); /* Ban đầu dịch lên trên */
+                transition: opacity 0.3s ease, transform 0.3s ease;
+            }
+
+            .menu-item:hover .popup,
+            .submenu-item:hover .popup-level-3 {
+                opacity: 1; /* Hiện popup */
+                transform: translateY(0); /* Dịch về đúng vị trí */
+                animation: fadeSlideIn 0.3s ease; /* Áp dụng animation */
+            }
+        </style>
+    </head>
+    <body>
+        <div class="menu">
+            <div class="menu-item">
+                Danh Mục 1
+                <span class="arrow">&#9654;</span>
+                <!-- Mũi tên cấp 1 -->
+                <div class="popup">
+                    <div class="submenu">
+                        <div class="submenu-item">
+                            Submenu 1.1
+                            <span class="arrow">&#9654;</span>
+                            <!-- Mũi tên cấp 2 -->
+                            <div class="popup-level-3">
+                                <div class="submenu-item">Submenu 1.1.1</div>
+                                <div class="submenu-item">Submenu 1.1.2</div>
+                            </div>
+                        </div>
+                        <div class="submenu-item">
+                            Submenu 1.2
+                            <span class="arrow">&#9654;</span>
+                            <!-- Mũi tên cấp 2 -->
+                            <div class="popup-level-3">
+                                <div class="submenu-item">Submenu 1.2.1</div>
+                                <div class="submenu-item">Submenu 1.2.2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="menu-item">
+                Danh Mục 2
+                <span class="arrow">&#9654;</span>
+                <div class="popup">
+                    <div class="submenu">
+                        <div class="submenu-item">
+                            Submenu 2.1
+                            <span class="arrow">&#9654;</span>
+                            <div class="popup-level-3">
+                                <div class="submenu-item">Submenu 2.1.1</div>
+                                <div class="submenu-item">Submenu 2.1.2</div>
+                            </div>
+                        </div>
+                        <div class="submenu-item">
+                            Submenu 2.2
+                            <span class="arrow">&#9654;</span>
+                            <div class="popup-level-3">
+                                <div class="submenu-item">Submenu 2.2.1</div>
+                                <div class="submenu-item">Submenu 2.2.2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="menu-item">
+                Danh Mục 3
+                <span class="arrow">&#9654;</span>
+                <div class="popup">
+                    <div class="submenu">
+                        <div class="submenu-item">
+                            Submenu 3.1
+                            <span class="arrow">&#9654;</span>
+                            <div class="popup-level-3">
+                                <div class="submenu-item">Submenu 3.1.1</div>
+                                <div class="submenu-item">Submenu 3.1.2</div>
+                            </div>
+                        </div>
+                        <div class="submenu-item">
+                            Submenu 3.2
+                            <span class="arrow">&#9654;</span>
+                            <div class="popup-level-3">
+                                <div class="submenu-item">Submenu 3.2.1</div>
+                                <div class="submenu-item">Submenu 3.2.2</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

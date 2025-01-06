@@ -62,7 +62,7 @@ mark {
     color: #000;
 }
 small {
-    display: inline-block;
+    /* display: inline-block; */
     font-size: 80%;
 }
 img {
@@ -168,7 +168,7 @@ body {
 hr {
     border-width: 0;
     border-top: 1px solid;
-    margin: 15px 0;
+    margin: 10px 0;
     opacity: 0.1;
 }
 img {
@@ -207,7 +207,7 @@ object {
 .columns,
 .gallery-item {
     margin: 0;
-    padding: 0 15px 30px;
+    padding: 0 25px 30px;
     position: relative;
     width: 100%;
 }
@@ -1043,10 +1043,11 @@ body.framed header {
 .next-prev-thumbs li.has-dropdown:hover > .nav-dropdown,
 .no-js li.has-dropdown:hover > .nav-dropdown,
 li.current-dropdown > .nav-dropdown {
+    border: 1px solid #e5086f;
     left: -15px;
     max-height: inherit;
     opacity: 1;
-    visibility: visible;
+    visibility: visible
 }
 .nav-right li.current-dropdown:last-child > .nav-dropdown,
 .nav-right li.has-dropdown:hover:last-child > .nav-dropdown {
@@ -2700,9 +2701,7 @@ input[type="submit"].button {
     border-color: #446084;
     color: #fff;
 }
-.success {
-    background-color: #7a9c59;
-}
+
 .success.is-link,
 .success.is-outline,
 .success.is-underline {
@@ -2996,10 +2995,10 @@ select.resize-select {
     box-shadow: none;
     color: currentColor !important;
 }
-.form-flat button,
+/* .form-flat button,
 .form-flat input {
     border-radius: 99px;
-}
+} */
 .form-flat textarea {
     border-radius: 15px;
 }
@@ -5118,7 +5117,7 @@ ul.ul-reset > li {
 .entry-content ul li,
 .entry-summary ol li,
 .entry-summary ul li {
-    margin-left: 1.3em;
+    /* margin-left: 1.3em; */
 }
 .col-inner ol li.tab,
 .col-inner ul li.tab,
@@ -5166,7 +5165,7 @@ fieldset,
 input,
 select,
 textarea {
-    margin-bottom: 1em;
+    /* margin-bottom: 1em; */
 }
 blockquote,
 dl,
@@ -6856,10 +6855,10 @@ a.hotspot:hover {
 .has-hover:hover .image-color img {
     filter: grayscale(0);
 }
-.bg-zoom:hover .bg,
+/* .bg-zoom:hover .bg,
 .has-hover:hover .image-zoom img {
     transform: scale(1.1);
-}
+} */
 .bg-zoom-long .bg,
 .has-hover .image-zoom-long img {
     transition: transform 5s !important;
@@ -7935,7 +7934,6 @@ ul.menu > li.has-child {
     border-radius: 3px;
     color: #b20000;
     line-height: 1.2em;
-    margin-top: -10px;
     opacity: 0.8;
     padding: 5px 8px;
     position: relative;

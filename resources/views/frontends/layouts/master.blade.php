@@ -14,6 +14,17 @@
 <body>
     <div id="wrapper">
 
+        <div class="loading-api">
+            <div id="loading-overlay" class="loading-overlay">
+                <div class="loading-spinner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <p class="loading-text">Đang tải dữ liệu...</p>
+            </div>
+        </div>
+
         <header id="header" class="header has-sticky sticky-jump">
             @include('frontends.layouts.partials.header')
         </header>

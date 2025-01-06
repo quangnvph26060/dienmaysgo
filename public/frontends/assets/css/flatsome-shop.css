@@ -165,10 +165,7 @@ a.added_to_cart:after {
 .woocommerce-form-login .button {
     margin-bottom: 0;
 }
-.woocommerce-billing-fields {
-    border-top: 2px solid #ddd;
-    padding-top: 15px;
-}
+
 .woocommerce-billing-fields p {
     margin-bottom: 0.5em;
 }
@@ -618,9 +615,9 @@ ul.product_list_widget li .quantity {
     margin-top: 3px;
     opacity: 0.6;
 }
-.product-main {
+/* .product-main {
     padding: 40px 0;
-}
+} */
 .page-title:not(.featured-title) + main .product-main {
     padding-top: 15px;
 }
@@ -643,10 +640,9 @@ ul.product_list_widget li .quantity {
 }
 .product_meta {
     font-size: 0.8em;
-    margin-bottom: 1em;
+    /* margin-bottom: 10px; */
 }
 .product_meta > span {
-    border-top: 1px dotted #ddd;
     display: block;
     padding: 5px 0;
 }
@@ -1010,14 +1006,10 @@ p.in-stock {
     margin-right: 0;
 }
 .quantity .button.minus {
-    border-bottom-right-radius: 0 !important;
-    border-right: 0 !important;
-    border-top-right-radius: 0 !important;
+    border-radius: 0 !important;
 }
 .quantity .button.plus {
-    border-bottom-left-radius: 0 !important;
-    border-left: 0 !important;
-    border-top-left-radius: 0 !important;
+    border-radius: 0 !important;
 }
 .quantity .minus,
 .quantity .plus {

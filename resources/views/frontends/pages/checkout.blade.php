@@ -9,7 +9,7 @@
                         <div class="woocommerce-notices-wrapper"></div>
                         <div class="woocommerce-notices-wrapper"></div>
                         <form name="checkout" method="post" class="checkout woocommerce-checkout"
-                            action="https://dienmaysgo.com/thanh-toan/" enctype="multipart/form-data">
+                            action="" enctype="multipart/form-data">
                             <div class="row pt-0">
                                 <div class="large-7 col">
                                     <div id="customer_details">
@@ -94,7 +94,7 @@
                                                                 id="billing_phone" placeholder="" value="+84964305701"
                                                                 aria-required="true" autocomplete="tel" /></span>
                                                     </p>
-                                                    
+
                                                     <p class="form-row form-row-wide validate-required validate-email"
                                                         id="billing_email_field" data-priority="110">
                                                         <label for="billing_email" class="">Email address&nbsp;<abbr
@@ -260,11 +260,6 @@
                                                             value="Place order" data-value="Place order">
                                                             Place order
                                                         </button>
-
-                                                        <input type="hidden" id="woocommerce-process-checkout-nonce"
-                                                            name="woocommerce-process-checkout-nonce"
-                                                            value="508dc5069e" /><input type="hidden"
-                                                            name="_wp_http_referer" value="/thanh-toan/" />
                                                     </div>
                                                 </div>
                                             </div>

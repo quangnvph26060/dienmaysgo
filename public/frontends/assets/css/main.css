@@ -13,22 +13,6 @@
     text-decoration: none;
 }
 
-@font-face {
-    font-family: "fl-icons";
-    font-display: block;
-    src: url(https://dienmaysgo.com/wp-content/themes/flatsome/assets/css/icons/fl-icons.eot?v=3.16.2);
-    src: url(https://dienmaysgo.com/wp-content/themes/flatsome/assets/css/icons/fl-icons.eot#iefix?v=3.16.2)
-            format("embedded-opentype"),
-        url(https://dienmaysgo.com/wp-content/themes/flatsome/assets/css/icons/fl-icons.woff2?v=3.16.2)
-            format("woff2"),
-        url(https://dienmaysgo.com/wp-content/themes/flatsome/assets/css/icons/fl-icons.ttf?v=3.16.2)
-            format("truetype"),
-        url(https://dienmaysgo.com/wp-content/themes/flatsome/assets/css/icons/fl-icons.woff?v=3.16.2)
-            format("woff"),
-        url(https://dienmaysgo.com/wp-content/themes/flatsome/assets/css/icons/fl-icons.svg?v=3.16.2#fl-icons)
-            format("svg");
-}
-
 .bg {
     opacity: 0;
     transition: opacity 1s;
@@ -42,23 +26,6 @@
     opacity: 1 !important;
 }
 
-@font-face {
-    font-family: Inter;
-    font-style: normal;
-    font-weight: 300 900;
-    font-display: fallback;
-    src: url("https://dienmaysgo.com/wp-content/plugins/woocommerce/assets/fonts/Inter-VariableFont_slnt,wght.woff2")
-        format("woff2");
-    font-stretch: normal;
-}
-@font-face {
-    font-family: Cardo;
-    font-style: normal;
-    font-weight: 400;
-    font-display: fallback;
-    src: url("https://dienmaysgo.com/wp-content/plugins/woocommerce/assets/fonts/cardo_normal_400.woff2")
-        format("woff2");
-}
 
 :root {
     --primary-color: #ec1c24;
@@ -80,6 +47,7 @@
 }
 .header-main {
     height: 100px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 #logo img {
     max-height: 100px;
@@ -463,6 +431,7 @@ html {
 .sub-menu .sub-menu {
     box-shadow: none;
     min-width: 233px !important;
+    width: 100%;
     clear: none;
     display: block !important;
     left: 0;
@@ -1017,7 +986,7 @@ form {
 .product-info p.stock {
     color: #00b322;
     text-transform: uppercase;
-    font-size: 15px;
+    font-size: 0.8rem;
 }
 .product-short-description ul {
     margin-bottom: 0;
@@ -1282,6 +1251,7 @@ th:first-child {
     display: flex;
     margin-top: 5px;
     justify-content: flex-end;
+    gap: 10px;
 }
 .sortbypttuan410 form {
     padding: 0 0 0 20px;
@@ -1667,4 +1637,98 @@ input[type="radio"] {
     display: block; /* Hiển thị popup */
     right: 0; /* Trượt vào từ bên phải */
     transition: left 0.3s ease;
+}
+
+header nav {
+    font-size: 1rem;
+    margin: 0;
+    flex-basis: 20.6666666667% !important;
+    max-width: 20.6666666667% !important;
+    border: 1px solid #dcdcdc;
+}
+.block.button-home-nav {
+    padding: 8px 0;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    margin: 0 !important;
+    border-bottom: 1px solid rgba(196, 196, 196, 0.5);
+}
+
+.block.button-home-nav i {
+    margin: 0 10px;
+}
+
+header nav ul {
+    list-style: none;
+}
+
+header nav ul li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 !important;
+}
+
+header nav ul li i {
+    margin: 0 10px !important;
+    flex-shrink: 0;
+}
+
+header .large-9 {
+    flex-basis: 79.3333333333% !important;
+    max-width: 79.3333333333% !important;
+}
+
+@media (max-width: 768px) {
+    #province_field,
+    #district_field,
+    #ward_field {
+        width: 100% !important;
+    }
+    #address_field {
+        display: block !important;
+    }
+
+    header.sticky-jump nav.large-2 {
+        display: none !important;
+    }
+
+    .header.has-sticky.sticky-jump .row.container {
+        padding: 0;
+    }
+    .header.has-sticky.sticky-jump .row.container .swiper {
+        height: auto;
+    }
+
+    header.sticky-jump .large-9 {
+        flex-basis: 100% !important;
+        max-width: 100% !important;
+    }
+    #gap-848292812 {
+        padding-top: 0px !important;
+    }
+}
+
+.product-title.product_title.entry-title {
+    font-size: 1.5rem !important;
+}
+#masthead.fixed {
+    backdrop-filter: blur(10px);
+    /* Làm mờ nền */
+    background-color: rgba(255, 255, 255, 0.9);
+    position: fixed;
+    /* Chuyển sang vị trí cố định */
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transform: translateY(0);
+    /* Trượt vào đúng vị trí */
+}
+
+#masthead.hidden {
+    top: -60px;
+    /* Ẩn khỏi màn hình khi không còn cần thiết */
 }
