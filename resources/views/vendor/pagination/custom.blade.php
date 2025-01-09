@@ -40,11 +40,11 @@
             {{-- Trang kế tiếp --}}
             @if ($paginator->hasMorePages())
                 <li>
-                    <a class="page-number" href="{{ $paginator->nextPageUrl() }}"><i class="icon-angle-right"></i></a>
+                    <a class="page-number" href="{{ $paginator->nextPageUrl() }}"><i class="fas fa-angle-right"></i></a>
                 </li>
             @else
                 <li>
-                    <span class="page-number disabled"><i class="icon-angle-right"></i></span>
+                    <span class="page-number disabled"><i class="fas fa-angle-right"></i></span>
                 </li>
             @endif
         </ul>

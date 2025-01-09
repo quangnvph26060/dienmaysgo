@@ -1,4 +1,5 @@
 @extends('backend.layouts.master')
+
 @section('title', 'Danh sách đơn hàng')
 
 @section('content')
@@ -44,7 +45,7 @@
                         data: 'email',
                         name: 'email',
                         orderable: false,
-                        searchable: false
+                        // searchable: false
                     },
                     {
                         data: 'total_price',

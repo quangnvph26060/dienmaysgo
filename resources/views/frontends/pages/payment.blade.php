@@ -32,8 +32,9 @@
                                                             </label>
                                                             <span class="woocommerce-input-wrapper">
                                                                 <input type="text" class="input-text " name="fullname"
-                                                                    id="fullname" placeholder="" value=""
-                                                                    aria-required="true" autocomplete="given-name">
+                                                                    id="fullname" placeholder=""
+                                                                    value="{{ auth()->user()->name }}" aria-required="true"
+                                                                    autocomplete="given-name">
                                                                 <small></small>
                                                             </span>
                                                         </p>
@@ -45,8 +46,9 @@
                                                             </label>
                                                             <span class="woocommerce-input-wrapper">
                                                                 <input type="tel" class="input-text" name="phone"
-                                                                    id="phone" placeholder="" value=""
-                                                                    aria-required="true" autocomplete="tel"
+                                                                    id="phone" placeholder=""
+                                                                    value="{{ auth()->user()->phone }}" aria-required="true"
+                                                                    autocomplete="tel"
                                                                     pattern="^(0[1-9]{1}[0-9]{8}|(\+84|84)[1-9]{1}[0-9]{8})$"
                                                                     title="Số điện thoại không đúng định dạng" />
                                                                 <small></small>
@@ -73,6 +75,7 @@
                                                                 <small></small>
                                                             </span>
                                                         </p>
+
                                                         <p class="form-row  validate-required" id="district_field"
                                                             data-priority="10" style="width: 33%">
                                                             <label for="district" class="">Quận/Huyện&nbsp;
@@ -87,6 +90,7 @@
                                                                 <small></small>
                                                             </span>
                                                         </p>
+
                                                         <p class="form-row  validate-required" id="ward_field"
                                                             data-priority="10" style="width: 33%">
                                                             <label for="ward" class="">Phường/Xã&nbsp;
@@ -123,7 +127,7 @@
                                                         </label>
                                                         <span class="woocommerce-input-wrapper">
                                                             <input type="email" class="input-text " name="email"
-                                                                id="email" placeholder="" value=""
+                                                                id="email" placeholder="" value="{{ auth()->user()->email }}"
                                                                 aria-required="true" autocomplete="email username">
                                                             <small></small>
                                                         </span>

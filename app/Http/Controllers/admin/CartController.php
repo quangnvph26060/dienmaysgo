@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Events\OrderPlaced;
+use App\Models\TransactionHistory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ConfigPayment;
@@ -28,6 +29,10 @@ class CartController extends Controller
 
     public function InfoPayment()
     {
+        if (!auth()->check()) {
+            session()->put('url.intended', url()->current());
+            return redirect(route('auth.login'));
+        }
 
         if (Cart::instance('shopping')->count() <= 0) return back();
 
@@ -235,7 +240,7 @@ class CartController extends Controller
                 'address' => 'nullable|max:28',
                 'email' => 'required|email',
                 'notes' => 'nullable|max:100',
-                'payment_method' => 'required|in:cod,bacs,currency'
+                'payment_method' => 'required|in:cod,bacs,currency',
             ]
         );
 
@@ -254,6 +259,7 @@ class CartController extends Controller
             $credentials['address'] = $this->buildFullAddress($request);
             $credentials['total_price'] = $this->calculateTotalPrice();
             $credentials['code'] = $this->generateOrderCode();
+            $credentials['user_id'] = auth()->id();
 
             if ($request->payment_method == 'bacs' || $request->payment_method == 'currency') {
                 return $this->paymentBacs($credentials);
@@ -350,29 +356,37 @@ class CartController extends Controller
         return response()->json(['wards' => $wards]);
     }
 
-    private function paymentBacs($data)
+    private function paymentBacs($values)
+    {
+        $total = $values['payment_method'] == 'currency' ? $values['total_price'] * (1 - ConfigPayment::query()->select('payment_percentage')->where('id', 3)->first()->payment_percentage / 100) : $values['total_price'];
+
+        $values['payment_status'] = $values['payment_method'] == 'currency' ? 2 : 1;
+
+        $values['deposit_amount'] = $values['payment_method'] == 'currency' ? $total : 0;
+
+        $values['status'] = 'confirmed';
+
+        session()->flash('payment_data', $values);
+
+        session()->flash('total', $total);
+
+        return $this->payOs($total, route('carts.thanh-toan'));
+    }
+
+    private function payOs($total, $cancelUrl, $returnUrl = null)
     {
         $clientId = env('PAYOS_CLIENT_ID');
         $apiKey = env('PAYOS_API_KEY');
         $checksumKey = env('PAYOS_CHECKSUM_KEY');
 
-        $total = $data['payment_method'] == 'currency' ? $data['total_price'] * (1 - ConfigPayment::query()->select('payment_percentage')->where('id', 3)->first()->payment_percentage / 100) : $data['total_price'];
-
-        $data['payment_status'] = $data['payment_method'] == 'currency' ? 2 : 1;
-
-        $data['deposit_amount'] = $data['payment_method'] == 'currency' ? $total : 0;
-
-        $data['status'] = 'confirmed';
-
-        session()->flash('payment_data', $data);
         // Dữ liệu yêu cầu
         $data = [
-            "orderCode" => (int) generateRandomNumber(8),
+            "orderCode" => (int) generateRandomNumber(length: 8),
             "amount" => $total,
-            "description" => formatName($data['fullname'])  . ' CHUYEN KHOAN',
+            "description" => 'DON HANG ' . session('payment_data')['code'],
 
-            "cancelUrl" => route('carts.thanh-toan'),
-            "returnUrl" => route('carts.payment-request'),
+            "cancelUrl" => $cancelUrl,
+            "returnUrl" => $returnUrl ?? route('carts.payment-request'),
             "expiredAt" => time() + 3600 // Hết hạn trong 1 giờ
         ];
 
@@ -392,6 +406,8 @@ class CartController extends Controller
 
 
             $responseBody = json_decode($response->getBody(), true);
+
+            Log::info('ResponseBody: ' . $responseBody);
 
             if (isset($responseBody['data']['checkoutUrl'])) {
 
@@ -420,18 +436,95 @@ class CartController extends Controller
 
     public function paymentRequest()
     {
-        $order = SgoOrder::create(session()->get('payment_data'));
+        try {
+            DB::beginTransaction();
 
-        $items = $this->mapCartItems();
+            $order = SgoOrder::create(session()->get('payment_data'));
 
-        $order->products()->attach($items);
+            $items = $this->mapCartItems();
 
-        Cart::instance('shopping')->destroy();
+            $order->products()->attach($items);
 
-        event(new OrderPlaced($order));
+            $existOrder = TransactionHistory::query()->where('sgo_order_id', $order->id)->exists();
 
-        Cache::put('payment_success', 'Thanh toán thành công', 120);
+            TransactionHistory::create([
+                'sgo_order_id' => $order->id,
+                'transaction_amount' => session('total'),
+                'transaction_notes' => formatName($order->fullname)  . ' CHUYEN KHOAN <strong class="text-danger">LAN ' . $existOrder ? 2 : 1 . '</strong>',
+            ]);
 
-        return redirect()->route('carts.order-success', $order->code);
+            Cart::instance('shopping')->destroy();
+
+            event(new OrderPlaced($order));
+
+            Cache::put('payment_success', 'Thanh toán thành công', 120);
+
+            DB::commit();
+
+            return redirect()->route('carts.order-success', $order->code);
+        } catch (\Throwable $th) {
+            Log::info($th->getMessage());
+
+            DB::rollBack();
+        }
+    }
+
+    public function handleRemainingPayment(Request $request)
+    {
+        $order = SgoOrder::query()->where('code', $request->code)->first();
+
+        if (!$order) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không tìm thấy thông tin đơn hàng!'
+            ]);
+        }
+
+        $total = $order->total_price - $order->deposit_amount;
+
+        $cancelUrl = $request->headers->get('referer');
+
+        $returnUrl = route('carts.order-updated-successfully');
+
+        session()->flash('code', $order->code);
+
+        return $this->payOs($total, $cancelUrl, $returnUrl);
+    }
+
+    public function orderUpdatedSuccessfully()
+    {
+        $order = SgoOrder::query()->where('code', session('code'))->first();
+
+
+        $existOrder = TransactionHistory::query()->where('sgo_order_id', $order->id)->exists();
+
+        TransactionHistory::create([
+            'sgo_order_id' => $order->id,
+            'transaction_amount' => $order->total_price - $order->deposit_amount,
+            'transaction_notes' => formatName($order->fullname)  . ' CHUYEN KHOAN <strong class="text-danger">LAN ' . $existOrder ? 2 : 1 . '</strong>'
+        ]);
+
+        $order->payment_status = 1;
+        $order->deposit_amount = $order->total_price;
+
+        $order->save();
+
+
+
+        return redirect()->route('carts.order.lookup', $order->code);
+    }
+
+    // public function lookup($code = null)
+    // {
+    //     $order = SgoOrder::query()->with('products')->where('code', $code)->first();
+
+    //     return view('frontends.pages.order-lookup', compact('order'));
+    // }
+
+    public function lookup($code)
+    {
+        $order = SgoOrder::query()->with('products')->where('code', $code)->firstOrFail();
+
+        return view('frontends.pages.order-detail', compact('order'));
     }
 }

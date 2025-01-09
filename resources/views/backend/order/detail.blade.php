@@ -1,4 +1,7 @@
 @extends('backend.layouts.master')
+
+@section('title', 'Chi tiết đơn hàng')
+
 @section('content')
     <div class="row">
         <div class="col-lg-9">
@@ -22,13 +25,13 @@
                                             {{ $item->pivot->p_name }}</a>
                                     </td>
                                     <td>
-                                        {{ number_format($item->pivot->p_price, 0, '.', ',') }} ₫
+                                        {{ formatAmount($item->pivot->p_price )}} ₫
                                     </td>
                                     <td>
                                         x {{ $item->pivot->p_qty }}
                                     </td>
                                     <td>
-                                        {{ number_format($item->pivot->p_price * $item->pivot->p_qty, 0, '.', ',') }} ₫
+                                        {{ formatAmount($item->pivot->p_price * $item->pivot->p_qty) }} ₫
                                     </td>
                                 </tr>
                             @endforeach
@@ -70,7 +73,7 @@
                                 đơn</button>
 
                             <button data-bs-toggle="modal" data-bs-target="#exampleModal" type="button"
-                                @disabled($orderItems->status == 'completed') class="btn btn-outline-danger btn-sm"><i
+                                @disabled($orderItems->status == 'completed' || $orderItems->payment_status == '1') class="btn btn-outline-danger btn-sm"><i
                                     class="far fa-window-close me-1"></i>Hủy yêu cầu
                             </button>
                         @endif

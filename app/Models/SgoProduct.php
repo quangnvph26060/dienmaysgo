@@ -50,11 +50,8 @@ class SgoProduct extends Model
         });
 
         static::saved(function () {
-            Cache::tags('products')->flush();
-        });
-
-        static::deleted(function () {
-            Cache::tags('products')->flush();
+            Cache::forget('home_data');
+            Cache::forget('categories');
         });
     }
     public function category()

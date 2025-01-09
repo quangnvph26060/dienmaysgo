@@ -1,5 +1,7 @@
 @extends('backend.layouts.master')
 
+@section('title', 'Danh sách danh mục')
+
 @section('content')
     <div class="content">
         <!-- Bảng danh sách danh mục -->

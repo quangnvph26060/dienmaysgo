@@ -1,4 +1,5 @@
 @extends('backend.layouts.master')
+@section('title', 'Danh sách thương hiệu')
 
 @section('content')
     <div>

@@ -63,8 +63,7 @@
                         <div class="woocommerce-notices-wrapper"></div>
                         <div class="woocommerce row row-large row-divided">
                             <div class="col large-7 pb-0">
-                                <form class="woocommerce-cart-form" action=""
-                                    method="post">
+                                <form class="woocommerce-cart-form" action="" method="post">
                                     <div class="cart-wrapper sm-touch-scroll">
                                         <table class="shop_table shop_table_responsive cart woocommerce-cart-form__contents"
                                             cellspacing="0">
@@ -81,7 +80,6 @@
                                             <tbody>
 
                                                 @forelse ($carts as $item)
-
                                                     <tr class="woocommerce-cart-form__cart-item cart_item"
                                                         data-row-id="{{ $item->id }}">
                                                         <td class="product-remove">
@@ -147,24 +145,21 @@
                                                         </td>
                                                     </tr>
                                                 @empty
+                                                    <tr>
+                                                        <td colspan="6" class="actions clear">
+                                                            Chưa có sản phẩm trong giỏ hàng
+                                                        </td>
+                                                    </tr>
                                                 @endforelse
-
-                                                <tr>
-                                                    <td colspan="6" class="actions clear">
-                                                        <div class="continue-shopping pull-left text-left">
-                                                            <a class="button-continue-shopping button primary is-outline"
-                                                                href="{{ route('home') }}">
-                                                                &#8592;&nbsp;Tiếp tục mua sắm
-                                                            </a>
-                                                        </div>
-
-                                                        <input type="hidden" id="woocommerce-cart-nonce"
-                                                            name="woocommerce-cart-nonce" value="a80326973f" /><input
-                                                            type="hidden" name="_wp_http_referer" value="/gio-hang/" />
-                                                    </td>
-                                                </tr>
                                             </tbody>
                                         </table>
+
+                                        <div class="continue-shopping pull-left text-left">
+                                            <a class="button-continue-shopping button primary is-outline"
+                                                href="{{ route('home') }}">
+                                                &#8592;&nbsp;Tiếp tục mua sắm
+                                            </a>
+                                        </div>
                                     </div>
                                 </form>
                             </div>

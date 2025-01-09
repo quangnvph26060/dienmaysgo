@@ -16,7 +16,7 @@
                                 <button type="submit" value="Search"
                                     class="ux-search-submit submit-button secondary button icon mb-0"
                                     aria-label="Submit">
-                                    <i class="icon-search"></i>
+                                    <i class="fas fa-search"></i>
                                 </button>
                             </div>
                         </div>
@@ -40,8 +40,14 @@
                         @foreach ($item->childrens as $child)
                             <li
                                 class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1607">
-                                <a href="{{ route('products.list', $child->slug) }}">{{ $child->name }}</a>
-                                <ul class="sub-menu nav-sidebar-ul">
+                                <div class="menu-header">
+                                    <a href="{{ route('products.list', $child->slug) }}">{{ $child->name }}</a>
+                                    <!-- Dấu cộng -->
+                                    @if ($child->childrens->isNotEmpty())
+                                    <button class="toggle-submenu-item">+</button>
+                                    @endif
+                                </div>
+                                <ul class="sub-menu-item nav-sidebar-ul" style="display: none;">
                                     @include('frontends.layouts.partials.menu-item', [
                                         'item' => $child,
                                     ])
@@ -49,6 +55,7 @@
                             </li>
                         @endforeach
                     @endif
+
                 </ul>
             </li>
         @endforeach

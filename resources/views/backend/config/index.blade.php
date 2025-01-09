@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-{{-- @section('title', $title) --}}
+@section('title', 'Cấu hình chung')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.default.min.css" rel="stylesheet">
 @section('content')
     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -14,7 +14,7 @@
             <a class="nav-link" href="{{ route('admin.config.config-slider') }}">Cấu hình trình chiếu</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.config.config-filter') }}">Cấu hình lọc</a>
+            <a class="nav-link" href="{{ route('admin.config.config-filter') }}">Cấu hình bộ lọc</a>
         </li>
     </ul>
 

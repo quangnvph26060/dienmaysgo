@@ -2,14 +2,13 @@
     @foreach ($products as $product)
         <div class="col">
             <div class="col-inner">
-                <div class="badge-container absolute left top z-1"></div>
                 <div class="product-small box has-hover box-normal box-text-bottom">
                     <div class="box-image">
                         <div class="image-zoom image-cover" style="padding-top: 100%">
                             <a href="{{ route('products.detail', $product->slug) }}" aria-label="{{ $product->name }}">
                                 <img fetchpriority="high" decoding="async" width="680" height="680"
                                     src="{{ showImage($product->image) }}" data-src="{{ showImage($product->image) }}"
-                                    class="lazy-load attachment-original size-original" alt="" srcset=""
+                                    class="lazy-load attachment-original size-original" alt=""
                                     sizes="(max-width: 680px) 100vw, 680px" />
                             </a>
                         </div>
@@ -21,7 +20,7 @@
                                     <button data-id="{{ $product->id }}"
                                         class="wishlist-button button is-outline circle icon add-to-cart"
                                         aria-label="Wishlist">
-                                        <i class="icon-shopping-cart"></i>
+                                        <i class="fas fa-shopping-cart"></i>
                                     </button>
                                     <div class="wishlist-popup dark">
                                         <div

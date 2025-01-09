@@ -1,5 +1,8 @@
 @extends('backend.layouts.master')
 
+@section('title', 'Cấu hình bộ lọc')
+
+
 @section('content')
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item">
@@ -12,7 +15,7 @@
             <a class="nav-link" href="{{ route('admin.config.config-slider') }}">Cấu hình trình chiếu</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link active" href="{{ route('admin.config.config-filter') }}">Cấu hình lọc</a>
+            <a class="nav-link active" href="{{ route('admin.config.config-filter') }}">Cấu hình bộ lọc</a>
         </li>
     </ul>
 
@@ -44,7 +47,7 @@
                 <form method="POST" action="" id="handleSubmit">
                     @csrf
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Thêm bộ lọc</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -74,8 +77,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-sm">Save changes</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Lưu thay đổi</button>
                     </div>
                 </form>
             </div>
@@ -96,7 +99,9 @@
                 },
                 {
                     data: 'title',
-                    name: 'title'
+                    name: 'title',
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'filter_type',
@@ -106,7 +111,9 @@
                 },
                 {
                     data: 'attribute_id',
-                    name: 'attribute_id'
+                    name: 'attribute_id',
+                    orderable: false,
+                    searchable: false
                 }
             ]
 
@@ -153,6 +160,39 @@
                     alert('Có lỗi xảy ra!');
                 });
             });
+
+            $('button[data-bs-toggle="modal"]').on('click', function() {
+                $('#exampleModalLabel').html('Thêm bộ lọc')
+                $('#handleSubmit').trigger('reset');
+                $('#filter_type').trigger('change');
+                $('#handleSubmit').attr('action', '')
+                $('.modal').modal('show');
+            });
+
+            $(document).on('click', '.btn-edit', function() {
+                const resource = $(this).data('resource');
+
+                $.each(resource, function(key, value) {
+
+                    $(`input[name=${key}]`).val(value);
+
+                    if (key == 'filter_type') {
+
+                        $(`select[name=${key}]`).val(value).trigger('change')
+                    }
+
+                    if (key == 'attribute_id') {
+                        $('#attribute_id').val(value)
+                    }
+                })
+
+                $('#exampleModalLabel').html('Cập nhật bộ lọc')
+
+                $('#handleSubmit').attr('action', '{{ route('admin.config.config-filter-update', ':id') }}'
+                    .replace(':id', resource.id));
+
+                $('.modal').modal('show');
+            })
         });
     </script>
 @endpush

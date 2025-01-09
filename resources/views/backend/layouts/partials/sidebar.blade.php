@@ -30,12 +30,36 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li class="nav-item">
+
+                {{-- <li class="nav-item">
                     <a href="{{ route('admin.order.index') }}">
                         <i class="fas fa-receipt"></i>
                         <p>Đơn hàng</p>
                     </a>
+                </li> --}}
+
+                <li class="nav-item">
+                    <a data-bs-toggle="collapse" href="#order">
+                        <i class="fas fa-receipt"></i>
+                        <p>Đơn hàng</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="order">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="{{ route('admin.order.index') }}">
+                                    <span class="sub-item">Danh sách đơn hàng</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('admin.order.transfer-history') }}">
+                                    <span class="sub-item">Lịch sử chuyển khoản</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
+
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#product">
                         <i class="fas fa-box-open"></i>

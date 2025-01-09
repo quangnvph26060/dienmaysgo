@@ -102,11 +102,11 @@
 
                     @if ($news->hasMorePages())
                         <li>
-                            <a class="page-number next" href="{{ $news->nextPageUrl() }}"><i class="icon-angle-right"></i></a>
+                            <a class="page-number next" href="{{ $news->nextPageUrl() }}"><i class="fas fa-angle-right"></i></a>
                         </li>
                     @else
                         <li>
-                            <span class="page-number disabled" aria-disabled="true"><i class="icon-angle-right"></i></span>
+                            <span class="page-number disabled" aria-disabled="true"><i class="fas fa-angle-right"></i></span>
                         </li>
                     @endif
                 </ul>

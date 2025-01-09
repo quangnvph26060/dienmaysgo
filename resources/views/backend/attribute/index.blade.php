@@ -1,5 +1,7 @@
 @extends('backend.layouts.master')
 
+@section('title', 'Danh sách thuộc tính')
+
 @section('content')
     <div>
         <div class="row">

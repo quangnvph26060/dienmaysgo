@@ -45,11 +45,11 @@
         </div>
         <div class="col d-flex align-items-center p-3 rounded" style="background-color: #f8d7da">
             <div class="icon rounded-circle bg-light me-3" style="padding: .8rem 1rem !important">
-                <i class="fas fa-won-sign"></i>
+                <i class="fas fa-dolly-flatbed"></i>
             </div>
             <div class="result">
-                <p class="m-0">Tổng Tiền Chi</p>
-                <h4 class="mb-0"><strong>{{ $totalCost }} VND</strong></h4>
+                <p class="m-0">Tổng Sản Phẩm Tồn Kho</p>
+                <h4 class="mb-0"><strong>{{ $calculateStock }} sản phẩm</strong></h4>
             </div>
         </div>
     </div>

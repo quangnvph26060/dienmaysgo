@@ -105,17 +105,19 @@ function deleteImage($path)
 }
 
 if (!function_exists('generateRandomString')) {
-    function generateRandomString($length = 16)
+    function generateRandomString()
     {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
+        $prefix = "ODR"; // 3 ký tự đầu cố định
+        $fourthChar = rand(1, 9); // Ký tự thứ 4 là số lớn hơn 0
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // Bảng ký tự cho phần còn lại
+        $remainingLength = 7; // Tổng độ dài là 11, trừ 4 ký tự đầu
 
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        $randomString = '';
+        for ($i = 0; $i < $remainingLength; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
         }
 
-        return $randomString;
+        return $prefix . $fourthChar . $randomString;
     }
 }
 
@@ -160,6 +162,20 @@ if (!function_exists('paymentStatus')) {
                 return '<span class="badge bg-warning">Thanh toán đặt cọc</span>';
             default:
                 return '<span class="badge bg-danger ">Chưa thanh toán...</span>';
+        }
+    }
+}
+
+if (!function_exists('paymentMethods')) {
+    function paymentMethods($method)
+    {
+        switch ($method) {
+            case 'cod':
+                return '<span class="badge bg-danger">Thanh toán khi nhận hàng (COD)</span>';
+            case 'bacs':
+                return '<span class="badge bg-success">Thanh toán chuyển khoản</span>';
+            case 'currency':
+                return '<span class="badge bg-warning">Thanh toán đặt cọc</span>';
         }
     }
 }
