@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\CartController;
+use App\Http\Controllers\Frontends\Auth\AuthController;
 use App\Http\Controllers\Frontends\HomeController;
 use App\Http\Controllers\Frontends\NewsController;
 use App\Http\Controllers\Frontends\ContactController;
@@ -20,6 +21,23 @@ use App\Http\Controllers\PaymentController;
 |
 */
 
+route::name('auth.')->controller(AuthController::class)->group(function () {
+    route::middleware('guest')->group(function () {
+        route::get('dang-nhap',  'login')->name('login');
+        route::post('dang-nhap', 'authenticate')->name('authenticate');
+        route::post('dang-ky', 'register')->name('register');
+        route::get('auth/google', 'redirect')->name('google-auth');
+        route::get('auth/google/call-back', 'callbackGoogle');
+    });
+
+
+    route::middleware('auth')->group(function () {
+        route::get('dang-xuat', 'logout')->name('logout');
+        route::get('profile', 'profile')->name('profile');
+        route::post('change-info', 'handleChangeInfo')->name('handle-change-info');
+        route::post('change-password', 'handleChangePassword')->name('handle-change-password');
+    });
+});
 
 
 route::get('/', [HomeController::class, 'home'])->name('home');
@@ -31,6 +49,11 @@ route::controller(CartController::class)->name('carts.')->group(function () {
     route::post('del-cart/{id}', 'delItemCart')->name('del-to-cart');
     route::post('update-cart/{id}', 'updateQtyCart')->name('update-to-cart');
     route::get('payment-request', 'paymentRequest')->name('payment-request');
+    Route::get('order-lookup/{code?}', [CartController::class, 'lookup'])->name('order.lookup');
+    Route::get('order-detail/{code}', [CartController::class, 'lookup'])->name('order-detail');
+    Route::post('handle-remaining-payment', [CartController::class, 'handleRemainingPayment'])->name('handle-remaining-payment');
+    Route::get('order-updated-successfully', [CartController::class, 'orderUpdatedSuccessfully'])->name('order-updated-successfully');
+
     // route::post('update-cart/{id}/{qty}', 'updateQtyCart')->name('update-to-cart');
 
     // Route::post('restore/{rowId}', [CartController::class, 'restoreLastDeletedProduct'])->name('restore');
@@ -42,9 +65,9 @@ route::controller(CartController::class)->name('carts.')->group(function () {
 });
 
 route::controller(ProductController::class)->name('products.')->group(function () {
-    route::get('danh-muc-san-pham/{slug}', 'list')->name('list');
+    route::get('danh-muc-san-pham/{slug?}', 'list')->name('list');
     route::get('san-pham/{slug}', 'detail')->name('detail');
-    route::get('filter-product/{slug}', 'filterProduct')->name('filter-product');
+    route::get('filter-product/{slug?}', 'filterProduct')->name('filter-product');
 });
 
 

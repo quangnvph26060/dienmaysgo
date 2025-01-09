@@ -5162,7 +5162,7 @@ label.error {
 }
 .navbar-expand-lg .navbar-nav .dropdown-menu {
     left: auto;
-    right: 0;
+    right: -125px;
     z-index: 1001;
 }
 .dropdown-item {
@@ -5553,8 +5553,9 @@ label.error {
     width: 280px;
     padding: 0 !important;
 }
-.messages-notif-box .notif-center a,
-.notif-box .notif-center a {
+/* ,.messages-notif-box .notif-center a
+ */
+ .notif-box .notif-center a {
     display: flex;
     color: #4d585f;
 }

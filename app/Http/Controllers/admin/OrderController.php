@@ -7,6 +7,7 @@ use App\Mail\OrderStatus;
 use App\Mail\OrderStatusMail;
 use App\Models\SgoOrder;
 use App\Models\SgoOrderDetail;
+use App\Models\TransactionHistory;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Http\Request;
@@ -189,5 +190,38 @@ class OrderController extends Controller
             'status' => true,
             'message' => 'Xác nhận thanh toán thành công.'
         ]);
+    }
+
+    public function transferHistory()
+    {
+        if (request()->ajax()) {
+            return datatables()->of(
+                TransactionHistory::query()->with('order.user')->orderBy('sgo_order_id')
+                    ->latest()->get()
+            )
+                ->addColumn('transaction_amount', function ($row) {
+                    return formatAmount($row->transaction_amount) . ' VND';
+                })
+                ->addColumn('total_price', function ($row) {
+                    return formatAmount($row->order->total_price) . ' VND';
+                })
+                ->addColumn('email', function ($row) {
+                    return "
+                    <p>" . $row->order->user->name . "</p>
+                    <p>" . $row->order->user->email . "</p>
+                    <p>" . $row->order->user->phone . "</p>
+                    ";
+                })
+                ->addColumn('code', function ($row) {
+                    return '<a href="' . route('admin.order.detail', $row->order->id) . '">' . $row->order->code . '</a>';
+                })
+                ->addColumn('transaction_date', function ($row) {
+                    return Carbon::parse($row->transaction_date)->format('d/m/Y');
+                })
+                ->rawColumns(['transaction_date', 'code', 'email', 'transaction_notes'])
+                ->addIndexColumn()
+                ->make(true);
+        }
+        return view('backend.order.ransfer-history');
     }
 }

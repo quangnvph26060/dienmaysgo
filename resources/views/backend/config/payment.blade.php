@@ -1,4 +1,5 @@
 @extends('backend.layouts.master')
+@section('title', 'Cấu hình thanh toán')
 
 @section('content')
     <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -12,7 +13,7 @@
             <a class="nav-link" href="{{ route('admin.config.config-slider') }}">Cấu hình trình chiếu</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link " href="{{ route('admin.config.config-filter') }}">Cấu hình lọc</a>
+            <a class="nav-link " href="{{ route('admin.config.config-filter') }}">Cấu hình bộ lọc</a>
         </li>
     </ul>
     <div class="card">

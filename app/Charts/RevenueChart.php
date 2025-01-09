@@ -158,4 +158,31 @@ class RevenueChart extends Chart
             'data' => $productQuantities
         ];
     }
+
+    public function calculateStock($year)
+    {
+        $productsInStock = DB::table('sgo_products as sp')
+        ->leftJoin('order_product as op', 'sp.id', '=', 'op.product_id')
+        ->select(DB::raw('COUNT(DISTINCT sp.id) as out_of_stock_count'))
+        ->whereYear('sp.created_at', '=', $year) // Lọc theo năm sản phẩm được tạo
+        ->groupBy('sp.id', 'sp.quantity') // Nhóm theo id và số lượng sản phẩm
+        ->havingRaw('COALESCE(SUM(op.p_qty), 0) <= 10') // Sản phẩm không bán được hoặc bán <= 10 lần
+        ->pluck('out_of_stock_count')
+        ->sum();
+
+        return $productsInStock;
+    }
 }
+
+// DB::table('sgo_products as sp')
+//         ->leftJoin('order_product as op', 'sp.id', '=', 'op.product_id')
+//         ->select(
+//             'sp.name',
+//             'sp.image',
+//             'sp.quantity',
+//             DB::raw('COALESCE(SUM(op.p_qty), 0) as sold_qty')
+//         )
+//         ->whereYear('sp.created_at', '=', $year) // Lọc theo năm sản phẩm được tạo
+//         ->groupBy('sp.id', 'sp.name', 'sp.image', 'sp.quantity') // Nhóm theo id, tên, ảnh và số lượng tồn kho
+//         ->havingRaw('COALESCE(SUM(op.p_qty), 0) <= 10') // Sản phẩm không bán được hoặc bán <= 10 lần
+//         ->get();

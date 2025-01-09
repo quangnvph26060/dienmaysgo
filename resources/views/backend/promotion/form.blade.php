@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-{{-- @section('title', $title) --}}
+@section('title', 'Thêm mới khuyến mại')
 <link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.default.min.css" rel="stylesheet">
 @section('content')
 

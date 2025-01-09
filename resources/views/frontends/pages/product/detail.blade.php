@@ -28,7 +28,7 @@
                                                     <button data-id="{{ $product->id }}"
                                                         class="wishlist-button button is-outline circle icon add-to-cart"
                                                         aria-label="Wishlist">
-                                                        <i class="icon-shopping-cart"></i>
+                                                        <i class="fas fa-shopping-cart"></i>
                                                     </button>
                                                 </div>
                                             </div>

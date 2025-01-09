@@ -12,6 +12,10 @@
 
             <div class="flex-col hide-for-medium flex-right">
                 <ul class="nav top-bar-nav nav-right nav-small nav-divided">
+                    {{-- <li id="menu-item-2010"
+                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2010 menu-item-design-default">
+                        <a href="{{ route('carts.order.lookup') }}" class="nav-top-link">Tra cứu đơn hàng</a>
+                    </li> --}}
                     <li id="menu-item-2011"
                         class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2011 menu-item-design-default">
                         <a href="{{ route('introduce', 'gioi-thieu') }}" class="nav-top-link">Giới
@@ -25,6 +29,24 @@
                         class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2010 menu-item-design-default">
                         <a href="{{ route('contact') }}" class="nav-top-link">Liên hệ</a>
                     </li>
+                    <li id="menu-item-2010"
+                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-2010 menu-item-design-default">
+                        @if (auth()->check())
+                            <div class="dropdown-info-container">
+                                <a href="javascript:void(0)" class="dropdown-toggle">
+                                    Hi! {{ auth()->user()->name }}
+                                </a>
+                                <div class="dropdown-info">
+                                    <a href="{{ route('auth.profile') }}">Thông tin</a>
+                                    <a  href="{{ route('auth.logout') }}">Đăng xuất</a>
+                                </div>
+                            </div>
+                        @else
+                            <a href="{{ route('auth.login') }}" class="nav-top-link">Đăng nhập</a>
+                        @endif
+                    </li>
+
+
                 </ul>
             </div>
 
@@ -37,12 +59,10 @@
             <div id="logo" class="flex-col logo">
                 <!-- Header logo -->
                 <a href="{{ url('/') }}" title="{{ request()->getHost() }}" rel="home">
-                    <img width="820" height="222"
-                        src="{{ showImage($settings->path) }}"
+                    <img width="820" height="222" src="{{ showImage($settings->path) }}"
                         class="header_logo header-logo" alt="" />
-                    <img width="820" height="222"
-                        src="{{ showImage($settings->path) }}"
-                        class="header-logo-dark" alt="{{ request()->getHost() }}" />
+                    <img width="820" height="222" src="{{ showImage($settings->path) }}" class="header-logo-dark"
+                        alt="{{ request()->getHost() }}" />
                 </a>
             </div>
 
@@ -54,7 +74,7 @@
                             <a href="#" data-open="#main-menu" data-pos="left" data-bg="main-menu-overlay"
                                 data-color="" class="icon primary button round is-small" aria-label="Menu"
                                 aria-controls="main-menu" aria-expanded="false">
-                                <i class="icon-menu"></i>
+                                <i class="fas fa-bars"></i>
                             </a>
                         </div>
                     </li>
@@ -80,7 +100,7 @@
                                             <button type="submit" value="Search"
                                                 class="ux-search-submit submit-button secondary button icon mb-0"
                                                 aria-label="Submit">
-                                                <i class="icon-search"></i>
+                                                <i class="fas fa-search"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -97,8 +117,8 @@
                 <ul class="header-nav header-nav-main nav nav-right nav-uppercase">
                     <li class="html header-button-1">
                         <div class="header-button">
-                            <a href="tel:0914379989" class="button primary" style="border-radius: 99px">
-                                <span>Hotline: 0914379989</span>
+                            <a href="tel:{{ $settings->phone }}" class="button primary" style="border-radius: 99px">
+                                <span>Hotline: {{ $settings->phone }}</span>
                             </a>
                         </div>
                     </li>
@@ -112,8 +132,9 @@
                         <div class="header-button">
                             <a href="{{ route('carts.list') }}"
                                 class="header-cart-link off-canvas-toggle nav-top-link icon primary button circle is-small"
-                                data-open="#cart-popup" data-class="off-canvas-cart" title="Cart" data-pos="right">
-                                <i class="icon-shopping-bag"
+                                data-open="#cart-popup" data-class="off-canvas-cart" title="Cart"
+                                data-pos="right">
+                                <i class="fas fa-shopping-cart"
                                     data-icon-label="{{ Cart::instance('shopping')->count() }}"> </i>
                             </a>
                         </div>
@@ -259,78 +280,3 @@
     </div>
 </div>
 
-
-{{-- @if (request()->routeIs('home'))
-    <div class="row container">
-        <nav class="large-2">
-            <p class="block button-home-nav"><i class="icon-menu" style="color: #9f2323; font-size: 20px"></i>Danh
-                sách danh mục</p>
-            <div class="flex-col hide-for-medium flex-center">
-                <ul class="nav header-nav header-bottom-nav nav-uppercase">
-                    @foreach ($cataloguesMenu as $item)
-                        <li
-                            class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1606 menu-item-design-default has-dropdown">
-                            <a href="{{ route('products.list', $item->slug) }}" class="nav-top-link"
-                                aria-expanded="false" aria-haspopup="menu">{{ $item->name }}
-                                @if ($item->childrens->isNotEmpty())
-                                    <i class="icon-angle-down"></i>
-                                @endif
-                            </a>
-                            <ul class="sub-menu nav-dropdown nav-dropdown-default">
-
-                                @if ($item->childrens->isNotEmpty())
-                                    @foreach ($item->childrens as $child)
-                                        <li id="menu-item-1607"
-                                            class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1607 nav-dropdown-col">
-                                            <a
-                                                href="{{ route('products.list', $child->slug) }}">{{ $child->name }}</a>
-                                            <ul class="sub-menu nav-column nav-dropdown-default">
-                                                @include('frontends.layouts.partials.menu-item', [
-                                                    'item' => $child,
-                                                ])
-                                            </ul>
-                                        </li>
-                                    @endforeach
-                                @endif
-                            </ul>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-        </nav>
-        <div class="large-9">
-            <div class="swiper">
-                <div class="swiper-wrapper">
-
-                    @foreach ($images as $image)
-                        <div class="swiper-slide">
-                            <img src="{{ showImage($image) }}" alt="{{ showImage($image) }}">
-                        </div>
-                    @endforeach
-                    <!-- Thêm nhiều slide nếu cần -->
-                </div>
-                <!-- Thêm nút điều hướng (nếu cần) -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-                <!-- Thêm phân trang (nếu cần) -->
-                <div class="swiper-pagination"></div>
-            </div>
-        </div>
-    </div>
-    <script>
-        const swiper = new Swiper('.swiper', {
-            loop: true, // Bật vòng lặp
-            autoplay: {
-                delay: 3000, // Thời gian chờ giữa các slide
-            },
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-        });
-    </script>
-@endif --}}

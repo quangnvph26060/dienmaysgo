@@ -1,6 +1,6 @@
 @extends('backend.layouts.master')
 
-{{-- @section('title', $title) --}}
+@section('title', 'Thêm mới bài viết')
 @section('content')
 <div class="card">
     <div class="card-body">

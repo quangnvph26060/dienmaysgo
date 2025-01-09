@@ -24,19 +24,6 @@ class SgoCategory extends Model
 
     public $timestamps = true;
 
-    public static function boot()
-    {
-        parent::boot();
-
-        static::saved(function () {
-            Cache::tags('categories')->flush();
-        });
-
-        static::deleted(function () {
-            Cache::tags('categories')->flush();
-        });
-    }
-
     // Nếu muốn tạo mối quan hệ cha-con trong bảng chính
     public function parent()
     {
@@ -65,5 +52,15 @@ class SgoCategory extends Model
         return $this->childrens->reduce(function ($carry, $child) {
             return $carry->merge([$child->id])->merge($child->allChildrenIds());
         }, collect());
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::saved(function () {
+            Cache::forget('home_data');
+            Cache::forget('categories');
+        });
     }
 }

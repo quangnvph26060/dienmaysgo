@@ -64,24 +64,24 @@
                         <a href="{{ $settings->link_fb ?? '' }}" target="_blank" data-label="Facebook"
                             rel="noopener noreferrer nofollow" class="icon primary button circle facebook tooltip"
                             title="Follow on Facebook" aria-label="Follow on Facebook">
-                            <i class="icon-facebook"></i>
+                            <i class="fab fa-facebook"></i>
                         </a>
 
                         <a href="{{ $settings->link_ig ?? '' }}" target="_blank" rel="noopener noreferrer nofollow"
                             data-label="Instagram" class="icon primary button circle instagram tooltip"
                             title="Follow on Instagram" aria-label="Follow on Instagram">
-                            <i class="icon-instagram"> </i>
+                            <i class="fab fa-instagram"></i>
                         </a>
 
                         <a href="mailto:{{ $settings->email }}" data-label="E-mail" rel="nofollow"
                             class="icon primary button circle email tooltip" title="Send us an email"
                             aria-label="Send us an email">
-                            <i class="icon-envelop"></i>
+                            <i class="fas fa-envelope"></i>
                         </a>
 
                         <a href="tel:{{ $settings->phone }}" target="_blank" data-label="Phone" rel="noopener noreferrer nofollow"
                             class="icon primary button circle phone tooltip" title="Call us" aria-label="Call us">
-                            <i class="icon-phone"></i>
+                            <i class="fas fa-phone-square-alt"></i>
                         </a>
 
                     </div>
@@ -102,6 +102,7 @@
                         <style>
                             #image_1190465660 {
                                 width: 48%;
+                                margin-top: 10px;
                             }
                         </style>
                     </div>

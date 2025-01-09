@@ -135,7 +135,7 @@ class ConfigController extends Controller
 
         // Xử lý lưu các hình ảnh mới
         if ($request->hasFile('images')) {
-            $uploadedUrls = saveImages($request, 'images', 'sliders', 1920, 1080, true);
+            $uploadedUrls = saveImages($request, 'images', 'sliders', 990, 280, true);
             $slidersData = collect($uploadedUrls)->map(fn($url) => ['url' => $url])->toArray();
 
             Slider::insert($slidersData); // Thêm tất cả các slider mới vào DB trong một truy vấn
@@ -154,11 +154,10 @@ class ConfigController extends Controller
             return datatables()->of(configFilter::query()->select(['id', 'filter_type', 'title', 'attribute_id'])->latest()
                 ->get())
                 ->addColumn('title', function ($row) {
-                    $urlEdit =  route('admin.brands.edit', $row);
                     $urlDestroy = route('admin.brands.destroy', $row);
                     return "
                     <strong class='text-primary'>$row->title</strong>
-                    " . view('components.action', compact('row', 'urlEdit', 'urlDestroy')) . "
+                    " . view('components.action', compact('row', 'urlDestroy')) . "
                     ";
                 })
                 ->addColumn('attribute_id', function ($row) {
@@ -188,6 +187,29 @@ class ConfigController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Thêm bộ lọc thành công'
+        ]);
+    }
+
+    public function handleSubmitChangeFilter(Request $request, string $id)
+    {
+        $credentials = $request->validate([
+            'filter_type' => 'required|in:attribute,brand',
+            'title' => 'required|unique:config_filters,title,' . $id,
+            'attribute_id' => 'nullable|exists:attributes,id'
+        ]);
+
+        if (!$data  = configFilter::query()->find($id)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Không tìm thấy bản ghi trên hệ thống!'
+            ], 401);
+        }
+
+        $data->update($credentials);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Cập nhật bộ lọc thành công!'
         ]);
     }
 }

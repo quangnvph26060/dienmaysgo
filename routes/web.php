@@ -41,12 +41,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('detail/{id}', [UserController::class, 'getUserInfor'])->name('getUserInfor');
     Route::post('update/{id}', [UserController::class, 'updateUserInfor'])->name('updateUserInfor');
     Route::post('change-password', [UserController::class, 'changePassword'])->name('changePassword');
-    route::middleware('guest')->group(function () {
+    route::middleware('admin.guest')->group(function () {
         route::get('login', [AuthController::class, 'login'])->name('login');
         route::post('login', [AuthController::class, 'authenticate']);
     });
 
-    route::middleware('auth')->group(function () {
+    route::middleware('admin.auth')->group(function () {
 
         // Route::get('/', function () {
         //     $title = ' Dashboard';
@@ -91,6 +91,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             route::post('change-status', 'changeOrderStatus')->name('change-order-status');
             route::post('cancel-order/{id}', 'cancelOrder')->name('cancel-order');
             route::get('confirm-payment/{id}', 'confirmPayment')->name('confirm-payment');
+            route::get('ransfer-history', 'transferHistory')->name('transfer-history');
         });
     });
 
@@ -151,6 +152,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         route::post('config-slider', [ConfigController::class, 'handleSubmitSlider'])->name('handle-submit-slider');
         route::get('config-filter', [ConfigController::class, 'configFilter'])->name('config-filter');
         route::post('config-filter', [ConfigController::class, 'handleSubmitFilter']);
+        route::post('config-filter-update/{id}', [ConfigController::class, 'handleSubmitChangeFilter'])->name('config-filter-update');
     });
 
     Route::prefix('fuel')->name('fuel.')->group(function () {

@@ -1,3 +1,4 @@
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <link rel="icon" href="{{ showImage($settings->icon) }}" sizes="32x32" />
 <link rel="icon" href="{{ showImage($settings->icon) }}" sizes="192x192" />
 <link rel="stylesheet" href="{{ asset('frontends/assets/css/styles.css') }}" />
@@ -10,6 +11,7 @@
 <link rel="stylesheet" href="{{ asset('frontends/assets/css/wc-blocks.css') }}" />
 <link rel="stylesheet" href="{{ asset('frontends/assets/css/main.css') }}" />
 <link rel="stylesheet" href="{{ asset('frontends/assets/css/toastr.min.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 
 {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"> --}}
@@ -17,6 +19,12 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
 
 <style>
+    .toast-top-right {
+        top: 12px;
+        right: inherit;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 
     .loading-overlay {
         display: none;
@@ -68,10 +76,29 @@
         }
     }
 
+    .dropdown-info-container .dropdown-toggle {
+        color: hsla(0, 0%, 100%, 0.8)
+    }
+
+    .dropdown-info-container .dropdown-toggle:hover {
+        color: #fff
+    }
+
     .loading-text {
         margin-top: 1rem;
         font-size: 1.2rem;
         text-align: center;
     }
+
+    @if (url()->current() === route('carts.list'))
+        .button.icon.is-small i {
+            top: 7px;
+        }
+
+    @else
+        .button.icon.is-small i {
+            top: 0px;
+        }
+    @endif
 </style>
 @stack('styles')

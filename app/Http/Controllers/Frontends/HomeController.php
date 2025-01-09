@@ -7,21 +7,26 @@ use App\Models\SgoCategory;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
     public function home()
     {
-        // Lấy tất cả danh mục cha
-        $categories = SgoCategory::whereNull('category_parent_id')->get();
+        // Cache danh mục cha
+        $categories = Cache::remember('categories', now()->addMinutes(30), function () {
+            return SgoCategory::whereNull('category_parent_id')->get();
+        });
 
-        // Hàm đệ quy để lấy tất cả các sản phẩm từ danh mục cha và con
-        $data = $categories->map(function ($category) {
-            return [
-                'parent' => $category, // Danh mục cha
-                'childrens' => $this->getAllChildrens($category), // Lấy tất cả danh mục con
-                'products' => $this->getAllProducts($category), // Lấy tất cả sản phẩm của danh mục cha và các danh mục con
-            ];
+        // Cache dữ liệu của trang chủ (danh mục cha, con và sản phẩm)
+        $data = Cache::remember('home_data', now()->addMinutes(30), function () use ($categories) {
+            return $categories->map(function ($category) {
+                return [
+                    'parent' => $category,
+                    'childrens' => $this->getAllChildrens($category),
+                    'products' => $this->getAllProducts($category),
+                ];
+            });
         });
 
         $images = Slider::query()->latest()->pluck('url', 'id')->toArray();
@@ -30,32 +35,7 @@ class HomeController extends Controller
         $query = SgoProduct::query();
 
         if (request('s')) {
-            $query->where('name', 'like', '%' . request('s') . '%');
-
-            if (request('orderby')) {
-                $orderby = request('orderby');
-                switch ($orderby) {
-                    case 'price':
-                        $query->orderBy('price', 'asc');
-                        break;
-                    case 'price-desc':
-                        $query->orderBy('price', 'desc');
-                        break;
-                    case 'date':
-                        $query->orderBy('created_at', 'desc');
-                        break;
-                    case 'old-product':
-                        $query->orderBy('created_at', 'asc');
-                        break;
-                    default:
-                        $query->orderBy('name', 'asc');
-                        break;
-                }
-            }
-
-            $products = $query->paginate(12);
-
-            return view('frontends.pages.product.list', compact('products'));
+            return redirect()->route('products.list', ['s' => request('s')]);
         }
 
         return view('frontends.pages.home', compact('data', 'images'));

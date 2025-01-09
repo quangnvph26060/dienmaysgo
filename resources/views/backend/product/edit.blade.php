@@ -1,5 +1,6 @@
 @extends('backend.layouts.master')
-@section('title', 'Thêm mới sản phẩm')
+
+@section('title', 'Cập nhật sản phẩm')
 
 @section('content')
     @if ($errors->any())

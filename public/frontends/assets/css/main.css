@@ -26,7 +26,6 @@
     opacity: 1 !important;
 }
 
-
 :root {
     --primary-color: #ec1c24;
 }
@@ -47,7 +46,7 @@
 }
 .header-main {
     height: 100px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); */
 }
 #logo img {
     max-height: 100px;
@@ -251,6 +250,8 @@ button[type="submit"]:focus-visible {
 }
 body {
     color: #3a3a3a;
+    font-family: "Roboto", Arial, sans-serif;
+    font-size: 14px;
 }
 h1,
 h2,
@@ -814,10 +815,15 @@ html {
     color: #fff;
     font-size: 16px;
 }
-.danh-muc-section .large-columns-5 {
+/* .danh-muc-section .large-columns-5 {
+    border-left: 1px solid #f1f1f1;
+    border-top: 1px solid #f1f1f1;
+} */
+.danh-muc-section .large-columns-5 .col {
     border-left: 1px solid #f1f1f1;
     border-top: 1px solid #f1f1f1;
 }
+
 .tieu-de .right ul li a {
     font-size: 15px;
     font-weight: 400;
@@ -1647,16 +1653,15 @@ header nav {
     border: 1px solid #dcdcdc;
 }
 .block.button-home-nav {
-    padding: 8px 0;
+    padding: 8px 10px;
     display: flex;
     align-items: center;
     font-weight: bold;
     margin: 0 !important;
-    border-bottom: 1px solid rgba(196, 196, 196, 0.5);
 }
 
 .block.button-home-nav i {
-    margin: 0 10px;
+    margin: 0 20px 0 10px;
 }
 
 header nav ul {
@@ -1681,6 +1686,30 @@ header .large-9 {
 }
 
 @media (max-width: 768px) {
+    .menu-item {
+        padding: 0 10px !important;
+    }
+    .menu-header .toggle-submenu-item {
+        margin-right: 0;
+    }
+    .menu-header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+    .sub-menu-item {
+        display: none;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease, opacity 0.5s ease;
+    }
+
+    /* Hiển thị submenu */
+    .sub-menu-item.show {
+        display: block !important;
+        max-height: 300px; /* Điều chỉnh tùy thuộc nội dung */
+        opacity: 1;
+    }
     #province_field,
     #district_field,
     #ward_field {

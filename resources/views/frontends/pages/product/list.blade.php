@@ -1,33 +1,33 @@
 @extends('frontends.layouts.master')
 
 @section('content')
-    @include('components.breadcrumb_V2', compact('category'))
-
+    @include('components.breadcrumb_V2', ['category' => $category ?? null])
     <form id="filterForm">
         <div class="row category-page-row">
             <div class="col large-3 hide-for-medium">
                 <div id="shop-sidebar" class="sidebar-inner col-inner">
-
-                    @foreach ($attributes as $attribute)
-                        <aside class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
-                            <span class="widget-title shop-sidebar">{{ $attribute->title }}</span>
-                            <div class="is-divider small"></div>
-                            @if ($attribute->attribute->attributeValues->isNotEmpty())
-                                @foreach ($attribute->attribute->attributeValues as $item)
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <div>
-                                            <input type="checkbox" name="attr[]" value="{{ $item->id }}"
-                                                onchange="submitFormWithDelay()">
-                                            <label>{{ $item->value }}</label>
+                    @if (!empty($attributes))
+                        @foreach ($attributes as $attribute)
+                            <aside class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
+                                <span class="widget-title shop-sidebar">{{ $attribute->title }}</span>
+                                <div class="is-divider small"></div>
+                                @if ($attribute->attribute->attributeValues->isNotEmpty())
+                                    @foreach ($attribute->attribute->attributeValues as $item)
+                                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                                            <div>
+                                                <input type="checkbox" name="attr[]" value="{{ $item->id }}"
+                                                    onchange="submitFormWithDelay()">
+                                                <label>{{ $item->value }}</label>
+                                            </div>
+                                            <small>({{ $item->products_count }})</small>
                                         </div>
-                                        <small>({{ $item->products_count }})</small>
-                                    </div>
-                                @endforeach
-                            @endif
-                        </aside>
-                    @endforeach
+                                    @endforeach
+                                @endif
+                            </aside>
+                        @endforeach
+                    @endif
 
-                    @isset($brands)
+                    @if (!empty($brands))
                         <aside class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
                             <span class="widget-title shop-sidebar">{{ $brands['title'] }}</span>
                             <div class="is-divider small"></div>
@@ -42,7 +42,7 @@
                                 </div>
                             @endforeach
                         </aside>
-                    @endisset
+                    @endif
 
 
                 </div>
@@ -51,8 +51,9 @@
             <div class="col large-9">
                 <div class="shop-container">
                     <div class="title_page">
-                        <h1>{{ $category->name ?? 'Kết quả tìm kiếm' . '"' . request()->s . '"' }}</h1>
+                        <h1>{{ $category->name ?? 'Kết quả tìm kiếm ' . '"' . request()->s . '"' }}</h1>
                     </div>
+
 
                     <div class="sortbypttuan410">
 
@@ -128,8 +129,18 @@
                     const url = event.target.closest('a.page-number').getAttribute(
                         'href'); // Sử dụng closest để lấy thẻ a
                     if (url) {
+                        // Lấy tham số 's' từ URL hiện tại (nếu có)
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const searchKeyword = urlParams.get('s');
+
+                        // Tạo URL mới bao gồm cả tham số 's' nếu có
+                        const updatedUrl = new URL(url, window.location.origin);
+                        if (searchKeyword) {
+                            updatedUrl.searchParams.set('s', searchKeyword); // Thêm 's' vào query string
+                        }
+
                         // Gửi request AJAX
-                        fetch(url, {
+                        fetch(updatedUrl.toString(), {
                                 method: 'GET',
                                 headers: {
                                     'X-Requested-With': 'XMLHttpRequest',
@@ -152,6 +163,7 @@
                 }
             });
 
+
             document.querySelectorAll('.sortbypttuan410 input[type="checkbox"]').forEach(input => {
                 input.addEventListener('change', (event) => {
                     // Bỏ chọn tất cả checkbox khác
@@ -169,8 +181,11 @@
         let timeout;
 
         function submitFormWithDelay() {
+            const loadingOverlay = document.getElementById('loading-overlay');
+
             loadingOverlay.style.display = 'flex';
             clearTimeout(timeout);
+
             timeout = setTimeout(() => {
                 const form = document.getElementById('filterForm');
                 const formData = new FormData(form);
@@ -181,8 +196,15 @@
                     params.append(key, value);
                 }
 
+                // Lấy giá trị của 's' từ URL hiện tại
+                const urlParams = new URLSearchParams(window.location.search);
+                const searchKeyword = urlParams.get('s');
+                if (searchKeyword) {
+                    params.append('s', searchKeyword); // Thêm tham số 's' vào params
+                }
+
                 // Gửi request qua URL với query string
-                fetch('{{ route('products.filter-product', $category->slug) }}?' + params.toString(), {
+                fetch('{{ route('products.filter-product', $category->slug ?? '') }}?' + params.toString(), {
                         method: 'GET',
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
@@ -193,7 +215,8 @@
                         document.querySelector('.pagination').innerHTML = data.pagination;
                         document.querySelector('.products').innerHTML = data.html;
                     })
-                    .catch(error => console.log(error)).finally(() => {
+                    .catch(error => console.log(error))
+                    .finally(() => {
                         // Ẩn loading overlay
                         loadingOverlay.style.display = 'none';
                     });

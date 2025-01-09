@@ -23,7 +23,8 @@ class SgoOrder extends Model
         'code',
         'reason',
         'payment_status',
-        'deposit_amount'
+        'deposit_amount',
+        'user_id'
     ];
     protected static function newFactory()
     {
@@ -33,6 +34,15 @@ class SgoOrder extends Model
     public function products()
     {
         return $this->belongsToMany(SgoProduct::class, 'order_product', 'order_id', 'product_id')->withPivot(['p_name', 'p_image', 'p_price', 'p_qty']);
+    }
+
+    public function transactionHistories()
+    {
+        return $this->hasMany(TransactionHistory::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
     public $timestamps = true;
 }

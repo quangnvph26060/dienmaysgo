@@ -5,15 +5,15 @@
                 <nav class="woocommerce-breadcrumb breadcrumbs ">
                     <a href="{{ url('/') }}">Trang chủ</a>
                     <span class="divider">&#47;</span>
-
-                    @isset($category)
+                    @if (isset($category) && !is_null($category))
                         @if ($category->parent)
-                            <a href="{{ route('products.list', $category->parent->slug) }}">{{ $category->parent->name }}</a>
+                            <a
+                                href="{{ route('products.list', $category->parent->slug) }}">{{ $category->parent->name }}</a>
                             <span class="divider">&#47;</span>
                         @endif
 
                         <a href="javascript::void(0)">{{ $category->name }}</a>
-                    @endisset
+                    @endif
 
                     @isset($product)
                         @if ($product->category)
@@ -23,6 +23,15 @@
                         @endif
 
                         <a href="javascript::void(0)">{{ $product->name }}</a>
+                    @endisset
+
+                    @if (isset($title) && !is_null($title))
+                        <a href="{{ $redirect }}">{{ $title }}</a>
+                        <span class="divider">&#47;</span>
+                    @endif
+
+                    @isset($name)
+                        <a href="javascript::void(0)">{{ $name }}</a>
                     @endisset
 
                 </nav>
