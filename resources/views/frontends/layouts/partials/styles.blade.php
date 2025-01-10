@@ -19,6 +19,10 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
 
 <style>
+    #toast-container>div {
+        padding: 5px 15px 5px 50px !important;
+    }
+
     .toast-top-right {
         top: 12px;
         right: inherit;
@@ -101,4 +105,5 @@
         }
     @endif
 </style>
+
 @stack('styles')

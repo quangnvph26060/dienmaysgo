@@ -45,8 +45,8 @@
     max-width: 1260px;
 }
 .header-main {
+    transition: 0.3s ease-in;
     height: 100px;
-    /* box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); */
 }
 #logo img {
     max-height: 100px;
@@ -1755,9 +1755,19 @@ header .large-9 {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     transform: translateY(0);
     /* Trượt vào đúng vị trí */
+    animation: slideIn 0.6s forwards;
 }
 
 #masthead.hidden {
     top: -60px;
     /* Ẩn khỏi màn hình khi không còn cần thiết */
+}
+
+@keyframes slideIn {
+    0% {
+        transform: translateY(-100px); /* Vị trí bắt đầu */
+    }
+    100% {
+        transform: translateY(0); /* Vị trí kết thúc */
+    }
 }

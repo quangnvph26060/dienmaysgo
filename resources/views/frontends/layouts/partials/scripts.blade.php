@@ -265,7 +265,7 @@
                     },
                     success: function(response) {
                         if (response.status) {
-                            // toastr.success(response.message);
+                            toastr.success(response.message);
                             cartResponse(response)
                             // jQuery('#cart-links').css('display', 'inline-block')
                             // jQuery('.woocommerce-Price-amount.amount bdi').html(response.total)

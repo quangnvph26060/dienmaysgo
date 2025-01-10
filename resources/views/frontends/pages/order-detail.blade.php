@@ -1,5 +1,11 @@
 @extends('frontends.layouts.master')
 
+@section('title', $order->code)
+{{-- @section('description', $news->description_seo)
+@section('keywords', $news->keyword_seo)
+@section('og_title', $news->name)
+@section('og_description', $news->description_seo) --}}
+
 @section('content')
     @include('components.breadcrumb_V2', [
         'title' => 'Thông tin cá nhân',

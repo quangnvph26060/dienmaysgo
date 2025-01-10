@@ -1,5 +1,11 @@
 @extends('frontends.layouts.master')
-@section('title', $title)
+
+@section('title', 'Giỏ hàng')
+{{-- @section('description', $news->description_seo)
+@section('keywords', $news->keyword_seo)
+@section('og_title', $news->name)
+@section('og_description', $news->description_seo) --}}
+
 @section('content')
     <div id="content" class="content-area page-wrapper cart_none" style="display: none;" role="main">
         <div class="row row-main">
@@ -146,7 +152,7 @@
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        <td colspan="6" class="actions clear">
+                                                        <td colspan="5" class="actions clear">
                                                             Chưa có sản phẩm trong giỏ hàng
                                                         </td>
                                                     </tr>

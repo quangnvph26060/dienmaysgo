@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Frontends\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\SgoOrder;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -138,21 +140,22 @@ class AuthController extends Controller
             }
             return redirect()->intended('/');
         } catch (\Exception $e) {
-            \Log::info($e->getMessage());
+            Log::info($e->getMessage());
             dd('something went wrong' . $e->getMessage());
         }
     }
 
     public function profile()
     {
-        /**
-         * @var User $user
-         */
-        $user = User::with(['orders' => function ($q) {
-            $q->latest();
-        }])->findOrFail(auth()->id());
+        // /**
+        //  * @var User $user
+        //  */
+        // $user = User::with(['orders' => function ($q) {
+        //     $q->latest();
+        // }])->findOrFail(auth()->id());
+        $orders = SgoOrder::query()->with('user')->latest()->where('user_id', auth()->id())->paginate(5);
 
-        return view('frontends.pages.profile', compact('user'));
+        return view('frontends.pages.profile', compact('orders'));
     }
 
     public function handleChangeInfo(Request $request)

@@ -8,7 +8,7 @@
                             <a href="{{ route('products.detail', $product->slug) }}" aria-label="{{ $product->name }}">
                                 <img fetchpriority="high" decoding="async" width="680" height="680"
                                     src="{{ showImage($product->image) }}" data-src="{{ showImage($product->image) }}"
-                                    class="lazy-load attachment-original size-original" alt=""
+                                    class="lazy-load attachment-original size-original" alt="{{ showImage($product->image) }}"
                                     sizes="(max-width: 680px) 100vw, 680px" />
                             </a>
                         </div>

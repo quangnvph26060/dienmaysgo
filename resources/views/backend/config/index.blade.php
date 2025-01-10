@@ -321,6 +321,7 @@
         }
     </style>
 @endpush
+
 @push('scripts')
     <script>
         const BASE_URL = "{{ url('/') }}";
@@ -354,7 +355,7 @@
 
         $(document).ready(function() {
 
-            $('#keyword_seo').selectize({
+            $('#keywords_seo').selectize({
                 delimiter: ',',
                 persist: false,
                 create: function(input) {
@@ -379,6 +380,8 @@
                 filebrowserImageUploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
                 filebrowserUploadMethod: 'form',
             });
+
+
         });
     </script>
 @endpush
