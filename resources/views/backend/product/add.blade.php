@@ -378,6 +378,7 @@
             });
 
             const input = document.querySelector('#keyword_seo');
+
             const tagify = new Tagify(input, {
                 dropdown: {
                     maxItems: 10,

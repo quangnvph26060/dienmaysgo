@@ -1,5 +1,11 @@
 @extends('frontends.layouts.master')
 
+@section('title', 'Đăng nhập')
+{{-- @section('description', $news->description_seo)
+@section('keywords', $news->keyword_seo)
+@section('og_title', $news->name)
+@section('og_description', $news->description_seo) --}}
+
 @section('content')
     <div class="container-swap">
         <div class="container-fluid">

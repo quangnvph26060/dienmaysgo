@@ -153,6 +153,7 @@ class OrderController extends Controller
 
         $order->status = 'cancelled';
         $order->reason = $request->reason;
+        $order->updated_at = now();
 
         $order->save();
 
@@ -184,6 +185,7 @@ class OrderController extends Controller
         }
 
         $order->payment_status = 1;
+        $order->updated_at = now();
         $order->save();
 
         return response()->json([
@@ -194,10 +196,11 @@ class OrderController extends Controller
 
     public function transferHistory()
     {
+
         if (request()->ajax()) {
             return datatables()->of(
-                TransactionHistory::query()->with('order.user')->orderBy('sgo_order_id')
-                    ->latest()->get()
+                TransactionHistory::query()->with('order.user')->orderBy('sgo_order_id', 'desc')
+                    ->latest('transaction_date')->get()
             )
                 ->addColumn('transaction_amount', function ($row) {
                     return formatAmount($row->transaction_amount) . ' VND';

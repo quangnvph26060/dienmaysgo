@@ -1,5 +1,5 @@
 @extends('frontends.layouts.master')
-@section('title', $title)
+@section('title', 'Thanh toán')
 @section('content')
     <div id="content" class="content-area page-wrapper" role="main">
         <div class="row row-main">

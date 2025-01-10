@@ -1,5 +1,11 @@
 @extends('frontends.layouts.master')
 
+@section('title', $category ? $category->name : 'Sản phẩm')
+@section('description', $category->description_seo ?? '')
+@section('keywords', $category->keyword_seo ?? '')
+@section('og_title', $category ? $category->name : '')
+@section('og_description', $category->description_seo ?? '')
+
 @section('content')
     @include('components.breadcrumb_V2', ['category' => $category ?? null])
     <form id="filterForm">

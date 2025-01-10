@@ -1,5 +1,11 @@
 @extends('frontends.layouts.master')
 
+@section('title', $news->title)
+@section('description', $news->description_seo)
+@section('keywords', $news->keyword_seo)
+@section('og_title', $news->name)
+@section('og_description', $news->description_seo)
+
 @section('content')
     <div id="content" class="blog-wrapper blog-single page-wrapper">
         <div class="row row-large">
@@ -31,29 +37,29 @@
                         <span class="widget-title"><span>Bài viết mới</span></span>
                         <div class="is-divider small"></div>
                         <ul>
-                            @forelse ($latestNews as $new )
-                            <li class="recent-blog-posts-li">
-                                <div class="flex-row recent-blog-posts align-top pt-half pb-half">
-                                    <div class="flex-col mr-half">
-                                        <div class="badge post-date badge-square">
-                                            <div class="badge-inner bg-fill" style="
-                                        background: url({{ asset('storage/'.$new->image) }});
+                            @forelse ($latestNews as $new)
+                                <li class="recent-blog-posts-li">
+                                    <div class="flex-row recent-blog-posts align-top pt-half pb-half">
+                                        <div class="flex-col mr-half">
+                                            <div class="badge post-date badge-square">
+                                                <div class="badge-inner bg-fill"
+                                                    style="
+                                        background: url({{ asset('storage/' . $new->image) }});
                                         border: 0;
                                         ">
+                                                </div>
                                             </div>
                                         </div>
+                                        <div class="flex-col flex-grow">
+                                            <a href="{{ route('news.list', ['slug' => $new->slug]) }}"
+                                                title="{{ $new->title }}">{{ $new->title }}</a>
+                                            <span class="post_comments op-7 block is-xsmall"><a
+                                                    href="{{ route('news.list', ['slug' => $new->slug]) }}/#respond"></a></span>
+                                        </div>
                                     </div>
-                                    <div class="flex-col flex-grow">
-                                        <a href="{{ route('news.list', ['slug' => $new->slug]) }}"
-                                            title="{{ $new->title }}">{{ $new->title }}</a>
-                                        <span class="post_comments op-7 block is-xsmall"><a
-                                                href="{{ route('news.list', ['slug' => $new->slug]) }}/#respond"></a></span>
-                                    </div>
-                                </div>
-                            </li>
-                        @empty
-
-                        @endforelse
+                                </li>
+                            @empty
+                            @endforelse
 
                         </ul>
                     </aside>

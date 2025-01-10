@@ -1,5 +1,5 @@
 @extends('frontends.layouts.master')
-
+@section('title', 'Thông tin cá nhân')
 @section('content')
     @include('components.breadcrumb_V2', [
         'name' => 'Thông tin cá nhân',
@@ -69,7 +69,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($user->orders as $order)
+                        @forelse ($orders as $order)
                             <tr>
                                 <td data-label="Mã đơn hàng">
                                     <div><a href="{{ route('carts.order-detail', $order->code) }}">{{ $order->code }}</a>
@@ -99,6 +99,11 @@
                         @endforelse
                     </tbody>
                 </table>
+
+                <div class="pagination">
+                    {{ $orders->links() }}
+                </div>
+
             </div>
 
 
@@ -305,7 +310,7 @@
             .action-header h2 {
                 margin-bottom: 0 !important;
                 /* flex-direction: column;
-                                                                                                                                                                text-align: center; */
+                                                                                                                                                                        text-align: center; */
             }
 
             .profile-form {

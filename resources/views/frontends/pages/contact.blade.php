@@ -1,5 +1,11 @@
 @extends('frontends.layouts.master')
 
+@section('title', 'Liên hệ')
+{{-- @section('description', $news->description_seo)
+@section('keywords', $news->keyword_seo)
+@section('og_title', $news->name)
+@section('og_description', $news->description_seo) --}}
+
 @section('content')
     <div id="content" role="main" class="content-area">
         <div id="page-header-1001269792" class="page-header-wrapper">

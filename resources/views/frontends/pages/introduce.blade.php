@@ -1,5 +1,11 @@
 @extends('frontends.layouts.master')
 
+@section('title', $title)
+{{-- @section('description', $news->description_seo)
+@section('keywords', $news->keyword_seo)
+@section('og_title', $news->name)
+@section('og_description', $news->description_seo) --}}
+
 @section('content')
     <div id="content" role="main" class="content-area">
         <div id="page-header-415093479" class="page-header-wrapper">
@@ -17,7 +23,7 @@
                     <div class="title-content flex-col flex-right text-right medium-text-center">
                         <div class="title-breadcrumbs pb-half pt-half">
                             <nav class="woocommerce-breadcrumb breadcrumbs">
-                                <a href="{{url('/')}}">Home</a>
+                                <a href="{{ url('/') }}">Home</a>
                                 <span class="divider">&#47;</span> {{ $title }}
                             </nav>
                         </div>
@@ -40,7 +46,7 @@
                     <div id="col-874962407" class="col small-12 large-12">
                         <div class="col-inner">
 
-                           {!! $introduce->content !!}
+                            {!! $introduce->content !!}
                         </div>
                     </div>
                 </div>

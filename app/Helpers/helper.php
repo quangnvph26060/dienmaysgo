@@ -277,3 +277,4 @@ if (!function_exists('formatName')) {
         return strtoupper($nameWithoutDiacritics);
     }
 }
+

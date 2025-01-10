@@ -370,10 +370,10 @@ class CartController extends Controller
 
         session()->flash('total', $total);
 
-        return $this->payOs($total, route('carts.thanh-toan'));
+        return $this->payOs($total, $values['code'], route('carts.thanh-toan'));
     }
 
-    private function payOs($total, $cancelUrl, $returnUrl = null)
+    private function payOs($total, $code, $cancelUrl, $returnUrl = null)
     {
         $clientId = env('PAYOS_CLIENT_ID');
         $apiKey = env('PAYOS_API_KEY');
@@ -383,7 +383,7 @@ class CartController extends Controller
         $data = [
             "orderCode" => (int) generateRandomNumber(length: 8),
             "amount" => $total,
-            "description" => 'DON HANG ' . session('payment_data')['code'],
+            "description" => 'DON HANG ' . $code,
 
             "cancelUrl" => $cancelUrl,
             "returnUrl" => $returnUrl ?? route('carts.payment-request'),
@@ -407,8 +407,6 @@ class CartController extends Controller
 
             $responseBody = json_decode($response->getBody(), true);
 
-            Log::info('ResponseBody: ' . $responseBody);
-
             if (isset($responseBody['data']['checkoutUrl'])) {
 
                 $paymentLink = $responseBody['data']['checkoutUrl'];
@@ -422,6 +420,7 @@ class CartController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'error' => $e->getMessage(),
+                'line' => $e->getLine(),
             ], 500);
         }
     }
@@ -462,8 +461,8 @@ class CartController extends Controller
             DB::commit();
 
             return redirect()->route('carts.order-success', $order->code);
-        } catch (\Throwable $th) {
-            Log::info($th->getMessage());
+        } catch (\Exception $e) {
+            Log::info('Error: ' . $e->getMessage());
 
             DB::rollBack();
         }
@@ -488,20 +487,19 @@ class CartController extends Controller
 
         session()->flash('code', $order->code);
 
-        return $this->payOs($total, $cancelUrl, $returnUrl);
+        return $this->payOs($total, $order->code, $cancelUrl, $returnUrl);
     }
 
     public function orderUpdatedSuccessfully()
     {
         $order = SgoOrder::query()->where('code', session('code'))->first();
 
-
         $existOrder = TransactionHistory::query()->where('sgo_order_id', $order->id)->exists();
 
         TransactionHistory::create([
             'sgo_order_id' => $order->id,
             'transaction_amount' => $order->total_price - $order->deposit_amount,
-            'transaction_notes' => formatName($order->fullname)  . ' CHUYEN KHOAN <strong class="text-danger">LAN ' . $existOrder ? 2 : 1 . '</strong>'
+            'transaction_notes' => (string) formatName($order->fullname)  . ' CHUYEN KHOAN <strong class="text-danger">LAN ' . $existOrder ? 2 : 1 . '</strong>'
         ]);
 
         $order->payment_status = 1;

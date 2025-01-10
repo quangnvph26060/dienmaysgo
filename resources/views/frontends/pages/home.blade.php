@@ -1,5 +1,12 @@
 @extends('frontends.layouts.master')
 
+@section('title', 'Trang chủ')
+@section('description', $settings->description_seo)
+@section('keywords', $settings->keywords_seo)
+@section('og_title', $settings->title_seo ?? env('APP_NAME'))
+@section('og_description', $settings->description_seo)
+
+
 @section('content')
     <div class="row container">
         <nav class="large-2">
@@ -150,9 +157,9 @@
         }
 
         /* .home-nav {
-                                                                display: flex;
-                                                                margin: 0;
-                                                            } */
+                                                                                            display: flex;
+                                                                                            margin: 0;
+                                                                                        } */
 
         .menu {
 

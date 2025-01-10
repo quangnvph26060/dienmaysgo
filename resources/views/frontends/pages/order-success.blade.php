@@ -1,5 +1,11 @@
 @extends('frontends.layouts.master')
 
+@section('title', 'Đặt hàng thông công')
+{{-- @section('description', $news->description_seo)
+@section('keywords', $news->keyword_seo)
+@section('og_title', $news->name)
+@section('og_description', $news->description_seo) --}}
+
 @section('content')
     <div class="body-order">
         <div class="order-success">

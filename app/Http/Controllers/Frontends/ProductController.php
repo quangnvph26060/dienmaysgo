@@ -16,7 +16,7 @@ class ProductController extends Controller
 
     public function list($slug = null)
     {
-        Cache::flush();
+        // Cache::flush();
         if (request()->ajax()) {
             return $this->filterProduct($slug);
         }
@@ -53,7 +53,6 @@ class ProductController extends Controller
                 ])->latest()->get();
         });
 
-
         $attributes = $filters->where('filter_type', 'attribute');
 
         $brands = Cache::remember("brands_" . ($category ? $category->id : 'all'), now()->addMinutes(5), function () use ($filters, $category) {
@@ -78,7 +77,6 @@ class ProductController extends Controller
             }
             return [];
         });
-
 
         $categoryIds = $category ? collect([$category->id])->merge($category->allChildrenIds()) : [];
 

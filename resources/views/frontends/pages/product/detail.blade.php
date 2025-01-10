@@ -1,5 +1,10 @@
 @extends('frontends.layouts.master')
 
+@section('title', $product->name)
+@section('description', $product->description_seo)
+@section('keywords', formatString($product->keyword_seo))
+@section('og_title', $product->name)
+@section('og_description', $product->description_seo)
 
 @section('content')
     @include('components.breadcrumb_V2', compact('product'))
@@ -206,7 +211,7 @@
 
 
                                                     <a href="{{ route('contact', ['product' => $product->slug]) }}"
-                                                        class="single_add_to_cart_button button alt"
+                                                        class="single_add_to_cart_buttonn button alt"
                                                         style="background: #ec1c24 !important; padding-left: 40px; padding-right: 40px; padding-bottom: 1px;">Liên
                                                         hệ <span class="bi bi-telephone"
                                                             style="margin-left: 3px"></span></a>
