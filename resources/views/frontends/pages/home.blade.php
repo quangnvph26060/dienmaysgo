@@ -14,14 +14,12 @@
                 phẩm</p>
             <div class="home-nav">
                 <div class="menu">
-                    @foreach ($cataloguesMenu as $item)
+                    @foreach ($cataloguesMenu->take(6) as $item)
                         <div class="menu-item @if ($item->childrens->isNotEmpty()) has-child @endif">
                             {{-- <i class="fas fa-home" style="margin-right: 5px"></i> --}}
                             <img width="22" src="{{ showImage($item->logo) }}" alt="">
-                            <a href="{{ route('products.list', $item->slug) }}"> {{ $item->name }}</a>
-                            @if ($item->childrens->isNotEmpty())
-                                <span class="arrow">&#9654;</span>
-                            @endif
+                            <a style="text-transform: uppercase;" href="{{ route('products.list', $item->slug) }}">
+                                {{ $item->name }}</a>
                             <!-- Mũi tên cấp 1 -->
                             <div class="popup">
                                 <div class="submenu">
@@ -44,7 +42,9 @@
                             </div>
                         </div>
                     @endforeach
-
+                    <div class="" style="text-align: center; margin-top: 5px">
+                        <a href="{{ route('products.list-category') }}">Xem tất cả danh mục</a>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -157,9 +157,9 @@
         }
 
         /* .home-nav {
-                                                                                            display: flex;
-                                                                                            margin: 0;
-                                                                                        } */
+                                                                                                                    display: flex;
+                                                                                                                    margin: 0;
+                                                                                                                } */
 
         .menu {
 
@@ -232,6 +232,8 @@
             /* white-space: nowrap; */
             width: 964px;
             bottom: 0;
+            min-height: 273px;
+            overflow-y: auto;
         }
 
 

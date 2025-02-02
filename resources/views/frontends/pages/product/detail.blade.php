@@ -98,8 +98,10 @@
                                             <p class="price product-page-price">
                                                 <span class="woocommerce-Price-amount amount" style="display: block;">
 
-                                                    @if (hasDiscount($product->promotion))
-                                                        <bdi style=" font-size: 25px">{{ formatAmount(calculateAmount($product->price, $product->promotion->discount)) }}
+
+
+                                                    @if (hasCustomDiscount($product->discount_start_date, $product->discount_end_date))
+                                                        <bdi style=" font-size: 25px">{{ formatAmount(calculateAmount($product->price, $product->discount_value, $product->discount_type !== 'amount')) }}
                                                             ₫
                                                         </bdi>
 
@@ -110,11 +112,26 @@
                                                         </del>
 
                                                         <span
-                                                            style="color: black; font-size: 14px; font-weight: 500">-{{ number_format($product->promotion->discount, 0) }}%</span>
+                                                            style="color: black; font-size: 14px; font-weight: 500">-{{ number_format(calculateDiscountPercentage($product->price, $product->discount_value), 0) }}%</span>
                                                     @else
-                                                        <bdi>{{ formatAmount($product->price) }}
-                                                            ₫
-                                                        </bdi>
+                                                        @if (hasDiscount($product->promotion))
+                                                            <bdi style=" font-size: 25px">{{ formatAmount(calculateAmount($product->price, $product->promotion->discount)) }}
+                                                                ₫
+                                                            </bdi>
+
+                                                            <del
+                                                                style="font-size: 14px;color: black !important;font-weight: 500; margin: 0 10px">
+                                                                {{ formatAmount($product->price) }}
+                                                                ₫
+                                                            </del>
+
+                                                            <span
+                                                                style="color: black; font-size: 14px; font-weight: 500">-{{ number_format($product->promotion->discount, 0) }}%</span>
+                                                        @else
+                                                            <bdi>{{ formatAmount($product->price) }}
+                                                                ₫
+                                                            </bdi>
+                                                        @endif
                                                     @endif
 
                                                 </span>
@@ -195,8 +212,8 @@
                                                                 class="minus button is-form" />
                                                             <input type="number" id="quantity_674f195d66f6f"
                                                                 class="input-text qty text" step="1" min="1"
-                                                                name="quantity" value="1" title="Qty" size="4"
-                                                                placeholder="" inputmode="numeric" />
+                                                                name="quantity" value="1" title="Qty"
+                                                                size="4" placeholder="" inputmode="numeric" />
                                                             <input type="button" value="+"
                                                                 class="plus button is-form" />
                                                         </div>

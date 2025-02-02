@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Imports\ProductsImport;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Brand;
@@ -18,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -40,7 +42,7 @@ class ProductController extends Controller
                     return '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />';
                 })
                 ->addColumn('category_id', function ($row) {
-                    return $row->category->name;
+                    return $row->category->name ?? '';
                 })
                 ->addColumn('name', function ($row) {
                     $urlEdit =  route('admin.product.detail', $row->id);
@@ -64,7 +66,7 @@ class ProductController extends Controller
     {
         $page = 'Sản phẩm';
         $title = 'Thêm sản phẩm';
-        $categories = SgoCategory::pluck('name', 'id');
+        $categories = SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->get();
         $attributes = Attribute::query()->pluck('name', 'id');
         $brands = Brand::query()->pluck('name', 'id');
         $promotions = SgoPromotion::pluck('name', 'id');
@@ -75,7 +77,7 @@ class ProductController extends Controller
     {
         $page = 'Sản phẩm';
         $title = 'Sửa sản phẩm';
-        $categories = SgoCategory::pluck('name', 'id');
+        $categories = SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->get();
         $promotions = SgoPromotion::pluck('name', 'id');
         $allAttributes = Attribute::pluck('name', 'id')->all();
         $brands = Brand::query()->pluck('name', 'id');
@@ -119,7 +121,11 @@ class ProductController extends Controller
                 'attribute_value_id.*' => 'exists:attribute_values,id',
                 'brand_id' => 'nullable|array',
                 'brand_id.*' => 'exists:brands,id',
-                'tags' => 'nullable'
+                'tags' => 'nullable',
+                'discount_type' => 'nullable|in:percentage,amount',
+                'discount_value' => 'nullable|numeric|min:0',
+                'discount_start_date' => 'nullable|date',
+                'discount_end_date' => 'nullable|date|after_or_equal:discount_start_date',
             ],
             __('request.messages'),
             [
@@ -215,7 +221,11 @@ class ProductController extends Controller
                 'attribute_value_id.*' => 'exists:attribute_values,id',
                 'brand_id' => 'nullable|array',
                 'brand_id.*' => 'exists:brands,id',
-                'tags' => 'nullable'
+                'tags' => 'nullable',
+                'discount_type' => 'nullable|in:percentage,amount',
+                'discount_value' => 'nullable|numeric|min:0',
+                'discount_start_date' => 'nullable|date',
+                'discount_end_date' => 'nullable|date|after_or_equal:discount_start_date',
             ],
             __('request.messages'),
             [
@@ -358,5 +368,10 @@ class ProductController extends Controller
         $product->save();
 
         return response()->json(['status' => true, 'message' => 'Giá đã được cập nhật', 'price' => formatAmount($product->price) . ' VND']);
+    }
+
+    public function importData(Request $request)
+    {
+        Excel::import(new ProductsImport, $request->file('file'));
     }
 }

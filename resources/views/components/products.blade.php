@@ -8,8 +8,8 @@
                             <a href="{{ route('products.detail', $product->slug) }}" aria-label="{{ $product->name }}">
                                 <img fetchpriority="high" decoding="async" width="680" height="680"
                                     src="{{ showImage($product->image) }}" data-src="{{ showImage($product->image) }}"
-                                    class="lazy-load attachment-original size-original" alt="{{ showImage($product->image) }}"
-                                    sizes="(max-width: 680px) 100vw, 680px" />
+                                    class="lazy-load attachment-original size-original"
+                                    alt="{{ showImage($product->image) }}" sizes="(max-width: 680px) 100vw, 680px" />
                             </a>
                         </div>
 
@@ -56,8 +56,8 @@
                             <span class="price">
                                 <span class="woocommerce-Price-amount amount">
                                     @if ($product->price > 0)
-                                        @if (hasDiscount($product->promotion))
-                                            <bdi>{{ formatAmount(calculateAmount($product->price, $product->promotion->discount)) }}
+                                        @if (hasCustomDiscount($product->discount_start_date, $product->discount_end_date))
+                                            <bdi>{{ formatAmount(calculateAmount($product->price, $product->discount_value, $product->discount_type !== 'amount')) }}
                                                 <span class="woocommerce-Price-currencySymbol">&#8363;</span>
                                             </bdi>
                                             <del>
@@ -66,9 +66,20 @@
                                                 </bdi>
                                             </del>
                                         @else
-                                            <bdi>{{ formatAmount($product->price) }}
-                                                <span class="woocommerce-Price-currencySymbol">&#8363;</span>
-                                            </bdi>
+                                            @if (hasDiscount($product->promotion))
+                                                <bdi>{{ formatAmount(calculateAmount($product->price, $product->promotion->discount)) }}
+                                                    <span class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                </bdi>
+                                                <del>
+                                                    <bdi class="original-price">{{ formatAmount($product->price) }}
+                                                        <span class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                    </bdi>
+                                                </del>
+                                            @else
+                                                <bdi>{{ formatAmount($product->price) }}
+                                                    <span class="woocommerce-Price-currencySymbol">&#8363;</span>
+                                                </bdi>
+                                            @endif
                                         @endif
                                     @else
                                         <a href="{{ route('contact', ['product' => $product->slug]) }}"
@@ -85,5 +96,3 @@
         </div>
     @endforeach
 @endif
-
-

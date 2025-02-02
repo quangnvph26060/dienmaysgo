@@ -73,6 +73,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('delete/{id}', [ProductController::class, 'delete'])->name('delete');
             route::post('change-select', [ProductController::class, 'changeSelect'])->name('changeSelect');
             route::post('update-price/{id}', [ProductController::class, 'handleChangePrice'])->name('handle-change-price');
+            route::post('import-data', [ProductController::class, 'importData'])->name('import-data');
         });
 
         // Route::prefix('order')->name('order.')->group(function () {

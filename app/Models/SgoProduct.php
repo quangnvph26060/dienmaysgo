@@ -32,7 +32,11 @@ class SgoProduct extends Model
         'keyword_seo',
         'image',
         'import_price',
-        'tags'
+        'tags',
+        'discount_type',
+        'discount_value',
+        'discount_end_date',
+        'discount_start_date'
     ];
 
 
