@@ -7,6 +7,9 @@
         <div class="card-header d-flex justify-content-between">
             <h4 class="card-title">Danh sách sản phẩm</h4>
             <div class="card-tools">
+                {{-- <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Import
+                </button> --}}
                 <a href="{{ route('admin.product.add') }}" class="btn btn-primary btn-sm">Thêm mới sản phẩm (+)</a>
             </div>
         </div>
@@ -26,6 +29,27 @@
 
                 </table>
             </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="{{ route('admin.product.import-data') }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Import sản phẩm</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="file" name="file" id="file" class="form-control" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Lưu thay đổi</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 @endsection

@@ -31,12 +31,25 @@
                             <select class="form-select @error('category_parent_id') is-invalid @enderror"
                                 id="category_parent_id" name="category_parent_id">
                                 <option value="">----- Chọn danh mục cha -----</option>
-                                @foreach ($parentCategories as $parentCategory)
-                                    <option value="{{ $parentCategory->id }}"
-                                        {{ isset($category) && $category->category_parent_id == $parentCategory->id ? 'selected' : '' }}>
-                                        {{ $parentCategory->name }}
-                                    </option>
-                                @endforeach
+                                @if ($parentCategories->isNotEmpty())
+                                    @foreach ($parentCategories as $parentCategory)
+                                        <option @selected($parentCategory->id == old('category_parent_id', $category->category_parent_id ?? '')) value="{{ $parentCategory->id }}">
+                                            {{ $parentCategory->name }}</option>
+                                        @if ($parentCategory->childrens->isNotEmpty())
+                                            @foreach ($parentCategory->childrens as $children)
+                                                <option @selected($children->id == old('category_parent_id', $category->category_parent_id ?? '')) value="{{ $children->id }}">--
+                                                    {{ $children->name }}</option>
+                                                @if ($children->childrens->isNotEmpty())
+                                                    @foreach ($children->childrens as $item)
+                                                        <option @selected($item->id == old('category_parent_id', $category->category_parent_id ?? '')) value="{{ $item->id }}">
+                                                            ---- {{ $item->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
 

@@ -283,10 +283,10 @@ h6,
     background-color: #ffffff;
 }
 a {
-    color: #ca8010;
+    color: #333;
 }
 a:hover {
-    color: #1e73be;
+    color: #ec1c24;
 }
 .tagcloud a:hover {
     border-color: #1e73be;

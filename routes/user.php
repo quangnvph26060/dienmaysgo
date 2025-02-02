@@ -68,6 +68,7 @@ route::controller(ProductController::class)->name('products.')->group(function (
     route::get('danh-muc-san-pham/{slug?}', 'list')->name('list');
     route::get('san-pham/{slug}', 'detail')->name('detail');
     route::get('filter-product/{slug?}', 'filterProduct')->name('filter-product');
+    route::get('danh-muc', 'listCategory')->name('list-category');
 });
 
 

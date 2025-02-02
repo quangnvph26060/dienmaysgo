@@ -240,4 +240,9 @@ class ProductController extends Controller
 
         return view('frontends.pages.product.detail', compact('product', 'relatedProducts'));
     }
+
+    public function listCategory()
+    {
+        return view('frontends.pages.category');
+    }
 }

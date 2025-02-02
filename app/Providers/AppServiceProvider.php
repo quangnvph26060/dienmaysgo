@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::defaultView('vendor.pagination.custom');
 
-        View::composer(['frontends.layouts.master', 'frontends.pages.home'], function ($view) {
+        View::composer(['frontends.layouts.master', 'frontends.pages.home', 'frontends.pages.category'], function ($view) {
 
             $view->with([
                 'cataloguesMenu' => SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->get(),

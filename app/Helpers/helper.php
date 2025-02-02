@@ -20,14 +20,42 @@ function hasDiscount($discount)
     return false;
 }
 
-function calculateAmount($amount, $discountPercentage)
+function hasCustomDiscount($startDate, $endDate)
 {
-    // Tính toán giá sau khuyến mãi
-    $discountAmount = $amount * ($discountPercentage / 100);
-    $finalAmount = $amount - $discountAmount;
+    // Nếu không có giảm giá, trả về false
+    if (!$endDate || $endDate < Carbon::now()) return false;
+
+    // Nếu ngày hiện tại nằm trong khoảng thời gian giảm giá, trả về true
+    if ($startDate <= Carbon::now() && $endDate >= Carbon::now()) {
+        return true;
+    }
+
+    return false;
+}
+
+function calculateAmount($amount, $discount, $isPercentage = true)
+{
+    if ($isPercentage) {
+        // Tính toán giảm giá theo phần trăm
+        $discountAmount = $amount * ($discount / 100);
+        $finalAmount = $amount - $discountAmount;
+    } else {
+        // Tính toán giảm giá theo số tiền cố định
+        $finalAmount = $amount - $discount;
+    }
 
     return $finalAmount;
 }
+
+function calculateDiscountPercentage($originalPrice, $discountAmount)
+{
+    if ($originalPrice == 0) {
+        return 0; // Tránh chia cho 0
+    }
+    $discountPercentage = ($discountAmount / $originalPrice) * 100;
+    return $discountPercentage;
+}
+
 
 function formatAmount($amount)
 {
@@ -277,4 +305,3 @@ if (!function_exists('formatName')) {
         return strtoupper($nameWithoutDiacritics);
     }
 }
-

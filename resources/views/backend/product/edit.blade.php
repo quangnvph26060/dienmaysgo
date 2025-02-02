@@ -229,12 +229,26 @@
                     <div class="card-body">
                         <div class="form-group">
                             <select class="form-select" name="category_id" id="category_id">
-                                <option value="">Chọn danh mục</option>
-                                @foreach ($categories as $id => $name)
-                                    <option value="{{ $id }}" @selected($id == old('category_id', $product->category_id))>
-                                        {{ $name }}
-                                    </option>
-                                @endforeach
+                                <option value="">--- Chọn danh mục ---</option>
+                                @if ($categories->isNotEmpty())
+                                    @foreach ($categories as $category)
+                                        <option @selected($category->id == old('category_id', $product->category_id ?? '')) value="{{ $category->id }}">
+                                            {{ $category->name }}</option>
+                                        @if ($category->childrens->isNotEmpty())
+                                            @foreach ($category->childrens as $children)
+                                                <option @selected($children->id == old('category_id', $product->category_id ?? '')) value="{{ $children->id }}">-
+                                                    {{ $children->name }}</option>
+                                                @if ($children->childrens->isNotEmpty())
+                                                    @foreach ($children->childrens as $item)
+                                                        <option @selected($item->id == old('category_id', $product->category_id ?? '')) value="{{ $item->id }}">
+                                                            -- {{ $item->name }}
+                                                        </option>
+                                                    @endforeach
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    @endforeach
+                                @endif
                             </select>
                         </div>
                     </div>
@@ -273,6 +287,40 @@
 
                             <input type="file" name="image" id="image" class="form-control"
                                 style="display: none">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Tự đặt khuyến mãi</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="discount-type" class="form-label">Chọn loại giảm giá:</label>
+                            <select id="discount-type" class="form-select" name="discount_type">
+                                <option value="amount" @selected($product->discount_type == 'amount')>Giảm tiền</option>
+                                <option value="percentage" @selected($product->discount_type == 'percentage')>Giảm theo %</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="discount-value" class="form-label">Nhập giá trị:</label>
+                            <input value="{{ $product->discount_value }}" type="number" id="discount-value"
+                                class="form-control" name="discount_value" placeholder="Nhập số tiền hoặc %">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="start-date" class="form-label">Ngày bắt đầu:</label>
+                            <input type="date" id="start-date" value="{{ $product->discount_start_date }}"
+                                class="form-control" name="discount_start_date">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="end-date" class="form-label">Ngày kết thúc:</label>
+                            <input type="date" value="{{ $product->discount_end_date }}" id="end-date"
+                                class="form-control" name="discount_end_date">
                         </div>
                     </div>
                 </div>
@@ -320,6 +368,11 @@
                     $('#promotions_id').prop('disabled', false);
                 }
             })
+
+            $('#category_id').select2({
+                placeholder: "Chọn một mục",
+                allowClear: true
+            });
 
             $('#mySelectBrand').select2({
                 placeholder: 'Chọn một tùy chọn',
