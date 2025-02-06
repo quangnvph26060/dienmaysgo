@@ -28,7 +28,7 @@ class ProductController extends Controller
         $page = 'Sản phẩm';
         $title = 'Danh sách sản phẩm';
         if ($request->ajax()) {
-            return datatables()->of(SgoProduct::select(['id', 'name', 'price', 'quantity', 'import_price', 'category_id'])->with('category')->latest()->get())
+            return datatables()->of(SgoProduct::select(['id', 'name', 'price', 'quantity', 'import_price', 'category_id', 'view_count'])->with('category')->latest()->get())
                 ->addColumn('price', function ($row) {
                     return number_format($row->price, 0, ',', '.') . ' VND' . '<i class="fas fa-pen-alt ms-2 pointer" data-id=' . $row->id . '></i>';
                 })

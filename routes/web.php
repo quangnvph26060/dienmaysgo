@@ -13,6 +13,7 @@ use App\Http\Controllers\admin\BrandController;
 use App\Http\Controllers\admin\ConfigController;
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\FuelController;
+use App\Http\Controllers\admin\HistorySearchController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\NewsController;
 use App\Http\Controllers\admin\OriginController;
@@ -74,6 +75,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
             route::post('change-select', [ProductController::class, 'changeSelect'])->name('changeSelect');
             route::post('update-price/{id}', [ProductController::class, 'handleChangePrice'])->name('handle-change-price');
             route::post('import-data', [ProductController::class, 'importData'])->name('import-data');
+        });
+
+        route::controller(HistorySearchController::class)->group(function () {
+            route::get('history-search', 'index')->name('history-search');
         });
 
         // Route::prefix('order')->name('order.')->group(function () {

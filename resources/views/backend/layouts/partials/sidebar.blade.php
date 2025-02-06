@@ -159,7 +159,12 @@
                         </ul>
                     </div>
                 </li>
-
+                <li class="nav-item">
+                    <a href="{{ route('admin.history-search') }}">
+                        <i class="fas fa-search"></i>
+                        <p>Danh sách từ khóa tìm kiếm</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.config.index') }}">
                         <i class="fas fa-cogs"></i>

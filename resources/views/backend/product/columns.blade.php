@@ -32,6 +32,11 @@
             name: 'category_id'
         },
         {
+            data: 'view_count',
+            name: 'view_count',
+            width: '10%'
+        },
+        {
             data: 'created_at',
             name: 'created_at'
         },
