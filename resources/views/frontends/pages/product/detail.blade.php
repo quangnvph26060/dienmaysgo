@@ -375,30 +375,32 @@
             });
         });
 
-        var endTime = new Date("{{ $product->discount_end_date }}").getTime();
+        if ("{{ $product->discount_end_date }}") {
+            var endTime = new Date("{{ $product->discount_end_date }}").getTime();
 
-        function updateCountdown() {
-            var now = new Date().getTime();
+            function updateCountdown() {
+                var now = new Date().getTime();
 
-            var timeLeft = endTime - now;
+                var timeLeft = endTime - now;
 
-            if (timeLeft > 0) {
-                var hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                if (timeLeft > 0) {
+                    var hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-                document.getElementById("hours").innerHTML = hours + " giờ";
-                document.getElementById("minutes").innerHTML = minutes + " phút";
-                document.getElementById("seconds").innerHTML = seconds + " giây";
-            } else {
-                document.getElementById("hours").innerHTML = "00 giờ";
-                document.getElementById("minutes").innerHTML = "00 phút";
-                document.getElementById("seconds").innerHTML = "00 giây";
+                    document.getElementById("hours").innerHTML = hours + " giờ";
+                    document.getElementById("minutes").innerHTML = minutes + " phút";
+                    document.getElementById("seconds").innerHTML = seconds + " giây";
+                } else {
+                    document.getElementById("hours").innerHTML = "00 giờ";
+                    document.getElementById("minutes").innerHTML = "00 phút";
+                    document.getElementById("seconds").innerHTML = "00 giây";
+                }
             }
-        }
 
-        updateCountdown(); // Gọi lần đầu để cập nhật ngay lập tức
-        setInterval(updateCountdown, 1000); // Cập nhật mỗi giây
+            updateCountdown(); // Gọi lần đầu để cập nhật ngay lập tức
+            setInterval(updateCountdown, 1000); // Cập nhật mỗi giây
+        }
 
         jQuery.noConflict();
 
@@ -420,6 +422,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             const swiper = new Swiper(".swiper-container", {
                 slidesPerView: 4, // Hiển thị 4 ảnh
+                spaceBetween: 10, // Khoảng cách giữa các ảnh
                 navigation: {
                     nextEl: ".swiper-button-next",
                     prevEl: ".swiper-button-prev",
@@ -431,7 +434,7 @@
                         spaceBetween: 10,
                     },
                     768: {
-                        slidesPerView: 5,
+                        slidesPerView: 4,
                         spaceBetween: 15,
                     },
                     1024: {
@@ -529,6 +532,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin: 15px 0;
         }
 
         .price-info {
@@ -586,8 +590,16 @@
         }
 
         @media (max-width: 768px) {
+            #tab-additional_information table {
+                width: 100% !important;
+            }
+
             .flash-sale {
                 width: 100%;
+            }
+
+            .btn-contact {
+                margin-bottom: 15px !important;
             }
         }
 
@@ -642,7 +654,6 @@
             padding: 10px;
             font-family: Arial, sans-serif;
             background-color: #fff;
-            margin-top: 10px;
         }
 
         .meta-title {

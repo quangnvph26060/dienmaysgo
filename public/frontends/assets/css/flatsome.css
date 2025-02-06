@@ -257,6 +257,9 @@ object {
     }
 }
 @media screen and (max-width: 849px) {
+    .page-title {
+        padding: 0 10px !important;
+    }
     .header-inner .nav {
         flex-wrap: nowrap;
     }
@@ -2193,9 +2196,6 @@ li.hide-title > a {
     width: 100%;
 }
 @media screen and (min-width: 849px) {
-    .page-title {
-        margin: 0 170px !important;
-    }
     .col-divided > .col-inner > .nav-wrapper > .nav-vertical {
         width: calc(100% + 31px);
     }
