@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Frontends;
 
 use App\Models\Brand;
 use App\Models\configFilter;
+use App\Models\ProductView;
 use App\Models\SgoProduct;
 use App\Models\SgoCategory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -210,9 +212,11 @@ class ProductController extends Controller
     public function detail($slug)
     {
         // Lấy sản phẩm chi tiết
-        $product = SgoProduct::with('images', 'brands', 'category.parent', 'category.childrens')
+        $product = SgoProduct::with('images', 'brands', 'category.parent', 'category.childrens', 'attributes:id,name', 'attributeValues:id,value')
             ->where('slug', $slug)
             ->firstOrFail();
+
+        $this->incrementView($product);
 
         // Lấy danh mục cha, anh em, và con
         $category = $product->category;
@@ -240,6 +244,84 @@ class ProductController extends Controller
 
         return view('frontends.pages.product.detail', compact('product', 'relatedProducts'));
     }
+
+    private function incrementView($product)
+    {
+        $ip = request()->ip();
+        $userAgent = request()->header('User-Agent');
+        $cacheKey = "viewed_product_{$product->id}_{$ip}";
+
+        // Lấy bản ghi xem trước đó từ DB
+        $view = ProductView::where('product_id', $product->id)
+            ->where('ip_address', $ip)
+            ->latest() // Lấy bản ghi mới nhất
+            ->first();
+
+        // Kiểm tra nếu cache không tồn tại (mới vào trang hoặc đã quá 10 phút)
+        if (!Cache::has($cacheKey)) {
+            Cache::put($cacheKey, true, now()->addMinutes(5)); // Set timeout 5 phút để tránh spam
+
+            if ($view) {
+                // Kiểm tra nếu lần truy cập trước đó đã quá 10 phút
+                $timeDifference = now()->diffInMinutes($view->start_time);
+
+                if ($timeDifference >= 5) {
+                    // Nếu quá 5 phút, tạo bản ghi mới và tăng lượt xem
+                    ProductView::create([
+                        'product_id' => $product->id,
+                        'ip_address' => $ip,
+                        'user_agent' => $userAgent,
+                        'start_time' => now(),
+                    ]);
+
+                    // Cập nhật số lượt xem trong bảng products
+                    $product->increment('view_count');
+                } else {
+                    // Nếu chưa đủ 10 phút, chỉ cập nhật lại `start_time` và `end_time`
+                    $view->update([
+                        'start_time' => now(),
+                        'end_time' => null, // Nếu người dùng đã thoát ra, reset end_time
+                    ]);
+                }
+            } else {
+                // Nếu lần đầu tiên truy cập, tạo mới bản ghi
+                ProductView::create([
+                    'product_id' => $product->id,
+                    'ip_address' => $ip,
+                    'user_agent' => $userAgent,
+                    'start_time' => now(),
+                ]);
+
+                // Cập nhật số lượt xem trong bảng products
+                $product->increment('view_count');
+            }
+        }
+    }
+
+
+
+    public function endView(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $productId = $data['product_id'];
+
+        $ip = request()->ip();
+
+        $view = ProductView::where('product_id', $productId)
+            ->where('ip_address', $ip)
+            ->latest()
+            ->first();
+
+        if ($view) {
+
+            $view->update([
+                'end_time' => now()
+            ]);
+
+        }
+    }
+
 
     public function listCategory()
     {

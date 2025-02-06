@@ -56,7 +56,7 @@
                             <span class="price">
                                 <span class="woocommerce-Price-amount amount">
                                     @if ($product->price > 0)
-                                        @if (hasCustomDiscount($product->discount_start_date, $product->discount_end_date))
+                                        @if (hasCustomDiscount($product->discount_start_date, $product->discount_end_date, $product->discount_value))
                                             <bdi>{{ formatAmount(calculateAmount($product->price, $product->discount_value, $product->discount_type !== 'amount')) }}
                                                 <span class="woocommerce-Price-currencySymbol">&#8363;</span>
                                             </bdi>

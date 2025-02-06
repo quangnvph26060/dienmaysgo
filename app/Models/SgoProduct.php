@@ -83,9 +83,15 @@ class SgoProduct extends Model
         return $this->hasMany(SgoProductImages::class, 'product_id', 'id');
     }
 
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, 'product_attribute_values', 'sgo_product_id', 'attribute_id')
+            ->withPivot('attribute_value_id');
+    }
+
     public function attributeValues()
     {
-        return $this->hasMany(ProductAttributeValue::class, 'sgo_product_id');
+        return $this->belongsToMany(AttributeValue::class, 'product_attribute_values', 'sgo_product_id', 'attribute_value_id');
     }
 
     public function brands()

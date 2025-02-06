@@ -170,3 +170,20 @@ form.submitting .wpcf7-spinner {
 .wpcf7-reflection > output[hidden] {
     display: none;
 }
+
+.woocommerce-breadcrumb {
+    overflow-x: auto;
+
+    white-space: nowrap;
+    display: flex;
+    gap: 5px; /* Giữ khoảng cách giữa các mục */
+    padding-bottom: 5px; /* Tránh che nội dung khác */
+}
+
+.woocommerce-breadcrumb a {
+    display: inline-block;
+}
+
+.woocommerce-breadcrumb::-webkit-scrollbar {
+    display: none; /* Ẩn thanh cuộn trên Chrome, Safari */
+}

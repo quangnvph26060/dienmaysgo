@@ -246,6 +246,10 @@
             }
 
             // Cập nhật giá trị vào input ẩn nếu cần
+            console.log(`name=[${input.slice(5)}]`);
+            console.log(value.replace(/\./g, ""));
+
+
             $(`input[name=${input.slice(5)}]`).val(value.replace(/\./g, ""));
         });
     };

@@ -64,12 +64,14 @@ route::controller(CartController::class)->name('carts.')->group(function () {
     Route::get('/wards', [CartController::class, 'getWards'])->name('api.wards');
 });
 
-route::controller(ProductController::class)->name('products.')->group(function () {
-    route::get('danh-muc-san-pham/{slug?}', 'list')->name('list');
-    route::get('san-pham/{slug}', 'detail')->name('detail');
-    route::get('filter-product/{slug?}', 'filterProduct')->name('filter-product');
-    route::get('danh-muc', 'listCategory')->name('list-category');
+Route::controller(ProductController::class)->name('products.')->group(function () {
+    Route::get('danh-muc-san-pham/{slug?}', 'list')->name('list');
+    Route::get('san-pham/{slug}', 'detail')->name('detail');
+    Route::get('filter-product/{slug?}', 'filterProduct')->name('filter-product');
+    Route::get('danh-muc', 'listCategory')->name('list-category');
+    Route::post('end-view', 'endView')->name('end-view'); // Đảm bảo rằng bạn có tên route đúng ở đây
 });
+
 
 
 Route::prefix('home')->group(function () {

@@ -68,54 +68,75 @@ class CartController extends Controller
     public function addToCart(Request $request)
     {
         if ($request->ajax()) {
-
             $product = SgoProduct::with('promotion')->find($request->productId);
-
             $cartItem = Cart::instance('shopping')->search(function ($data) use ($product) {
                 return $data->id === $product->id;
             })->first();
 
             $requestedQty = $request->qty ?? 1;
 
-            if ($requestedQty > $product->quantity) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'Số lượng sản phẩm không đủ!'
-                ]);
+            // Kiểm tra số lượng sản phẩm có đủ không
+            $checkResult = $this->checkProductAvailability($product, $requestedQty, $cartItem);
+            if (!$checkResult['status']) {
+                return response()->json($checkResult);
             }
 
-            if ($cartItem) {
+            // Tính giá sản phẩm sau giảm giá
+            $price = $this->calculateProductPrice($product);
 
-                if (($cartItem->qty + $requestedQty) > $product->quantity) {
-                    return response()->json([
-                        'status' => false,
-                        'message' => 'Số lượng sản phẩm không đủ!'
-                    ]);
-                }
+            // Thêm vào giỏ hàng
+            if ($cartItem) {
                 Cart::instance('shopping')->update($cartItem->rowId, $cartItem->qty + $requestedQty);
             } else {
                 Cart::instance('shopping')->add([
                     'id' => $product->id,
                     'name' => $product->name,
                     'qty' => $requestedQty,
-                    'price' =>  hasDiscount($product->promotion) ? calculateAmount($product->price, $product->promotion->discount) : $product->price,
+                    'price' => $price,
                     'options' => [
                         'image' => $product->image,
                         'slug' => $product->slug,
                     ]
                 ]);
             }
-            // $product->price
-            $carts = Cart::instance('shopping');
 
+            $carts = Cart::instance('shopping');
             return response()->json([
                 'status' => true,
                 'message' => 'Thêm giỏ hàng thành công.',
                 'carts' => $carts->content(),
                 'count' => $carts->count(),
-                'total' =>  strtok($carts->subTotal(), '.')
+                'total' => strtok($carts->subTotal(), '.')
             ]);
         }
+    }
+
+    private function checkProductAvailability($product, $requestedQty, $cartItem)
+    {
+        if ($requestedQty > $product->quantity) {
+            return ['status' => false, 'message' => 'Số lượng sản phẩm không đủ!'];
+        }
+
+        if ($cartItem && ($cartItem->qty + $requestedQty) > $product->quantity) {
+            return ['status' => false, 'message' => 'Số lượng sản phẩm không đủ!'];
+        }
+
+        return ['status' => true];
+    }
+
+    private function calculateProductPrice($product)
+    {
+        // Kiểm tra giảm giá tùy chỉnh
+        if (hasCustomDiscount($product->discount_start_date, $product->discount_end_date, $product->discount_value)) {
+            return calculateAmount($product->price, $product->discount_value, $product->discount_type !== 'amount');
+        }
+
+        // Kiểm tra giảm giá chương trình khuyến mãi
+        if (hasDiscount($product->promotion)) {
+            return calculateAmount($product->price, $product->promotion->discount);
+        }
+
+        return $product->price; // Không có giảm giá, sử dụng giá gốc
     }
 
     public function updateQtyCart($id)

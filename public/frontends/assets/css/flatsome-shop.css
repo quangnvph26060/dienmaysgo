@@ -28,7 +28,7 @@
     width: 30px;
 }
 .category-page-row {
-    padding-top: 30px;
+    padding-top: 20px;
 }
 .price_slider_amount input {
     display: none;
@@ -1414,4 +1414,21 @@ dl.variation dd {
 
 .d-none {
     display: none;
+}
+
+.social-icons a.icon {
+    display: grid !important;
+    place-items: center;  /* Căn giữa cả ngang và dọc */
+    width: 20px;
+    height: 20px;
+}
+
+.social-icons a.icon:hover {
+    background-color: #165dce; /* Màu khi hover */
+}
+
+.social-icons {
+    display: flex;              /* Đặt các icon cùng một hàng */
+    gap: 10px;                  /* Khoảng cách giữa các icon */
+    align-items: center;         /* Căn giữa icon theo chiều dọc */
 }

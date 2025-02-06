@@ -88,9 +88,10 @@
                                             <label for="import_price" class="form-label">Giá nhập</label>
                                             <input type="text" class="form-control" id="fake_import_price"
                                                 placeholder="Nhập giá nhập sản phẩm"
-                                                value="{{ old('import_price', $product->import_price) }}">
+                                                value="{{ old('import_price', number_format($product->import_price, 0, ',', '')) }}">
+
                                             <input type="hidden" name="import_price"
-                                                value="{{ old('import_price', $product->import_price) }}">
+                                                value="{{ old('import_price', number_format($product->import_price, 0, ',', '')) }}">
                                         </div>
                                     </div>
 
@@ -99,9 +100,9 @@
                                             <label for="price" class="form-label">Giá bán</label>
                                             <input type="text" class="form-control" id="fake_price"
                                                 placeholder="Nhập giá bán sản phẩm"
-                                                value="{{ old('price', $product->price) }}">
+                                                value="{{ old('price', number_format($product->price, 0, ',', '')) }}">
                                             <input type="hidden" name="price"
-                                                value="{{ old('price', $product->price) }}">
+                                                value="{{ old('price', number_format($product->price, 0, ',', '')) }}">
                                         </div>
                                     </div>
 
@@ -304,23 +305,25 @@
                                 <option value="percentage" @selected($product->discount_type == 'percentage')>Giảm theo %</option>
                             </select>
                         </div>
-
                         <div class="form-group">
-                            <label for="discount-value" class="form-label">Nhập giá trị:</label>
-                            <input value="{{ $product->discount_value }}" type="number" id="discount-value"
-                                class="form-control" name="discount_value" placeholder="Nhập số tiền hoặc %">
-                        </div>
+                            <label for="discount_value" class="form-label">Nhập giá trị:</label>
+                            <input value="{{ number_format($product->discount_value, 0, ',', '') }}" type="text"
+                                id="fake_discount_value" class="form-control" placeholder="Nhập số tiền hoặc %">
 
+                            <input value="{{ number_format($product->discount_value, 0, ',', '') }}" type="hidden"
+                                name="discount_value">
+                        </div>
                         <div class="form-group">
                             <label for="start-date" class="form-label">Ngày bắt đầu:</label>
-                            <input type="date" id="start-date" value="{{ $product->discount_start_date }}"
+                            <input type="date" id="start-date" value="{{ \Carbon\Carbon::parse($product->discount_start_date)->format('Y-m-d') }}"
                                 class="form-control" name="discount_start_date">
                         </div>
 
                         <div class="form-group">
                             <label for="end-date" class="form-label">Ngày kết thúc:</label>
-                            <input type="date" value="{{ $product->discount_end_date }}" id="end-date"
-                                class="form-control" name="discount_end_date">
+                            <input type="date" value="{{ \Carbon\Carbon::parse($product->discount_end_date)->format('Y-m-d') }}" id="end-date"
+                            class="form-control" name="discount_end_date">
+
                         </div>
                     </div>
                 </div>
@@ -497,6 +500,7 @@
 
             formatDataInput('fake_price');
             formatDataInput('fake_import_price');
+            formatDataInput('fake_discount_value');
         });
     </script>
 @endpush
