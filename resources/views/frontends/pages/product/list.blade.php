@@ -22,8 +22,8 @@
                                         <div style="display: flex; justify-content: space-between; align-items: center;">
                                             <div>
                                                 <input type="checkbox" name="attr[]" value="{{ $item->id }}"
-                                                    onchange="submitFormWithDelay()">
-                                                <label>{{ $item->value }}</label>
+                                                    onchange="submitFormWithDelay()" id="{{ $item->id }}">
+                                                <label for="{{ $item->id }}">{{ $item->value }}</label>
                                             </div>
                                             <small>({{ $item->products_count }})</small>
                                         </div>
@@ -236,6 +236,9 @@
         .has-equal-box-heights .box-image {
             padding-top: 0;
             margin-top: 15px;
+        }
+        label{
+            margin-bottom: 0 !important;
         }
     </style>
 @endpush

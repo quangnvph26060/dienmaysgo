@@ -60,7 +60,7 @@
             <div id="col-970340967" class="col cot4 medium-3 small-12 large-3">
                 <div class="col-inner">
                     <h3>KẾT NỐI VỚI CHÚNG TÔI</h3>
-                    <div class="social-icons follow-icons full-width text-left">
+                    <div class="social-icons follow-icons full-width text-left social-icons">
                         <a href="{{ $settings->link_fb ?? '' }}" target="_blank" data-label="Facebook"
                             rel="noopener noreferrer nofollow" class="icon primary button circle facebook tooltip"
                             title="Follow on Facebook" aria-label="Follow on Facebook">

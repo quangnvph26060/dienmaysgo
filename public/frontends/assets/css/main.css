@@ -1247,16 +1247,20 @@ th:first-child {
     font-size: 15px;
 }
 .title_page {
-    float: left;
     text-transform: none;
     font-size: 14px;
     font-weight: 700;
     line-height: 30px;
 }
+.range-check{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
 .sortbypttuan410 {
     display: flex;
     margin-top: 5px;
-    justify-content: flex-end;
+    /* justify-content: flex-end;*/
     gap: 10px;
 }
 .sortbypttuan410 form {
@@ -1264,6 +1268,7 @@ th:first-child {
 }
 .sortbypttuan410 .pt-checkbox {
     margin-right: 0;
+    margin-left: 0;
 }
 .product-section .mt,
 .thong-so-ky-thuat h3 {

@@ -20,12 +20,17 @@ function hasDiscount($discount)
     return false;
 }
 
-function hasCustomDiscount($startDate, $endDate)
+function hasCustomDiscount($startDate, $endDate, $value)
 {
-    // Nếu không có giảm giá, trả về false
-    if (!$endDate || $endDate < Carbon::now()) return false;
+    if ($value <= 0) return false; // Nếu không có giá trị giảm giá, trả về false
 
-    // Nếu ngày hiện tại nằm trong khoảng thời gian giảm giá, trả về true
+    // Nếu không có ngày bắt đầu và ngày kết thúc => luôn true
+    if (!$startDate && !$endDate) return true;
+
+    // Nếu có ngày bắt đầu nhưng không có ngày kết thúc => luôn true
+    if ($startDate && !$endDate) return true;
+
+    // Nếu có cả startDate và endDate => Kiểm tra khoảng thời gian
     if ($startDate <= Carbon::now() && $endDate >= Carbon::now()) {
         return true;
     }
@@ -47,8 +52,9 @@ function calculateAmount($amount, $discount, $isPercentage = true)
     return $finalAmount;
 }
 
-function calculateDiscountPercentage($originalPrice, $discountAmount)
+function calculateDiscountPercentage($originalPrice, $discountAmount, $type)
 {
+    if ($type == 'percentage') return $discountAmount;
     if ($originalPrice == 0) {
         return 0; // Tránh chia cho 0
     }

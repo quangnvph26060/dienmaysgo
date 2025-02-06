@@ -17,7 +17,7 @@
                 class="product type-product post-1113 status-publish first instock product_cat-may-phat-dien-elemax has-post-thumbnail shipping-taxable purchasable product-type-simple">
                 <div class="row content-row row-divided row-large row-reverse">
                     {{-- <div id="product-sidebar" class="col large-3 hide-for-medium shop-sidebar"></div> --}}
-                    <div class="col large-12">
+                    <div class="large-12">
                         <div class="product-main">
                             <div class="row">
                                 <div class="large-6 col">
@@ -25,20 +25,6 @@
                                         data-columns="4">
                                         <!-- Badge container -->
                                         <div class="badge-container is-larger absolute left top z-1"></div>
-
-                                        <!-- Wishlist button -->
-                                        @if ($product->price)
-                                            <div class="image-tools absolute top show-on-hover right z-3">
-                                                <div class="wishlist-icon">
-                                                    <button data-id="{{ $product->id }}"
-                                                        class="wishlist-button button is-outline circle icon add-to-cart"
-                                                        aria-label="Wishlist">
-                                                        <i class="fas fa-shopping-cart"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        @endif
-
 
                                         <!-- Main image -->
                                         <figure
@@ -82,14 +68,39 @@
                                 </div>
 
                                 <div class="product-info summary entry-summary col col-fit product-summary form-flat">
-                                    <h1 class="product-title product_title entry-title" style="margin-bottom: 5px">
+                                    <h1 class="product-title product_title entry-title" style="margin-bottom: 15px">
                                         {{ $product->name }}
                                     </h1>
 
-                                    <p style="margin-bottom: 0; font-size: .8rem">
-                                        Thương hiệu: {{ implode(' | ', $product->brands->pluck('name')->toArray()) }}
+                                    <div class="product-details">
+                                        @if ($product->brands->isNotEmpty())
+                                            <div class="detail-item"><span class="label">Thương hiệu:</span> <span
+                                                    class="value">{{ implode(' | ', $product->brands->pluck('name')->toArray()) }}</span>
+                                            </div>
+                                        @endif
+                                        @if ($product->category)
+                                            <div class="detail-item"><span class="label">Danh mục:</span>
+                                                <span class="value">
+                                                    <a href="{{ route('products.list', $product->category->slug) }}"
+                                                        rel="tag">{{ $product->category->name }}</a>
+                                                </span>
+                                            </div>
+                                        @endif
 
-                                    </p>
+                                        @foreach ($product->attributes as $attribute)
+                                            <div class="detail-item"><span class="label">{{ $attribute->name }}:</span>
+                                                @php
+                                                    $value = $product->attributeValues
+                                                        ->where('id', $attribute->pivot->attribute_value_id)
+                                                        ->first();
+                                                @endphp
+
+                                                <span class="value">{{ $value ? $value->value : 'Không có' }}</span>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+
 
                                     <hr>
 
@@ -97,22 +108,51 @@
                                         <div class="price-wrapper">
                                             <p class="price product-page-price">
                                                 <span class="woocommerce-Price-amount amount" style="display: block;">
+                                                    @if (hasCustomDiscount($product->discount_start_date, $product->discount_end_date, $product->discount_value))
 
 
+                                                        @if (is_null($product->discount_end_date))
+                                                            <bdi style=" font-size: 25px">{{ formatAmount(calculateAmount($product->price, $product->discount_value, $product->discount_type !== 'amount')) }}
+                                                                ₫
+                                                            </bdi>
 
-                                                    @if (hasCustomDiscount($product->discount_start_date, $product->discount_end_date))
-                                                        <bdi style=" font-size: 25px">{{ formatAmount(calculateAmount($product->price, $product->discount_value, $product->discount_type !== 'amount')) }}
-                                                            ₫
-                                                        </bdi>
+                                                            <del
+                                                                style="font-size: 14px;color: black !important;font-weight: 500; margin: 0 10px">
+                                                                {{ formatAmount($product->price) }}
+                                                                ₫
+                                                            </del>
 
-                                                        <del
-                                                            style="font-size: 14px;color: black !important;font-weight: 500; margin: 0 10px">
-                                                            {{ formatAmount($product->price) }}
-                                                            ₫
-                                                        </del>
+                                                            <span
+                                                                style="color: black; font-size: 14px; font-weight: 500">-{{ number_format(calculateDiscountPercentage($product->price, $product->discount_value, $product->discount_type), 0) }}%</span>
+                                                        @else
+                                                            <div class="flash-sale">
+                                                                <!-- Giá và thông tin giảm giá -->
+                                                                <div class="price-info">
+                                                                    <div class="current-price">
+                                                                        {{ formatAmount(calculateAmount($product->price, $product->discount_value, $product->discount_type !== 'amount')) }}
+                                                                        đ</div>
+                                                                    <div class="discount-info">
+                                                                        <span
+                                                                            class="discount">-{{ number_format(calculateDiscountPercentage($product->price, $product->discount_value, $product->discount_type), 0) }}%</span>
+                                                                        <span class="original-price">
+                                                                            {{ formatAmount($product->price) }} đ</span>
+                                                                    </div>
+                                                                </div>
 
-                                                        <span
-                                                            style="color: black; font-size: 14px; font-weight: 500">-{{ number_format(calculateDiscountPercentage($product->price, $product->discount_value), 0) }}%</span>
+                                                                <!-- Thời gian đếm ngược -->
+                                                                <div class="countdown">
+                                                                    <div class="countdown-label">Kết thúc sau</div>
+                                                                    <div>
+                                                                        <span class="time-box" id="hours">00 giờ</span>
+                                                                        <span class="time-box" id="minutes">00 phút</span>
+                                                                        <span class="time-box" id="seconds">00 giây</span>
+                                                                    </div>
+                                                                    <div class="stock">Còn <span
+                                                                            style="color: white;">{{ $product->quantity }}</span>
+                                                                        Chiếc</div>
+                                                                </div>
+                                                            </div>
+                                                        @endif
                                                     @else
                                                         @if (hasDiscount($product->promotion))
                                                             <bdi style=" font-size: 25px">{{ formatAmount(calculateAmount($product->price, $product->promotion->discount)) }}
@@ -139,9 +179,6 @@
                                         </div>
                                     @endif
 
-
-
-
                                     @if ($product->price)
 
                                         <div style="margin-bottom: 10px">
@@ -153,20 +190,6 @@
                                                         {{ formatString($product->tags) }}</p>
                                                 </div>
                                             @endif
-
-
-                                            <div class="product_meta">
-                                                <span class="posted_in" style="font-size: .8rem">Danh mục:
-                                                    <a style="margin: 0 0 0 25px"
-                                                        href="{{ route('products.list', $product->category->slug) }}"
-                                                        rel="tag">{{ $product->category->name }}</a></span>
-                                            </div>
-
-                                            <div style="display: flex; align-items: center; font-size: .8rem">
-                                                <p class="status" style="margin: 0">Trạng thái: </p>
-                                                <p class="stock in-stock" style="margin: 0 0 0 30px">
-                                                    {{ $product->quantity == 0 ? 'Hết hàng' : 'Còn hàng' }}</p>
-                                            </div>
                                         </div>
 
                                         <form class="cart" action="" method="post" enctype="multipart/form-data">
@@ -228,7 +251,7 @@
 
 
                                                     <a href="{{ route('contact', ['product' => $product->slug]) }}"
-                                                        class="single_add_to_cart_buttonn button alt"
+                                                        class="single_add_to_cart_buttonn button alt btn-contact"
                                                         style="background: #ec1c24 !important; padding-left: 40px; padding-right: 40px; padding-bottom: 1px;">Liên
                                                         hệ <span class="bi bi-telephone"
                                                             style="margin-left: 3px"></span></a>
@@ -275,37 +298,31 @@
                             <div class="woocommerce-tabs wc-tabs-wrapper container tabbed-content">
                                 <ul class="tabs wc-tabs product-tabs small-nav-collapse nav nav-uppercase nav-tabs nav-normal nav-left"
                                     role="tablist">
-                                    <li class="description_tab active" id="tab-title-description" role="presentation">
-                                        <a href="#tab-description" role="tab" aria-selected="true"
-                                            aria-controls="tab-description">
-                                            Mô tả chi tiết
-                                        </a>
-                                    </li>
-                                    <li class="additional_information_tab" id="tab-title-additional_information"
+                                    <li class="additional_information_tab active" id="tab-title-additional_information"
                                         role="presentation">
                                         <a href="#tab-additional_information" role="tab" aria-selected="false"
                                             aria-controls="tab-additional_information" tabindex="-1">
                                             Thông số kỹ thuật
                                         </a>
                                     </li>
-                                    {{-- <li class="reviews_tab" id="tab-title-reviews" role="presentation">
-                                    <a href="#tab-reviews" role="tab" aria-selected="false" aria-controls="tab-reviews"
-                                        tabindex="-1">
-                                        Bình luận &amp; đánh giá
-                                    </a>
-                                </li> --}}
+                                    <li class="description_tab" id="tab-title-description" role="presentation">
+                                        <a href="#tab-description" role="tab" aria-selected="true"
+                                            aria-controls="tab-description">
+                                            Mô tả chi tiết
+                                        </a>
+                                    </li>
                                 </ul>
                                 <div class="tab-panels">
-                                    <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content active"
-                                        id="tab-description" role="tabpanel" aria-labelledby="tab-title-description">
-                                        {!! $product->description !!}
-                                    </div>
-                                    <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--additional_information panel entry-content"
+                                    <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--additional_information panel entry-content active"
                                         id="tab-additional_information" role="tabpanel"
                                         aria-labelledby="tab-title-additional_information">
                                         {!! $product->description_short !!}
-
                                     </div>
+                                    <div class="woocommerce-Tabs-panel woocommerce-Tabs-panel--description panel entry-content "
+                                        id="tab-description" role="tabpanel" aria-labelledby="tab-title-description">
+                                        {!! $product->description !!}
+                                    </div>
+
 
                                 </div>
                             </div>
@@ -358,6 +375,31 @@
             });
         });
 
+        var endTime = new Date("{{ $product->discount_end_date }}").getTime();
+
+        function updateCountdown() {
+            var now = new Date().getTime();
+
+            var timeLeft = endTime - now;
+
+            if (timeLeft > 0) {
+                var hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                document.getElementById("hours").innerHTML = hours + " giờ";
+                document.getElementById("minutes").innerHTML = minutes + " phút";
+                document.getElementById("seconds").innerHTML = seconds + " giây";
+            } else {
+                document.getElementById("hours").innerHTML = "00 giờ";
+                document.getElementById("minutes").innerHTML = "00 phút";
+                document.getElementById("seconds").innerHTML = "00 giây";
+            }
+        }
+
+        updateCountdown(); // Gọi lần đầu để cập nhật ngay lập tức
+        setInterval(updateCountdown, 1000); // Cập nhật mỗi giây
+
         jQuery.noConflict();
 
         addToCart();
@@ -377,7 +419,7 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             const swiper = new Swiper(".swiper-container", {
-                slidesPerView: 5, // Hiển thị 4 ảnh
+                slidesPerView: 4, // Hiển thị 4 ảnh
                 navigation: {
                     nextEl: ".swiper-button-next",
                     prevEl: ".swiper-button-prev",
@@ -442,6 +484,31 @@
                 });
             });
         });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let productId = "{{ $product->id }}";
+
+            window.addEventListener("beforeunload", function() {
+
+                // Thay vì dùng URL trực tiếp, dùng route helper để tạo đúng URL
+                fetch("{{ route('products.end-view') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": "{{ csrf_token() }}" // Thêm CSRF token nếu cần
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                    })
+                }).then(response => {
+                    if (!response.ok) {
+                        console.error('Error sending end view data');
+                    }
+                }).catch(error => {
+                    console.error('Fetch error: ', error);
+                });
+            });
+        });
     </script>
 @endpush
 
@@ -453,6 +520,103 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
+        .flash-sale {
+            background-color: #d32f2f;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            width: 550px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .current-price {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .discount-info {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .discount {
+            background: white;
+            color: #d32f2f;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            opacity: 0.8;
+            margin-right: 5px;
+        }
+
+        .countdown {
+            text-align: right;
+        }
+
+        .countdown-label {
+            font-size: 12px;
+        }
+
+        .time-box {
+            display: inline-block;
+            background: white;
+            color: #d32f2f;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        .stock {
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .flash-sale {
+                width: 100%;
+            }
+        }
+
+        .product-details {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            /* Điều chỉnh theo nhu cầu */
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .label {
+            font-weight: bold;
+            min-width: 120px;
+            /* Đảm bảo các label có cùng chiều rộng */
+            white-space: nowrap;
+            /* Không xuống dòng */
+        }
+
+        .value {
+            flex-grow: 1;
+            text-align: left;
+        }
+
         .Service-freeship {
             padding: 10px;
             margin-top: 15px;
