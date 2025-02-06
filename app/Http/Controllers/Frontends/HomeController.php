@@ -7,6 +7,7 @@ use App\Models\SgoCategory;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\HistorySearch;
 use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
@@ -59,6 +60,7 @@ class HomeController extends Controller
         $query = SgoProduct::query();
 
         if (request('s')) {
+            HistorySearch::insert(request('s'));
             return redirect()->route('products.list', ['s' => request('s')]);
         }
 

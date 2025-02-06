@@ -23,6 +23,7 @@
                         <th>GIÁ NHẬP</th>
                         <th>GIÁ BÁN</th>
                         <th>DANH MỤC</th>
+                        <th>LƯỢT XEM</th>
                         <th>NGÀY TẠO</th>
                     </thead>
 

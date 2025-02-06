@@ -116,11 +116,17 @@
 
 
 
-    const dataTables = (api, columns, model) => {
-        $('#myTable').DataTable({
+    const dataTables = (api, columns, model, filterDate = false) => {
+        const table = $('#myTable').DataTable({ // Định nghĩa biến table
             processing: true,
             serverSide: true,
-            ajax: api,
+            ajax: {
+                url: api,
+                data: function(d) {
+                    d.startDate = $('#startDate').val() || null; // Gửi nếu có giá trị
+                    d.endDate = $('#endDate').val() || null;
+                }
+            },
             columns: columns,
             order: [],
         });
@@ -129,24 +135,68 @@
 
         const targetDiv = $('.dt-layout-cell.dt-layout-start');
 
-        let _html =
-            `
-            <div id="actionDiv" style="display: none;">
-                <div class="d-flex">
-                    <select id="actionSelect" class="form-select">
-                        <option value="">-- Chọn hành động --</option>
-                        <option value="delete">Xóa</option>
-                    </select>
-                    <button id="applyAction" class="btn btn-outline-danger btn-sm">Apply</button>
-                </div>
+        let _html = `
+        <div id="actionDiv" style="display: none;">
+            <div class="d-flex">
+                <select id="actionSelect" class="form-select">
+                    <option value="">-- Chọn hành động --</option>
+                    <option value="delete">Xóa</option>
+                </select>
+                <button id="applyAction" class="btn btn-outline-danger btn-sm">Apply</button>
             </div>
-        `;
+        </div>
+    `;
 
         targetDiv.after(_html);
 
+        if (filterDate) {
+            const lengthContainer = document.querySelector('.dt-length');
+
+            if (lengthContainer) {
+                // Tạo input filter
+                const filterHtml = `
+                    <div class="date-filter ml-2 d-flex align-items-center">
+                        <input type="date" id="startDate" class="form-control d-inline-block w-auto" placeholder="Start Date">
+                        <input type="date" id="endDate" class="form-control d-inline-block w-auto ms-2" placeholder="End Date">
+                        <button id="filterBtn" class="btn btn-primary ms-2 btn-sm"><i class="fa-solid fa-filter"></i></button>
+                        <button id="resetBtn" class="btn btn-secondary ms-2 btn-sm">Reset</button>
+                    </div>
+                `;
+
+                // Thêm sau `.dt-length`
+                lengthContainer.insertAdjacentHTML('afterend', filterHtml);
+
+                $('#filterBtn').on('click', function() {
+                    const startDate = $('#startDate').val();
+                    const endDate = $('#endDate').val();
+
+                    if (startDate && endDate && endDate < startDate) {
+                        alert('Ngày kết thúc không thể nhỏ hơn ngày bắt đầu!');
+                        return;
+                    }
+
+                    // Nếu cả hai trường rỗng, không làm gì cả
+                    if (!startDate && !endDate) {
+                        alert('Vui lòng nhập Start Date và End Date để lọc!');
+                        return;
+                    }
+
+                    table.draw();
+                });
+
+                $('#resetBtn').on('click', function() {
+                    if ($('#startDate').val() || $('#endDate').val()) {
+                        $('#startDate').val('');
+                        $('#endDate').val('');
+                        table.draw();
+                    }
+                });
+            }
+        }
+
+
         $('#myTable thead input[type="checkbox"]').on('click', function() {
             const isChecked = $(this).prop('checked');
-            // Tìm tất cả checkbox trong tbody và set trạng thái
             $('#myTable tbody input[type="checkbox"]').prop('checked', isChecked);
             toggleActionDiv();
         });
@@ -177,7 +227,8 @@
                     },
                     success: function(response) {
                         alert('Xóa thành công!');
-                        $('#myTable').DataTable().ajax.reload();
+                        table.ajax
+                            .reload(); // Sử dụng biến table thay vì gọi lại $('#myTable').DataTable()
                         $('input[type="checkbox"]').prop('checked', false);
                         toggleActionDiv();
                     },
@@ -186,10 +237,9 @@
                     }
                 });
             }
-
-
         });
-    }
+    };
+
 
     function toggleActionDiv() {
         if ($('.row-checkbox:checked').length > 0) {
