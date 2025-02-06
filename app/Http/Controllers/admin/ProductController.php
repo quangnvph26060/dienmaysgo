@@ -101,6 +101,8 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        $rule = $request->discount_type == 'amount' ? 'nullable|numeric|min:0|lt:price' : 'nullable|numeric|max:100';
+
         $validated  = $request->validate(
             [
                 'name' => 'required|unique:sgo_products',
@@ -123,7 +125,7 @@ class ProductController extends Controller
                 'brand_id.*' => 'exists:brands,id',
                 'tags' => 'nullable',
                 'discount_type' => 'nullable|in:percentage,amount',
-                'discount_value' => 'nullable|numeric|min:0',
+                'discount_value' => $rule,
                 'discount_start_date' => 'nullable|date',
                 'discount_end_date' => 'nullable|date|after_or_equal:discount_start_date',
             ],
@@ -146,6 +148,10 @@ class ProductController extends Controller
 
         try {
             DB::beginTransaction();
+
+            if ($validated['discount_end_date'] && is_null($validated['discount_start_date'])) {
+                $validated['discount_start_date'] = now();
+            }
 
             if ($request->hasFile('image')) {
                 $validated['image'] = saveImage($request, 'image', 'products_main_images');
@@ -202,6 +208,7 @@ class ProductController extends Controller
         $product = SgoProduct::findOrFail($id);
 
         $rule = $request->discount_type == 'amount' ? 'nullable|numeric|min:0|lt:price' : 'nullable|numeric|max:100';
+
         $validated  = $request->validate(
             [
                 'name' => 'required|unique:sgo_products,name,' . $id,

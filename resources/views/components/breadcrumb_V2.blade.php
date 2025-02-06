@@ -1,4 +1,5 @@
-<div class="page-title shop-page-title product-page-title" style="margin:0 20px">
+<div class="page-title shop-page-title product-page-title"
+    style="margin:0 20px; max-width: 1230px;padding: 0 25px;    margin: auto;">
     <div class="page-title-inner flex-row medium-flex-wrap">
         <div class="flex-col flex-grow medium-text-center">
             <div class="is-small">
@@ -42,4 +43,3 @@
         </div>
     </div>
 </div>
-
