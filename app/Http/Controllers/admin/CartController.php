@@ -96,6 +96,7 @@ class CartController extends Controller
                     'options' => [
                         'image' => $product->image,
                         'slug' => $product->slug,
+                        'catalogue' => $product->category->name
                     ]
                 ]);
             }

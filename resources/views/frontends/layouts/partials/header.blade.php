@@ -162,7 +162,7 @@
                                                 @endif
 
 
-                                                <a href="{{ route('products.detail', $cart->options->slug) }}">
+                                                <a href="{{ route('products.detail', [$cart->options->catalogue, $cart->options->slug]) }}">
                                                     <img width="300" height="300"
                                                         src="{{ showImage($cart->options->image) }}"
                                                         data-src="{{ showImage($cart->options->image) }}"

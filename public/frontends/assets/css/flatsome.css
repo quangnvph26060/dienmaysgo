@@ -210,7 +210,7 @@ object {
 .columns,
 .gallery-item {
     margin: 0;
-    padding: 0 25px 30px;
+    padding: 0 25px 0px;
     position: relative;
     width: 100%;
 }
@@ -3605,7 +3605,7 @@ span + .image-icon {
 }
 .button [data-icon-label]:after {
     right: -12px;
-    top: -16px;
+    top: -17px;
 }
 .reveal-icon i {
     width: 1em;
@@ -5405,7 +5405,7 @@ span.widget-title {
 }
 .is-small,
 .is-small.button {
-    font-size: 0.8em;
+    font-size: 1em;
 }
 .is-smaller {
     font-size: 0.75em;
@@ -5422,6 +5422,7 @@ span.widget-title {
     }
     .is-xlarge {
         font-size: 1.8em;
+        margin-bottom: 0;
     }
     .is-larger {
         font-size: 1.2em;

@@ -8,6 +8,22 @@
 
 @section('content')
     @include('components.breadcrumb_V2', ['category' => $category ?? null])
+    <div class="shop-page-title category-page-title page-title">
+        <div class="page-title-inner flex-row medium-flex-wrap container">
+            <div class="flex-col flex-grow medium-text-center">
+                <h1 class="shop-page-title is-xlarge">Máy phát điện</h1>
+                <div class="category-filtering category-filter-row show-for-medium">
+                    <a href="#" data-open="#shop-sidebar" data-visible-after="true" data-pos="left"
+                        class="filter-button uppercase plain">
+                        <i class="bi bi-sliders"></i>
+                        <strong>Lọc sản phẩm</strong>
+                    </a>
+                    <div class="inline-block"></div>
+                </div>
+            </div>
+            <div class="flex-col medium-text-center"></div>
+        </div>
+    </div>
     <form id="filterForm">
         <div class="row category-page-row">
             <div class="col large-3 hide-for-medium">
@@ -233,11 +249,18 @@
 
 @push('styles')
     <style>
+        @media (max-width: 768px) {
+            .title_page {
+                display: none;
+            }
+        }
+
         .has-equal-box-heights .box-image {
             padding-top: 0;
             margin-top: 15px;
         }
-        label{
+
+        label {
             margin-bottom: 0 !important;
         }
     </style>

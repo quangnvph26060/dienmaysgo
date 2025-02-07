@@ -13,21 +13,6 @@
                 <div class="col-inner">
                     <div class="woocommerce">
                         <div class="woocommerce-notices-wrapper" id="lastDeletedProduct">
-
-                            {{-- @php
-                                    $lastDeletedProduct = $lastDeletedProduct;
-                                @endphp
-                                <div class="woocommerce-message message-wrapper" role="alert">
-                                    <div class="message-container container success-color medium-text-center">
-                                        <i class="icon-checkmark"></i>
-                                        “{{ $lastDeletedProduct->name }}” đã bị xóa.
-                                        <a href="{{ route('carts.restore', ['rowId' => $lastDeletedProduct->rowId]) }}" class="restore-item">
-                                            Undo?
-                                        </a>
-
-                                    </div>
-                                </div> --}}
-
                             <div class="woocommerce-info message-wrapper">
                                 <div class="message-container container medium-text-center">
                                     <font style="vertical-align: inherit;">
@@ -96,7 +81,7 @@
 
                                                         <td class="product-thumbnail">
                                                             <a
-                                                                href="{{ route('products.detail', $item->options['slug']) }}"><img
+                                                                href="{{ route('products.detail', [$item->options['catalogue'], $item->options['slug']]) }}"><img
                                                                     fetchpriority="high" decoding="async" width="300"
                                                                     height="300"
                                                                     src="{{ asset('storage/' . $item->options->image) }}"
@@ -109,7 +94,7 @@
 
                                                         <td class="product-name" data-title="Sản phẩm">
                                                             <a
-                                                                href="{{ route('products.detail', $item->options['slug']) }}">{{ $item->name }}
+                                                                href="{{ route('products.detail', [$item->options['catalogue'], $item->options['slug']]) }}">{{ $item->name }}
                                                             </a>
                                                             <div class="show-for-small mobile-product-price">
                                                                 <span class="mobile-product-price__qty">{{ $item->qty }}
@@ -276,7 +261,6 @@
                     },
                     success: function(response) {
 
-
                         if (response.status) {
                             toastr.success(response.message);
 
@@ -300,14 +284,29 @@
                     }
                 });
             });
-
-
-
         });
     </script>
 @endpush
 <style scoped>
+    .fa,
+    .fa-brands,
+    .fa-regular,
+    .fa-solid,
+    .fab,
+    .far,
+    .fas {
+        line-height: 2 !important;
+    }
+
+    .cart_totals.calculated_shipping {
+        margin-top: 20px;
+    }
+
     .white-space-nowrap {
         white-space: nowrap;
     }
+
+    .button [data-icon-label]:after {
+    top: -10px !important;
+}
 </style>

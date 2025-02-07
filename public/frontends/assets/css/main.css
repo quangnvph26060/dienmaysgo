@@ -1592,9 +1592,9 @@ input[type="radio"] {
     content: "Popular";
 }
 
-#gap-848292812 {
+/* #gap-848292812 {
     padding-top: 30px;
-}
+} */
 
 #button-contact-vr {
     right: 0;
@@ -1693,6 +1693,10 @@ header .large-9 {
 }
 
 @media (max-width: 768px) {
+    .header.show-on-scroll,
+    .stuck .header-main {
+        height: 115px !important;
+    }
     #header-search {
         display: block !important;
     }

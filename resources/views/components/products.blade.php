@@ -37,15 +37,7 @@
                                     <div class="wishlist-popup dark">
                                         <div
                                             class="yith-wcwl-add-to-wishlist add-to-wishlist-2189 wishlist-fragment on-first-load">
-                                            <!-- ADD TO WISHLIST -->
 
-                                            <div class="yith-wcwl-add-button">
-                                                <i class="yith-wcwl-icon fa fa-heart-o"></i>
-                                                <span>Thêm giỏ hàng</span>
-                                                </a>
-                                            </div>
-
-                                            <!-- COUNT TEXT -->
                                         </div>
                                     </div>
                                 </div>
