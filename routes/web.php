@@ -77,7 +77,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             route::post('import-data', [ProductController::class, 'importData'])->name('import-data');
         });
 
-        route::controller(HistorySearchController::class)->group(function () {
+        route::prefix('marketing')->name('marketing.')->controller(HistorySearchController::class)->group(function () {
             route::get('history-search', 'index')->name('history-search');
         });
 

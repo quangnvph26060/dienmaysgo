@@ -24,19 +24,22 @@ function hasCustomDiscount($startDate, $endDate, $value)
 {
     if ($value <= 0) return false; // Nếu không có giá trị giảm giá, trả về false
 
+    $now = Carbon::now(); // Lấy thời gian hiện tại với giờ, phút, giây
+
     // Nếu không có ngày bắt đầu và ngày kết thúc => luôn true
     if (!$startDate && !$endDate) return true;
 
     // Nếu có ngày bắt đầu nhưng không có ngày kết thúc => luôn true
     if ($startDate && !$endDate) return true;
 
-    // Nếu có cả startDate và endDate => Kiểm tra khoảng thời gian
-    if ($startDate <= Carbon::now() && $endDate >= Carbon::now()) {
+    // Nếu có cả startDate và endDate => Kiểm tra khoảng thời gian chính xác
+    if (Carbon::parse($startDate)->lessThanOrEqualTo($now) && Carbon::parse($endDate)->greaterThanOrEqualTo($now)) {
         return true;
     }
 
     return false;
 }
+
 
 function calculateAmount($amount, $discount, $isPercentage = true)
 {
@@ -309,5 +312,20 @@ if (!function_exists('formatName')) {
 
         // Chuyển thành chữ in hoa
         return strtoupper($nameWithoutDiacritics);
+    }
+}
+
+if (!function_exists('convertToSentenceCase')) {
+    function convertToSentenceCase($string)
+    {
+        $string = mb_strtolower(trim(preg_replace('/\s+/', ' ', $string))); // Chuyển thành chữ thường và loại bỏ khoảng trắng thừa
+        return ucfirst($string); // Viết hoa chữ cái đầu tiên
+    }
+}
+
+if (!function_exists('activeMenu')) {
+    function activeMenu($url)
+    {
+        return request()->routeIs($url) ? 'active' : '';
     }
 }

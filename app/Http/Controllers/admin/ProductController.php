@@ -16,6 +16,7 @@ use App\Models\SgoProductImages;
 use App\Models\SgoPromotion;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -102,7 +103,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $rule = $request->discount_type == 'amount' ? 'nullable|numeric|min:0|lt:price' : 'nullable|numeric|max:100';
-
+        // lt:price
         $validated  = $request->validate(
             [
                 'name' => 'required|unique:sgo_products',
@@ -154,7 +155,7 @@ class ProductController extends Controller
             }
 
             if ($request->hasFile('image')) {
-                $validated['image'] = saveImage($request, 'image', 'products_main_images');
+                $validated['image'] = saveImages($request, 'image', 'products_main_images', 500, 500);
             }
 
 
@@ -204,10 +205,11 @@ class ProductController extends Controller
     }
     public function update(Request $request, $id)
     {
+        // dd($request->toArray());
 
         $product = SgoProduct::findOrFail($id);
-
-        $rule = $request->discount_type == 'amount' ? 'nullable|numeric|min:0|lt:price' : 'nullable|numeric|max:100';
+        // lt:price
+        $rule = $request->discount_type == 'amount' ? 'nullable|numeric|min:0' : 'nullable|numeric|max:100';
 
         $validated  = $request->validate(
             [
@@ -255,14 +257,25 @@ class ProductController extends Controller
         DB::beginTransaction();
         try {
 
-            if ($validated['discount_end_date'] && is_null($validated['discount_start_date'])) {
-                $validated['discount_start_date'] = now();
+            // Xử lý ngày tháng đúng định dạng
+            if ($validated['discount_start_date']) {
+                $validated['discount_start_date'] = Carbon::parse($validated['discount_start_date'])->format('Y-m-d H:i:s');
             }
+
+            if ($validated['discount_end_date']) {
+                $validated['discount_end_date'] = Carbon::parse($validated['discount_end_date'])->format('Y-m-d H:i:s');
+            }
+
+            if ($validated['discount_end_date'] && is_null($validated['discount_start_date'])) {
+                $validated['discount_start_date'] = now()->format('Y-m-d H:i:s');
+            }
+
+            // dd($validated);
 
             if ($request->hasFile('image')) {
                 deleteImage($product->image);
 
-                $validated['image'] = saveImage($request, 'image', 'products_main_images');
+                $validated['image'] = saveImages($request, 'image', 'products_main_images', 500, 500);
             }
 
             $oldImages = $request->input('old', []);

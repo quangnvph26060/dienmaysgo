@@ -63,46 +63,24 @@
 {{-- <script src="{{ asset('backend/assets/js/demo.js') }}"></script> --}}
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const collapsibleMenus = document.querySelectorAll('.nav-item > a[data-bs-toggle="collapse"]');
+    document.addEventListener("DOMContentLoaded", function() {
+        // Lấy toàn bộ các menu có submenu
+        const menuItems = document.querySelectorAll('.nav-item > a[data-bs-toggle="collapse"]');
 
-        // Đọc trạng thái từ local storage
-        const activeMenu = localStorage.getItem('activeMenu');
-        if (activeMenu) {
-            const target = document.querySelector(activeMenu);
-            if (target) {
-                target.classList.add('show');
-                const parentLi = target.closest('.nav-item');
-                if (parentLi) {
-                    parentLi.classList.add('active');
+        menuItems.forEach(function(menuItem) {
+            // Kiểm tra xem đường dẫn của menu có khớp với route hiện tại hay không
+            const submenuId = menuItem.getAttribute('href').substring(
+            1); // Lấy id của submenu (ví dụ: "order", "product")
+            const currentRoute = window.location.pathname;
+
+            // Nếu menu tương ứng với route hiện tại, mở submenu
+            if (currentRoute.includes(submenuId)) {
+                const collapseElement = document.getElementById(submenuId);
+                if (collapseElement) {
+                    // Mở submenu bằng cách thêm class 'show' vào collapse
+                    collapseElement.classList.add('show');
                 }
             }
-        }
-
-        collapsibleMenus.forEach(menu => {
-            menu.addEventListener('click', function() {
-                // Đóng tất cả menu khác
-                collapsibleMenus.forEach(otherMenu => {
-                    const targetId = otherMenu.getAttribute('href');
-                    const target = document.querySelector(targetId);
-                    if (target && targetId !== this.getAttribute('href')) {
-                        target.classList.remove('show');
-                        const parentLi = otherMenu.closest('.nav-item');
-                        if (parentLi) parentLi.classList.remove('active');
-                    }
-                });
-
-                // Thêm active cho menu đang mở
-                const parentLi = this.closest('.nav-item');
-                parentLi.classList.toggle('active');
-
-                // Lưu trạng thái vào local storage
-                if (parentLi.classList.contains('active')) {
-                    localStorage.setItem('activeMenu', this.getAttribute('href'));
-                } else {
-                    localStorage.removeItem('activeMenu');
-                }
-            });
         });
     });
 </script>

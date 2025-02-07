@@ -38,7 +38,7 @@
                                 </a>
                                 <div class="dropdown-info">
                                     <a href="{{ route('auth.profile') }}">Thông tin</a>
-                                    <a  href="{{ route('auth.logout') }}">Đăng xuất</a>
+                                    <a href="{{ route('auth.logout') }}">Đăng xuất</a>
                                 </div>
                             </div>
                         @else
@@ -54,7 +54,11 @@
     </div>
 
     <div id="masthead" class="header-main">
+
         <div class="header-inner flex-row container logo-left medium-logo-center" role="navigation">
+
+
+
             <!-- Logo -->
             <div id="logo" class="flex-col logo">
                 <!-- Header logo -->
@@ -201,82 +205,40 @@
                     </li>
                 </ul>
             </div>
+
+
         </div>
+
+
+        <div class="header-search-form-wrapper" id="header-search" style="padding: 0 15px; display: none;">
+            <div class="searchform-wrapper ux-search-box relative form-flat is-normal">
+                <form role="search" method="get" class="searchform" action="{{ url('/') }}">
+                    <div class="flex-row relative">
+                        <div class="flex-col flex-grow">
+                            <label class="screen-reader-text" for="woocommerce-product-search-field-0">Search
+                                for:</label>
+                            <input type="search" id="woocommerce-product-search-field-0"
+                                class="search-field mb-0" placeholder="Nhập từ khóa tìm kiếm..."
+                                value="{{ request()->s }}" name="s" />
+                        </div>
+                        <div class="flex-col">
+                            <button type="submit" value="Search"
+                                class="ux-search-submit submit-button secondary button icon mb-0"
+                                aria-label="Submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="live-search-results text-left z-top"></div>
+                </form>
+            </div>
+        </div>
+
     </div>
 
-
-    {{-- <div id="wide-nav" class="header-bottom wide-nav nav-dark flex-has-center">
-        <div class="flex-row container">
-            <div class="flex-col hide-for-medium flex-center">
-                <ul class="nav header-nav header-bottom-nav nav-center nav-uppercase">
-                    <li id="menu-item-1080"
-                        class="menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-1080 menu-item-design-default">
-                        <a href="{{ url('/') }}" class="nav-top-link">Trang chủ</a>
-                    </li>
-                    @foreach ($cataloguesMenu as $item)
-                        <li
-                            class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1606 menu-item-design-default   @if ($item->childrens->isNotEmpty()) has-dropdown @endif">
-                            <a href="{{ route('products.list', $item->slug) }}" class="nav-top-link"
-                                aria-expanded="false" aria-haspopup="menu">{{ $item->name }}
-                                @if ($item->childrens->isNotEmpty()) <i class="icon-angle-down"></i> @endif</a>
-                            <ul class="sub-menu nav-dropdown nav-dropdown-default">
-
-                                @if ($item->childrens->isNotEmpty())
-                                    @foreach ($item->childrens as $child)
-                                        <li id="menu-item-1607"
-                                            class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1607 nav-dropdown-col">
-                                            <a
-                                                href="{{ route('products.list', $child->slug) }}">{{ $child->name }}</a>
-                                            <ul class="sub-menu nav-column nav-dropdown-default">
-                                                @include('frontends.layouts.partials.menu-item', [
-                                                    'item' => $child,
-                                                ])
-                                            </ul>
-                                        </li>
-                                    @endforeach
-                                @endif
-                            </ul>
-                        </li>
-                    @endforeach
-                </ul>
-            </div>
-
-            <div class="flex-col show-for-medium flex-grow">
-                <ul class="nav header-bottom-nav nav-center mobile-nav nav-uppercase">
-                    <li class="header-search-form search-form html relative has-icon">
-                        <div class="header-search-form-wrapper">
-                            <div class="searchform-wrapper ux-search-box relative form-flat is-normal">
-                                <form role="search" method="get" class="searchform"
-                                    action="{{ url('/') }}">
-                                    <div class="flex-row relative">
-                                        <div class="flex-col flex-grow">
-                                            <label class="screen-reader-text"
-                                                for="woocommerce-product-search-field-1">Search for:</label>
-                                            <input type="search" id="woocommerce-product-search-field-1"
-                                                class="search-field mb-0" placeholder="Nhập từ khóa tìm kiếm..."
-                                                value="{{ request()->s }}" name="s" />
-                                        </div>
-                                        <div class="flex-col">
-                                            <button type="submit" value="Search"
-                                                class="ux-search-submit submit-button secondary button icon mb-0"
-                                                aria-label="Submit">
-                                                <i class="icon-search"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div class="live-search-results text-left z-top"></div>
-                                </form>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div> --}}
 
     <div class="header-bg-container fill">
         <div class="header-bg-image fill"></div>
         <div class="header-bg-color fill"></div>
     </div>
 </div>
-

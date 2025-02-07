@@ -201,12 +201,13 @@
 
 
         .menu-item {
-            padding: 5px 10px;
+            padding: 10px;
             cursor: pointer;
             transition: background-color 0.3s ease;
             display: flex;
             gap: 15px;
             align-items: center;
+            border-bottom: 1px solid #f0f0f0;
         }
 
 

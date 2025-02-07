@@ -98,4 +98,9 @@ class SgoProduct extends Model
     {
         return $this->belongsToMany(Brand::class, 'brand_product', 'product_id', 'brand_id');
     }
+
+    protected $casts = [
+        'discount_end_date' => 'datetime',
+        'discount_start_date ' => 'datetime',
+    ];
 }
