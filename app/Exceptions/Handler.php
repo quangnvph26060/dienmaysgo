@@ -32,9 +32,9 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
 
-        if ($exception instanceof ModelNotFoundException) {
-            return redirect()->route('home');
-        }
+        // if ($exception instanceof ModelNotFoundException) {
+        //     return redirect()->route('home');
+        // }
 
         // if ($exception instanceof ValidationException) {
         //     return response()->json([
