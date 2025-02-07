@@ -200,7 +200,7 @@
         }
 
 
-        .menu-item {
+        .menu .menu-item {
             padding: 10px;
             cursor: pointer;
             transition: background-color 0.3s ease;

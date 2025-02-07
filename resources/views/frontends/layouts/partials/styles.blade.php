@@ -25,7 +25,7 @@
 
     .toast-top-right {
         top: 12px;
-        right: inherit;
+        right: inherit !important;
         left: 50%;
         transform: translateX(-50%);
     }

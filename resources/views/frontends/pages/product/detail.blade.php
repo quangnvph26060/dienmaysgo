@@ -20,7 +20,7 @@
                     <div class="large-12">
                         <div class="product-main">
                             <div class="row">
-                                <div class="large-6 col">
+                                <div class="large-4 col">
                                     <div class="product-images relative mb-half has-hover woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images"
                                         data-columns="4">
                                         <!-- Badge container -->
@@ -331,7 +331,7 @@
                                     Sản phẩm liên quan
                                 </h3>
 
-                                <div class="row has-equal-box-heights equalize-box large-columns-4 medium-columns-3 small-columns-2 row-small slider row-slider slider-nav-reveal slider-nav-push"
+                                <div class="row has-equal-box-heights equalize-box large-columns-5 medium-columns-4 small-columns-2 row-small slider row-slider slider-nav-reveal slider-nav-push"
                                     data-flickity-options='{"imagesLoaded": true, "groupCells": "100%", "dragThreshold" : 5, "cellAlign": "left","wrapAround": true,"prevNextButtons": false,"percentPosition": true,"pageDots": false, "rightToLeft": false, "autoPlay" : true}'>
 
 
@@ -373,7 +373,9 @@
             });
         });
 
-        if ("{{ $product->discount_end_date }}") {
+        var endTime = new Date("{{ $product->discount_end_date }}").getTime();
+
+        if (endTime) {
             var endTime = new Date("{{ $product->discount_end_date }}").getTime();
 
             function updateCountdown() {
@@ -419,7 +421,7 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             const swiper = new Swiper(".swiper-container", {
-                slidesPerView: 4, // Hiển thị 4 ảnh
+                slidesPerView: 3, // Hiển thị 4 ảnh
                 spaceBetween: 10, // Khoảng cách giữa các ảnh
                 navigation: {
                     nextEl: ".swiper-button-next",
@@ -428,15 +430,15 @@
                 breakpoints: {
                     // Responsive settings
                     640: {
-                        slidesPerView: 5,
+                        slidesPerView: 4,
                         spaceBetween: 10,
                     },
                     768: {
-                        slidesPerView: 4,
+                        slidesPerView: 3,
                         spaceBetween: 15,
                     },
                     1024: {
-                        slidesPerView: 5,
+                        slidesPerView: 4,
                         spaceBetween: 20,
                     },
                 },
@@ -455,6 +457,34 @@
             });
         });
     </script>
+
+   @if ($product->discount_end_date && strtotime($product->discount_end_date) > time())
+    <script>
+        var endTime = new Date("{{ $product->discount_end_date }}").getTime();
+
+        function updateCountdown() {
+            var now = new Date().getTime();
+            var timeLeft = endTime - now;
+
+            if (timeLeft > 0) {
+                var hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                document.getElementById("hours").innerHTML = hours + " giờ";
+                document.getElementById("minutes").innerHTML = minutes + " phút";
+                document.getElementById("seconds").innerHTML = seconds + " giây";
+            } else {
+                document.getElementById("hours").innerHTML = "00 giờ";
+                document.getElementById("minutes").innerHTML = "00 phút";
+                document.getElementById("seconds").innerHTML = "00 giây";
+            }
+        }
+
+        updateCountdown(); // Gọi lần đầu để cập nhật ngay lập tức
+        setInterval(updateCountdown, 1000); // Cập nhật mỗi giây
+    </script>
+@endif
 
     <script>
         jQuery(document).ready(function() {
@@ -521,9 +551,10 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
-        .large-6.col{
+        .large-4.col {
             padding: 0 0px 30px;
         }
+
         .flash-sale {
             background-color: #d32f2f;
             color: white;

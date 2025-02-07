@@ -13,29 +13,43 @@
             @endif
 
             {{-- Các trang --}}
-            @foreach ($elements as $element)
-                {{-- "Three Dots" Separator --}}
-                @if (is_string($element))
+            @php
+                $currentPage = $paginator->currentPage();
+                $lastPage = $paginator->lastPage();
+            @endphp
+
+            {{-- Trang đầu tiên --}}
+            <li>
+                <a class="page-number" href="{{ $paginator->url(1) }}">1</a>
+            </li>
+
+            {{-- Dấu "..." nếu cần --}}
+            @if ($currentPage > 4)
+                <li><span class="page-number disabled">...</span></li>
+            @endif
+
+            {{-- Các trang gần trang hiện tại --}}
+            @for ($page = max(2, $currentPage - 1); $page <= min($lastPage - 1, $currentPage + 1); $page++)
+                @if ($page == $currentPage)
                     <li>
-                        <span class="page-number disabled">{{ $element }}</span>
+                        <span aria-current="page" class="page-number current">{{ $page }}</span>
+                    </li>
+                @else
+                    <li>
+                        <a class="page-number" href="{{ $paginator->url($page) }}">{{ $page }}</a>
                     </li>
                 @endif
+            @endfor
 
-                {{-- Các số trang --}}
-                @if (is_array($element))
-                    @foreach ($element as $page => $url)
-                        @if ($page == $paginator->currentPage())
-                            <li>
-                                <span aria-current="page" class="page-number current">{{ $page }}</span>
-                            </li>
-                        @else
-                            <li>
-                                <a class="page-number" href="{{ $url }}">{{ $page }}</a>
-                            </li>
-                        @endif
-                    @endforeach
-                @endif
-            @endforeach
+            {{-- Dấu "..." nếu cần --}}
+            @if ($currentPage < $lastPage - 3)
+                <li><span class="page-number disabled">...</span></li>
+            @endif
+
+            {{-- Trang cuối cùng --}}
+            <li>
+                <a class="page-number" href="{{ $paginator->url($lastPage) }}">{{ $lastPage }}</a>
+            </li>
 
             {{-- Trang kế tiếp --}}
             @if ($paginator->hasMorePages())

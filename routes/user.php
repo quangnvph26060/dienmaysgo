@@ -65,11 +65,11 @@ route::controller(CartController::class)->name('carts.')->group(function () {
 });
 
 Route::controller(ProductController::class)->name('products.')->group(function () {
-    Route::get('danh-muc-san-pham/{slug?}', 'list')->name('list');
-    Route::get('san-pham/{slug}', 'detail')->name('detail');
+    Route::get('danh-muc/{slug?}', 'list')->name('list');
     Route::get('filter-product/{slug?}', 'filterProduct')->name('filter-product');
     Route::get('danh-muc', 'listCategory')->name('list-category');
     Route::post('end-view', 'endView')->name('end-view'); // Đảm bảo rằng bạn có tên route đúng ở đây
+    Route::get('{catalogue?}/{slug}', 'detail')->name('detail');
 });
 
 

@@ -25,6 +25,7 @@ class ProductController extends Controller
 
         // Nếu không có slug, xử lý logic hiển thị toàn bộ sản phẩm
         $category = null;
+
         if ($slug) {
             // Lấy thông tin danh mục và tất cả danh mục con
             $category = SgoCategory::where('slug', $slug)
@@ -33,8 +34,8 @@ class ProductController extends Controller
         }
 
         // Lấy bộ lọc từ cache hoặc tạo mới
-        $filters = Cache::remember("filters_" . ($category ? $category->id : 'all'), now()->addMinutes(5), function () use ($category) {
-            $search = request('s'); // Lấy từ khóa tìm kiếm nếu có
+        $filters = Cache::remember("filters_" . request('s', '') . ($category ? $category->id : 'all'), now()->addMinutes(5), function () use ($category) {
+            $search = request('s');
 
             return configFilter::query()
                 ->with([
@@ -209,12 +210,16 @@ class ProductController extends Controller
 
 
 
-    public function detail($slug)
+    public function detail($catalogue = null, $slug)
     {
         // Lấy sản phẩm chi tiết
         $product = SgoProduct::with('images', 'brands', 'category.parent', 'category.childrens', 'attributes:id,name', 'attributeValues:id,value')
             ->where('slug', $slug)
             ->firstOrFail();
+
+        if ($catalogue) {
+            if (is_null($product->category)) abort(404);
+        }
 
         $this->incrementView($product);
 
@@ -318,7 +323,6 @@ class ProductController extends Controller
             $view->update([
                 'end_time' => now()
             ]);
-
         }
     }
 

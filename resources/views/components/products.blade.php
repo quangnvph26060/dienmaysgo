@@ -4,8 +4,20 @@
             <div class="col-inner">
                 <div class="product-small box has-hover box-normal box-text-bottom">
                     <div class="box-image">
+                        @if (
+                            $product->price > 0 &&
+                                hasCustomDiscount($product->discount_start_date, $product->discount_end_date, $product->discount_value))
+                            <span class="discount-badge">
+                                -{{ number_format(calculateDiscountPercentage($product->price, $product->discount_value, $product->discount_type), 0) }}%
+                            </span>
+                        @elseif ($product->price > 0 && hasDiscount($product->promotion))
+                            <span class="discount-badge">
+                                -{{ number_format($product->promotion->discount, 0) }}%
+                            </span>
+                        @endif
                         <div class="image-zoom image-cover" style="padding-top: 100%">
-                            <a href="{{ route('products.detail', $product->slug) }}" aria-label="{{ $product->name }}">
+                            <a href="{{ route('products.detail', [$product->category->slug, $product->slug]) }}"
+                                aria-label="{{ $product->name }}">
                                 <img fetchpriority="high" decoding="async" width="680" height="680"
                                     src="{{ showImage($product->image) }}" data-src="{{ showImage($product->image) }}"
                                     class="lazy-load attachment-original size-original"
@@ -47,7 +59,7 @@
                     <div class="box-text text-left">
                         <div class="title-wrapper">
                             <p class="name product-title woocommerce-loop-product__title">
-                                <a href="{{ route('products.detail', $product->slug) }}"
+                                <a href="{{ route('products.detail', [$product->category->slug, $product->slug]) }}"
                                     class="woocommerce-LoopProduct-link woocommerce-loop-product__link">{{ $product->name }}
                                 </a>
                             </p>
