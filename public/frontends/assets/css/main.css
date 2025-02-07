@@ -99,7 +99,7 @@
 }
 @media (max-width: 549px) {
     .header-main {
-        height: 70px;
+        height: 115px;
     }
     #logo img {
         max-height: 70px;
@@ -1252,7 +1252,7 @@ th:first-child {
     font-weight: 700;
     line-height: 30px;
 }
-.range-check{
+.range-check {
     display: flex;
     align-items: center;
     gap: 5px;
@@ -1330,10 +1330,12 @@ input[type="radio"] {
     border-radius: 7px;
 }
 .related h3 {
-    margin: 0;
+    font-size: 2em;
+    margin: 0 15px;
     text-transform: none;
     letter-spacing: 0;
     color: #000;
+    margin-bottom: 10px;
 }
 .product-footer .container {
     display: flex;
@@ -1691,6 +1693,9 @@ header .large-9 {
 }
 
 @media (max-width: 768px) {
+    #header-search {
+        display: block !important;
+    }
     .menu-item {
         padding: 0 10px !important;
     }

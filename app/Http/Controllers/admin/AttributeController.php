@@ -21,11 +21,11 @@ class AttributeController extends Controller
             DB::reconnect();
             return datatables()->of(Attribute::query()->with('attributeValues')->latest()->get())
                 ->addColumn('name', function ($row) {
-                    $urlEdit =  route('admin.attributes.edit', $row);
+                    // $urlEdit =  route('admin.attributes.edit', $row);
                     $urlDestroy = route('admin.attributes.destroy', $row);
                     return "
                     <a href=" . route('admin.attribute-values.index', ['slug' => $row->slug]) . "><strong>$row->name</strong></a>
-                    " . view('components.action', compact('row', 'urlEdit', 'urlDestroy')) . "
+                    " . view('components.action', compact('row', 'urlDestroy')) . "
                     ";
                 })
                 ->addColumn('teams', function ($row) {

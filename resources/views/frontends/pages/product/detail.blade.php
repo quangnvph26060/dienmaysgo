@@ -33,10 +33,10 @@
                                                 <a href="{{ asset('storage/' . $product->image) }}"
                                                     data-lightbox="product-gallery"
                                                     data-title="Máy phát điện Elemax SV2800">
-                                                    <img id="main-image" width="458" height="458"
+                                                    <img id="main-image" width="500" height="500"
                                                         src="{{ asset('storage/' . $product->image) }}" alt=""
                                                         title="{{ $product->slug }}" decoding="async" fetchpriority="high"
-                                                        sizes="(max-width: 458px) 100vw, 458px" />
+                                                        sizes="(max-width: 500px) 100vw, 500px" />
                                                 </a>
                                             </div>
                                         </figure>
@@ -109,8 +109,6 @@
                                             <p class="price product-page-price">
                                                 <span class="woocommerce-Price-amount amount" style="display: block;">
                                                     @if (hasCustomDiscount($product->discount_start_date, $product->discount_end_date, $product->discount_value))
-
-
                                                         @if (is_null($product->discount_end_date))
                                                             <bdi style=" font-size: 25px">{{ formatAmount(calculateAmount($product->price, $product->discount_value, $product->discount_type !== 'amount')) }}
                                                                 ₫
@@ -194,7 +192,7 @@
 
                                         <form class="cart" action="" method="post" enctype="multipart/form-data">
                                             <div class="sticky-add-to-cart-wrapper">
-                                                <div class="sticky-add-to-cart">
+                                                <div class="sticky-add-to-cartt">
                                                     <div class="sticky-add-to-cart__product">
                                                         <img src="{{ showImage($product->image) }}" alt=""
                                                             class="sticky-add-to-cart-img" />
@@ -334,7 +332,7 @@
                                 </h3>
 
                                 <div class="row has-equal-box-heights equalize-box large-columns-4 medium-columns-3 small-columns-2 row-small slider row-slider slider-nav-reveal slider-nav-push"
-                                    data-flickity-options='{"imagesLoaded": true, "groupCells": "100%", "dragThreshold" : 5, "cellAlign": "left","wrapAround": true,"prevNextButtons": true,"percentPosition": true,"pageDots": false, "rightToLeft": false, "autoPlay" : false}'>
+                                    data-flickity-options='{"imagesLoaded": true, "groupCells": "100%", "dragThreshold" : 5, "cellAlign": "left","wrapAround": true,"prevNextButtons": false,"percentPosition": true,"pageDots": false, "rightToLeft": false, "autoPlay" : true}'>
 
 
                                     <x-products :products="$relatedProducts" />
@@ -523,6 +521,9 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
+        .large-6.col{
+            padding: 0 0px 30px;
+        }
         .flash-sale {
             background-color: #d32f2f;
             color: white;
@@ -597,10 +598,6 @@
             .flash-sale {
                 width: 100%;
             }
-
-            .btn-contact {
-                margin-bottom: 15px !important;
-            }
         }
 
         .product-details {
@@ -631,7 +628,7 @@
 
         .Service-freeship {
             padding: 10px;
-            margin-top: 15px;
+            margin-top: 20px;
             border: 1px solid #ddd;
         }
 
@@ -645,8 +642,18 @@
             margin-right: 10px;
         }
 
+        form {
+            margin-top: 15px;
+            margin-bottom: 15px !important;
+        }
+
         #main-image {
-            height: 400px;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            max-height: 500px;
+            object-fit: cover;
+            /* Giữ hình ảnh luôn đầy đủ */
         }
 
         .hotline-box {

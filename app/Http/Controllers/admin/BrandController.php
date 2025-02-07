@@ -21,11 +21,11 @@ class BrandController extends Controller
             return datatables()->of(Brand::query()->select(['id', 'name', 'slug', 'description'])
                 ->get())
                 ->addColumn('name', function ($row) {
-                    $urlEdit =  route('admin.brands.edit', $row);
+                    // $urlEdit =  route('admin.brands.edit', $row);
                     $urlDestroy = route('admin.brands.destroy', $row);
                     return "
                     <strong class='text-primary'>$row->name</strong>
-                    " . view('components.action', compact('row', 'urlEdit', 'urlDestroy')) . "
+                    " . view('components.action', compact('row', 'urlDestroy')) . "
                     ";
                 })
                 ->addColumn('description', function ($row) {

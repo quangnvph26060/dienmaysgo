@@ -315,14 +315,14 @@
                         </div>
                         <div class="form-group">
                             <label for="start-date" class="form-label">Ngày bắt đầu:</label>
-                            <input type="date" id="start-date" value="{{ \Carbon\Carbon::parse($product->discount_start_date)->format('Y-m-d') }}"
+                            <input type="datetime-local" id="start-date" value="{{ $product->discount_start_date }}"
                                 class="form-control" name="discount_start_date">
                         </div>
 
                         <div class="form-group">
                             <label for="end-date" class="form-label">Ngày kết thúc:</label>
-                            <input type="date" value="{{ \Carbon\Carbon::parse($product->discount_end_date)->format('Y-m-d') }}" id="end-date"
-                            class="form-control" name="discount_end_date">
+                            <input type="datetime-local" value="{{ $product->discount_end_date }}" id="end-date"
+                                class="form-control" name="discount_end_date">
 
                         </div>
                     </div>

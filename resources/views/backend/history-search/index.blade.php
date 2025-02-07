@@ -2,6 +2,9 @@
 
 @section('content')
     <div class="card">
+        <div class="card-header d-flex justify-content-between">
+            <h4 class="card-title">Danh sách từ khóa tìm kiếm</h4>
+        </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table id="myTable" class="display" style="width:100%">
@@ -24,7 +27,7 @@
     @include('backend.history-search.columns')
     <script>
         $(document).ready(function() {
-            const api = '{{ route('admin.history-search') }}'
+            const api = '{{ route('admin.marketing.history-search') }}'
 
             dataTables(api, columns, 'HistorySearch', true)
 
