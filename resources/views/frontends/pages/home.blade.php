@@ -10,8 +10,8 @@
 @section('content')
     <div class="row container">
         <nav class="large-2">
-            <p class="block button-home-nav"><i class="fas fa-bars" style="color: #EC1C24; font-size: 20px"></i>Danh mục sản
-                phẩm</p>
+            <p class="block button-home-nav"><i class="fas fa-bars"
+                    style="color: #EC1C24; font-size: 20px"></i>DANH MỤC SẢN PHẨM</p>
             <div class="home-nav">
                 <div class="menu">
                     @foreach ($cataloguesMenu->take(6) as $item)
@@ -157,9 +157,9 @@
         }
 
         /* .home-nav {
-                                                                                                                    display: flex;
-                                                                                                                    margin: 0;
-                                                                                                                } */
+                                                                                                                        display: flex;
+                                                                                                                        margin: 0;
+                                                                                                                    } */
 
         .menu {
 

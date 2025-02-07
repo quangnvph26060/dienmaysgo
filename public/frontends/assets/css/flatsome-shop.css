@@ -120,11 +120,11 @@ a.added_to_cart:after {
 .grid-tools .add-to-cart-grid {
     width: 0;
 }
-@media (max-width: 849px) {
+/* @media (max-width: 849px) {
     .category-filter-row {
         padding: 10px 0;
     }
-}
+} */
 .filter-button {
     display: inline-block;
     margin-top: 0.5em;

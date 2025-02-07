@@ -45,7 +45,7 @@
 
         // Hàm kiểm tra và áp dụng lớp `fixed`
         const checkScroll = () => {
-            if (window.scrollY > 100) {
+            if (window.scrollY > 200) {
                 document.querySelector(".header-wrapper").classList.add("stuck")
                 masthead.classList.add("fixed");
             } else {

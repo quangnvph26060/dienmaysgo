@@ -20,7 +20,7 @@
                     <div class="large-12">
                         <div class="product-main">
                             <div class="row">
-                                <div class="large-4 col">
+                                <div class="large-6 col">
                                     <div class="product-images relative mb-half has-hover woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images"
                                         data-columns="4">
                                         <!-- Badge container -->
@@ -31,8 +31,7 @@
                                             class="woocommerce-product-gallery__wrapper product-gallery-slider slider slider-nav-small mb-half">
                                             <div class="woocommerce-product-gallery__image slide first">
                                                 <a href="{{ asset('storage/' . $product->image) }}"
-                                                    data-lightbox="product-gallery"
-                                                    data-title="Máy phát điện Elemax SV2800">
+                                                    data-lightbox="product-gallery" data-title="{{ $product->name }}">
                                                     <img id="main-image" width="500" height="500"
                                                         src="{{ asset('storage/' . $product->image) }}" alt=""
                                                         title="{{ $product->slug }}" decoding="async" fetchpriority="high"
@@ -250,9 +249,9 @@
 
                                                     <a href="{{ route('contact', ['product' => $product->slug]) }}"
                                                         class="single_add_to_cart_buttonn button alt btn-contact"
-                                                        style="background: #ec1c24 !important; padding-left: 40px; padding-right: 40px; padding-bottom: 1px;">Liên
-                                                        hệ <span class="bi bi-telephone"
-                                                            style="margin-left: 3px"></span></a>
+                                                        style="background: #ec1c24 !important; padding-left: 40px; padding-right: 40px; padding-bottom: 1px;"><span
+                                                            class="bi bi-telephone" style="margin-right: 3px"></span>Liên
+                                                        hệ </a>
                                                 </div>
                                             </div>
 
@@ -270,9 +269,10 @@
                                             <div>
                                                 @foreach ($settings->introduction['phone'] ?? [] as $key => $item)
                                                     <p>
-                                                        <span class="hotline-number">{{ $item }}</span>
                                                         <span
                                                             class="hotline-region">{{ $settings->introduction['facility'][$key] ?? '' }}</span>
+                                                        <span class="hotline-number">{{ $item }}</span>
+
                                                     </p>
                                                 @endforeach
 
@@ -373,35 +373,6 @@
             });
         });
 
-        var endTime = new Date("{{ $product->discount_end_date }}").getTime();
-
-        if (endTime) {
-            var endTime = new Date("{{ $product->discount_end_date }}").getTime();
-
-            function updateCountdown() {
-                var now = new Date().getTime();
-
-                var timeLeft = endTime - now;
-
-                if (timeLeft > 0) {
-                    var hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                    var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                    var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-                    document.getElementById("hours").innerHTML = hours + " giờ";
-                    document.getElementById("minutes").innerHTML = minutes + " phút";
-                    document.getElementById("seconds").innerHTML = seconds + " giây";
-                } else {
-                    document.getElementById("hours").innerHTML = "00 giờ";
-                    document.getElementById("minutes").innerHTML = "00 phút";
-                    document.getElementById("seconds").innerHTML = "00 giây";
-                }
-            }
-
-            updateCountdown(); // Gọi lần đầu để cập nhật ngay lập tức
-            setInterval(updateCountdown, 1000); // Cập nhật mỗi giây
-        }
-
         jQuery.noConflict();
 
         addToCart();
@@ -458,33 +429,34 @@
         });
     </script>
 
-   @if ($product->discount_end_date && strtotime($product->discount_end_date) > time())
-    <script>
-        var endTime = new Date("{{ $product->discount_end_date }}").getTime();
+    @if ($product->discount_end_date && \Carbon\Carbon::parse($product->discount_end_date)->gt(now()))
+        <script>
+            var endTime = new Date("{{ $product->discount_end_date }}").getTime();
 
-        function updateCountdown() {
-            var now = new Date().getTime();
-            var timeLeft = endTime - now;
+            function updateCountdown() {
+                var now = new Date().getTime();
 
-            if (timeLeft > 0) {
-                var hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                var timeLeft = endTime - now;
 
-                document.getElementById("hours").innerHTML = hours + " giờ";
-                document.getElementById("minutes").innerHTML = minutes + " phút";
-                document.getElementById("seconds").innerHTML = seconds + " giây";
-            } else {
-                document.getElementById("hours").innerHTML = "00 giờ";
-                document.getElementById("minutes").innerHTML = "00 phút";
-                document.getElementById("seconds").innerHTML = "00 giây";
+                if (timeLeft > 0) {
+                    var hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                    document.getElementById("hours").innerHTML = hours + " giờ";
+                    document.getElementById("minutes").innerHTML = minutes + " phút";
+                    document.getElementById("seconds").innerHTML = seconds + " giây";
+                } else {
+                    document.getElementById("hours").innerHTML = "00 giờ";
+                    document.getElementById("minutes").innerHTML = "00 phút";
+                    document.getElementById("seconds").innerHTML = "00 giây";
+                }
             }
-        }
 
-        updateCountdown(); // Gọi lần đầu để cập nhật ngay lập tức
-        setInterval(updateCountdown, 1000); // Cập nhật mỗi giây
-    </script>
-@endif
+            updateCountdown(); // Gọi lần đầu để cập nhật ngay lập tức
+            setInterval(updateCountdown, 1000); // Cập nhật mỗi giây
+        </script>
+    @endif
 
     <script>
         jQuery(document).ready(function() {
@@ -551,7 +523,11 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
-        .large-4.col {
+        .lb-dataContainer {
+            display: none !important;
+        }
+
+        .large-6.col {
             padding: 0 0px 30px;
         }
 
@@ -673,7 +649,7 @@
             margin-right: 10px;
         }
 
-        form {
+        form.cart {
             margin-top: 15px;
             margin-bottom: 15px !important;
         }
@@ -707,7 +683,6 @@
         .hotline-content {
             display: flex;
             gap: 10px;
-            justify-content: center;
         }
 
         .hotline-content p {
