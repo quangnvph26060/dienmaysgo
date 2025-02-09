@@ -16,6 +16,9 @@
         <li class="nav-item">
             <a class="nav-link" href="{{ route('admin.config.config-filter') }}">Cấu hình bộ lọc</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.config.config-support') }}">Thông tin hỗ trợ</a>
+        </li>
     </ul>
 
     <form action="{{ route('admin.config.update') }}" enctype="multipart/form-data" method="POST">
@@ -106,15 +109,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
-                            <div class="col-md-12 mb-3">
-                                <label for="content" class="form-label">Nội dung</label>
-                                <textarea id="content" name="content" class="form-control @error('content') is-invalid @enderror" rows="5"
-                                    placeholder="Enter content">{{ old('content', $config->content ?? '') }}</textarea>
-                                @error('content')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -153,71 +147,6 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
-                            <div class="col-md-12 mb-3">
-                                <label for="url">URL</label>
-                                <input type="text" id="url" name="url"
-                                    class="form-control @error('url') is-invalid @enderror" placeholder="Enter URL"
-                                    value="{{ old('url', $config->url ?? '') }}">
-                                @error('url')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="card">
-                    <div class="card-body">
-
-                        <div class="form-group mb-3">
-                            <label for="">Tiêu đề</label>
-                            <input type="text" name="introduct_title" class="form-control"
-                                value="{{ $config->introduct_title }}">
-                        </div>
-
-                        <div id="input-container">
-
-                            @forelse ($config->introduction['phone'] ?? [] as $key => $phone)
-                                <div class="row">
-                                    <div class="col-lg-6 mb-3">
-                                        <input type="text" name="introduction[phone][]" class="form-control"
-                                            value="{{ $phone }}" placeholder="Số điện thoại">
-                                    </div>
-
-                                    <div class="col-lg-5 mb-3">
-                                        <input type="text" name="introduction[facility][]" class="form-control"
-                                            value="{{ $config->introduction['facility'][$key] ?? '' }}"
-                                            placeholder="Cơ sở">
-                                    </div>
-
-                                    <div class="col-lg-1 mb-3">
-                                        @if ($key > 0)
-                                            <button type="button" class="btn  btn-danger remove-row btn-sm">-</button>
-                                        @else
-                                            <button type="button" class="btn  btn-success add-row btn-sm">+</button>
-                                        @endif
-                                    </div>
-                                </div>
-                            @empty
-                                <div class="row">
-                                    <div class="col-lg-6 mb-3">
-                                        <input type="text" name="introduction[phone][]" class="form-control"
-                                            value="" placeholder="Số điện thoại">
-                                    </div>
-
-                                    <div class="col-lg-5 mb-3">
-                                        <input type="text" name="introduction[facility][]" class="form-control"
-                                            value="" placeholder="Cơ sở">
-                                    </div>
-
-                                    <div class="col-lg-1 mb-3">
-                                        <button type="button" class="btn btn-sm btn-success add-row">+</button>
-                                    </div>
-                                </div>
-                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -323,35 +252,9 @@
 @endpush
 
 @push('scripts')
-    <script>
-        const BASE_URL = "{{ url('/') }}";
-    </script>
-    <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
-
-    <script src="{{ asset('ckfinder_php_3.7.0/ckfinder/ckfinder.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
     <script>
-        $('.add-row').click(function() {
-            var newRow = `
-            <div class="row">
-                <div class="col-lg-6 mb-3">
-                        <input type="text" name="introduction[phone][]" class="form-control" value="" placeholder="Số điện thoại">
-                </div>
-                <div class="col-lg-5 mb-3">
-                        <input type="text" name="introduction[facility][]" class="form-control" value="" placeholder="Cơ sở">
-                </div>
-                <div class="col-lg-1 mb-3">
-                        <button type="button" class="btn btn-sm btn-danger remove-row">-</button>
-                </div>
-            </div>
-        `;
-            $('#input-container').append(newRow);
-        });
-
-        // Xử lý nút "-" để xóa dòng input
-        $(document).on('click', '.remove-row', function() {
-            $(this).closest('.row').remove();
-        });
+       
 
         $(document).ready(function() {
 
@@ -376,11 +279,6 @@
                     }
                 }
             });
-            CKEDITOR.replace('content', {
-                filebrowserImageUploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
-                filebrowserUploadMethod: 'form',
-            });
-
 
         });
     </script>

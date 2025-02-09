@@ -37,9 +37,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         View::composer('*', function ($view) {
-            $settings = Cache::remember('site_settings', now()->addMinutes(30), function () {
-                return SgoConfig::query()->first();
-            });
+            $settings = SgoConfig::query()->first();
 
             $view->with('settings', $settings);
         });

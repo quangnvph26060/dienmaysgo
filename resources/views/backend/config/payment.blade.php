@@ -15,6 +15,9 @@
         <li class="nav-item">
             <a class="nav-link " href="{{ route('admin.config.config-filter') }}">Cấu hình bộ lọc</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.config.config-support') }}">Thông tin hỗ trợ</a>
+        </li>
     </ul>
     <div class="card">
         <div class="card-header">

@@ -8,7 +8,7 @@
 
 @section('content')
     @include('components.breadcrumb_V2', ['category' => $category ?? null])
-    <div class="shop-page-title category-page-title page-title">
+    <div class="shop-page-title category-page-title page-title" style="display: none">
         <div class="page-title-inner flex-row medium-flex-wrap container">
             <div class="flex-col flex-grow medium-text-center">
                 <h1 class="shop-page-title is-xlarge">Máy phát điện</h1>
@@ -28,6 +28,7 @@
         <div class="row category-page-row">
             <div class="col large-3 hide-for-medium">
                 <div id="shop-sidebar" class="sidebar-inner col-inner">
+
                     @if (!empty($attributes))
                         @foreach ($attributes as $attribute)
                             <aside class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
@@ -36,7 +37,7 @@
                                 @if ($attribute->attribute->attributeValues->isNotEmpty())
                                     @foreach ($attribute->attribute->attributeValues as $item)
                                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                                            <div>
+                                            <div class="d-flex">
                                                 <input type="checkbox" name="attr[]" value="{{ $item->id }}"
                                                     onchange="submitFormWithDelay()" id="{{ $item->id }}">
                                                 <label for="{{ $item->id }}">{{ $item->value }}</label>
@@ -65,6 +66,20 @@
                             @endforeach
                         </aside>
                     @endif
+
+                    @if (!empty($priceOptions))
+                        <span class="widget-title shop-sidebar">{{ $priceFilter->title }}</span>
+                        <select name="price_range" id="price_range" onchange="submitFormWithDelay()">
+                            <option value="">Tất cả</option>
+                            @foreach ($priceOptions as $priceRange)
+                                <option value="{{ $priceRange }}"
+                                    {{ request('price_range') == $priceRange ? 'selected' : '' }}>
+                                    {{ $priceRange }} VNĐ
+                                </option>
+                            @endforeach
+                        </select>
+                    @endif
+
 
 
                 </div>
@@ -249,7 +264,21 @@
 
 @push('styles')
     <style>
+        .d-flex {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .col.large-3.hide-for-medium {
+            padding-left: 0 !important;
+        }
+
         @media (max-width: 768px) {
+            .shop-page-title.category-page-title.page-title {
+                display: block !important;
+            }
+
             .title_page {
                 display: none;
             }

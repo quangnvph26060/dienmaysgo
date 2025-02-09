@@ -18,7 +18,7 @@ class ProductController extends Controller
 
     public function list($slug = null)
     {
-        // Cache::flush();
+        Cache::flush();
         if (request()->ajax()) {
             return $this->filterProduct($slug);
         }
@@ -57,6 +57,23 @@ class ProductController extends Controller
         });
 
         $attributes = $filters->where('filter_type', 'attribute');
+
+        $priceFilter = $filters->where('filter_type', 'price')->first();
+        $priceOptions = [];
+
+        if (!empty($priceFilter) && !empty($priceFilter->option_price)) {
+            $priceRanges = explode(',', $priceFilter->option_price);
+
+            foreach ($priceRanges as $range) {
+                $prices = explode('-', trim($range));
+                $formattedRange = implode(' - ', array_map(function ($price) {
+                    return $this->formatPrice($price); // Định dạng giá ở đây
+                }, $prices));
+
+                $priceOptions[] = $formattedRange; // Lưu giá đã format vào mảng
+            }
+        }
+
 
         $brands = Cache::remember("brands_" . ($category ? $category->id : 'all'), now()->addMinutes(5), function () use ($filters, $category) {
             if ($filters->contains('filter_type', 'brand')) {
@@ -99,7 +116,15 @@ class ProductController extends Controller
 
         $products->appends(request()->query());
 
-        return view('frontends.pages.product.list', compact('category', 'products', 'brands', 'attributes'));
+        return view('frontends.pages.product.list', compact('category', 'products', 'brands', 'attributes', 'priceOptions', 'priceFilter'));
+    }
+    private function formatPrice($price)
+    {
+        $price = (int) $price;
+
+        $price *= 1000;
+
+        return number_format($price, 0, ',', '.'); // Định dạng số thành 10.000 hoặc 10.000.000
     }
 
 
@@ -110,6 +135,7 @@ class ProductController extends Controller
         $brands = request()->input('brand', []);
         $orderby = request('orderby', 'date');
         $search = request('s', ''); // Lấy từ khóa tìm kiếm nếu có
+        $priceRange = request('price_range'); // Lấy khoảng giá đã chọn từ request
 
         // Tạo cache key duy nhất
         $cacheKey = "products_filter_" . ($slug ?? 'all') . "_" . md5(json_encode([
@@ -117,11 +143,12 @@ class ProductController extends Controller
             'brands' => $brands,
             'orderby' => $orderby,
             'search' => $search, // Thêm từ khóa tìm kiếm vào cache key
+            'price_range' => $priceRange, // Thêm khoảng giá vào cache key
             'page' => request('page', 1),
         ]));
 
         // Kiểm tra cache
-        return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($slug, $attributes, $brands, $orderby, $search) {
+        return Cache::remember($cacheKey, now()->addMinutes(30), function () use ($slug, $attributes, $brands, $orderby, $search, $priceRange) {
             // Lấy thông tin danh mục và tất cả danh mục con
             $category = $slug ? SgoCategory::where('slug', $slug)
                 ->with('childrens:id,category_parent_id')
@@ -141,6 +168,34 @@ class ProductController extends Controller
             if (!empty($categoryIds)) {
                 $productsQuery->whereIn('category_id', $categoryIds);
             }
+
+            // Lọc theo khoảng giá nếu có
+            // Lọc theo khoảng giá nếu có
+            if (!empty($priceRange)) {
+                // Tách khoảng giá thành min và max
+                $priceParts = explode(' - ', $priceRange);
+                if (count($priceParts) == 2) {
+                    $minPrice = str_replace('.', '', $priceParts[0]); // Loại bỏ dấu chấm và convert về số
+                    $maxPrice = str_replace('.', '', $priceParts[1]); // Loại bỏ dấu chấm và convert về số
+
+                    // Sử dụng giá giảm từ sản phẩm nếu có
+                    $productsQuery->where(function ($query) use ($minPrice, $maxPrice) {
+                        $query->whereBetween(DB::raw('CASE
+                    WHEN discount_value IS NOT NULL
+                        AND discount_end_date >= NOW() THEN
+                        CASE
+                            WHEN discount_type = "percentage" THEN price * (1 - discount_value / 100)
+                            WHEN discount_type = "amount" THEN price - discount_value
+                            ELSE price
+                        END
+                    WHEN promotions_id IS NOT NULL
+                        AND sgo_promotions.end_date >= NOW() THEN price * (1 - sgo_promotions.discount / 100)
+                    ELSE price
+                END'), [(int)$minPrice, (int)$maxPrice]);
+                    });
+                }
+            }
+
 
             // Lọc theo attributes nếu có
             if (!empty($attributes)) {
@@ -176,10 +231,10 @@ class ProductController extends Controller
 
             // Thêm trường giá cuối cùng (final_price)
             $productsQuery->selectRaw('sgo_products.*, sgo_promotions.discount,
-        CASE
-            WHEN promotions_id IS NOT NULL THEN price * (1 - sgo_promotions.discount / 100)
-            ELSE price
-        END as final_price')
+                CASE
+                    WHEN promotions_id IS NOT NULL THEN price * (1 - sgo_promotions.discount / 100)
+                    ELSE price
+                END as final_price')
                 ->leftJoin('sgo_promotions', 'sgo_products.promotions_id', '=', 'sgo_promotions.id');
 
             // Sắp xếp theo orderby
@@ -207,6 +262,7 @@ class ProductController extends Controller
             ];
         });
     }
+
 
 
 

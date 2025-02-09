@@ -15,7 +15,11 @@ use Illuminate\Support\Facades\Log;
 
 class ConfigController extends Controller
 {
-    //
+    public function configSupport()
+    {
+        $config = SgoConfig::first();
+        return view('backend.config.support', compact('config'));
+    }
 
     public function index()
     {
@@ -51,6 +55,27 @@ class ConfigController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
+    }
+
+    public function updateSupport(Request $request)
+    {
+        // dd($request->toArray());
+        $credentials = $request->validate(
+            [
+                'introduct_title' => 'nullable',
+                'introduction' => 'nullable',
+                'support' => 'nullable|array',
+            ],
+            __('request.messages')
+        );
+
+        $config = SgoConfig::first();
+
+        $config->update($credentials);
+
+        toastr()->success('Thay đổi thành công.');
+
+        return redirect()->back();
     }
 
     public function configPayment()
@@ -151,17 +176,23 @@ class ConfigController extends Controller
     {
         if (request()->ajax()) {
             DB::reconnect();
-            return datatables()->of(configFilter::query()->select(['id', 'filter_type', 'title', 'attribute_id'])->latest()
+            return datatables()->of(configFilter::query()->select(['id', 'filter_type', 'title', 'attribute_id', 'option_price'])->latest()
                 ->get())
                 ->addColumn('title', function ($row) {
-                    $urlDestroy = route('admin.brands.destroy', $row);
+                    // $urlDestroy = route('admin.brands.destroy', $row);
                     return "
                     <strong class='text-primary'>$row->title</strong>
-                    " . view('components.action', compact('row', 'urlDestroy')) . "
+                    " . view('components.action', compact('row')) . "
                     ";
                 })
                 ->addColumn('attribute_id', function ($row) {
-                    return $row->attribute->name ?? '---';
+                    if (!empty($row->attribute->name)) {
+                        return $row->attribute->name;
+                    } elseif (!empty($row->option_price)) {
+                        return $row->option_price;
+                    } else {
+                        return '---';
+                    }
                 })
                 ->addColumn('checkbox', function ($row) {
                     return '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />';
@@ -177,9 +208,10 @@ class ConfigController extends Controller
     public function handleSubmitFilter(Request $request)
     {
         $credentials = $request->validate([
-            'filter_type' => 'required|in:attribute,brand',
+            'filter_type' => 'required|in:attribute,brand,price',
             'title' => 'required|unique:config_filters',
-            'attribute_id' => 'nullable|exists:attributes,id'
+            'attribute_id' => 'nullable|exists:attributes,id',
+            'option_price' => 'nullable|string'
         ]);
 
         configFilter::create($credentials);
@@ -193,9 +225,10 @@ class ConfigController extends Controller
     public function handleSubmitChangeFilter(Request $request, string $id)
     {
         $credentials = $request->validate([
-            'filter_type' => 'required|in:attribute,brand',
+            'filter_type' => 'required|in:attribute,brand,price',
             'title' => 'required|unique:config_filters,title,' . $id,
-            'attribute_id' => 'nullable|exists:attributes,id'
+            'attribute_id' => 'nullable|exists:attributes,id',
+            'option_price' => 'nullable|string'
         ]);
 
         if (!$data  = configFilter::query()->find($id)) {

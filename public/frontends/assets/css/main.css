@@ -1798,3 +1798,6 @@ header .large-9 {
     border-radius: 5px;
     z-index: 10;
 }
+.page-number.current {
+    background-color: red;
+}

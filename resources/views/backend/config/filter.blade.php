@@ -17,6 +17,9 @@
         <li class="nav-item">
             <a class="nav-link active" href="{{ route('admin.config.config-filter') }}">Cấu hình bộ lọc</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('admin.config.config-support') }}">Thông tin hỗ trợ</a>
+        </li>
     </ul>
 
     <div class="card">
@@ -56,6 +59,7 @@
                             <select id="filter_type" name="filter_type" class="form-control">
                                 <option value="brand">Thương hiệu</option>
                                 <option value="attribute">Thuộc tính</option>
+                                <option value="price">Giá</option>
                             </select>
                         </div>
 
@@ -73,6 +77,17 @@
                                         <option value="{{ $id }}">{{ $name }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+
+                        <div id="price-section" style="display: none;">
+                            <div class="form-group">
+                                <label for="attribute_id" class="form-label">Chọn giá muốn lọc</label>
+
+                                <i class="fas fa-question-circle" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="Ví dụ: 10-20, 30-50, ..."></i>
+
+                                <input type="text" class="form-control" name="option_price">
                             </div>
                         </div>
                     </div>
@@ -129,10 +144,14 @@
                 if (selectedType === 'attribute') {
                     // Hiện phần "Thuộc tính", ẩn phần "Thương hiệu"
                     $('#attribute-section').show();
+                    $('#price-section').hide();
                     $('#brand-section').hide();
-                } else {
+                } else if (selectedType == 'brand') {
                     // Hiện phần "Thương hiệu", ẩn phần "Thuộc tính"
                     $('#brand-section').show();
+                    $('#attribute-section').hide();
+                } else {
+                    $('#price-section').show();
                     $('#attribute-section').hide();
                 }
             });
@@ -176,8 +195,7 @@
 
                     $(`input[name=${key}]`).val(value);
 
-                    if (key == 'filter_type') {
-
+                    if (key == 'filter_type' ) {
                         $(`select[name=${key}]`).val(value).trigger('change')
                     }
 
