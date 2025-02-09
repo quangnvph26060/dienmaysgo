@@ -281,11 +281,15 @@
                                         </div>
                                     </div>
 
-                                    <div class="Service-freeship">
-                                        @foreach ($settings->support['icon'] ?? [] as $key => $icon)
-                                            <p><i class="{{ $icon }}"></i> {{ $settings->support['content'][$key] ?? '' }}</p>
-                                        @endforeach
-                                    </div>
+                                    @if ($settings->support)
+                                        <div class="Service-freeship">
+                                            @foreach ($settings->support['icon'] ?? [] as $key => $icon)
+                                                <p><i class="{{ $icon }}"></i>
+                                                    {{ $settings->support['content'][$key] ?? '' }}</p>
+                                            @endforeach
+                                        </div>
+                                    @endif
+
 
                                 </div>
                             </div>
