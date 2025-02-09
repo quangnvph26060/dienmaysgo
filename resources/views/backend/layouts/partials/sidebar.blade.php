@@ -129,7 +129,7 @@
                     </div>
                 </li>
 
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#home">
                         <i class="fas fa-newspaper"></i>
                         <p>Cấu hình page</p>
@@ -149,7 +149,7 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li> --}}
 
                 <li class="nav-item">
                     <a data-bs-toggle="collapse" href="#marketing">

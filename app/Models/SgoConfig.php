@@ -27,21 +27,24 @@ class SgoConfig extends Model
         'content',
         'introduct_title',
         'introduction',
-        'icon'
+        'icon',
+        'support'
     ];
 
     protected $casts = [
         'introduction' => 'array',
+        'support' => 'array'
     ];
 
     public $timestamps = true;
 
-    public static function boot()
-    {
-        parent::boot();
+    // public static function boot()
+    // {
+    //     parent::boot();
 
-        static::saved(function () {
-            Cache::forget('site_settings');
-        });
-    }
+    //     static::saved(function () {
+    //         \Log::info('clear cache');
+    //         Cache::forget('site_settings');
+    //     });
+    // }
 }

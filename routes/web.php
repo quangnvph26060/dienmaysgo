@@ -149,8 +149,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
     Route::prefix('config')->name('config.')->group(function () {
+        Route::get('config-support', [ConfigController::class, 'configSupport'])->name('config-support');
         Route::get('', [ConfigController::class, 'index'])->name('index');
         Route::post('update', [ConfigController::class, 'update'])->name('update');
+        Route::post('update-support', [ConfigController::class, 'updateSupport'])->name('update-support');
         route::get('config-payment', [ConfigController::class, 'configPayment'])->name('config-payment');
         route::post('config-payment', [ConfigController::class, 'configPaymentPost']);
         route::put('config-payment', [ConfigController::class, 'handleChangePublishPayment'])->name('handle-change-publish-payment');

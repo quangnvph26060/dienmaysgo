@@ -282,13 +282,11 @@
                                     </div>
 
                                     <div class="Service-freeship">
-                                        <p><i class="bi bi-car-front"></i>Miễn phí giao hàng trong nội thành Hà Nội và
-                                            nội
-                                            thành TP. Hồ Chí Minh.</p>
-                                        <p><i class="bi bi-hand-index-thumb"></i>Hàng Chính Hãng</p>
-                                        <p><i class="bi bi-shield-check"></i>Bảo hành chính hãng, có người đến tận nhà.
-                                        </p>
+                                        @foreach ($settings->support['icon'] ?? [] as $key => $icon)
+                                            <p><i class="{{ $icon }}"></i> {{ $settings->support['content'][$key] ?? '' }}</p>
+                                        @endforeach
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -392,7 +390,7 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             const swiper = new Swiper(".swiper-container", {
-                slidesPerView: 3, // Hiển thị 4 ảnh
+                slidesPerView: 4, // Hiển thị 4 ảnh
                 spaceBetween: 10, // Khoảng cách giữa các ảnh
                 navigation: {
                     nextEl: ".swiper-button-next",
@@ -401,15 +399,15 @@
                 breakpoints: {
                     // Responsive settings
                     640: {
-                        slidesPerView: 4,
+                        slidesPerView: 5,
                         spaceBetween: 10,
                     },
                     768: {
-                        slidesPerView: 3,
+                        slidesPerView: 4,
                         spaceBetween: 15,
                     },
                     1024: {
-                        slidesPerView: 4,
+                        slidesPerView: 5,
                         spaceBetween: 20,
                     },
                 },
