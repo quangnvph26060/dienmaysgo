@@ -27,7 +27,7 @@
             <div class="card-body">
                 <div id="icon-container">
 
-                    @foreach ($config->support['icon'] ?? [] as $key => $icon)
+                    @forelse ($config->support['icon'] ?? [] as $key => $icon)
                         <div class="row form-group">
                             <div class="col-4">
                                 <input type="text" value="{{ $icon }}" class="form-control icon-picker"
@@ -43,7 +43,21 @@
                                 <button type="button" class="remove-btn btn btn-danger btn-sm col-1">-</button>
                             @endif
                         </div>
-                    @endforeach
+                    @empty
+                        <div class="row form-group">
+                            <div class="col-4">
+                                <input type="text" class="form-control icon-picker"
+                                    name="support[icon][]" placeholder="Chọn icon" />
+                            </div>
+                            <div class="col-7">
+                                <input type="text" class="form-control" name="support[content][]"
+                                    placeholder="Nội dung" />
+                            </div>
+
+                            <button id="add-btn" type="button" class="btn btn-success btn-sm col-1">+</button>
+
+                        </div>
+                    @endforelse
 
                 </div>
             </div>
