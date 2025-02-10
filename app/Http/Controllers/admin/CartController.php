@@ -247,7 +247,7 @@ class CartController extends Controller
         return redirect()->back()->with('error', 'Không có sản phẩm nào để khôi phục');
     }
 
-    public function checkout(Request $request)
+    public function switchPaymentMethod(Request $request)
     {
         if (Cart::instance('shopping')->count() <= 0) return url('/');
 
@@ -262,7 +262,8 @@ class CartController extends Controller
                 'address' => 'nullable|max:28',
                 'email' => 'required|email',
                 'notes' => 'nullable|max:100',
-                'payment_method' => 'required|in:cod,bacs,currency',
+                'payment_method' => 'required|in:cod,bacs,currency,transfer_payment',
+                'type' => 'nullable'
             ]
         );
 
@@ -275,42 +276,115 @@ class CartController extends Controller
 
         $credentials = $credentials->validated();
 
+        $credentials['address'] = $this->buildFullAddress($request);
+        $credentials['total_price'] = $this->calculateTotalPrice();
+        $credentials['code'] = $this->generateOrderCode();
+        $credentials['user_id'] = auth()->id();
+
+        switch ($credentials['payment_method']) {
+            case 'cod':
+                return $this->codPayment($credentials);
+            case 'bacs':
+            case 'currency':
+            case 'transfer_payment':
+                return $this->transferPayment($credentials);
+                // return $this
+        }
+    }
+
+    private function codPayment($credentials)
+    {
         try {
             DB::beginTransaction();
 
-            $credentials['address'] = $this->buildFullAddress($request);
-            $credentials['total_price'] = $this->calculateTotalPrice();
-            $credentials['code'] = $this->generateOrderCode();
-            $credentials['user_id'] = auth()->id();
-
-            if ($request->payment_method == 'bacs' || $request->payment_method == 'currency') {
-                return $this->paymentBacs($credentials);
-            }
-
-            $order = SgoOrder::create($credentials);
-
-            $items = $this->mapCartItems();
-
-            $order->products()->attach($items);
-
-            Cart::instance('shopping')->destroy();
-
-            event(new OrderPlaced($order));
-
-            Cache::put('payment_success', 'Thanh toán thành công', 120);
+            $order =  $this->checkout($credentials);
 
             DB::commit();
 
-            return response()->json([
-                'status' => true,
-                'redirect' => route('carts.order-success', $order->code),
-            ]);
-        } catch (\Exception $e) {
+            return response()->json(['success' => true, 'payment_method' => 'cod', 'redirect' => route('carts.order-success', $order->code)]);
+        } catch (\Throwable $th) {
             DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ], 500);
+        }
+    }
+
+    public function checkout($credentials)
+    {
+
+        $order = SgoOrder::create($credentials);
+
+        $items = $this->mapCartItems();
+
+        $order->products()->attach($items);
+
+        Cart::instance('shopping')->destroy();
+
+        event(new OrderPlaced($order));
+
+        Cache::put('payment_success', 'Thanh toán thành công', 120);
+
+        return $order;
+
+        // try {
+        //     DB::beginTransaction();
+
+        //     $credentials['address'] = $this->buildFullAddress($request);
+        //     $credentials['total_price'] = $this->calculateTotalPrice();
+        //     $credentials['code'] = $this->generateOrderCode();
+        //     $credentials['user_id'] = auth()->id();
+
+        //     if ($request->payment_method == 'transfer_payment') {
+        //         return $this->transferPayment();
+        //     }
+
+        //     if ($request->payment_method == 'bacs' || $request->payment_method == 'currency') {
+        //         return $this->paymentBacs($credentials);
+        //     }
+
+
+
+        //     DB::commit();
+
+        //     // return response()->json([
+        //     //     'status' => true,
+        //     //     'redirect' => route('carts.order-success', $order->code),
+        //     // ]);
+        // } catch (\Exception $e) {
+        //     DB::rollBack();
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => $e->getMessage(),
+        //     ], 500);
+        // }
+    }
+
+    private function transferPayment($credentials)
+    {
+        if (isset($credentials['type']) && $credentials['type'] == 'confirm') return $this->confirmTransferPayment($credentials);
+
+        $paymentMethod = ConfigPayment::query()->where('id', 2)->first();
+
+        $bank = $paymentMethod->bank_code; // Mã ngân hàng (VD: Agribank)
+        $account = $paymentMethod->account_number; // Số tài khoản nhận tiền
+        $amount = $credentials['total_price']; // Số tiền cần thanh toán (tùy chọn)
+        $content = 'THANH TOAN DON HANG ' . $credentials['code']; // Nội dung chuyển khoản
+
+        $qrUrl = "https://img.vietqr.io/image/{$bank}-{$account}-compact.png?amount={$amount}&addInfo={$content}";
+
+        return response()->json(['success' => true, 'payment_method' => 'transfer_payment', 'qrCode' => $qrUrl]);
+    }
+
+    public function confirmTransferPayment($credentials)
+    {
+        try {
+            DB::beginTransaction();
+
+            $order =  $this->checkout($credentials);
+
+            DB::commit();
+
+            return response()->json(['success' => true, 'payment_method' => 'transfer_payment', 'redirect' => route('carts.order-success', $order->code)]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
         }
     }
 

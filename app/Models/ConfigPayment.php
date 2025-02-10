@@ -13,7 +13,9 @@ class ConfigPayment extends Model
         'name',
         'published',
         'description',
-        'payment_percentage'
+        'payment_percentage',
+        'bank_code',
+        'account_number'
     ];
 
     public  $casts = [
