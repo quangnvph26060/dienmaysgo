@@ -1,6 +1,19 @@
 @extends('frontends.layouts.master')
 @section('title', 'Thanh toán')
 @section('content')
+    <div class="popup-overlay" id="qrPopup">
+        <div class="popup-content">
+            <span class="popup-close" onclick="closePopup()">×</span>
+            <p>Quét mã QR để thanh toán</p>
+            <img id="qrImage" src="" alt="QR Code">
+            <div class="popup-buttons">
+                <button class="btn-cancel" onclick="closePopup()">Hủy</button>
+                <button class="btn-complete" onclick="confirmPayment()">Hoàn tất thanh toán</button>
+            </div>
+        </div>
+    </div>
+
+
     <div id="content" class="content-area page-wrapper" role="main">
         <div class="row row-main">
             <div class="large-12 col">
@@ -127,8 +140,9 @@
                                                         </label>
                                                         <span class="woocommerce-input-wrapper">
                                                             <input type="email" class="input-text " name="email"
-                                                                id="email" placeholder="" value="{{ auth()->user()->email }}"
-                                                                aria-required="true" autocomplete="email username">
+                                                                id="email" placeholder=""
+                                                                value="{{ auth()->user()->email }}" aria-required="true"
+                                                                autocomplete="email username">
                                                             <small></small>
                                                         </span>
                                                     </p>
@@ -216,9 +230,12 @@
                                                     <h3 id="order_review_heading">Phương thức thanh toán</h3>
 
                                                     <ul class="wc_payment_methods payment_methods methods">
-                                                        @php($statusValue = ['cod', 'bacs', 'currency'])
+                                                        {{-- <input type="radio" class="input-radio" name="payment_method"
+                                                            value="transfer_payment"> --}}
+                                                        @php($statusValue = ['cod', 'transfer_payment'])
                                                         @foreach ($payments as $item)
                                                             @php($value = $statusValue[$item->id - 1])
+
                                                             <li class="wc_payment_method payment_method_alepay">
                                                                 <input type="radio" class="input-radio"
                                                                     @checked($loop->first) name="payment_method"
@@ -227,14 +244,14 @@
                                                                 <label for="payment_method_alepay">
                                                                     {{ $item->name }}
 
-                                                                    @if ($loop->last)
+                                                                    {{-- @if ($loop->last)
                                                                         <code>{{ number_format($item->payment_percentage, 0) }}%</code>
-                                                                    @endif
+                                                                    @endif --}}
 
                                                                 </label>
 
                                                                 <small
-                                                                    style="display: block; margin-left: 10px">{{ $item->description }}
+                                                                    style="display: block; margin-left: 10px">{!! $item->description !!}
                                                                 </small>
                                                             </li>
                                                         @endforeach
@@ -271,6 +288,39 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <script>
+        function closePopup() {
+            $('#qrPopup').fadeOut();
+        }
+
+        function confirmPayment() {
+            let formData = $('#billingForm').serializeArray(); // Lấy toàn bộ dữ liệu từ form
+
+            // Thêm type = confirm vào formData
+            formData.push({
+                name: 'type',
+                value: 'confirm'
+            });
+
+            $.ajax({
+                url: '{{ route('carts.checkout') }}',
+                type: 'POST',
+                data: formData,
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                },
+                success: function(response) {
+                    window.location.href = response.redirect
+                },
+                error: function(xhr) {
+                    alert('Lỗi khi xác nhận thanh toán. Vui lòng thử lại!');
+                }
+            });
+        }
+
+        function closePopup() {
+            $('#qrPopup').fadeOut();
+        }
+
         $(document).ready(function() {
 
             // Ẩn tất cả các đoạn text trong thẻ <p> ban đầu
@@ -302,9 +352,23 @@
                     },
                     success: function(response) {
 
-                        if (response.paymentUrl) window.location.href = response.paymentUrl
+                        // if (response.payment_method === 'transfer_payment') {
+                        //     $('#qrImage').attr('src', response.qrCode);
+                        //     $('#qrPopup').css('display', 'flex');
+                        // }
 
-                        if (response.redirect) window.location.href = response.redirect
+                        // if (response.paymentUrl) window.location.href = response.paymentUrl
+
+                        // if (response.redirect) window.location.href = response.redirect
+
+                        switch (response.payment_method) {
+                            case 'cod':
+                                window.location.href = response.redirect
+                            case 'transfer_payment':
+                                $('#qrImage').attr('src', response.qrCode);
+                                $('#qrPopup').css('display', 'flex');
+                                break;
+                        }
 
                     },
                     error: function(xhr) {
@@ -326,6 +390,7 @@
                     },
                 });
             });
+
 
             $('#province').change(function() {
                 var provinceId = $(this).val();
@@ -379,3 +444,79 @@
         });
     </script>
 @endsection
+
+@push('styles')
+    <style>
+        .popup-buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-complete {
+            background: #28a745;
+            color: white;
+            padding: 0px 15px !important;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 0 !important;
+        }
+
+        .btn-cancel {
+            background: #dc3545;
+            color: white;
+            padding: 0px 15px !important;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-complete:hover {
+            background: #218838;
+        }
+
+        .btn-cancel:hover {
+            background: #c82333;
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+            /* Ẩn mặc định */
+        }
+
+        .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            width: 400px;
+        }
+
+        .popup-content img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+@endpush

@@ -58,7 +58,7 @@ route::controller(CartController::class)->name('carts.')->group(function () {
 
     // Route::post('restore/{rowId}', [CartController::class, 'restoreLastDeletedProduct'])->name('restore');
     Route::post('restore', [CartController::class, 'restore'])->name('restore');
-    Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
+    Route::post('/checkout', [CartController::class, 'switchPaymentMethod'])->name('checkout');
     Route::get('order-success/{code}', [CartController::class, 'orderSuccess'])->name('order-success');
     Route::get('/districts', [CartController::class, 'getDistricts'])->name('api.districts');
     Route::get('/wards', [CartController::class, 'getWards'])->name('api.wards');

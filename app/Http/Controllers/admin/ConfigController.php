@@ -91,7 +91,9 @@ class ConfigController extends Controller
                 'name' => 'required|unique:config_payments,name,' . $request->id,
                 'description' => 'nullable',
                 'id' => 'required|exists:config_payments,id',
-                'payment_percentage' => 'nullable|numeric'
+                'payment_percentage' => 'nullable|numeric',
+                'bank_code' => 'nullable|numeric',
+                'account_number' => 'nullable|numeric',
             ],
             __('request.messages')
         );
