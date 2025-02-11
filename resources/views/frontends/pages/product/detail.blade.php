@@ -41,28 +41,33 @@
                                         </figure>
 
                                         <!-- Gallery images -->
-                                        <div class="product-gallery-thumbnails swiper-container">
-                                            <div class="swiper-wrapper">
-                                                @php
-                                                    $images = array_merge(
-                                                        [$product->image],
-                                                        $product->images->pluck('image')->toArray() ?? [],
-                                                    );
-                                                @endphp
-                                                {{-- @if ($product->images->isNotEmpty()) --}}
-                                                @foreach ($images as $index => $image)
-                                                    <div class="swiper-slide">
-                                                        <img class="gallery-thumb" src="{{ asset('storage/' . $image) }}"
-                                                            data-large-src="{{ asset('storage/' . $image) }}"
-                                                            alt="Thumbnail {{ $index + 1 }}" />
-                                                    </div>
-                                                @endforeach
-                                                {{-- @else
-                                                @endif --}}
-                                                <!-- Add more thumbnails as needed -->
+                                        @php
+                                            $images = array_merge(
+                                                [$product->image],
+                                                $product->images->pluck('image')->toArray() ?? [],
+                                            );
+                                        @endphp
+                                        @if (count($images) > 1)
+                                            <div class="product-gallery-thumbnails swiper-container">
+                                                <div class="swiper-wrapper">
+
+                                                    {{-- @if ($product->images->isNotEmpty()) --}}
+                                                    @foreach ($images as $index => $image)
+                                                        <div class="swiper-slide">
+                                                            <img class="gallery-thumb"
+                                                                src="{{ asset('storage/' . $image) }}"
+                                                                data-large-src="{{ asset('storage/' . $image) }}"
+                                                                alt="Thumbnail {{ $index + 1 }}" />
+                                                        </div>
+                                                    @endforeach
+                                                    {{-- @else
+                                                    @endif --}}
+                                                    <!-- Add more thumbnails as needed -->
+                                                </div>
+                                                <!-- Navigation buttons -->
                                             </div>
-                                            <!-- Navigation buttons -->
-                                        </div>
+                                        @endif
+
                                     </div>
                                 </div>
 
@@ -246,12 +251,10 @@
                                                         </button>
                                                     @endif
 
-
-                                                    <a href="{{ route('contact', ['product' => $product->slug]) }}"
+                                                    <a href="#" id="buy_now"
                                                         class="single_add_to_cart_buttonn button alt btn-contact"
-                                                        style="background: #ec1c24 !important; padding-left: 40px; padding-right: 40px; padding-bottom: 1px;"><span
-                                                            class="bi bi-telephone" style="margin-right: 3px"></span>Liên
-                                                        hệ </a>
+                                                        style="background: #ec1c24 !important; padding-left: 40px; padding-right: 40px; padding-bottom: 1px;"></span>Mua
+                                                        ngay</a>
                                                 </div>
                                             </div>
 
@@ -391,6 +394,35 @@
             wrapAround: true, // Lặp lại danh sách ảnh
             alwaysShowNavOnTouchDevices: true, // Hiển thị nút điều hướng trên thiết bị cảm ứng
         });
+
+        document.querySelector('#buy_now').addEventListener('click', function(e) {
+            e.preventDefault();
+
+            let productId = "{{ $product->id }}";
+            let quantity = document.querySelector('.input-text').value
+
+            fetch("{{ route('carts.buy-now') }}", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            "content") // Bảo vệ CSRF
+                    },
+                    body: JSON.stringify({
+                        product_id: productId,
+                        qty: quantity
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = "{{ route('carts.thanh-toan') }}"
+                    } else {
+                        alert(data.message)
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+        })
 
         document.addEventListener("DOMContentLoaded", () => {
             const swiper = new Swiper(".swiper-container", {

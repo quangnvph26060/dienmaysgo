@@ -53,6 +53,7 @@ route::controller(CartController::class)->name('carts.')->group(function () {
     Route::get('order-detail/{code}', [CartController::class, 'lookup'])->name('order-detail');
     Route::post('handle-remaining-payment', [CartController::class, 'handleRemainingPayment'])->name('handle-remaining-payment');
     Route::get('order-updated-successfully', [CartController::class, 'orderUpdatedSuccessfully'])->name('order-updated-successfully');
+    Route::post('by-now', [CartController::class, 'buyNow'])->name('buy-now');
 
     // route::post('update-cart/{id}/{qty}', 'updateQtyCart')->name('update-to-cart');
 
@@ -60,6 +61,7 @@ route::controller(CartController::class)->name('carts.')->group(function () {
     Route::post('restore', [CartController::class, 'restore'])->name('restore');
     Route::post('/checkout', [CartController::class, 'switchPaymentMethod'])->name('checkout');
     Route::get('order-success/{code}', [CartController::class, 'orderSuccess'])->name('order-success');
+    Route::post('gen-qr-code', [CartController::class, 'genQrCode'])->name('gen-qr-code');
     Route::get('/districts', [CartController::class, 'getDistricts'])->name('api.districts');
     Route::get('/wards', [CartController::class, 'getWards'])->name('api.wards');
 });

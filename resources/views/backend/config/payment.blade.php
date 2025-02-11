@@ -71,7 +71,7 @@
                             <small class="text-danger"></small>
                         </div>
 
-                        <div class="form-group d-none" id="bank_code_container">
+                        {{-- <div class="form-group d-none" id="bank_code_container">
                             <label for="bank_code">Mã ngân hàng</label>
                             <input type="text" class="form-control" id="bank_code" name="bank_code">
                             <small class="text-danger"></small>
@@ -81,7 +81,7 @@
                             <label for="account_number">Tài khoản hưởng thụ</label>
                             <input type="text" class="form-control" id="account_number" name="account_number">
                             <small class="text-danger"></small>
-                        </div>
+                        </div> --}}
 
                         <div class="form-group">
                             <label for="name">Mô tả</label>
@@ -123,9 +123,10 @@
                 })
 
                 if (resource.id == 2) {
-                    $('#bank_code_container, #account_number_container').removeClass('d-none');
-                } else {
-                    $('#bank_code_container, #account_number_container').addClass('d-none');
+                    window.location.href = '{{ route('admin.config.config-payment', ':__id__') }}'.replace(
+                        ':__id__', resource.id)
+
+                    return true;
                 }
 
                 if (resource.id == 3) {

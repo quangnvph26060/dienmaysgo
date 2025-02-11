@@ -1361,11 +1361,11 @@ li.has-dropdown:hover > .nav-dropdown-full {
     .title_page {
         padding-top: 10px;
     }
-    .single_add_to_cart_button,
+    /* .single_add_to_cart_button,
     .btn-contact {
         width: 100%;
         margin-bottom: 5px;
-    }
+    } */
     .flatsome-cookies__inner {
         align-items: stretch;
         flex-direction: column;

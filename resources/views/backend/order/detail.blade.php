@@ -209,7 +209,7 @@
                         $('#status-order-top').html(
                             '<span class="badge bg-primary">Đã xác nhận</span>');
 
-                        $(this).html('Hoàn thành hơn hàng');
+                        $(this).html('Hoàn thành đơn hàng');
                     } else {
 
                         $('button[data-bs-toggle="modal"]').prop('disabled', true);
