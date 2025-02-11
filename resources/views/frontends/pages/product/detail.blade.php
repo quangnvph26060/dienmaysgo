@@ -418,7 +418,11 @@
                     if (data.success) {
                         window.location.href = "{{ route('carts.thanh-toan') }}"
                     } else {
-                        alert(data.message)
+                        if (data.message) {
+                            alert(data.message)
+                        } else {
+                            window.location.href = "{{ route('auth.login') }}"
+                        }
                     }
                 })
                 .catch(error => console.error("Error:", error));
