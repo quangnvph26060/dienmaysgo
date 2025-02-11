@@ -1,17 +1,6 @@
 @extends('frontends.layouts.master')
 @section('title', 'Thanh toán')
 @section('content')
-    <div class="popup-overlay" id="qrPopup">
-        <div class="popup-content">
-            <span class="popup-close" onclick="closePopup()">×</span>
-            <p>Quét mã QR để thanh toán</p>
-            <img id="qrImage" src="" alt="QR Code">
-            <div class="popup-buttons">
-                <button class="btn-cancel" onclick="closePopup()">Hủy</button>
-                <button class="btn-complete" onclick="confirmPayment()">Hoàn tất thanh toán</button>
-            </div>
-        </div>
-    </div>
 
 
     <div id="content" class="content-area page-wrapper" role="main">
@@ -219,7 +208,8 @@
                                                         <tr class="cart-subtotal">
                                                             <th>Tổng cộng</th>
                                                             <td><span class="woocommerce-Price-amount amount"><bdi>{{ number_format($total, 0, '', '.') }}<span
-                                                                            class="woocommerce-Price-currencySymbol">₫</span></bdi></span>
+                                                                            class="woocommerce-Price-currencySymbol">
+                                                                            ₫</span></bdi></span>
                                                             </td>
                                                         </tr>
 
@@ -232,8 +222,9 @@
                                                     <ul class="wc_payment_methods payment_methods methods">
                                                         {{-- <input type="radio" class="input-radio" name="payment_method"
                                                             value="transfer_payment"> --}}
-                                                        @php($statusValue = ['cod', 'transfer_payment'])
+                                                        @php($statusValue = ['cod', 'bacs'])
                                                         @foreach ($payments as $item)
+                                                            {{-- {{ $item }} --}}
                                                             @php($value = $statusValue[$item->id - 1])
 
                                                             <li class="wc_payment_method payment_method_alepay">
@@ -243,11 +234,6 @@
 
                                                                 <label for="payment_method_alepay">
                                                                     {{ $item->name }}
-
-                                                                    {{-- @if ($loop->last)
-                                                                        <code>{{ number_format($item->payment_percentage, 0) }}%</code>
-                                                                    @endif --}}
-
                                                                 </label>
 
                                                                 <small
@@ -288,39 +274,6 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <script>
-        function closePopup() {
-            $('#qrPopup').fadeOut();
-        }
-
-        function confirmPayment() {
-            let formData = $('#billingForm').serializeArray(); // Lấy toàn bộ dữ liệu từ form
-
-            // Thêm type = confirm vào formData
-            formData.push({
-                name: 'type',
-                value: 'confirm'
-            });
-
-            $.ajax({
-                url: '{{ route('carts.checkout') }}',
-                type: 'POST',
-                data: formData,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                success: function(response) {
-                    window.location.href = response.redirect
-                },
-                error: function(xhr) {
-                    alert('Lỗi khi xác nhận thanh toán. Vui lòng thử lại!');
-                }
-            });
-        }
-
-        function closePopup() {
-            $('#qrPopup').fadeOut();
-        }
-
         $(document).ready(function() {
 
             // Ẩn tất cả các đoạn text trong thẻ <p> ban đầu
@@ -339,6 +292,7 @@
             $('.wc_payment_methods .wc_payment_method input:checked').closest('li').find('small').show();
 
             $('#billingForm').on('submit', function(e) {
+
                 e.preventDefault();
 
                 let formData = $(this).serializeArray();
@@ -351,24 +305,16 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
                     },
                     success: function(response) {
+                        if (response.success) window.location.href = response.redirect
 
-                        // if (response.payment_method === 'transfer_payment') {
-                        //     $('#qrImage').attr('src', response.qrCode);
-                        //     $('#qrPopup').css('display', 'flex');
+                        // switch (response.payment_method) {
+                        //     case 'cod':
+                        //         window.location.href = response.redirect
+                        //     case 'bacs':
+                        //         $('#qrImage').attr('src', response.qrCode);
+                        //         $('#qrPopup').css('display', 'flex');
+                        //         break;
                         // }
-
-                        // if (response.paymentUrl) window.location.href = response.paymentUrl
-
-                        // if (response.redirect) window.location.href = response.redirect
-
-                        switch (response.payment_method) {
-                            case 'cod':
-                                window.location.href = response.redirect
-                            case 'transfer_payment':
-                                $('#qrImage').attr('src', response.qrCode);
-                                $('#qrPopup').css('display', 'flex');
-                                break;
-                        }
 
                     },
                     error: function(xhr) {
@@ -447,6 +393,10 @@
 
 @push('styles')
     <style>
+        bdi {
+            font-size: 15px;
+        }
+
         .popup-buttons {
             margin-top: 15px;
             display: flex;
@@ -496,7 +446,16 @@
             /* Ẩn mặc định */
         }
 
-        .popup-content {
+        .popup .popup-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .popup-overlay .popup-content {
             background: white;
             padding: 20px;
             border-radius: 8px;

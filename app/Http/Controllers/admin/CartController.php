@@ -27,6 +27,33 @@ class CartController extends Controller
         return view('frontends.pages.cart', compact('carts', 'title'));
     }
 
+    public function buyNow(Request $request)
+    {
+        if (!auth()->check()) {
+            return response()->json([
+                'success' => false,
+            ]);
+        }
+
+        $productId = $request->product_id;
+        $quantity = $request->qty ?? 1;
+
+        $product = SgoProduct::find($productId);
+        if (!$product) return back();
+
+        if ($quantity > $product->quantity) return response()->json(['success' => false, 'message' => 'Số lượng trong kho không đủ!']);
+
+        session()->put('buy_now', [
+            'id'    => $product->id,
+            'name' => $product->name,
+            'qty' => $quantity,
+            'price' => $this->calculateProductPrice($product),
+            'image' => $product->image,
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
     public function InfoPayment()
     {
         if (!auth()->check()) {
@@ -34,11 +61,18 @@ class CartController extends Controller
             return redirect(route('auth.login'));
         }
 
-        if (Cart::instance('shopping')->count() <= 0) return back();
-
         $title = "Thanh toán";
-        $carts = Cart::instance('shopping')->content();
-        $total = $this->sumCarts();
+
+        if (! session()->has('buy_now')) {
+            if (Cart::instance('shopping')->count() <= 0) return back();
+            $carts = Cart::instance('shopping')->content();
+
+            $total = $this->sumCarts();
+        } else {
+            $carts = [(object) session()->get('buy_now')];
+            $total = $carts[0]->price * $carts[0]->qty;
+        }
+
 
         $province = Cache::rememberForever('province',  function () {
             return DB::table('province')->pluck('name', 'province_id')->toArray();
@@ -125,6 +159,17 @@ class CartController extends Controller
         return ['status' => true];
     }
 
+    public function sumCarts()
+    {
+        $carts = session()->get('cart')['shopping'] ?? [];
+        $total = 0;
+
+        foreach ($carts as $item) {
+            $total += $item->subtotal;
+        }
+        return $total;
+    }
+
     private function calculateProductPrice($product)
     {
         // Kiểm tra giảm giá tùy chỉnh
@@ -204,18 +249,6 @@ class CartController extends Controller
         ], 400);
     }
 
-
-    public function sumCarts()
-    {
-        $carts = session()->get('cart')['shopping'] ?? [];
-        $total = 0;
-
-        foreach ($carts as $item) {
-            $total += $item->subtotal;
-        }
-        return $total;
-    }
-
     public function restore()
     {
         // Lấy thông tin sản phẩm cuối cùng đã xóa từ session
@@ -249,7 +282,9 @@ class CartController extends Controller
 
     public function switchPaymentMethod(Request $request)
     {
-        if (Cart::instance('shopping')->count() <= 0) return url('/');
+        if (! session()->has('buy_now')) {
+            if (Cart::instance('shopping')->count() <= 0) return url('/');
+        }
 
         $credentials = Validator::make(
             $request->all(),
@@ -269,7 +304,7 @@ class CartController extends Controller
 
         if ($credentials->fails()) {
             return response()->json([
-                'status' => false,
+                'success' => false,
                 'errors' => $credentials->errors(),
             ], 422);
         }
@@ -285,9 +320,9 @@ class CartController extends Controller
             case 'cod':
                 return $this->codPayment($credentials);
             case 'bacs':
+                return $this->bacsPayment($credentials);
             case 'currency':
             case 'transfer_payment':
-                return $this->transferPayment($credentials);
                 // return $this
         }
     }
@@ -316,11 +351,9 @@ class CartController extends Controller
 
         $order->products()->attach($items);
 
-        Cart::instance('shopping')->destroy();
+        if (!session()->has('buy_now'))  Cart::instance('shopping')->destroy();
 
         event(new OrderPlaced($order));
-
-        Cache::put('payment_success', 'Thanh toán thành công', 120);
 
         return $order;
 
@@ -333,7 +366,7 @@ class CartController extends Controller
         //     $credentials['user_id'] = auth()->id();
 
         //     if ($request->payment_method == 'transfer_payment') {
-        //         return $this->transferPayment();
+        //         return $this->bacsPayment();
         //     }
 
         //     if ($request->payment_method == 'bacs' || $request->payment_method == 'currency') {
@@ -357,23 +390,35 @@ class CartController extends Controller
         // }
     }
 
-    private function transferPayment($credentials)
+    private function bacsPayment($credentials)
     {
-        if (isset($credentials['type']) && $credentials['type'] == 'confirm') return $this->confirmTransferPayment($credentials);
+        try {
+            DB::beginTransaction();
 
-        $paymentMethod = ConfigPayment::query()->where('id', 2)->first();
+            $order =  $this->checkout($credentials);
 
-        $bank = $paymentMethod->bank_code; // Mã ngân hàng (VD: Agribank)
-        $account = $paymentMethod->account_number; // Số tài khoản nhận tiền
-        $amount = $credentials['total_price']; // Số tiền cần thanh toán (tùy chọn)
-        $content = 'THANH TOAN DON HANG ' . $credentials['code']; // Nội dung chuyển khoản
+            DB::commit();
+
+            return response()->json(['success' => true, 'payment_method' => 'transfer_payment', 'redirect' => route('carts.order-success', $order->code)]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+        }
+    }
+
+    public function genQrCode(Request $request)
+    {
+
+        $bank = $request->qrData['bank_code']; // Mã ngân hàng (VD: Agribank)
+        $account = $request->qrData['account_number']; // Số tài khoản nhận tiền
+        $amount = $request->qrData['total_price']; // Số tiền cần thanh toán (tùy chọn)
+        $content = 'THANH TOAN DON HANG ' . $request->qrData['code']; // Nội dung chuyển khoản
 
         $qrUrl = "https://img.vietqr.io/image/{$bank}-{$account}-compact.png?amount={$amount}&addInfo={$content}";
 
-        return response()->json(['success' => true, 'payment_method' => 'transfer_payment', 'qrCode' => $qrUrl]);
+        return response()->json(['success' => true, 'qrCode' => $qrUrl]);
     }
 
-    public function confirmTransferPayment($credentials)
+    public function confirmbacsPayment($credentials)
     {
         try {
             DB::beginTransaction();
@@ -403,6 +448,11 @@ class CartController extends Controller
 
     private function calculateTotalPrice()
     {
+        if (session()->has('buy_now')) {
+            $cart = session()->get('buy_now');
+
+            return $cart['price'] * $cart['qty'];
+        }
         return floatval(str_replace(',', '', Cart::instance('shopping')->subtotal()));
     }
 
@@ -427,12 +477,15 @@ class CartController extends Controller
 
     public function orderSuccess($code)
     {
-        if (! Cache::get('payment_success')) return redirect()->route('home');
-
         $order = SgoOrder::query()->where('code', request('code'))->with('products')->firstOrFail();
 
-        return view('frontends.pages.order-success', compact('order'));
+        // Lấy thông tin tài khoản ngân hàng
+        $accountDetails = ConfigPayment::query()->where('type', 'bacs')->first();
+
+
+        return view('frontends.pages.order-success', compact('order', 'accountDetails'));
     }
+
 
     public function getDistricts(Request $request)
     {
@@ -552,7 +605,7 @@ class CartController extends Controller
 
             event(new OrderPlaced($order));
 
-            Cache::put('payment_success', 'Thanh toán thành công', 120);
+            // Cache::put('payment_success', 'Thanh toán thành công', 120);
 
             DB::commit();
 

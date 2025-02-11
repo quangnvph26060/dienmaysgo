@@ -1,12 +1,15 @@
 @extends('frontends.layouts.master')
 
 @section('title', 'Đặt hàng thông công')
-{{-- @section('description', $news->description_seo)
-@section('keywords', $news->keyword_seo)
-@section('og_title', $news->name)
-@section('og_description', $news->description_seo) --}}
 
 @section('content')
+    <div class="popup-overlay" id="qrPopup">
+        <div class="popup-content">
+            <span class="popup-close" onclick="closePopup()">×</span>
+            <p>Quét mã QR để thanh toán</p>
+            <img id="qrImage" src="" alt="QR Code">
+        </div>
+    </div>
     <div class="body-order">
         <div class="order-success">
             <div class="success-icon">
@@ -55,8 +58,35 @@
                         </p>
                     </div>
 
-
                 </div>
+                @if ($order->payment_method == 'bacs')
+                    <h2>Thông tin tài khoản ngân hàng</h2>
+                    <table class="bank-account-table" border="1">
+                        <thead>
+                            <tr>
+                                <th>Tên người hưởng thụ</th>
+                                <th>Số tài khoản</th>
+                                <th>Ngân hàng</th>
+                                <th>QR</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php($accountDetails = $accountDetails->account_details)
+                            @foreach ($accountDetails['account_name'] as $key => $accountName)
+                                <tr>
+                                    <td>{{ $accountName }}</td>
+                                    <td>{{ $accountDetails['account_number'][$key] }}</td>
+                                    <td>{{DB::table('banks')->where('bin', $accountDetails['bank_code'][$key])->first()->name }}</td>
+                                    <td>
+                                        <i class="fas fa-qrcode fa-lg"
+                                            data-qr="{{ json_encode(['bank_code' => $accountDetails['bank_code'][$key], 'account_number' => $accountDetails['account_number'][$key], 'total_price' => $order->total_price, 'code' => $order->code]) }}"
+                                            style="cursor: pointer;"></i>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endif
 
                 <h2>Sản phẩm đã đặt</h2>
                 <table class="product-table">
@@ -93,8 +123,118 @@
     </div>
 @endsection
 
+@push('scripts')
+    <script>
+        function closePopup() {
+            var qrPopup = document.getElementById('qrPopup');
+            if (qrPopup) {
+                qrPopup.style.display = 'none';
+            }
+        }
+
+        var iconQr = document.querySelectorAll('.fa-qrcode')
+
+        iconQr.forEach(element => {
+            element.addEventListener('click', () => {
+                let qrData = JSON.parse(element.getAttribute('data-qr'));
+
+                fetch("{{ route('carts.gen-qr-code') }}", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute(
+                                    'content')
+                        },
+                        body: JSON.stringify({
+                            qrData
+                        })
+                    })
+                    .then(response => {
+
+                        if (response.status != 200) {
+                            alert('Có lỗi xảy ra vui lòng thử lại sau!');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.qrCode) {
+                            // Cập nhật ảnh QR trong phần tử với id 'qrImage'
+                            const qrImage = document.getElementById('qrImage');
+                            if (qrImage) {
+                                qrImage.src = data.qrCode;
+                            }
+
+                            // Hiển thị popup QR
+                            const qrPopup = document.getElementById('qrPopup');
+                            if (qrPopup) {
+                                qrPopup.style.display = 'flex';
+                            }
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            })
+        });
+    </script>
+@endpush
+
 @push('styles')
     <style>
+        .popup-buttons {
+            margin-top: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-complete {
+            background: #28a745;
+            color: white;
+            padding: 0px 15px !important;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 0 !important;
+        }
+
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+            /* Ẩn mặc định */
+        }
+
+        .popup-overlay .popup-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            width: 400px;
+        }
+
+        .popup-content img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            cursor: pointer;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
         /* styles.css */
         .body-order {
             font-family: Arial, sans-serif;

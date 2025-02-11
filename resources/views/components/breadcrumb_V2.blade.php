@@ -32,7 +32,7 @@
                     @endif
 
                     @isset($name)
-                        <a href="javascript::void(0)">{{ convertToSentenceCase($name) }}</a>
+                        <a href="javascript::void(0)">{{ $name }}</a>
                     @endisset
 
                 </nav>

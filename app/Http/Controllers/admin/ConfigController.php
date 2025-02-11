@@ -78,13 +78,19 @@ class ConfigController extends Controller
         return redirect()->back();
     }
 
-    public function configPayment()
+    public function configPayment($id = null)
     {
+        if ($id) {
+            $config = ConfigPayment::query()->where('id', 2)->first();
+            $banks = DB::table('banks')->pluck('name', 'bin')->toArray();
+
+            return view('backend.config.transfer_payment', compact('banks', 'config'));
+        }
         $configPayments = ConfigPayment::query()->get();
         return view('backend.config.payment', compact('configPayments'));
     }
 
-    public function configPaymentPost(Request $request)
+    public function configPaymentPost(Request $request, string $id = null)
     {
         $credentials = $request->validate(
             [
@@ -111,6 +117,28 @@ class ConfigController extends Controller
                 'status' => false,
             ], 500);
         }
+    }
+
+    public function configTransferPayment(Request $request)
+    {
+        $credentials = $request->validate([
+            'name' => 'required|max:100',
+            'description' => 'nullable',
+            'account_details.account_name' => 'required|array',
+            'account_details.account_name.*' => 'required|string|max:255',
+            'account_details.account_number' => 'required|array',
+            'account_details.account_number.*' => 'required|numeric|digits_between:6,20',
+            'account_details.bank_code' => 'required|array',
+            'account_details.bank_code.*' => 'required|string|distinct',
+        ], __('request.messages'));
+
+        $config = ConfigPayment::query()->where('id', 2)->first();
+
+        $config->update($credentials);
+
+        toastr()->success('Lưu thay đổi thành công.');
+
+        return redirect()->route('admin.config.config-payment');
     }
 
     public function handleChangePublishPayment(Request $request)

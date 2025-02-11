@@ -153,7 +153,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('', [ConfigController::class, 'index'])->name('index');
         Route::post('update', [ConfigController::class, 'update'])->name('update');
         Route::post('update-support', [ConfigController::class, 'updateSupport'])->name('update-support');
-        route::get('config-payment', [ConfigController::class, 'configPayment'])->name('config-payment');
+        route::get('config-payment/{id?}', [ConfigController::class, 'configPayment'])->name('config-payment');
         route::post('config-payment', [ConfigController::class, 'configPaymentPost']);
         route::put('config-payment', [ConfigController::class, 'handleChangePublishPayment'])->name('handle-change-publish-payment');
         route::get('config-slider', [ConfigController::class, 'configSlider'])->name('config-slider');
@@ -161,6 +161,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         route::get('config-filter', [ConfigController::class, 'configFilter'])->name('config-filter');
         route::post('config-filter', [ConfigController::class, 'handleSubmitFilter']);
         route::post('config-filter-update/{id}', [ConfigController::class, 'handleSubmitChangeFilter'])->name('config-filter-update');
+        route::post('config-transfer-payment', [ConfigController::class, 'configTransferPayment'])->name('config-transfer-payment');
     });
 
     Route::prefix('fuel')->name('fuel.')->group(function () {

@@ -15,10 +15,12 @@ class ConfigPayment extends Model
         'description',
         'payment_percentage',
         'bank_code',
-        'account_number'
+        'account_number',
+        'account_details'
     ];
 
     public  $casts = [
         'published' => 'boolean',
+        'account_details' => 'array',
     ];
 }
