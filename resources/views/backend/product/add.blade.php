@@ -32,24 +32,26 @@
                     Thông tin sản phẩm
                 </button>
             </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo" type="button"
-                    role="tab" aria-controls="seo" aria-selected="false">
-                    Cấu hình SEO
-                </button>
-            </li>
+
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="parameters-tab" data-bs-toggle="tab" data-bs-target="#parameters"
                     type="button" role="tab" aria-controls="parameters" aria-selected="false">
                     Thông số kỹ thuật
                 </button>
             </li>
+
             <li class="nav-item" role="presentation">
+                <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo" type="button"
+                    role="tab" aria-controls="seo" aria-selected="false">
+                    Cấu hình SEO
+                </button>
+            </li>
+            {{-- <li class="nav-item" role="presentation">
                 <button class="nav-link" id="attribute-tab" data-bs-toggle="tab" data-bs-target="#attribute" type="button"
                     role="tab" aria-controls="attribute" aria-selected="false">
                     Thuộc tính
                 </button>
-            </li>
+            </li> --}}
         </ul>
 
         <div class="row">
@@ -115,6 +117,24 @@
 
                                     <div class="col-lg-12">
                                         <div class="form-group">
+                                            <label for="">Thuộc tính</label>
+                                            <select id="mySelect" multiple="multiple" class="form-select"
+                                                style="width: 100%;" name="attribute_id[]">
+                                                @foreach ($attributes as $id => $name)
+                                                    <option value="{{ $id }}">{{ $name }}</option>
+                                                @endforeach
+                                            </select>
+
+                                            <div id="additional-selects" class="mt-3 row form-group">
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-lg-12">
+                                        <div class="form-group">
                                             <label for="" class="form-label">Album ảnh</label>
                                             <div class="input-images pb-3"></div>
                                         </div>
@@ -124,6 +144,14 @@
                                         <div class="form-group">
                                             <label for="description" class="form-label">Mô tả chi tiết</label>
                                             <textarea id="description" class="form-control" name="description" rows="10">{!! old('description') !!}</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <div class="form-group mb-3">
+                                            <label for="tags" class="form-label">Tags</label>
+                                            <input type="text" class="form-control" name="tags" id="tags"
+                                                placeholder="tags sản phẩm" value="{{ old('tags') }}">
                                         </div>
                                     </div>
 
@@ -155,12 +183,6 @@
                                         value="{{ old('keyword_seo') }}" placeholder="Nhập từ khóa SEO">
                                 </div>
 
-                                <div class="form-group mb-3">
-                                    <label for="tags" class="form-label">Tags</label>
-                                    <input type="text" class="form-control" name="tags" id="tags"
-                                        placeholder="tags sản phẩm" value="{{ old('tags') }}">
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -175,25 +197,13 @@
                         </div>
                     </div>
 
-                    <div class="tab-pane fade" id="attribute" role="tabpanel" aria-labelledby="attribute-tab">
+                    {{-- <div class="tab-pane fade" id="attribute" role="tabpanel" aria-labelledby="attribute-tab">
                         <div class="card">
                             <div class="card-body">
-                                <div class="form-group">
-                                    <label for="">Thuộc tính</label>
-                                    <select id="mySelect" multiple="multiple" class="form-select" style="width: 100%;"
-                                        name="attribute_id[]">
-                                        @foreach ($attributes as $id => $name)
-                                            <option value="{{ $id }}">{{ $name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
 
-                                <div id="additional-selects" class="mt-3 row form-group">
-
-                                </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 

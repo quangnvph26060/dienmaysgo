@@ -26,8 +26,6 @@
                         <th>LƯỢT XEM</th>
                         <th>NGÀY TẠO</th>
                     </thead>
-
-
                 </table>
             </div>
         </div>
@@ -57,6 +55,7 @@
 
 
 @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
     @include('backend.product.columns')
@@ -65,7 +64,7 @@
         $(document).ready(function() {
             const api = '{{ route('admin.product.index') }}'
 
-            dataTables(api, columns, 'SgoProduct')
+            dataTables(api, columns, 'SgoProduct', false, true)
 
             handleDestroy()
 
@@ -95,6 +94,10 @@
                 $(this).closest('td').find('.price-input').focus();
             });
 
+            function formattedNumber(number) {
+                return parseInt(number.replaceAll('.', ''), 10);
+            }
+
 
             $(document).on({
                 input: function() {
@@ -117,7 +120,7 @@
                                     productId), // Thay bằng URL API của bạn
                             type: 'POST',
                             data: {
-                                price: newPrice
+                                price: formattedNumber(newPrice)
                             },
                             success: function(response) {
                                 if (response.status) {
@@ -145,6 +148,13 @@
 @endpush
 
 @push('styles')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <style>
+        .select2 {
+            width: 340px !important;
+        }
+    </style>
 @endpush

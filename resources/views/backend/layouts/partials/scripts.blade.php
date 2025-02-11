@@ -70,7 +70,7 @@
         menuItems.forEach(function(menuItem) {
             // Kiểm tra xem đường dẫn của menu có khớp với route hiện tại hay không
             const submenuId = menuItem.getAttribute('href').substring(
-            1); // Lấy id của submenu (ví dụ: "order", "product")
+                1); // Lấy id của submenu (ví dụ: "order", "product")
             const currentRoute = window.location.pathname;
 
             // Nếu menu tương ứng với route hiện tại, mở submenu
@@ -94,15 +94,16 @@
 
 
 
-    const dataTables = (api, columns, model, filterDate = false) => {
+    const dataTables = (api, columns, model, filterDate = false, filterCatalogue = false) => {
         const table = $('#myTable').DataTable({ // Định nghĩa biến table
             processing: true,
             serverSide: true,
             ajax: {
                 url: api,
                 data: function(d) {
-                    d.startDate = $('#startDate').val() || null; // Gửi nếu có giá trị
+                    d.startDate = $('#startDate').val() || null;
                     d.endDate = $('#endDate').val() || null;
+                    d.catalogue = $('#catalogueFilter').val() || null; // Thêm dữ liệu filter catalogue
                 }
             },
             columns: columns,
@@ -171,6 +172,64 @@
                 });
             }
         }
+
+        if (filterCatalogue) {
+            const lengthContainer = document.querySelector('.dt-length');
+
+            if (lengthContainer) {
+                const catalogueFilterHtml = `
+        <div class="catalogue-filter ms-2 d-flex align-items-center">
+            <select id="catalogueFilter" class="form-control w-auto">
+                <option value="">Chọn danh mục</option> <!-- Dữ liệu mặc định "Chọn danh mục" -->
+            </select>
+            <button id="resetCatalogueBtn" class="btn btn-secondary ms-2 btn-sm">Reset</button>
+        </div>
+    `;
+
+                lengthContainer.insertAdjacentHTML('afterend', catalogueFilterHtml);
+
+                // Initialize Select2 với dữ liệu mặc định
+                $('#catalogueFilter').select2({
+                    placeholder: 'Chọn danh mục',
+                    allowClear: true,
+                    minimumInputLength: 0 // Không cần nhập ký tự để hiển thị dữ liệu
+                });
+
+                // Gọi API một lần để lấy tất cả danh mục và thêm vào Select2
+                $.ajax({
+                    url: "{{ route('admin.product.categories.index') }}", // API lấy danh mục
+                    dataType: 'json',
+                    success: function(data) {
+                        const formattedData = data.map(item => {
+                            // Thêm dấu ngạch (-) tương ứng với level của danh mục
+                            let prefix = '-'.repeat(item
+                            .level); // Tạo dấu "-" tương ứng với level
+                            return {
+                                id: item.id,
+                                text: prefix + " " + item.name // Thêm dấu "-" vào tên
+                            };
+                        });
+
+                        // Cập nhật dữ liệu vào Select2 sau khi đã có dữ liệu
+                        $('#catalogueFilter').select2({
+                            data: formattedData
+                        });
+                    }
+                });
+
+                // Khi chọn catalogue, filter bảng
+                $('#catalogueFilter').on('change', function() {
+                    table.draw();
+                });
+
+                // Reset filter
+                $('#resetCatalogueBtn').on('click', function() {
+                    $('#catalogueFilter').val(null).trigger('change');
+                    table.draw();
+                });
+            }
+        }
+
 
 
         $('#myTable thead input[type="checkbox"]').on('click', function() {
