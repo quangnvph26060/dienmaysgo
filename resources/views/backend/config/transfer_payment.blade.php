@@ -30,7 +30,15 @@
                         </thead>
 
                         <tbody>
-                            @foreach ($config->account_details['account_name'] as $keys => $account_name)
+                            @php
+                                $accountDetails = $config->account_details ?? [
+                                    'account_name' => [],
+                                    'account_number' => [],
+                                    'bank_code' => [],
+                                ];
+                            @endphp
+
+                            @foreach ($accountDetails['account_name'] as $keys => $account_name)
                                 <tr>
                                     <td style="width: 25%">
                                         <input class="form-control" type="text" name="account_details[account_name][]"
@@ -38,12 +46,13 @@
                                     </td>
                                     <td style="width: 30%">
                                         <input class="form-control" type="text" name="account_details[account_number][]"
-                                            value="{{ $config->account_details['account_number'][$keys] }}">
+                                            value="{{ $accountDetails['account_number'][$keys] ?? '' }}">
                                     </td>
                                     <td>
                                         <select class="form-control select-bank" name="account_details[bank_code][]">
                                             @foreach ($banks as $key => $item)
-                                                <option @selected($key == $config->account_details['bank_code'][$keys]) value="{{ $key }}">{{ $item }}</option>
+                                                <option @selected($key == $accountDetails['bank_code'][$keys] ?? '') value="{{ $key }}">
+                                                    {{ $item }}</option>
                                             @endforeach
                                         </select>
                                     </td>
@@ -90,7 +99,7 @@
         }
 
         initSelect2();
-        updateBankOptions()
+        updateBankOptions();
 
         function initSelect2() {
             $(".select-bank").select2({
@@ -121,9 +130,7 @@
                     ${generateBankOptions()}
                 </select>
             </td>
-            <td style="width: 11%">
-                <button class="btn btn-danger btn-sm btn-delete">Xóa</button>
-            </td>
+            <td style="width: 11%"><button class="btn btn-danger btn-sm btn-delete">Xóa</button></td>
         </tr>
     `;
             $("tbody").append(newRow);

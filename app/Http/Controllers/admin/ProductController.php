@@ -24,12 +24,47 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
+
+    public function getCategories()
+    {
+        $categories = DB::table('sgo_category')->get();
+
+        $sortedCategories = $this->sortCategories($categories);
+
+        return response()->json($sortedCategories);
+    }
+
+    private function sortCategories($categories, $parentId = null, $level = 0)
+    {
+        $result = [];
+
+        foreach ($categories as $category) {
+            if ($category->category_parent_id == $parentId) {
+                $category->level = $level;
+                $result[] = $category;
+
+                // Gọi đệ quy để lấy danh mục con
+                $children = $this->sortCategories($categories, $category->id, $level + 1);
+                $result = array_merge($result, $children);
+            }
+        }
+
+        return $result;
+    }
+
     public function index(Request $request)
     {
         $page = 'Sản phẩm';
         $title = 'Danh sách sản phẩm';
         if ($request->ajax()) {
-            return datatables()->of(SgoProduct::select(['id', 'name', 'price', 'quantity', 'import_price', 'category_id', 'view_count'])->with('category')->latest()->get())
+            return datatables()->of(SgoProduct::select(['id', 'name', 'price', 'quantity', 'import_price', 'category_id', 'view_count'])
+                ->when($request->catalogue, function ($query) use ($request) {
+                    // Kiểm tra xem có bộ lọc catalogue không và áp dụng điều kiện lọc
+                    return $query->where('category_id', $request->catalogue);
+                })
+                ->with('category') // Quan hệ với bảng Category
+                ->latest() // Sắp xếp theo thời gian giảm dần
+                ->get())
                 ->addColumn('price', function ($row) {
                     return number_format($row->price, 0, ',', '.') . ' VND' . '<i class="fas fa-pen-alt ms-2 pointer" data-id=' . $row->id . '></i>';
                 })
