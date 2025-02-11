@@ -29,12 +29,7 @@ class CartController extends Controller
 
     public function buyNow(Request $request)
     {
-        if (!auth()->check()) {
-            session()->put('url.intended', route('carts.thanh-toan'));
-            return response()->json([
-                'success' => false,
-            ]);
-        }
+
 
         $productId = $request->product_id;
         $quantity = $request->qty ?? 1;
@@ -51,6 +46,13 @@ class CartController extends Controller
             'price' => $this->calculateProductPrice($product),
             'image' => $product->image,
         ]);
+
+        if (!auth()->check()) {
+            session()->put('url.intended', route('carts.thanh-toan'));
+            return response()->json([
+                'success' => false,
+            ]);
+        }
 
         return response()->json(['success' => true]);
     }
@@ -462,19 +464,35 @@ class CartController extends Controller
         return generateRandomString();
     }
 
-    private function mapCartItems()
+    private function mapCartItems(): array
     {
         $items = [];
-        Cart::instance('shopping')->content()->each(function ($item) use (&$items) {
-            $items[$item->id] = [
-                'p_name' => $item->name,
-                'p_image' => $item->options['image'],
-                'p_price' => $item->price,
-                'p_qty' => $item->qty,
+
+        if (session()->has('buy_now')) {
+            // Lấy sản phẩm từ session 'buy_now'
+            $buyNowItem = session()->get('buy_now');
+
+            $items[$buyNowItem['id']] = [
+                'p_name' => $buyNowItem['name'],
+                'p_image' => $buyNowItem['image'],
+                'p_price' => $buyNowItem['price'],
+                'p_qty' => $buyNowItem['qty'],
             ];
-        });
+        } else {
+            // Lấy sản phẩm từ giỏ hàng bình thường
+            Cart::instance('shopping')->content()->each(function ($item) use (&$items) {
+                $items[$item->id] = [
+                    'p_name' => $item->name,
+                    'p_image' => $item->options['image'],
+                    'p_price' => $item->price,
+                    'p_qty' => $item->qty,
+                ];
+            });
+        }
+
         return $items;
     }
+
 
     public function orderSuccess($code)
     {

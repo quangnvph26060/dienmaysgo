@@ -27,7 +27,7 @@ route::name('auth.')->controller(AuthController::class)->group(function () {
         route::post('dang-nhap', 'authenticate')->name('authenticate');
         route::post('dang-ky', 'register')->name('register');
         route::get('auth/google', 'redirect')->name('google-auth');
-        route::get('auth/google/call-back', 'callbackGoogle');
+        route::get('auth/google/call-back', 'callbackGoogle')->name('callbackGoogle');;
     });
 
 
