@@ -126,6 +126,8 @@
                 })
                 .then(response => response.json())
                 .then(response => {
+                    console.log(response);
+
                     if (response.status_code == 400) alert(response.message)
 
                     if (response.status_code == 422) alert(response.error)

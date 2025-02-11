@@ -15,9 +15,29 @@ class isBuyNow
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (session()->has('buy_now') && !$request->routeIs('carts.thanh-toan')) {
+        // Danh sách các route cần loại trừ
+        $excludedRoutes = [
+            'carts.thanh-toan',
+            'carts.checkout',
+            'carts.api.districts',
+            'carts.api.wards',
+            'auth.login',
+            'auth.authenticate',
+            'auth.register',
+            'auth.google-auth',
+            'auth.callbackGoogle',
+        ];
+
+        // Nếu route hiện tại nằm trong danh sách loại trừ, bỏ qua middleware
+        if ($request->routeIs($excludedRoutes)) {
+            return $next($request);
+        }
+
+        // Nếu session tồn tại và không thuộc các route trên, xóa session
+        if (session()->has('buy_now')) {
             session()->forget('buy_now');
         }
+
         return $next($request);
     }
 }

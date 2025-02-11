@@ -417,7 +417,8 @@
                 .then(data => {
                     if (data.success) {
                         window.location.href = "{{ route('carts.thanh-toan') }}"
-                    } else {
+                    }
+                    else {
                         if (data.message) {
                             alert(data.message)
                         } else {

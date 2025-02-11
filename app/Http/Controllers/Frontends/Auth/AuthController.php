@@ -53,7 +53,8 @@ class AuthController extends Controller
                 return response()->json(['status_code' => 400, 'message' => 'Tài khoản Admin không thể truy cập!']);
             }
 
-            $intendedUrl = session('url.intended', route('home'));
+            $intendedUrl = session()->has('url.intended') ? session()->get('url.intended') : session('url.intended', route('home'));
+
             return response()->json([
                 'message' => 'Đăng nhập thành công!',
                 'redirect' => $intendedUrl,
