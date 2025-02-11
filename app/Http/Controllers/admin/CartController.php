@@ -30,6 +30,7 @@ class CartController extends Controller
     public function buyNow(Request $request)
     {
         if (!auth()->check()) {
+            session()->put('url.intended', route('carts.thanh-toan'));
             return response()->json([
                 'success' => false,
             ]);
