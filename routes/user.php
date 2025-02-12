@@ -38,7 +38,7 @@ route::controller(CartController::class)->name('carts.')->group(function () {
 });
 
 route::controller(ProductController::class)->name('products.')->group(function () {
-    route::get('danh-muc-san-pham/{slug}', 'list')->name('list');
+    route::get('{slug}', 'list')->name('list');
     route::get('san-pham/{slug}', 'detail')->name('detail');
 });
 

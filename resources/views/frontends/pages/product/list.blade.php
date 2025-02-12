@@ -8,16 +8,22 @@
                     class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
                     <span class="widget-title shop-sidebar">Nhiên liệu sử dụng</span>
                     <div class="is-divider small"></div>
+                    <?php
+                          $fuels = App\Models\SgoFuel::get();
+                    ?>
                     <ul class="woocommerce-widget-layered-nav-list">
-                        <li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term">
-                            <a rel="nofollow"
-                                href="https://dienmaysgo.com/may-phat-dien/?filter_nhien-lieu=diesel">Diesel</a>
-                            <span class="count">(1)</span>
-                        </li>
-                        <li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term">
-                            <a rel="nofollow" href="https://dienmaysgo.com/may-phat-dien/?filter_nhien-lieu=xang">Xăng</a>
-                            <span class="count">(1)</span>
-                        </li>
+                        @foreach ($fuels as $fuel)
+                            <li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term">
+                                <a rel="nofollow"
+                                    href="https://dienmaysgo.com/may-phat-dien/?filter_nhien-lieu=diesel">{{ $fuel->name }}</a>
+                                <span class="count">
+                                    (<?php
+                                      echo $count = App\Models\SgoProduct::where('fuel_id', $fuel->id)->count();
+                                    ?>)
+                                </span>
+                            </li>
+                        @endforeach
+
                     </ul>
                 </aside>
             </div>
