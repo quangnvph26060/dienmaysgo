@@ -32,8 +32,20 @@ return [
     ],
 
     'nocaptcha' => [
-    'sitekey' => env('NOCAPTCHA_SITEKEY'),
-    'secret' => env('NOCAPTCHA_SECRET'),
+        'sitekey' => env('NOCAPTCHA_SITEKEY'),
+        'secret' => env('NOCAPTCHA_SECRET'),
+    ],
+
+    // 'facebook' => [
+    //     'client_id' => '598605722761627',
+    //     'client_secret' => 'd33895bb6d031d4f6de207b9167a78e2',
+    //     'redirect' => '',
+    // ],
+
+    'google' => [
+    'client_id' => env('GOOGLE_CLIENT_ID'),
+    'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+    'redirect' => 'http://127.0.0.1:8000/auth/google/call-back',
 ],
 
 

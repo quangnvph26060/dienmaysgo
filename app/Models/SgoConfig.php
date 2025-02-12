@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class SgoConfig extends Model
 {
@@ -23,9 +24,27 @@ class SgoConfig extends Model
         'title_seo',
         'description_seo',
         'keywords_seo',
-        'url',
-        'content'
+        'content',
+        'introduct_title',
+        'introduction',
+        'icon',
+        'support'
+    ];
+
+    protected $casts = [
+        'introduction' => 'array',
+        'support' => 'array'
     ];
 
     public $timestamps = true;
+
+    // public static function boot()
+    // {
+    //     parent::boot();
+
+    //     static::saved(function () {
+    //         \Log::info('clear cache');
+    //         Cache::forget('site_settings');
+    //     });
+    // }
 }

@@ -1,6 +1,7 @@
 <script src="{{ asset('frontends/assets/js/chunk.countup.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/chunk.sticky-sidebar.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/chunk.tooltips.js') }}"></script>
+<script src="{{ asset('frontends/assets/js/chunk.vendors-popups.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/chunk.vendors-slider.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/jquery.min.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/jquery.blockUI.min.js') }}"></script>
@@ -21,10 +22,45 @@
 <script src="{{ asset('frontends/assets/js/jquery.selectBox.min.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/jquery.prettyPhoto.min.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/jquery.yith-wcwl.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/custom.js') }}"></script>
+{{-- <script src="{{ asset('frontends/assets/js/custom.js') }}"></script> --}}
 <script src="{{ asset('frontends/assets/js/toastr.min.js') }}"></script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lấy URL hiện tại
+        const currentUrl = window.location.href;
 
+        // Kiểm tra nếu URL không chứa chữ 'profile'
+        if (!currentUrl.includes('profile')) {
+            // Kiểm tra xem key 'activeTab' có tồn tại trong Local Storage không
+            if (localStorage.getItem('activeTab')) {
+                localStorage.removeItem('activeTab'); // Xóa key 'activeTab'
+            }
+        }
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const masthead = document.getElementById("masthead");
+
+        // Hàm kiểm tra và áp dụng lớp `fixed`
+        const checkScroll = () => {
+            if (window.scrollY > 200) {
+                document.querySelector(".header-wrapper").classList.add("stuck")
+                masthead.classList.add("fixed");
+            } else {
+                document.querySelector(".header-wrapper").classList.remove("stuck")
+                masthead.classList.remove("fixed");
+            }
+        };
+
+        // Kiểm tra ngay khi tải trang
+        checkScroll();
+
+        // Lắng nghe sự kiện cuộn
+        window.addEventListener("scroll", checkScroll);
+    });
+</script>
 <script>
     const BASE_URL = "{{ url('/') }}";
 
@@ -59,7 +95,7 @@
             _html += `
             <li class="woocommerce-mini-cart-item mini_cart_item">
                 <a class="remove remove_from_cart_button" data-row-id="${cart.rowId}" data-product_id="${cart.id}">×</a>
-                <a href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sv2800/">
+                <a href="${BASE_URL + '/san-pham/' + cart.options['slug']}">
                     <img
                         width="300"
                         height="300"
@@ -81,17 +117,21 @@
                 </span>
             </li>
         `;
-            total += cart.price * cart.qty; // Tính t��ng tiền
+            total += cart.price * cart.qty;
         });
 
+        var count = data.count;
 
-        jQuery('.cart-count').html(data.count);
+        jQuery('.header-cart-link .fas.fa-shopping-cart').attr('data-icon-label', count);
 
-        jQuery('.cart_list.product_list_widget').html(_html);
-        jQuery('.total_cart').html(formatCurrency(total));
-        jQuery('.button.checkout.wc-forward').css('display', 'block')
+        jQuery('.woocommerce-mini-cart.cart_list.product_list_widget').html(_html);
+
+        jQuery('.woocommerce-mini-cart__total .woocommerce-Price-amount.amount bdi').html(formatCurrency(total));
+
+        jQuery('.woocommerce-mini-cart__buttons.buttons .checkout').css('display', 'block')
+
         if (data.count == 0) {
-            jQuery('.button.checkout.wc-forward').css('display', 'none');
+            jQuery('.woocommerce-mini-cart__buttons.buttons .checkout').css('display', 'none');
         }
     };
 
@@ -114,7 +154,7 @@
                     </td>
 
                     <td class="product-thumbnail">
-                        <a href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sh1900/"
+                        <a href="${BASE_URL + '/san-pham/' + cart.options['slug']}"
                             ><img
                                 fetchpriority="high"
                                 decoding="async"
@@ -131,7 +171,7 @@
                     </td>
 
                     <td class="product-name" data-title="Sản phẩm">
-                        <a href="https://dienmaysgo.com/may-phat-dien-chay-xang-elemax-sh1900/"
+                        <a href="${BASE_URL + '/san-pham/' + cart.options['slug']}"
                             >${ cart.name }
                         </a>
 
@@ -213,9 +253,9 @@
 
     const addToCart = () => {
         jQuery(document).ready(function() {
-            jQuery(document).on('click', '.add-to-cart', function() {
+            jQuery(document).on('click', '.add-to-cart', function(e) {
+                e.preventDefault();
                 const productId = jQuery(this).data('id');
-
 
                 jQuery.ajax({
                     url: "{{ route('carts.add-to-cart') }}",
@@ -234,6 +274,7 @@
                         }
                     },
                     error: function(xhr) {
+
                         toastr.error('Có lỗi xảy ra! Vui lòng thử lại.');
                     }
                 });
@@ -263,8 +304,9 @@
                 },
                 success: function(response) {
 
+
                     if (response.status) {
-                        toastr.success(response.message);
+                        // toastr.success(response.message);
 
                         row.remove();
 
@@ -286,6 +328,46 @@
         });
 
 
+
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleButtons = document.querySelectorAll('.toggle-submenu-item');
+
+        toggleButtons.forEach(button => {
+
+            button.addEventListener('click', function() {
+
+                const subMenu = this.parentElement.nextElementSibling;
+
+                // Toggle trạng thái ẩn/hiện
+                if (subMenu.classList.contains('show')) {
+                    subMenu.classList.remove('show');
+                } else {
+                    subMenu.classList.add('show');
+                }
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const dropdownToggle = document.querySelector('.dropdown-toggle');
+        const dropdownInfo = document.querySelector('.dropdown-info');
+
+
+        dropdownToggle?.addEventListener('click', (e) => {
+            e.preventDefault();
+            dropdownInfo.classList.toggle('show'); // Hiện/ẩn dropdown
+        });
+
+        // Đóng dropdown khi click ngoài
+        document.addEventListener('click', (e) => {
+            if (dropdownInfo && dropdownToggle) {
+                if (!dropdownInfo.contains(e.target) && !dropdownToggle.contains(e.target)) {
+                    dropdownInfo.classList.remove('show');
+                }
+            }
+        });
     });
 </script>
 

@@ -3,6 +3,11 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Imports\ProductsImport;
+use App\Models\Attribute;
+use App\Models\AttributeValue;
+use App\Models\Brand;
+use App\Models\ProductAttributeValue;
 use App\Models\SgoCategory;
 use App\Models\SgoFuel;
 use App\Models\SgoOrigin;
@@ -11,19 +16,57 @@ use App\Models\SgoProductImages;
 use App\Models\SgoPromotion;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
+
+    public function getCategories()
+    {
+        $categories = DB::table('sgo_category')->get();
+
+        $sortedCategories = $this->sortCategories($categories);
+
+        return response()->json($sortedCategories);
+    }
+
+    private function sortCategories($categories, $parentId = null, $level = 0)
+    {
+        $result = [];
+
+        foreach ($categories as $category) {
+            if ($category->category_parent_id == $parentId) {
+                $category->level = $level;
+                $result[] = $category;
+
+                // Gọi đệ quy để lấy danh mục con
+                $children = $this->sortCategories($categories, $category->id, $level + 1);
+                $result = array_merge($result, $children);
+            }
+        }
+
+        return $result;
+    }
+
     public function index(Request $request)
     {
         $page = 'Sản phẩm';
         $title = 'Danh sách sản phẩm';
         if ($request->ajax()) {
-            return datatables()->of(SgoProduct::select(['id', 'name', 'price', 'quantity', 'import_price'])->get())
+            return datatables()->of(SgoProduct::select(['id', 'name', 'price', 'quantity', 'import_price', 'category_id', 'view_count'])
+                ->when($request->catalogue, function ($query) use ($request) {
+                    // Kiểm tra xem có bộ lọc catalogue không và áp dụng điều kiện lọc
+                    return $query->where('category_id', $request->catalogue);
+                })
+                ->with('category') // Quan hệ với bảng Category
+                ->latest() // Sắp xếp theo thời gian giảm dần
+                ->get())
                 ->addColumn('price', function ($row) {
-                    return number_format($row->price, 0, ',', '.') . ' VND';
+                    return number_format($row->price, 0, ',', '.') . ' VND' . '<i class="fas fa-pen-alt ms-2 pointer" data-id=' . $row->id . '></i>';
                 })
                 ->addColumn('import_price', function ($row) {
                     return number_format($row->import_price, 0, ',', '.') . ' VND';
@@ -31,16 +74,24 @@ class ProductController extends Controller
                 ->addColumn('quantity', function ($row) {
                     return number_format($row->quantity, 0, ',', '.');
                 })
-                ->addColumn('action', function ($row) {
-                    return '
-                    <div class="btn-group">
-                        <button class="btn btn-danger btn-sm delete-product-btn" data-url="' . route('admin.product.delete', $row->id) . '">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                ';
+                ->addColumn('checkbox', function ($row) {
+                    return '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />';
                 })
-                ->rawColumns(['action'])
+                ->addColumn('category_id', function ($row) {
+                    return $row->category->name ?? '';
+                })
+                ->addColumn('name', function ($row) {
+                    $urlEdit =  route('admin.product.detail', $row->id);
+                    $urlDestroy = route('admin.product.delete', $row->id);
+                    return "
+                    <strong class='text-primary'>$row->name</strong>
+                    " . view('components.action', compact('row', 'urlEdit', 'urlDestroy')) . "
+                    ";
+                })
+                ->editColumn('created_at', function ($row) {
+                    return date('d/m/Y', $row->created_at);
+                })
+                ->rawColumns(['checkbox', 'name', 'price'])
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -51,28 +102,43 @@ class ProductController extends Controller
     {
         $page = 'Sản phẩm';
         $title = 'Thêm sản phẩm';
-        $categories = SgoCategory::pluck('name', 'id');
-        $origins = SgoOrigin::pluck('name', 'id');
-        $fuels = SgoFuel::pluck('name', 'id');
+        $categories = SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->get();
+        $attributes = Attribute::query()->pluck('name', 'id');
+        $brands = Brand::query()->pluck('name', 'id');
         $promotions = SgoPromotion::pluck('name', 'id');
-        return view('backend.product.add', compact('categories', 'origins', 'fuels', 'promotions', 'page', 'title'));
+        return view('backend.product.add', compact('categories', 'promotions', 'page', 'title', 'attributes', 'brands'));
     }
 
     public function edit($id)
     {
         $page = 'Sản phẩm';
         $title = 'Sửa sản phẩm';
-        $categories = SgoCategory::pluck('name', 'id');
-        $origins = SgoOrigin::pluck('name', 'id');
-        $fuels = SgoFuel::pluck('name', 'id');
+        $categories = SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->get();
         $promotions = SgoPromotion::pluck('name', 'id');
-        $product = SgoProduct::findOrFail($id);
+        $allAttributes = Attribute::pluck('name', 'id')->all();
+        $brands = Brand::query()->pluck('name', 'id');
+
+
+        $attributes = ProductAttributeValue::query()
+            ->where('sgo_product_id', $id)
+            ->get(['attribute_id', 'attribute_value_id'])
+            ->toArray();
+
+        $allAttributeValues = AttributeValue::get()->groupBy('attribute_id')->map(function ($values) {
+            return $values->pluck('value', 'id');
+        })->toArray();
+
+        $product = SgoProduct::query()->with(['attributeValues', 'brands'])->findOrFail($id);
+
+
         $images = $product->images;
-        return view('backend.product.edit', compact('categories', 'origins', 'fuels', 'promotions', 'product', 'page', 'title', 'images'));
+        return view('backend.product.edit', compact('categories', 'promotions', 'product', 'page', 'title', 'images', 'attributes', 'allAttributeValues', 'allAttributes', 'brands'));
     }
 
     public function store(Request $request)
     {
+        $rule = $request->discount_type == 'amount' ? 'nullable|numeric|min:0|lt:price' : 'nullable|numeric|max:100';
+        // lt:price
         $validated  = $request->validate(
             [
                 'name' => 'required|unique:sgo_products',
@@ -80,15 +146,24 @@ class ProductController extends Controller
                 'import_price' => 'nullable|numeric',
                 'quantity' => 'nullable|numeric',
                 'category_id' => 'required',
-                'origin_id' => 'required',
-                'fuel_id' => 'required',
                 'promotions_id' => 'nullable',
-                'description_short' => 'required',
-                'description' => 'required',
+                'description_short' => 'nullable',
+                'description' => 'nullable',
                 'title_seo' => 'nullable',
                 'description_seo' => 'nullable',
                 'keyword_seo' => 'nullable',
                 'image' => 'required|mimes:jpeg,png,gif,svg,webp,jfif|max:2048',
+                'attribute_id' => 'nullable|array',
+                'attribute_id.*' => 'exists:attributes,id',
+                'attribute_value_id' => 'nullable|array',
+                'attribute_value_id.*' => 'exists:attribute_values,id',
+                'brand_id' => 'nullable|array',
+                'brand_id.*' => 'exists:brands,id',
+                'tags' => 'nullable',
+                'discount_type' => 'nullable|in:percentage,amount',
+                'discount_value' => $rule,
+                'discount_start_date' => 'nullable|date',
+                'discount_end_date' => 'nullable|date|after_or_equal:discount_start_date',
             ],
             __('request.messages'),
             [
@@ -97,8 +172,6 @@ class ProductController extends Controller
                 'import_price' => 'Giá nhập sản phẩm',
                 'quantity' => 'Số lượng sản phẩm',
                 'category_id' => 'Danh mục sản phẩm',
-                'origin_id' => 'Xuất xứ sản phẩm',
-                'fuel_id' => 'Nhiên liệu sản phẩm',
                 'promtions_id' => 'Chương trình khuyến mãi',
                 'description_short' => 'Mô tả ngắn của sản phẩm',
                 'description' => 'Mô tả sản phẩm',
@@ -110,21 +183,25 @@ class ProductController extends Controller
         );
 
         try {
+            DB::beginTransaction();
+
+            if ($validated['discount_end_date'] && is_null($validated['discount_start_date'])) {
+                $validated['discount_start_date'] = now();
+            }
 
             if ($request->hasFile('image')) {
-                $validated['image'] = saveImage($request, 'image', 'products_main_images');
+                $validated['image'] = saveImages($request, 'image', 'products_main_images', 500, 500);
             }
 
 
             $product = SgoProduct::create($validated);
+
             if ($request->hasFile('images')) {
                 $images = $request->file('images');
-                Log::info($images);
                 foreach ($images as $image) {
                     $imagePath = saveImageNew($image, 'image', 'products_images');
 
                     if ($imagePath) {
-                        Log::info($imagePath);
                         SgoProductImages::create([
                             'product_id' => $product->id,
                             'image' => $imagePath,
@@ -132,7 +209,27 @@ class ProductController extends Controller
                     }
                 }
             }
+
+            if ($request->has('brand_id')) {
+                $product->brands()->sync($request->brand_id);
+            }
+
+            if ($request->attribute_id) {
+                $data = [];
+                foreach ($request->attribute_id as $key => $attributeId) {
+                    $data[] = [
+                        'sgo_product_id' => $product->id,
+                        'attribute_id' => $attributeId,
+                        'attribute_value_id' => $request->attribute_value_id[$key]
+                    ];
+                }
+
+                ProductAttributeValue::insert($data);
+            }
+
             toastr()->success('Thêm sản phẩm mới thành công');
+
+            DB::commit();
 
             return redirect()->route('admin.product.index');
         } catch (Exception $e) {
@@ -143,9 +240,12 @@ class ProductController extends Controller
     }
     public function update(Request $request, $id)
     {
-        // dd($request->all());
+        // dd($request->toArray());
 
         $product = SgoProduct::findOrFail($id);
+        // lt:price
+        $rule = $request->discount_type == 'amount' ? 'nullable|numeric|min:0' : 'nullable|numeric|max:100';
+
         $validated  = $request->validate(
             [
                 'name' => 'required|unique:sgo_products,name,' . $id,
@@ -153,15 +253,24 @@ class ProductController extends Controller
                 'import_price' => 'nullable|numeric',
                 'quantity' => 'nullable|numeric',
                 'category_id' => 'required',
-                'origin_id' => 'required',
-                'fuel_id' => 'required',
                 'promotions_id' => 'nullable',
-                'description_short' => 'required',
-                'description' => 'required',
+                'description_short' => 'nullable',
+                'description' => 'nullable',
                 'title_seo' => 'nullable',
                 'description_seo' => 'nullable',
                 'keyword_seo' => 'nullable',
                 'image' => 'nullable|mimes:jpeg,png,gif,svg,webp,jfif|max:2048',
+                'attribute_id' => 'nullable|array',
+                'attribute_id.*' => 'exists:attributes,id',
+                'attribute_value_id' => 'nullable|array',
+                'attribute_value_id.*' => 'exists:attribute_values,id',
+                'brand_id' => 'nullable|array',
+                'brand_id.*' => 'exists:brands,id',
+                'tags' => 'nullable',
+                'discount_type' => 'nullable|in:percentage,amount',
+                'discount_value' => $rule,
+                'discount_start_date' => 'nullable|date',
+                'discount_end_date' => 'nullable|date|after_or_equal:discount_start_date',
             ],
             __('request.messages'),
             [
@@ -169,8 +278,6 @@ class ProductController extends Controller
                 'import_price' => 'Giá nhập sản phẩm',
                 'quantity' => 'Số lượng sản phẩm',
                 'category_id' => 'Danh mục sản phẩm',
-                'origin_id' => 'Xuất xứ sản phẩm',
-                'fuel_id' => 'Nhiên liệu sản phẩm',
                 'promtions_id' => 'Chương trình khuyến mãi',
                 'description_short' => 'Mô tả ngắn của sản phẩm',
                 'description' => 'Mô tả sản phẩm',
@@ -178,15 +285,32 @@ class ProductController extends Controller
                 'description_seo' => 'Mô tả SEO sản phẩm',
                 'keyword_seo' => 'Từ khóa SEO sản phẩm',
                 'image' => 'Ảnh sản phẩm',
+                'discount_value' => 'Giá trị giảm'
             ]
         );
 
+        DB::beginTransaction();
         try {
+
+            // Xử lý ngày tháng đúng định dạng
+            if ($validated['discount_start_date']) {
+                $validated['discount_start_date'] = Carbon::parse($validated['discount_start_date'])->format('Y-m-d H:i:s');
+            }
+
+            if ($validated['discount_end_date']) {
+                $validated['discount_end_date'] = Carbon::parse($validated['discount_end_date'])->format('Y-m-d H:i:s');
+            }
+
+            if ($validated['discount_end_date'] && is_null($validated['discount_start_date'])) {
+                $validated['discount_start_date'] = now()->format('Y-m-d H:i:s');
+            }
+
+            // dd($validated);
 
             if ($request->hasFile('image')) {
                 deleteImage($product->image);
 
-                $validated['image'] = saveImage($request, 'image', 'products_main_images');
+                $validated['image'] = saveImages($request, 'image', 'products_main_images', 500, 500);
             }
 
             $oldImages = $request->input('old', []);
@@ -201,23 +325,44 @@ class ProductController extends Controller
 
             if ($request->hasFile('images')) {
                 $images = $request->file('images');
-                // dd($images);
                 foreach ($images as $image) {
                     $imagePath = saveImageNew($image, 'image', 'products_images');
 
                     if ($imagePath) {
-                        Log::info($imagePath);
                         SgoProductImages::create([
-                            'product_id' => $id, // Liên kết với sản phẩm
-                            'image' => $imagePath, // Đường dẫn file ảnh đã lưu
+                            'product_id' => $id,
+                            'image' => $imagePath,
                         ]);
                     }
                 }
             }
 
-
             $product->update($validated);
+
+            if ($request->has('brand_id')) {
+                $product->brands()->sync($request->brand_id);
+            }
+
+            if ($request->attribute_id) {
+                ProductAttributeValue::where('sgo_product_id', $product->id)->delete();
+
+                $data = [];
+                foreach ($request->attribute_id as $key => $attributeId) {
+                    if (isset($request->attribute_value_id[$key])) {
+                        $data[] = [
+                            'sgo_product_id' => $product->id,
+                            'attribute_id' => $attributeId,
+                            'attribute_value_id' => $request->attribute_value_id[$key],
+                        ];
+                    }
+                }
+
+                ProductAttributeValue::insert($data);
+            }
+
             toastr()->success('Cập nhập phẩm mới thành công');
+
+            DB::commit();
 
             return redirect()->route('admin.product.index');
         } catch (Exception $e) {
@@ -250,5 +395,44 @@ class ProductController extends Controller
                 'message' => 'Xóa sản phẩm thất bại',
             ]);
         }
+    }
+
+
+    public function changeSelect(Request $request)
+    {
+        if ($request->selectedId) {
+            $attrbuteValues = AttributeValue::query()->where('attribute_id', $request->selectedId)->pluck('value', 'id')->all();
+
+            return response()->json($attrbuteValues);
+        }
+    }
+
+    public function handleChangePrice(Request $request, string $id)
+    {
+        $price = str_replace('.', '', $request->input('price'));
+
+        $request->validate([
+            'price' => ['required', 'numeric', 'min:0']
+        ]);
+
+        $product = SgoProduct::findOrFail($id);
+
+        if ($price < $product->import_price) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Giá bán phải lớn hơn giá nhập!',
+                'price' => formatAmount($product->price) . ' VND'
+            ]);
+        }
+
+        $product->price = $price;
+        $product->save();
+
+        return response()->json(['status' => true, 'message' => 'Giá đã được cập nhật', 'price' => formatAmount($product->price) . ' VND']);
+    }
+
+    public function importData(Request $request)
+    {
+        Excel::import(new ProductsImport, $request->file('file'));
     }
 }

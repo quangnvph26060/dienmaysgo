@@ -20,14 +20,51 @@ function hasDiscount($discount)
     return false;
 }
 
-function calculateAmount($amount, $discountPercentage)
+function hasCustomDiscount($startDate, $endDate, $value)
 {
-    // Tính toán giá sau khuyến mãi
-    $discountAmount = $amount * ($discountPercentage / 100);
-    $finalAmount = $amount - $discountAmount;
+    if ($value <= 0) return false; // Nếu không có giá trị giảm giá, trả về false
+
+    $now = Carbon::now(); // Lấy thời gian hiện tại với giờ, phút, giây
+
+    // Nếu không có ngày bắt đầu và ngày kết thúc => luôn true
+    if (!$startDate && !$endDate) return true;
+
+    // Nếu có ngày bắt đầu nhưng không có ngày kết thúc => luôn true
+    if ($startDate && !$endDate) return true;
+
+    // Nếu có cả startDate và endDate => Kiểm tra khoảng thời gian chính xác
+    if (Carbon::parse($startDate)->lessThanOrEqualTo($now) && Carbon::parse($endDate)->greaterThanOrEqualTo($now)) {
+        return true;
+    }
+
+    return false;
+}
+
+
+function calculateAmount($amount, $discount, $isPercentage = true)
+{
+    if ($isPercentage) {
+        // Tính toán giảm giá theo phần trăm
+        $discountAmount = $amount * ($discount / 100);
+        $finalAmount = $amount - $discountAmount;
+    } else {
+        // Tính toán giảm giá theo số tiền cố định
+        $finalAmount = $amount - $discount;
+    }
 
     return $finalAmount;
 }
+
+function calculateDiscountPercentage($originalPrice, $discountAmount, $type)
+{
+    if ($type == 'percentage') return $discountAmount;
+    if ($originalPrice == 0) {
+        return 0; // Tránh chia cho 0
+    }
+    $discountPercentage = ($discountAmount / $originalPrice) * 100;
+    return $discountPercentage;
+}
+
 
 function formatAmount($amount)
 {
@@ -105,17 +142,19 @@ function deleteImage($path)
 }
 
 if (!function_exists('generateRandomString')) {
-    function generateRandomString($length = 8)
+    function generateRandomString()
     {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $charactersLength = strlen($characters);
-        $randomString = '';
+        $prefix = "ODR"; // 3 ký tự đầu cố định
+        $fourthChar = rand(1, 9); // Ký tự thứ 4 là số lớn hơn 0
+        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // Bảng ký tự cho phần còn lại
+        $remainingLength = 7; // Tổng độ dài là 11, trừ 4 ký tự đầu
 
-        for ($i = 0; $i < $length; $i++) {
-            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        $randomString = '';
+        for ($i = 0; $i < $remainingLength; $i++) {
+            $randomString .= $characters[rand(0, strlen($characters) - 1)];
         }
 
-        return $randomString;
+        return $prefix . $fourthChar . $randomString;
     }
 }
 
@@ -128,4 +167,165 @@ function saveImageNew($image, string $inputName, string $directory = 'images')
     }
 
     return null; // Trả về null nếu không có ảnh
+}
+
+if (!function_exists('statusColor')) {
+    function statusColor($status)
+    {
+        switch ($status) {
+            case 'pending':
+                return '<span class="badge bg-warning">Chờ xử lý...</span>';
+            case 'confirmed':
+                return '<span class="badge bg-primary">Đã xác nhận</span>';
+            case 'completed':
+                return '<span class="badge bg-success">Đơn hàng đã hoàn thành</span>';
+            case 'cancelled':
+                return '<span class="badge bg-danger">Đã hủy</span>';
+            default:
+                return '<span class="badge bg-warning">Chờ xử lý...</span>';
+        }
+    }
+}
+
+if (!function_exists('paymentStatus')) {
+    function paymentStatus($status)
+    {
+        switch ($status) {
+            case '0':
+                return '<span class="badge bg-danger">Chưa thanh toán...</span>';
+            case '1':
+                return '<span class="badge bg-success">Đã thanh toán</span>';
+            case '2':
+                return '<span class="badge bg-warning">Thanh toán đặt cọc</span>';
+            default:
+                return '<span class="badge bg-danger ">Chưa thanh toán...</span>';
+        }
+    }
+}
+
+if (!function_exists('paymentMethods')) {
+    function paymentMethods($method)
+    {
+        switch ($method) {
+            case 'cod':
+                return '<span class="badge bg-danger">Thanh toán khi nhận hàng (COD)</span>';
+            case 'bacs':
+                return '<span class="badge bg-success">Thanh toán chuyển khoản</span>';
+            case 'currency':
+                return '<span class="badge bg-warning">Thanh toán đặt cọc</span>';
+        }
+    }
+}
+
+if (!function_exists('changeStatus')) {
+    function changeStatus($status)
+    {
+        switch ($status) {
+            case 'pending':
+                return 'confirmed';
+            case 'confirmed':
+                return 'completed';
+        }
+    }
+}
+function saveImagesWithoutResize($request, string $inputName, string $directory = 'images', $isArray = false)
+{
+    $paths = [];
+
+    // Kiểm tra xem có file không
+    if ($request->hasFile($inputName)) {
+        // Lấy tất cả các file hình ảnh
+        $images = $request->file($inputName);
+
+        if (!is_array($images)) {
+            $images = [$images]; // Đưa vào mảng nếu chỉ có 1 ảnh
+        }
+
+        foreach ($images as $key => $image) {
+            // Tạo tên file duy nhất
+            $filename = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+
+            // Lưu ảnh vào storage
+            Storage::disk('public')->putFileAs($directory, $image, $filename);
+
+            // Lưu đường dẫn vào mảng
+            $paths[$key] = $directory . '/' . $filename;
+        }
+
+        // Trả về danh sách các đường dẫn
+        return $isArray ? $paths : $paths[0];
+    }
+
+    return null;
+}
+
+function formatString($json = null)
+{
+    if (empty($json))  return null;
+
+    $keywordsArray = json_decode($json, true);
+
+    $keywordsString = implode(', ', array_column($keywordsArray, 'value'));
+
+    return $keywordsString;
+}
+
+
+
+
+if (!function_exists('generateRandomNumber')) {
+    /**
+     * Generate a random number with a specified length
+     *
+     * @param int $length
+     * @return string
+     */
+    function generateRandomNumber($length = 10)
+    {
+        // Ensure the length is at least 1
+        $length = max(1, (int)$length);
+
+        // Generate the first digit (1-9) to avoid leading zero
+        $firstDigit = mt_rand(1, 9);
+
+        // Generate the remaining digits (0-9)
+        $remainingDigits = '';
+        if ($length > 1) {
+            $remainingDigits = substr(str_shuffle(str_repeat('0123456789', $length - 1)), 0, $length - 1);
+        }
+
+        return $firstDigit . $remainingDigits;
+    }
+}
+
+if (!function_exists('formatName')) {
+    /**
+     * Format a string to uppercase without diacritics
+     *
+     * @param string $name
+     * @return string
+     */
+    function formatName($name)
+    {
+        // Loại bỏ dấu bằng hàm Laravel support
+        $nameWithoutDiacritics = \Illuminate\Support\Str::ascii($name);
+
+        // Chuyển thành chữ in hoa
+        return strtoupper($nameWithoutDiacritics);
+    }
+}
+
+if (!function_exists('convertToSentenceCase')) {
+    function convertToSentenceCase($string)
+    {
+        $string = mb_strtolower(trim(preg_replace('/\s+/', ' ', $string))); // Chuyển thành chữ thường và loại bỏ khoảng trắng thừa
+        return ucfirst($string); // Viết hoa chữ cái đầu tiên
+    }
+}
+
+if (!function_exists('activeMenu')) {
+    function activeMenu($url)
+    {
+        return request()->routeIs($url) ? 'active' : '';
+    }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\SgoCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
 
@@ -18,7 +19,7 @@ class CategoryController extends Controller
         if ($request->ajax()) {
 
             $data = SgoCategory::with('parent')
-                ->select('id', 'name', 'slug', 'description', 'logo', 'category_parent_id', 'title_seo', 'description_seo', 'keyword_seo');
+                ->select('id', 'name', 'slug', 'description', 'logo', 'category_parent_id', 'title_seo', 'description_seo', 'keyword_seo')->latest();
             return DataTables::of($data)
                 ->addColumn('parent_name', function ($row) {
 
@@ -30,7 +31,7 @@ class CategoryController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     return '<div style="display: flex;">
-                                <a href="' . route('admin.category.edit', $row->id) . '" class="btn btn-primary btn-sm edit">
+                                <a href="' . route('admin.category.edit', $row->id) . '" class="btn btn-primary btn-sm edit me-2">
                                     <i class="fas fa-edit btn-edit" title="Sửa"></i>
                                 </a>
                                 <a href="#" class="btn btn-danger btn-sm delete"
@@ -49,11 +50,14 @@ class CategoryController extends Controller
         return view('backend.category.index', compact('title', 'page'));
     }
 
+
+
+
     public function create()
     {
         $page = 'Danh mục';
         $title = 'Thêm danh mục';
-        $parentCategories = SgoCategory::whereNull('category_parent_id')->get();
+        $parentCategories = SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->get();
         return view('backend.category.create', compact('parentCategories', 'title', 'page'));
     }
 
@@ -62,7 +66,7 @@ class CategoryController extends Controller
         $page = 'Danh mục';
         $title = 'Sửa danh mục';
         $category = SgoCategory::find($id);
-        $parentCategories = SgoCategory::whereNull('category_parent_id')->get();
+        $parentCategories = SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->get();
         return view('backend.category.create', compact('category', 'parentCategories', 'title', 'page'));
     }
 
@@ -97,6 +101,7 @@ class CategoryController extends Controller
             $category = SgoCategory::find($id);
 
             $credentials = $request->validated();
+
             if ($request->hasFile('logo')) $credentials['logo'] =  saveImage($request, 'logo', 'category_images');
             $category->update($credentials);
 
@@ -108,7 +113,8 @@ class CategoryController extends Controller
         }
     }
 
-    public function delete($id){
+    public function delete($id)
+    {
         try {
             $category = SgoCategory::findOrFail($id);  // Tìm danh mục hoặc báo lỗi nếu không tìm thấy
             $category->delete();

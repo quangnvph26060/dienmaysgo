@@ -33,9 +33,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/6.0.0-beta1/js/tempus-dominus.min.js">
     </script>
-    <script src="{{ asset('auth/js/api.js') }}" async defer></script>
 </head>
 <style type="text/css">
+    #toast-container>div {
+        width: auto !important;
+    }
+
     .error_txt {
         color: red;
     }
@@ -64,10 +67,6 @@
         cursor: no-drop;
     }
 
-    .disabled_button {
-        background: #6d9abb !important;
-        cursor: no-drop;
-    }
 
     @media (min-width: 768px) {
         .login_page .ct_left {
@@ -227,17 +226,11 @@
 
             <div class="ct_right">
                 <div class="ct_right_ct">
-                    <!-- Nút chuyển ngôn ngữ -->
-                    {{-- <span class="login_translate pointer" onclick="changeLanguage('vi')" id="vi-language">
-                        <img src="{{ asset('auth/images/translate-tv-icon.png') }}" style="width: 25px; ">Tiếng việt
-                    </span>
-                    <span class="login_translate pointer" onclick="changeLanguage('en')" id="en-language">
-                        <img src="{{ asset('auth/images/lg_icon_translate.png') }}" style="width: 25px;">English
-                    </span> --}}
+
 
                     <figure class="logo_login">
                         <a href="#"><img style="width: 210px !important"
-                                src="https://sgomedia.vn/wp-content/uploads/2023/11/logo-sgo-media-optimized.png"
+                                src="{{ asset('backend/assets/img/1693475024727-logo-sgo-media-file-chot-1.png') }}"
                                 alt="logo-sgo-media"></a>
                     </figure>
 
@@ -252,7 +245,7 @@
                                     <figure class="feild_icon"><img
                                             src="{{ asset('auth/images/login_user_icon.png') }}"></figure>
                                     @error('email')
-                                    <small class="text-danger mb-2">{{ $message }}</small>
+                                        <small class="text-danger mb-2">{{ $message }}</small>
                                     @enderror
                                 </div>
 
@@ -262,7 +255,7 @@
                                     <figure class="feild_icon"><img
                                             src="{{ asset('auth/images/login_padlock_icon.png') }}"></figure>
                                     @error('password')
-                                    <small class="text-danger mb-2">{{ $message }}</small>
+                                        <small class="text-danger mb-2">{{ $message }}</small>
                                     @enderror
                                 </div>
 
@@ -298,7 +291,7 @@
                                 {!! NoCaptcha::display() !!}
 
                                 @error('g-recaptcha-response')
-                                <small class="text-danger">{{ $message }}</small>
+                                    <small class="text-danger">{{ $message }}</small>
                                 @enderror
 
                                 <div class="btn">
@@ -383,59 +376,4 @@
         jQuery('.loginButton').removeClass('disabled_button');
         jQuery('.loginButton').attr('disabled', false);
     }
-</script>
-
-<script>
-    // Lắng nghe sự kiện thay đổi của checkbox
-    document.getElementById("captcha").addEventListener("change", function() {
-        var submitBtn = document.getElementById("submitBtn");
-
-        // Kiểm tra xem checkbox đã được chọn chưa
-        if (this.checked) {
-            // Nếu đã chọn, xóa class disabled_button và kích hoạt nút
-            submitBtn.classList.remove("disabled_button");
-            submitBtn.disabled = false; // Kích hoạt nút
-        } else {
-            // Nếu không chọn, thêm lại class disabled_button và vô hiệu hóa nút
-            submitBtn.classList.add("disabled_button");
-            submitBtn.disabled = true; // Vô hiệu hóa nút
-        }
-    });
-</script>
-<script>
-    function changeLanguage(language) {
-        if (language === 'vi') {
-            // Tiếng Việt
-            document.getElementById('username').setAttribute('placeholder', 'Username hoặc Email');
-            document.getElementById('password').setAttribute('placeholder', 'Password');
-            document.getElementById('captcha-label').innerText = 'Xác minh bạn là con người';
-            document.getElementById('privacy-link').innerText = 'Quyền riêng tư';
-            document.getElementById('terms-link').innerText = 'Điều khoản';
-            document.getElementById('create-account').innerText = 'Tạo tài khoản';
-            document.getElementById('forgot-password').innerText = 'Quên mật khẩu?';
-            document.getElementById('submitBtn').innerText = 'Đăng nhập';
-
-            // Ẩn nút Tiếng Việt và hiển thị nút English
-            document.getElementById('vi-language').style.display = 'none';
-            document.getElementById('en-language').style.display = 'inline-block';
-        } else if (language === 'en') {
-            // Tiếng Anh
-            document.getElementById('username').setAttribute('placeholder', 'Username or Email');
-            document.getElementById('password').setAttribute('placeholder', 'Password');
-            document.getElementById('captcha-label').innerText = 'Verify you are human';
-            document.getElementById('privacy-link').innerText = 'Privacy Policy';
-            document.getElementById('terms-link').innerText = 'Terms of Service';
-            document.getElementById('create-account').innerText = 'Create an Account';
-            document.getElementById('forgot-password').innerText = 'Forgot Password?';
-            document.getElementById('submitBtn').innerText = 'Login';
-
-            // Ẩn nút English và hiển thị nút Tiếng Việt
-            document.getElementById('vi-language').style.display = 'inline-block';
-            document.getElementById('en-language').style.display = 'none';
-        }
-    }
-
-    window.onload = function() {
-        changeLanguage('vi');
-    };
 </script>

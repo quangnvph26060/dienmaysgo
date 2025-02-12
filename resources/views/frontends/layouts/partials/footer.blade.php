@@ -10,23 +10,23 @@
                     <h3>LIÊN HỆ VỚI CHÚNG TÔI</h3>
                     <ul>
                         <li>
-                            <span style="font-size: 90%"><strong>{{ $settings->company_name ?? "" }}</strong></span>
+                            <span style="font-size: 90%"><strong>{{ $settings->company_name ?? '' }}</strong></span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">Địa chỉ: {{ $settings->address ?? "" }}</span>
+                            <span style="font-size: 90%">Địa chỉ: {{ $settings->address ?? '' }}</span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">Kho hàng: {{ $settings->warehouse ?? "" }}</span>
+                            <span style="font-size: 90%">Kho hàng: {{ $settings->warehouse ?? '' }}</span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">Điện thoại: {{ $settings->phone ?? "" }}
+                            <span style="font-size: 90%">Điện thoại: {{ $settings->phone ?? '' }}
                             </span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">MST: {{ $settings->tax_code ?? "" }}</span>
+                            <span style="font-size: 90%">MST: {{ $settings->tax_code ?? '' }}</span>
                         </li>
                         <li>
-                            <span style="font-size: 90%">Email: {{ $settings->email ?? "" }}</span>
+                            <span style="font-size: 90%">Email: {{ $settings->email ?? '' }}</span>
                         </li>
                     </ul>
                 </div>
@@ -38,49 +38,19 @@
                         <h3 class="heading">HỖ TRỢ KHÁCH HÀNG</h3>
                         <div class="bg-ft">
                             <?php
-                                $lishhome = \App\Models\SgoHome::get();
-                                // dd($lishhome)
+                            $lishhome = \App\Models\SgoHome::get();
+                            // dd($lishhome)
                             ?>
                             <ul class="list-mn">
-                                @forelse ($lishhome as $item )
-                                <li>
-                                    <span style="font-size: 90%"><a
-                                            href="{{ route('introduce', ['slug' => $item->slug]) }}">
-                                            {{ $item->name }}
-                                        </a></span>
-                                </li>
+                                @forelse ($lishhome as $item)
+                                    <li>
+                                        <span style="font-size: 90%"><a
+                                                href="{{ route('introduce', ['slug' => $item->slug]) }}">
+                                                {{ $item->name }}
+                                            </a></span>
+                                    </li>
                                 @empty
-
                                 @endforelse
-                                {{-- <li>
-                                    <span style="font-size: 90%"><a
-                                            href="https://dienmaysgo.com/chinh-sach-ban-hang/">Chính sách
-                                            bán hàng</a></span>
-                                </li>
-                                <li>
-                                    <span style="font-size: 90%"><a href="https://dienmaysgo.com/privacy-policy/">Chính
-                                            sách bảo
-                                            mật, quyền riêng tư</a></span>
-                                </li>
-                                <li>
-                                    <span style="font-size: 90%"><a
-                                            href="https://dienmaysgo.com/hinh-thuc-thanh-toan/">Hình thức
-                                            thanh toán</a></span>
-                                </li>
-                                <li>
-                                    <span style="font-size: 90%"><a
-                                            href="https://dienmaysgo.com/chinh-sach-giao-hang/">Chính sách
-                                            giao hàng</a></span>
-                                </li>
-                                <li>
-                                    <span style="font-size: 90%"><a
-                                            href="https://dienmaysgo.com/chinh-sach-hoan-tien/">Chính sách
-                                            hoàn tiền</a></span>
-                                </li>
-                                <li>
-                                    <a href="https://dienmaysgo.com/chinh-sach-tra-hang/"><span
-                                            style="font-size: 90%">Chính sách trả hàng</span></a>
-                                </li> --}}
                             </ul>
                         </div>
                     </div>
@@ -91,28 +61,45 @@
 
                 <div class="col-inner">
                     <h3>KẾT NỐI VỚI CHÚNG TÔI</h3>
+<<<<<<< HEAD
                     <div class="social-icons follow-icons full-width text-left">
                         <a href="{{ $settings->link_fb ?? route('hone') }}" target="_blank" data-label="Facebook"
+=======
+                    <div class="social-icons follow-icons full-width text-left social-icons">
+                        <a href="{{ $settings->link_fb ?? '' }}" target="_blank" data-label="Facebook"
+>>>>>>> main
                             rel="noopener noreferrer nofollow" class="icon primary button circle facebook tooltip"
                             title="Follow on Facebook" aria-label="Follow on Facebook">
-                            <i class="icon-facebook"></i>
+                            <i class="fab fa-facebook"></i>
                         </a>
 
+<<<<<<< HEAD
                         <a href="{{ $settings->link_ig ?? route('hone') }}" target="_blank" rel="noopener noreferrer nofollow"
+=======
+                        <a href="{{ $settings->link_ig ?? '' }}" target="_blank" rel="noopener noreferrer nofollow"
+>>>>>>> main
                             data-label="Instagram" class="icon primary button circle instagram tooltip"
                             title="Follow on Instagram" aria-label="Follow on Instagram">
-                            <i class="icon-instagram"> </i>
+                            <i class="fab fa-instagram"></i>
                         </a>
 
+<<<<<<< HEAD
                         <a href="mailto:{{ $settings->email ?? route('hone') }}" data-label="E-mail" rel="nofollow"
+=======
+                        <a href="mailto:{{ $settings->email }}" data-label="E-mail" rel="nofollow"
+>>>>>>> main
                             class="icon primary button circle email tooltip" title="Send us an email"
                             aria-label="Send us an email">
-                            <i class="icon-envelop"></i>
+                            <i class="fas fa-envelope"></i>
                         </a>
 
+<<<<<<< HEAD
                         <a href="tel:{{ $settings->phone ?? '' }}" target="_blank" data-label="Phone" rel="noopener noreferrer nofollow"
+=======
+                        <a href="tel:{{ $settings->phone }}" target="_blank" data-label="Phone" rel="noopener noreferrer nofollow"
+>>>>>>> main
                             class="icon primary button circle phone tooltip" title="Call us" aria-label="Call us">
-                            <i class="icon-phone"></i>
+                            <i class="fas fa-phone-square-alt"></i>
                         </a>
 
                     </div>
@@ -121,11 +108,11 @@
                         <a class="" href="http://online.gov.vn/Home/WebDetails/104877">
                             <div class="img-inner dark">
                                 <img width="600" height="227"
-                                    src="https://dienmaysgo.com/wp-content/uploads/2024/05/logoSaleNoti.png"
+                                    src="{{ asset('frontends/assets/image/logoSaleNoti.png') }}"
                                     class="attachment-large size-large" alt="" decoding="async" loading="lazy"
                                     srcset="
-                https://dienmaysgo.com/wp-content/uploads/2024/05/logoSaleNoti.png         600w,
-                https://dienmaysgo.com/wp-content/uploads/2024/05/logoSaleNoti-300x114.png 300w
+                {{ asset('frontends/assets/image/logoSaleNoti.png') }}       600w,
+                {{ asset('frontends/assets/image/logoSaleNoti-300x114.png') }} 300w
               "
                                     sizes="auto, (max-width: 600px) 100vw, 600px" />
                             </div>
@@ -133,6 +120,7 @@
                         <style>
                             #image_1190465660 {
                                 width: 48%;
+                                margin-top: 10px;
                             }
                         </style>
                     </div>
@@ -168,7 +156,7 @@
     <div class="container clearfix" style="text-align: center">
         <div class="footer-primary ">
             <div class="copyright-footer">
-                {{ $settings->copyright ?? "" }}
+                {{ $settings->copyright ?? '' }}
             </div>
         </div>
     </div>

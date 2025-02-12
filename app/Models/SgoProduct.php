@@ -8,6 +8,7 @@ use App\Models\SgoOrigin;
 use App\Models\SgoPromotion;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class SgoProduct extends Model
@@ -30,7 +31,12 @@ class SgoProduct extends Model
         'description_seo',
         'keyword_seo',
         'image',
-        'import_price'
+        'import_price',
+        'tags',
+        'discount_type',
+        'discount_value',
+        'discount_end_date',
+        'discount_start_date'
     ];
 
 
@@ -46,6 +52,11 @@ class SgoProduct extends Model
         static::updating(function ($model) {
             if ($model->isDirty('name')) $model->slug = Str::slug($model->name);
         });
+
+        static::saved(function () {
+            Cache::forget('home_data');
+            Cache::forget('categories');
+        });
     }
     public function category()
     {
@@ -57,18 +68,39 @@ class SgoProduct extends Model
         return $this->belongsTo(SgoPromotion::class, 'promotions_id');
     }
 
-    public function origin()
-    {
-        return $this->belongsTo(SgoOrigin::class, 'origin_id');
-    }
+    // public function origin()
+    // {
+    //     return $this->belongsTo(SgoOrigin::class, 'origin_id');
+    // }
 
-    public function fuel()
-    {
-        return $this->belongsTo(SgoFuel::class, 'fuel_id');
-    }
+    // public function fuel()
+    // {
+    //     return $this->belongsTo(SgoFuel::class, 'fuel_id');
+    // }
 
     public function images()
     {
         return $this->hasMany(SgoProductImages::class, 'product_id', 'id');
     }
+
+    public function attributes()
+    {
+        return $this->belongsToMany(Attribute::class, 'product_attribute_values', 'sgo_product_id', 'attribute_id')
+            ->withPivot('attribute_value_id');
+    }
+
+    public function attributeValues()
+    {
+        return $this->belongsToMany(AttributeValue::class, 'product_attribute_values', 'sgo_product_id', 'attribute_value_id');
+    }
+
+    public function brands()
+    {
+        return $this->belongsToMany(Brand::class, 'brand_product', 'product_id', 'brand_id');
+    }
+
+    protected $casts = [
+        'discount_end_date' => 'datetime',
+        'discount_start_date ' => 'datetime',
+    ];
 }

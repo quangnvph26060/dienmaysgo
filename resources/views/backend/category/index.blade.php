@@ -1,67 +1,45 @@
 @extends('backend.layouts.master')
 
+@section('title', 'Danh sách danh mục')
+
 @section('content')
-    <div class="content">
-        <!-- Bảng danh sách danh mục -->
-        <div class="category-list">
-            <div class="card-tools mb-3" id="add-category-btn">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between">
+            <h4 class="card-title">Danh sách danh mục</h4>
+            <div class="card-tools">
                 <a href="{{ route('admin.category.create') }}" class="btn btn-primary btn-sm">Thêm mới (+)</a>
             </div>
-            <table class="table table-striped table-hover" id="categoryTable">
-                <thead>
-                    <tr>
-                        <th>Tên danh mục</th>
-                        <th>Mô tả</th>
-                        <th>Danh mục cha</th>
-                        <th>Hành động</th>
-                    </tr>
-                </thead>
-            </table>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="myTable" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Tên danh mục</th>
+                            <th>Mô tả</th>
+                            <th>Danh mục cha</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+
+
+                </table>
+            </div>
         </div>
     </div>
+
 @endsection
 
 @push('styles')
-    <style>
-        #add-category-btn {
-            display: flex;
-            justify-content: flex-end;
-            align-items: center; */
-            /* text-align: end; */
-            padding: 10px;
-            margin-righ: 100px;
-        }
-
-
-        td a {
-            padding: 8px 11px !important;
-            border-radius: 5px;
-            color: white;
-            display: inline-block;
-        }
-
-        .edit {
-            background: #ffc107;
-            margin: 0px 15px;
-        }
-
-        .delete {
-            background: #dc3545;
-            padding: 8px 12px !important;
-        }
-    </style>
-    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" rel="stylesheet"> --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
 @endpush
 
 @push('scripts')
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script> --}}
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#categoryTable').DataTable({
+            $('#myTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: '{{ route('admin.category.index') }}',
@@ -73,8 +51,10 @@
                         data: 'description',
                         name: 'description',
                         render: function(data, type, row) {
-                            return data; // Không cần xử lý thêm, vì dữ liệu đã là HTML
-                        }
+                            return data;
+                        },
+                        orderable: false,
+                        searchable: false
                     },
                     {
                         data: 'parent_name',
@@ -88,37 +68,6 @@
                         searchable: false
                     }
                 ],
-                columnDefs: [{
-                        width: '20%',
-                        targets: 0
-                    }, // Cột Name chiếm 20% độ rộng bảng
-                    {
-                        width: '45%',
-                        targets: 1
-                    }, // Cột Description chiếm 30%
-                    {
-                        width: '20%',
-                        targets: 2
-                    }, // Cột Category Parent ID chiếm 25%
-                    {
-                        width: '15%',
-                        targets: 3
-                    } // Cột Actions chiếm 25%
-                ],
-                pagingType: "full_numbers", // Kiểu phân trang
-                language: {
-                    paginate: {
-                        previous: '&laquo;', // Nút trước
-                        next: '&raquo;' // Nút sau
-                    },
-                    lengthMenu: "Hiển thị _MENU_ mục mỗi trang",
-                    zeroRecords: "Không tìm thấy dữ liệu",
-                    info: "Hiển thị _START_ đến _END_ của _TOTAL_ mục",
-                    infoEmpty: "Không có dữ liệu để hiển thị",
-                    infoFiltered: "(lọc từ _MAX_ mục)"
-                },
-                dom: '<"row"<"col-md-6"l><"col-md-6"f>>t<"row"<"col-md-6"i><"col-md-6"p>>',
-                lengthMenu: [10, 25, 50, 100],
             });
         });
     </script>

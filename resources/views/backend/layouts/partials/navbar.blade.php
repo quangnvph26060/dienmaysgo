@@ -33,60 +33,28 @@
                 <ul class="dropdown-menu messages-notif-box animated fadeIn" aria-labelledby="messageDropdown">
                     <li>
                         <div class="dropdown-title d-flex justify-content-between align-items-center">
-                            Messages
-                            <a href="#" class="small">Mark all as read</a>
+                            Lịch sử chuyển khoản
+                            {{-- <a href="#" class="small">Mark all as read</a> --}}
                         </div>
                     </li>
                     <li>
                         <div class="message-notif-scroll scrollbar-outer">
-                            <div class="notif-center">
-                                <a href="#">
-                                    <div class="notif-img">
-                                        <img src="{{ asset('backend/assets/img/jm_denis.jpg') }}" alt="Img Profile" />
-                                    </div>
-                                    <div class="notif-content">
-                                        <span class="subject">Jimmy Denis</span>
-                                        <span class="block"> How are you ? </span>
-                                        <span class="time">5 minutes ago</span>
-                                    </div>
-                                </a>
-                                <a href="#">
-                                    <div class="notif-img">
-                                        <img src="{{ asset('backend/assets/img/chadengle.jpg') }}" alt="Img Profile" />
-                                    </div>
-                                    <div class="notif-content">
-                                        <span class="subject">Chad</span>
-                                        <span class="block"> Ok, Thanks ! </span>
-                                        <span class="time">12 minutes ago</span>
-                                    </div>
-                                </a>
-                                <a href="#">
-                                    <div class="notif-img">
-                                        <img src="{{ asset('backend/assets/img/mlane.jpg') }}" alt="Img Profile" />
-                                    </div>
-                                    <div class="notif-content">
-                                        <span class="subject">Jhon Doe</span>
-                                        <span class="block">
-                                            Ready for the meeting today...
-                                        </span>
-                                        <span class="time">12 minutes ago</span>
-                                    </div>
-                                </a>
-                                <a href="#">
-                                    <div class="notif-img">
-                                        <img src="{{ asset('backend/assets/img/talha.jpg') }}" alt="Img Profile" />
-                                    </div>
-                                    <div class="notif-content">
-                                        <span class="subject">Talha</span>
-                                        <span class="block"> Hi, Apa Kabar ? </span>
-                                        <span class="time">17 minutes ago</span>
-                                    </div>
-                                </a>
+                            <div class="notif-center px-3">
+                                @foreach ($ransferHistory as $item)
+                                    <a href="#" class="text-light">
+                                        <div class="notif-content" style="background-color: rgba(0, 128, 0, .4)">
+                                            <span class="subject">{!! $item->transaction_notes !!}</span>
+                                            <span class="subject">+ {{ formatAmount($item->transaction_amount) }}
+                                                VND</span>
+                                            <span class="time">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</span>
+                                        </div>
+                                    </a>
+                                @endforeach
                             </div>
                         </div>
                     </li>
                     <li>
-                        <a class="see-all" href="javascript:void(0);">See all messages<i class="fa fa-angle-right"></i>
+                        <a class="see-all" href="{{ route('admin.order.transfer-history') }}">Xem tất cả<i class="fa fa-angle-right"></i>
                         </a>
                     </li>
                 </ul>
@@ -95,68 +63,50 @@
                 <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-bell"></i>
-                    <span class="notification">4</span>
+                    <span class="notification"> {{ $todayOrdersCount }}</span>
                 </a>
                 <ul class="dropdown-menu notif-box animated fadeIn" aria-labelledby="notifDropdown">
                     <li>
                         <div class="dropdown-title">
-                            You have 4 new notification
+                            Bạn có {{ $todayOrdersCount }} đơn hàng mới hôm nay
                         </div>
                     </li>
                     <li>
                         <div class="notif-scroll scrollbar-outer">
                             <div class="notif-center">
-                                <a href="#">
-                                    <div class="notif-icon notif-primary">
-                                        <i class="fa fa-user-plus"></i>
-                                    </div>
-                                    <div class="notif-content">
-                                        <span class="block"> New user registered </span>
-                                        <span class="time">5 minutes ago</span>
-                                    </div>
-                                </a>
-                                <a href="#">
-                                    <div class="notif-icon notif-success">
-                                        <i class="fa fa-comment"></i>
-                                    </div>
-                                    <div class="notif-content">
-                                        <span class="block">
-                                            Rahmad commented on Admin
-                                        </span>
-                                        <span class="time">12 minutes ago</span>
-                                    </div>
-                                </a>
-                                <a href="#">
-                                    <div class="notif-img">
-                                        <img src="{{ asset('backend/assets/img/profile2.jpg') }}" alt="Img Profile" />
-                                    </div>
-                                    <div class="notif-content">
-                                        <span class="block">
-                                            Reza send messages to you
-                                        </span>
-                                        <span class="time">12 minutes ago</span>
-                                    </div>
-                                </a>
-                                <a href="#">
-                                    <div class="notif-icon notif-danger">
-                                        <i class="fa fa-heart"></i>
-                                    </div>
-                                    <div class="notif-content">
-                                        <span class="block"> Farrah liked Admin </span>
-                                        <span class="time">17 minutes ago</span>
-                                    </div>
-                                </a>
+
+                                @foreach ($groupedOrders as $timeGroup => $orders)
+                                    <small class="ms-3">{{ $timeGroup }}</small>
+                                    @foreach ($orders as $order)
+                                        <a href="{{ route('admin.order.detail', $order->id) }}">
+                                            <div class="notif-icon">
+                                                {{-- <i class="fa fa-comment"></i> --}}
+                                                <img width="22" src="{{ showImage($order->user->avatar) }}"
+                                                    alt="">
+                                            </div>
+                                            <div class="notif-content">
+                                                <span class="block">
+                                                    {{ $order->user->name }} đặt hàng
+                                                </span>
+                                                <span class="time">
+                                                    {{ $order->created_at->diffForHumans() }}
+                                                </span>
+                                            </div>
+                                        </a>
+                                    @endforeach
+                                @endforeach
+
                             </div>
                         </div>
                     </li>
                     <li>
-                        <a class="see-all" href="javascript:void(0);">See all notifications<i
+                        <a class="see-all" href="{{ route('admin.order.index') }}">Xem tất cả thông báo<i
                                 class="fa fa-angle-right"></i>
                         </a>
                     </li>
                 </ul>
             </li>
-            <li class="nav-item topbar-icon dropdown hidden-caret">
+            {{-- <li class="nav-item topbar-icon dropdown hidden-caret">
                 <a class="nav-link" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                     <i class="fas fa-layer-group"></i>
                 </a>
@@ -220,18 +170,18 @@
                         </div>
                     </div>
                 </div>
-            </li>
+            </li> --}}
 
             <li class="nav-item topbar-user dropdown hidden-caret">
                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                     aria-expanded="false">
                     <div class="avatar-sm">
-                        <img src="{{ asset('backend/assets/img/profile.jpg') }}" alt="..."
+                        <img src="{{ showImage(Auth::guard('admin')->user()->image) }}" alt="..."
                             class="avatar-img rounded-circle" />
                     </div>
                     <span class="profile-username">
                         <span class="op-7">Hi,</span>
-                        <span class="fw-bold">{{ Auth::user()->name }}</span>
+                        <span class="fw-bold">{{ Auth::guard('admin')->user()->name }}</span>
                     </span>
                 </a>
                 <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -239,19 +189,21 @@
                         <li>
                             <div class="user-box">
                                 <div class="avatar-lg">
-                                    <img src="{{ asset('backend/assets/img/profile.jpg') }}" alt="image profile"
-                                        class="avatar-img rounded" />
+                                    <img src="{{ showImage(Auth::guard('admin')->user()->image) }}"
+                                        alt="image profile" class="avatar-img rounded" />
                                 </div>
                                 <div class="u-text">
-                                    <h4>{{ Auth::user()->name }}</h4>
-                                    <p class="text-muted">{{ Auth::user()->email }}</p>
-                                    <a href="#" >View Profile</a>
+                                    <h4>{{ Auth::guard('admin')->user()->name }}</h4>
+                                    <p class="text-muted">{{ Auth::guard('admin')->user()->email }}</p>
+                                    <a
+                                        href="{{ route('admin.getUserInfor', ['id' => Auth::guard('admin')->user()->id]) }}">View
+                                        Profile</a>
                                 </div>
                             </div>
                         </li>
                         <li>
 
-                            <a class="dropdown-item" href="{{route('admin.logout')}}">Logout</a>
+                            <a class="dropdown-item" href="{{ route('admin.logout') }}">Logout</a>
                         </li>
                     </div>
                 </ul>

@@ -58,7 +58,7 @@
     });
 
     urlToPreload = linkElement.href;
-    preload(linkElement.href);
+    // preload(linkElement.href);
   }
 
   function touchendAndTouchcancelListener() {
@@ -84,7 +84,7 @@
     urlToPreload = linkElement.href;
 
     mouseoverTimer = setTimeout(function () {
-      preload(linkElement.href);
+    //   preload(linkElement.href);
       mouseoverTimer = undefined;
     }, 65);
   }
@@ -159,9 +159,9 @@
     return true;
   }
 
-  function preload(url) {
-    prefetcher.href = url;
-  }
+//   function preload(url) {
+//     prefetcher.href = url;
+//   }
 
   function stopPreloading() {
     prefetcher.removeAttribute("href");

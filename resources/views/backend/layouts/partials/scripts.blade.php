@@ -62,7 +62,297 @@
 <script src="{{ asset('backend/assets/js/setting-demo.js') }}"></script>
 {{-- <script src="{{ asset('backend/assets/js/demo.js') }}"></script> --}}
 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Lấy toàn bộ các menu có submenu
+        const menuItems = document.querySelectorAll('.nav-item > a[data-bs-toggle="collapse"]');
 
+        menuItems.forEach(function(menuItem) {
+            // Kiểm tra xem đường dẫn của menu có khớp với route hiện tại hay không
+            const submenuId = menuItem.getAttribute('href').substring(
+                1); // Lấy id của submenu (ví dụ: "order", "product")
+            const currentRoute = window.location.pathname;
+
+            // Nếu menu tương ứng với route hiện tại, mở submenu
+            if (currentRoute.includes(submenuId)) {
+                const collapseElement = document.getElementById(submenuId);
+                if (collapseElement) {
+                    // Mở submenu bằng cách thêm class 'show' vào collapse
+                    collapseElement.classList.add('show');
+                }
+            }
+        });
+    });
+</script>
+
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+
+
+    const dataTables = (api, columns, model, filterDate = false, filterCatalogue = false) => {
+        const table = $('#myTable').DataTable({ // Định nghĩa biến table
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: api,
+                data: function(d) {
+                    d.startDate = $('#startDate').val() || null;
+                    d.endDate = $('#endDate').val() || null;
+                    d.catalogue = $('#catalogueFilter').val() || null; // Thêm dữ liệu filter catalogue
+                }
+            },
+            columns: columns,
+            order: [],
+        });
+
+        $('label[for="dt-length-0"]').remove();
+
+        const targetDiv = $('.dt-layout-cell.dt-layout-start');
+
+        let _html = `
+        <div id="actionDiv" style="display: none;">
+            <div class="d-flex">
+                <select id="actionSelect" class="form-select">
+                    <option value="">-- Chọn hành động --</option>
+                    <option value="delete">Xóa</option>
+                </select>
+                <button id="applyAction" class="btn btn-outline-danger btn-sm">Apply</button>
+            </div>
+        </div>
+    `;
+
+        targetDiv.after(_html);
+
+        if (filterDate) {
+            const lengthContainer = document.querySelector('.dt-length');
+
+            if (lengthContainer) {
+                // Tạo input filter
+                const filterHtml = `
+                    <div class="date-filter ml-2 d-flex align-items-center">
+                        <input type="date" id="startDate" class="form-control d-inline-block w-auto" placeholder="Start Date">
+                        <input type="date" id="endDate" class="form-control d-inline-block w-auto ms-2" placeholder="End Date">
+                        <button id="filterBtn" class="btn btn-primary ms-2 btn-sm"><i class="fa-solid fa-filter"></i></button>
+                        <button id="resetBtn" class="btn btn-secondary ms-2 btn-sm">Reset</button>
+                    </div>
+                `;
+
+                // Thêm sau `.dt-length`
+                lengthContainer.insertAdjacentHTML('afterend', filterHtml);
+
+                $('#filterBtn').on('click', function() {
+                    const startDate = $('#startDate').val();
+                    const endDate = $('#endDate').val();
+
+                    if (startDate && endDate && endDate < startDate) {
+                        alert('Ngày kết thúc không thể nhỏ hơn ngày bắt đầu!');
+                        return;
+                    }
+
+                    // Nếu cả hai trường rỗng, không làm gì cả
+                    if (!startDate && !endDate) {
+                        alert('Vui lòng nhập Start Date và End Date để lọc!');
+                        return;
+                    }
+
+                    table.draw();
+                });
+
+                $('#resetBtn').on('click', function() {
+                    if ($('#startDate').val() || $('#endDate').val()) {
+                        $('#startDate').val('');
+                        $('#endDate').val('');
+                        table.draw();
+                    }
+                });
+            }
+        }
+
+        if (filterCatalogue) {
+            const lengthContainer = document.querySelector('.dt-length');
+
+            if (lengthContainer) {
+                const catalogueFilterHtml = `
+        <div class="catalogue-filter ms-2 d-flex align-items-center">
+            <select id="catalogueFilter" class="form-control w-auto">
+                <option value="">Chọn danh mục</option> <!-- Dữ liệu mặc định "Chọn danh mục" -->
+            </select>
+            <button id="resetCatalogueBtn" class="btn btn-secondary ms-2 btn-sm">Reset</button>
+        </div>
+    `;
+
+                lengthContainer.insertAdjacentHTML('afterend', catalogueFilterHtml);
+
+                // Initialize Select2 với dữ liệu mặc định
+                $('#catalogueFilter').select2({
+                    placeholder: 'Chọn danh mục',
+                    allowClear: true,
+                    minimumInputLength: 0 // Không cần nhập ký tự để hiển thị dữ liệu
+                });
+
+                // Gọi API một lần để lấy tất cả danh mục và thêm vào Select2
+                $.ajax({
+                    url: "{{ route('admin.product.categories.index') }}", // API lấy danh mục
+                    dataType: 'json',
+                    success: function(data) {
+                        const formattedData = data.map(item => {
+                            // Thêm dấu ngạch (-) tương ứng với level của danh mục
+                            let prefix = '-'.repeat(item
+                            .level); // Tạo dấu "-" tương ứng với level
+                            return {
+                                id: item.id,
+                                text: prefix + " " + item.name // Thêm dấu "-" vào tên
+                            };
+                        });
+
+                        // Cập nhật dữ liệu vào Select2 sau khi đã có dữ liệu
+                        $('#catalogueFilter').select2({
+                            data: formattedData
+                        });
+                    }
+                });
+
+                // Khi chọn catalogue, filter bảng
+                $('#catalogueFilter').on('change', function() {
+                    table.draw();
+                });
+
+                // Reset filter
+                $('#resetCatalogueBtn').on('click', function() {
+                    $('#catalogueFilter').val(null).trigger('change');
+                    table.draw();
+                });
+            }
+        }
+
+
+
+        $('#myTable thead input[type="checkbox"]').on('click', function() {
+            const isChecked = $(this).prop('checked');
+            $('#myTable tbody input[type="checkbox"]').prop('checked', isChecked);
+            toggleActionDiv();
+        });
+
+        $('#myTable tbody').on('click', 'input[type="checkbox"]', function() {
+            const allChecked = $('#myTable tbody input[type="checkbox"]').length === $(
+                '#myTable tbody input[type="checkbox"]:checked').length;
+            $('#myTable thead input[type="checkbox"]').prop('checked', allChecked);
+            toggleActionDiv();
+        });
+
+        $('#applyAction').on('click', function() {
+            const selectedAction = $('#actionSelect').val();
+
+            if (!selectedAction) return;
+
+            const selectedIds = $('.row-checkbox:checked').map(function() {
+                return $(this).val();
+            }).get();
+
+            if (selectedAction === 'delete') {
+                $.ajax({
+                    url: "{{ route('admin.delete.items') }}",
+                    method: 'POST',
+                    data: {
+                        ids: selectedIds,
+                        model: model
+                    },
+                    success: function(response) {
+                        alert('Xóa thành công!');
+                        table.ajax
+                            .reload(); // Sử dụng biến table thay vì gọi lại $('#myTable').DataTable()
+                        $('input[type="checkbox"]').prop('checked', false);
+                        toggleActionDiv();
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra, vui lòng thử lại!');
+                    }
+                });
+            }
+        });
+    };
+
+
+    function toggleActionDiv() {
+        if ($('.row-checkbox:checked').length > 0) {
+
+            $('#actionDiv').show();
+        } else {
+            $('#actionDiv').hide();
+        }
+    }
+
+    const handleDestroy = () => {
+        $('tbody').on('click', '.btn-destroy', function(e) {
+            e.preventDefault();
+
+            if (confirm('Chắc chắn muốn xóa?')) {
+                var form = $(this).closest('form');
+
+                $.ajax({
+                    url: form.attr('action'),
+                    method: 'POST',
+                    data: form.serialize(),
+                    success: function(response) {
+                        $('#myTable').DataTable().ajax.reload();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        alert(jqXHR)
+                    }
+                });
+            }
+        });
+    }
+
+    const formatDataInput = function(input) {
+        let $input = $(`#${input}`);
+
+        // Hàm format số theo định dạng tiền tệ Việt Nam
+        function formatNumber(value) {
+            return Number(value).toLocaleString("vi-VN");
+        }
+
+        // Format ngay khi trang load nếu có giá trị
+        let initialValue = $input.val().replace(/\./g, "");
+        if (!isNaN(initialValue) && initialValue !== "") {
+            $input.val(formatNumber(initialValue));
+        }
+
+        // Lắng nghe sự kiện nhập liệu
+        $input.on('input', function() {
+            let value = $(this).val().replace(/\./g, ""); // Xóa dấu chấm cũ
+            if (!isNaN(value)) {
+                $(this).val(formatNumber(value)); // Format lại số
+            } else {
+                $(this).val($(this).val().slice(0, -1)); // Xóa ký tự không hợp lệ
+            }
+
+            // Cập nhật giá trị vào input ẩn nếu cần
+            console.log(`name=[${input.slice(5)}]`);
+            console.log(value.replace(/\./g, ""));
+
+
+            $(`input[name=${input.slice(5)}]`).val(value.replace(/\./g, ""));
+        });
+    };
+
+    const previewImage = function(event, imgId) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
+        reader.onload = function() {
+            const imgElement = document.getElementById(imgId);
+            imgElement.src = reader.result;
+        }
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 @include('backend/includes/alert')
 
 @stack('scripts')

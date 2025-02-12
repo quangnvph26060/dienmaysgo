@@ -1,4 +1,5 @@
 @extends('backend.layouts.master')
+
 @section('title', 'Danh sách sản phẩm')
 
 @section('content')
@@ -6,6 +7,9 @@
         <div class="card-header d-flex justify-content-between">
             <h4 class="card-title">Danh sách sản phẩm</h4>
             <div class="card-tools">
+                {{-- <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Import
+                </button> --}}
                 <a href="{{ route('admin.product.add') }}" class="btn btn-primary btn-sm">Thêm mới sản phẩm (+)</a>
             </div>
         </div>
@@ -13,159 +17,144 @@
             <div class="table-responsive">
                 <table id="myTable" class="display" style="width:100%">
                     <thead>
-                        <th>STT</th>
-                        <th>Tên</th>
-                        <th>Số lượng</th>
-                        <th>Giá</th>
-                        <th>Giá bán</th>
-                        <th style="text-align: center">Hành động</th>
+                        <th><input type="checkbox" id="selectAll" /></th>
+                        <th>TÊN</th>
+                        <th>SỐ LƯỢNG</th>
+                        <th>GIÁ NHẬP</th>
+                        <th>GIÁ BÁN</th>
+                        <th>DANH MỤC</th>
+                        <th>LƯỢT XEM</th>
+                        <th>NGÀY TẠO</th>
                     </thead>
-
-
                 </table>
             </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="{{ route('admin.product.import-data') }}" method="post" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Import sản phẩm</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="file" name="file" id="file" class="form-control" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Lưu thay đổi</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 @endsection
 
 
 @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.all.min.js"></script>
+    @include('backend.product.columns')
 
     <script>
         $(document).ready(function() {
-            $('#myTable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route('admin.product.index') }}',
-                columns: [{
-                        data: 'id',
-                        name: 'id'
-                    },
-                    {
-                        data: 'name',
-                        name: 'name',
-                        render: function(data, type, row) {
-                            return '<a href="' + '{{ route('admin.product.detail', '__id__') }}'
-                                .replace('__id__', row.id) + '">' + data + '</a>';
-                        }
-                    },
-                    {
-                        data: 'quantity',
-                        name: 'quantity',
-                    },
-                    {
-                        data: 'price',
-                        name: 'price'
-                    },
-                    {
-                        data: 'import_price',
-                        name: 'import_price'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false
-                    },
+            const api = '{{ route('admin.product.index') }}'
 
-                ],
+            dataTables(api, columns, 'SgoProduct', false, true)
 
-                order: [
-                    [0, 'desc']
-                ],
-            });
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
+            handleDestroy()
+
+
+
+            $(document).on('click', '.fas.fa-pen-alt', function() {
+                // Đặt lại các ô khác về trạng thái ban đầu
+                $('.price-input').each(function() {
+                    const originalPrice = $(this).val() + ' VND';
+                    const penIcon = '<i class="fas fa-pen-alt ms-2 pointer"></i>';
+                    $(this).closest('td').html(originalPrice + penIcon);
+                });
+
+                let id = $(this).data('id');
+
+                // Lấy giá trị của giá sản phẩm
+                const currentPrice = $(this).closest('td').text().trim().replace(' VND', '');
+
+                // Tạo ô input cho giá sản phẩm
+                const inputField =
+                    `<input type="text" class="form-control price-input" data-id="${id}" inputmode="numeric" value="${currentPrice}" />`;
+
+                // Thay thế giá trị hiện tại bằng ô input
+                $(this).closest('td').html(inputField);
+
+                // Đặt focus vào ô input
+                $(this).closest('td').find('.price-input').focus();
             });
 
-            $(document).on('click', '.delete-product-btn', function() {
-                let url = $(this).data('url');
+            function formattedNumber(number) {
+                return parseInt(number.replaceAll('.', ''), 10);
+            }
 
-                Swal.fire({
-                    title: 'Xác nhận',
-                    text: "Bạn có chắc chắn muốn xóa sản phẩm này?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Có',
-                    cancelButtonText: 'Không'
-                }).then((result) => {
-                    if (result.isConfirmed) {
+
+            $(document).on({
+                input: function() {
+                    let input = $(this);
+                    let value = input.val().replace(/\D/g, ''); // Loại bỏ tất cả ký tự không phải số
+                    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Thêm dấu chấm định dạng
+                    input.val(value); // Gán lại giá trị đã định dạng
+                },
+                keydown: function(e) {
+                    if (e.key === 'Enter') {
+                        const input = $(this);
+                        const newPrice = input.val().trim(); // Lấy giá trị mới từ ô input
+                        const productId = input.data('id'); // Giả sử `tr` có data-id là id của sản phẩm
+
+                        // Gọi API để cập nhật giá
                         $.ajax({
-                            url: url,
-                            type: 'DELETE',
+                            url: "{{ route('admin.product.handle-change-price', ':id') }}"
+                                .replace(
+                                    ':id',
+                                    productId), // Thay bằng URL API của bạn
+                            type: 'POST',
+                            data: {
+                                price: formattedNumber(newPrice)
+                            },
                             success: function(response) {
                                 if (response.status) {
-                                    $('#myTable').DataTable().ajax.reload();
-                                    const Toast = Swal.mixin({
-                                        toast: true,
-                                        position: "top-end",
-                                        showConfirmButton: false,
-                                        timer: 3000,
-                                        timerProgressBar: true,
-                                        didOpen: (toast) => {
-                                            toast.onmouseenter = Swal
-                                                .stopTimer;
-                                            toast.onmouseleave = Swal
-                                                .resumeTimer;
-                                        }
-                                    });
-                                    Toast.fire({
-                                        icon: "success",
-                                        title: response.message
-                                    });
+                                    // Cập nhật lại giá trị trong ô
+                                    const penIcon =
+                                        `<i class="fas fa-pen-alt ms-2 pointer" data-id="${productId}"></i>`;
+                                    input.closest('td').html(response.price + penIcon);
                                 } else {
-                                    const Toast = Swal.mixin({
-                                        toast: true,
-                                        position: "top-end",
-                                        showConfirmButton: false,
-                                        timer: 3000,
-                                        timerProgressBar: true,
-                                        didOpen: (toast) => {
-                                            toast.onmouseenter = Swal
-                                                .stopTimer;
-                                            toast.onmouseleave = Swal
-                                                .resumeTimer;
-                                        }
-                                    });
-                                    Toast.fire({
-                                        icon: "error",
-                                        title: response.message
-                                    });
+                                    alert('Cập nhật giá không thành công!');
+                                    alert(response.message)
+                                    const penIcon =
+                                        `<i class="fas fa-pen-alt ms-2 pointer" data-id="${productId}"></i>`;
+                                    input.closest('td').html(response.price + penIcon);
                                 }
                             },
-                            error: function(xhr) {
-                                const Toast = Swal.mixin({
-                                    toast: true,
-                                    position: "top-end",
-                                    showConfirmButton: false,
-                                    timer: 3000,
-                                    timerProgressBar: true,
-                                    didOpen: (toast) => {
-                                        toast.onmouseenter = Swal
-                                            .stopTimer;
-                                        toast.onmouseleave = Swal
-                                            .resumeTimer;
-                                    }
-                                });
-                                Toast.fire({
-                                    icon: "error",
-                                    title: response.message
-                                });
+                            error: function() {
+                                alert('Có lỗi xảy ra khi cập nhật giá!');
                             }
                         });
                     }
-                });
-            })
+                }
+            }, '.price-input');
         })
     </script>
 @endpush
 
 @push('styles')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.5/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <style>
+        .select2 {
+            width: 340px !important;
+        }
+    </style>
 @endpush

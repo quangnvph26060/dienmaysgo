@@ -3,17 +3,18 @@
 
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>{{ isset($title) ? $title : '-----' }}</title>
+    <title>@yield('title', 'Tổng quan')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
 
     @include('backend.layouts.partials.styles')
 
     <style>
-        table tr td:last-child {
+        /* table tr td:last-child {
             text-align: center;
-        }
-        #categoryTable, #originTable{
+        } */
+        #categoryTable,
+        #originTable {
             width: 100% !important;
         }
     </style>
@@ -57,31 +58,7 @@
 
             <div class="container">
                 <div class="page-inner">
-                    <div class="page-header">
-                        <ul class="breadcrumbs mb-3">
-                            <li class="nav-home">
-                                <a href="">
-                                    <i class="icon-home"></i>
-                                </a>
-                            </li>
-                            <li class="separator">
-                                <i class="icon-arrow-right"></i>
-                            </li>
-                            <li class="nav-item">
-
-                                <a href="">{{ isset($page) ? $page : 'Dashboard' }}</a>
-
-                            </li>
-                            <li class="separator">
-                                <i class="icon-arrow-right"></i>
-                            </li>
-                            <li class="nav-item">
-
-                                <a href="">{{ isset($title) ? $title : 'Dashboard' }}</a>
-
-                            </li>
-                        </ul>
-                    </div>
+                    @yield('breadcrumbs')
 
                     @yield('content')
 

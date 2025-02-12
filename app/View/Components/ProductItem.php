@@ -11,7 +11,7 @@ class ProductItem extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct(public $product)
+    public function __construct(public $products)
     {
         //
     }
@@ -22,6 +22,6 @@ class ProductItem extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.product-item');
+        return view('components.products');
     }
 }
