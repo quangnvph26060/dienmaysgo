@@ -7,16 +7,21 @@
     "require": {
         "php": "^8.1",
         "anhskohbo/no-captcha": "^3.6",
+        "barryvdh/laravel-dompdf": "^3.0",
+        "consoletvs/charts": "^6.7",
         "guzzlehttp/guzzle": "^7.2",
         "hardevine/shoppingcart": "^3.3",
         "intervention/image": "^3.9",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
+        "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.8",
+        "maatwebsite/excel": "^3.1",
         "yajra/laravel-datatables-oracle": "10.3.1",
         "yoeunes/toastr": "^2.3"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.14",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",

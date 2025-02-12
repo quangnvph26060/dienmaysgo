@@ -14,7 +14,6 @@ class NewsController extends Controller
     //
     public function index(Request $request)
     {
-        $title = "Bài viết";
 
         if ($request->ajax()) {
             $data = SgoNews::select('id', 'title', 'slug', 'image', 'content');
@@ -46,8 +45,7 @@ class NewsController extends Controller
                 ->make(true);
         }
 
-        $page = 'Bài viết';
-        return view('backend.news.index', compact('title', 'page'));
+        return view('backend.news.index');
     }
 
 

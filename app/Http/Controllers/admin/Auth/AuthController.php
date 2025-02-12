@@ -24,7 +24,15 @@ class AuthController extends Controller
 
         $remember = $request->boolean('remember');
 
-        if (auth()->attempt($credentials, $remember)) {
+        if (auth()->guard('admin')->attempt($credentials, $remember)) {
+
+            $account = auth()->guard('admin')->user();
+
+            if ($account->role_id != 1) {
+                auth()->guard('admin')->logout();
+                toastr()->error('Bạn không có quyền truy cập vào trang quản lý!');
+                return back();
+            }
 
             toastr()->success('Đăng nhập thành công.');
 

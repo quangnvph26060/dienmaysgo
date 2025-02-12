@@ -25,7 +25,42 @@
 {{-- <script src="{{ asset('frontends/assets/js/custom.js') }}"></script> --}}
 <script src="{{ asset('frontends/assets/js/toastr.min.js') }}"></script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Lấy URL hiện tại
+        const currentUrl = window.location.href;
 
+        // Kiểm tra nếu URL không chứa chữ 'profile'
+        if (!currentUrl.includes('profile')) {
+            // Kiểm tra xem key 'activeTab' có tồn tại trong Local Storage không
+            if (localStorage.getItem('activeTab')) {
+                localStorage.removeItem('activeTab'); // Xóa key 'activeTab'
+            }
+        }
+    });
+
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const masthead = document.getElementById("masthead");
+
+        // Hàm kiểm tra và áp dụng lớp `fixed`
+        const checkScroll = () => {
+            if (window.scrollY > 200) {
+                document.querySelector(".header-wrapper").classList.add("stuck")
+                masthead.classList.add("fixed");
+            } else {
+                document.querySelector(".header-wrapper").classList.remove("stuck")
+                masthead.classList.remove("fixed");
+            }
+        };
+
+        // Kiểm tra ngay khi tải trang
+        checkScroll();
+
+        // Lắng nghe sự kiện cuộn
+        window.addEventListener("scroll", checkScroll);
+    });
+</script>
 <script>
     const BASE_URL = "{{ url('/') }}";
 
@@ -85,12 +120,9 @@
             total += cart.price * cart.qty;
         });
 
-
-
-
         var count = data.count;
 
-        jQuery('.icon-shopping-bag').attr('data-icon-label', count);
+        jQuery('.header-cart-link .fas.fa-shopping-cart').attr('data-icon-label', count);
 
         jQuery('.woocommerce-mini-cart.cart_list.product_list_widget').html(_html);
 
@@ -221,9 +253,9 @@
 
     const addToCart = () => {
         jQuery(document).ready(function() {
-            jQuery(document).on('click', '.add-to-cart', function() {
+            jQuery(document).on('click', '.add-to-cart', function(e) {
+                e.preventDefault();
                 const productId = jQuery(this).data('id');
-
 
                 jQuery.ajax({
                     url: "{{ route('carts.add-to-cart') }}",
@@ -242,6 +274,7 @@
                         }
                     },
                     error: function(xhr) {
+
                         toastr.error('Có lỗi xảy ra! Vui lòng thử lại.');
                     }
                 });
@@ -273,7 +306,7 @@
 
 
                     if (response.status) {
-                        toastr.success(response.message);
+                        // toastr.success(response.message);
 
                         row.remove();
 
@@ -295,6 +328,46 @@
         });
 
 
+
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleButtons = document.querySelectorAll('.toggle-submenu-item');
+
+        toggleButtons.forEach(button => {
+
+            button.addEventListener('click', function() {
+
+                const subMenu = this.parentElement.nextElementSibling;
+
+                // Toggle trạng thái ẩn/hiện
+                if (subMenu.classList.contains('show')) {
+                    subMenu.classList.remove('show');
+                } else {
+                    subMenu.classList.add('show');
+                }
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const dropdownToggle = document.querySelector('.dropdown-toggle');
+        const dropdownInfo = document.querySelector('.dropdown-info');
+
+
+        dropdownToggle?.addEventListener('click', (e) => {
+            e.preventDefault();
+            dropdownInfo.classList.toggle('show'); // Hiện/ẩn dropdown
+        });
+
+        // Đóng dropdown khi click ngoài
+        document.addEventListener('click', (e) => {
+            if (dropdownInfo && dropdownToggle) {
+                if (!dropdownInfo.contains(e.target) && !dropdownToggle.contains(e.target)) {
+                    dropdownInfo.classList.remove('show');
+                }
+            }
+        });
     });
 </script>
 

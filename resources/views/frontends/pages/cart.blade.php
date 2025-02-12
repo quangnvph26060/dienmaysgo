@@ -1,5 +1,11 @@
 @extends('frontends.layouts.master')
-@section('title', $title)
+
+@section('title', 'Giỏ hàng')
+{{-- @section('description', $news->description_seo)
+@section('keywords', $news->keyword_seo)
+@section('og_title', $news->name)
+@section('og_description', $news->description_seo) --}}
+
 @section('content')
     <div id="content" class="content-area page-wrapper cart_none" style="display: none;" role="main">
         <div class="row row-main">
@@ -7,21 +13,6 @@
                 <div class="col-inner">
                     <div class="woocommerce">
                         <div class="woocommerce-notices-wrapper" id="lastDeletedProduct">
-
-                            {{-- @php
-                                    $lastDeletedProduct = $lastDeletedProduct;
-                                @endphp
-                                <div class="woocommerce-message message-wrapper" role="alert">
-                                    <div class="message-container container success-color medium-text-center">
-                                        <i class="icon-checkmark"></i>
-                                        “{{ $lastDeletedProduct->name }}” đã bị xóa.
-                                        <a href="{{ route('carts.restore', ['rowId' => $lastDeletedProduct->rowId]) }}" class="restore-item">
-                                            Undo?
-                                        </a>
-
-                                    </div>
-                                </div> --}}
-
                             <div class="woocommerce-info message-wrapper">
                                 <div class="message-container container medium-text-center">
                                     <font style="vertical-align: inherit;">
@@ -63,8 +54,7 @@
                         <div class="woocommerce-notices-wrapper"></div>
                         <div class="woocommerce row row-large row-divided">
                             <div class="col large-7 pb-0">
-                                <form class="woocommerce-cart-form" action="https://dienmaysgo.com/gio-hang/"
-                                    method="post">
+                                <form class="woocommerce-cart-form" action="" method="post">
                                     <div class="cart-wrapper sm-touch-scroll">
                                         <table class="shop_table shop_table_responsive cart woocommerce-cart-form__contents"
                                             cellspacing="0">
@@ -81,7 +71,6 @@
                                             <tbody>
 
                                                 @forelse ($carts as $item)
-                                        
                                                     <tr class="woocommerce-cart-form__cart-item cart_item"
                                                         data-row-id="{{ $item->id }}">
                                                         <td class="product-remove">
@@ -92,7 +81,7 @@
 
                                                         <td class="product-thumbnail">
                                                             <a
-                                                                href="{{ route('products.detail', $item->options['slug']) }}"><img
+                                                                href="{{ route('products.detail', [$item->options['catalogue'], $item->options['slug']]) }}"><img
                                                                     fetchpriority="high" decoding="async" width="300"
                                                                     height="300"
                                                                     src="{{ asset('storage/' . $item->options->image) }}"
@@ -105,7 +94,7 @@
 
                                                         <td class="product-name" data-title="Sản phẩm">
                                                             <a
-                                                                href="{{ route('products.detail', $item->options['slug']) }}">{{ $item->name }}
+                                                                href="{{ route('products.detail', [$item->options['catalogue'], $item->options['slug']]) }}">{{ $item->name }}
                                                             </a>
                                                             <div class="show-for-small mobile-product-price">
                                                                 <span class="mobile-product-price__qty">{{ $item->qty }}
@@ -147,24 +136,21 @@
                                                         </td>
                                                     </tr>
                                                 @empty
+                                                    <tr>
+                                                        <td colspan="5" class="actions clear">
+                                                            Chưa có sản phẩm trong giỏ hàng
+                                                        </td>
+                                                    </tr>
                                                 @endforelse
-
-                                                <tr>
-                                                    <td colspan="6" class="actions clear">
-                                                        <div class="continue-shopping pull-left text-left">
-                                                            <a class="button-continue-shopping button primary is-outline"
-                                                                href="{{ route('home') }}">
-                                                                &#8592;&nbsp;Tiếp tục mua sắm
-                                                            </a>
-                                                        </div>
-
-                                                        <input type="hidden" id="woocommerce-cart-nonce"
-                                                            name="woocommerce-cart-nonce" value="a80326973f" /><input
-                                                            type="hidden" name="_wp_http_referer" value="/gio-hang/" />
-                                                    </td>
-                                                </tr>
                                             </tbody>
                                         </table>
+
+                                        <div class="continue-shopping pull-left text-left">
+                                            <a class="button-continue-shopping button primary is-outline"
+                                                href="{{ route('home') }}">
+                                                &#8592;&nbsp;Tiếp tục mua sắm
+                                            </a>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -275,7 +261,6 @@
                     },
                     success: function(response) {
 
-
                         if (response.status) {
                             toastr.success(response.message);
 
@@ -299,14 +284,29 @@
                     }
                 });
             });
-
-
-
         });
     </script>
 @endpush
 <style scoped>
+    .fa,
+    .fa-brands,
+    .fa-regular,
+    .fa-solid,
+    .fab,
+    .far,
+    .fas {
+        line-height: 2 !important;
+    }
+
+    .cart_totals.calculated_shipping {
+        margin-top: 20px;
+    }
+
     .white-space-nowrap {
         white-space: nowrap;
     }
+
+    .button [data-icon-label]:after {
+    top: -10px !important;
+}
 </style>

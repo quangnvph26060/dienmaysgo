@@ -4,8 +4,19 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@yield('title')</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>@yield('title')</title>
+    <meta name="description" content="@yield('description')">
+    <meta name="keywords" content="@yield('keywords')">
+
+    <meta property="fb:app_id" content="1234567890" />
+    <meta property="og:url" content="{{ url()->current() }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="@yield('og_title')" />
+    <meta property="og:description" content="@yield('og_description')" />
+    <meta property="og:site_name" content="{{ $settings->company_name ?? env('APP_NAME') }}" />
+    <meta property="og:image" content="@yield('og_image', showImage($settings->path))" />
 
     @include('frontends.layouts.partials.styles')
 
@@ -13,6 +24,17 @@
 
 <body>
     <div id="wrapper">
+
+        <div class="loading-api">
+            <div id="loading-overlay" class="loading-overlay">
+                <div class="loading-spinner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <p class="loading-text">Đang tải dữ liệu...</p>
+            </div>
+        </div>
 
         <header id="header" class="header has-sticky sticky-jump">
             @include('frontends.layouts.partials.header')

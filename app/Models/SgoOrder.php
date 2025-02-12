@@ -12,28 +12,37 @@ class SgoOrder extends Model
     protected $table = 'sgo_orders';
 
     protected $fillable = [
-        'first_name',
-        'last_name',
-        'company_name',
-        'country',
+        'fullname',
         'address',
-        'postcode',
-        'city',
         'phone',
         'email',
         'notes',
         'total_price',
         'payment_method',
         'status',
+        'code',
+        'reason',
+        'payment_status',
+        'deposit_amount',
+        'user_id'
     ];
     protected static function newFactory()
     {
         return OrderFactory::new();
     }
 
-    public function orderDetails()
+    public function products()
     {
-        return $this->hasMany(SgoOrderDetail::class, 'order_id');
+        return $this->belongsToMany(SgoProduct::class, 'order_product', 'order_id', 'product_id')->withPivot(['p_name', 'p_image', 'p_price', 'p_qty']);
+    }
+
+    public function transactionHistories()
+    {
+        return $this->hasMany(TransactionHistory::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
     public $timestamps = true;
 }

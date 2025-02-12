@@ -1,5 +1,11 @@
 @extends('frontends.layouts.master')
 
+@section('title', 'Liên hệ')
+{{-- @section('description', $news->description_seo)
+@section('keywords', $news->keyword_seo)
+@section('og_title', $news->name)
+@section('og_description', $news->description_seo) --}}
+
 @section('content')
     <div id="content" role="main" class="content-area">
         <div id="page-header-1001269792" class="page-header-wrapper">
@@ -17,7 +23,7 @@
                     <div class="title-content flex-col flex-right text-right medium-text-center">
                         <div class="title-breadcrumbs pb-half pt-half">
                             <nav class="woocommerce-breadcrumb breadcrumbs">
-                                <a href="{{url('/')}}">Home</a>
+                                <a href="{{ url('/') }}">Home</a>
                                 <span class="divider">&#47;</span> Liên hệ
                             </nav>
                         </div>
@@ -39,71 +45,76 @@
                 <div class="row" id="row-330176352">
                     <div id="col-1091670975" class="col medium-6 small-12 large-6">
                         <div class="col-inner">
-                            <ul>
+                            <ul style="list-style: none">
                                 <li>
-                                    Địa chỉ: {{$settings->address}}
+                                    <p style="margin: 0; display: flex;"><strong style="width: 16%">Địa chỉ:</strong>
+                                        <span>{{ $settings->address }}</span>
+                                    </p>
                                 </li>
                                 <li>
-                                    Kho hàng: {{ $settings->warehouse }}
+                                    <strong>Kho hàng:</strong> {{ $settings->warehouse }}
                                 </li>
-                                <li>Điện thoại: {{ $settings->phone }}</li>
+                                <li><strong>Điện thoại:</strong> {{ $settings->phone }}</li>
                                 <li>
-                                    Email:
-                                    <a href="_wp_link_placeholder" data-wplink-edit="true">{{ $settings->email}}</a>
+                                    <strong>Email:</strong>
+                                    <a href="_wp_link_placeholder" data-wplink-edit="true">{{ $settings->email }}</a>
                                 </li>
                             </ul>
+
+                            <hr>
 
                             <div class="wpcf7 no-js" id="wpcf7-f2452-p23-o1" lang="vi" dir="ltr">
                                 <div class="screen-reader-response">
                                     <p role="status" aria-live="polite" aria-atomic="true"></p>
                                     <ul></ul>
                                 </div>
-                                <form action="/lien-he/#wpcf7-f2452-p23-o1" method="post" class="wpcf7-form init"
+                                <form action="{{ route('post-contact') }}" method="post" class="wpcf7-form init"
                                     aria-label="Form liên hệ" novalidate="novalidate" data-status="init">
-                                    <div style="display: none">
-                                        <input type="hidden" name="_wpcf7" value="2452" />
-                                        <input type="hidden" name="_wpcf7_version" value="5.9.8" />
-                                        <input type="hidden" name="_wpcf7_locale" value="vi" />
-                                        <input type="hidden" name="_wpcf7_unit_tag" value="wpcf7-f2452-p23-o1" />
-                                        <input type="hidden" name="_wpcf7_container_post" value="23" />
-                                        <input type="hidden" name="_wpcf7_posted_data_hash" value="" />
-                                    </div>
+                                    @csrf
                                     <p>
                                         <label>
-                                            Your name<br />
-                                            <span class="wpcf7-form-control-wrap" data-name="your-name"><input
-                                                    size="40" maxlength="400"
+                                            Họ và tên<br />
+                                            <span class="wpcf7-form-control-wrap" data-name="name">
+                                                <input size="40" maxlength="400"
                                                     class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
                                                     autocomplete="name" aria-required="true" aria-invalid="false"
-                                                    value="" type="text" name="your-name" /></span>
+                                                    type="text" name="name" />
+                                                <span class="wpcf7-not-valid-tip"></span>
+                                            </span>
                                         </label>
                                     </p>
                                     <p>
                                         <label>
-                                            Your email<br />
-                                            <span class="wpcf7-form-control-wrap" data-name="your-email"><input
-                                                    size="40" maxlength="400"
+                                            Địa chỉ Email<br />
+                                            <span class="wpcf7-form-control-wrap" data-name="email">
+                                                <input size="40" maxlength="400"
                                                     class="wpcf7-form-control wpcf7-email wpcf7-validates-as-required wpcf7-text wpcf7-validates-as-email"
                                                     autocomplete="email" aria-required="true" aria-invalid="false"
-                                                    value="" type="email" name="your-email" /></span>
+                                                    type="email" name="email" />
+                                                <span class="wpcf7-not-valid-tip"></span>
+                                            </span>
                                         </label>
                                     </p>
                                     <p>
                                         <label>
-                                            Tiêu đề:<br />
-                                            <span class="wpcf7-form-control-wrap" data-name="your-subject"><input
-                                                    size="40" maxlength="400"
+                                            Tiêu đề<br />
+                                            <span class="wpcf7-form-control-wrap" data-name="subject">
+                                                <input size="40" maxlength="400"
                                                     class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required"
-                                                    aria-required="true" aria-invalid="false" value="" type="text"
-                                                    name="your-subject" /></span>
+                                                    aria-required="true" aria-invalid="false" type="text" name="subject"
+                                                    placeholder="Tên sản phẩm"
+                                                    value="@isset($product){{ $product->name }}@endisset" />
+                                                <span class="wpcf7-not-valid-tip"></span>
+                                            </span>
                                         </label>
                                     </p>
+
                                     <p>
                                         <label>
-                                            Your message (không bắt buộc)<br />
-                                            <span class="wpcf7-form-control-wrap" data-name="your-message">
-                                                <textarea cols="40" rows="10" maxlength="2000" class="wpcf7-form-control wpcf7-textarea"
-                                                    aria-invalid="false" name="your-message"></textarea>
+                                            Tin nhắn của bạn (không bắt buộc)<br />
+                                            <span class="wpcf7-form-control-wrap" data-name="message">
+                                                <textarea cols="40" rows="10" maxlength="2000" class="wpcf7-form-control wpcf7-textarea" aria-invalid="false"
+                                                    name="message"></textarea>
                                             </span>
                                         </label>
                                     </p>
@@ -111,33 +122,32 @@
                                         <input class="wpcf7-form-control wpcf7-submit has-spinner" type="submit"
                                             value="Gửi" />
                                     </p>
-                                    <p style="display: none !important" class="akismet-fields-container"
-                                        data-prefix="_wpcf7_ak_">
-                                        <label>&#916;
-                                            <textarea name="_wpcf7_ak_hp_textarea" cols="45" rows="8" maxlength="100"></textarea>
-                                        </label><input type="hidden" id="ak_js_1" name="_wpcf7_ak_js"
-                                            value="136" />
-                                        <script>
-                                            document
-                                                .getElementById("ak_js_1")
-                                                .setAttribute("value", new Date().getTime());
-                                        </script>
-                                    </p>
-                                    <div class="wpcf7-response-output" aria-hidden="true"></div>
+                                    <div class="wpcf7-response-output"></div>
                                 </form>
+
                             </div>
                         </div>
                     </div>
 
                     <div id="col-2005453375" class="col medium-6 small-12 large-6">
                         <div class="col-inner">
-                           {!! $settings->map !!}
+                            {!! $settings->map !!}
                         </div>
                     </div>
                 </div>
             </div>
 
             <style>
+                .success {
+                    border: 1px solid rgb(60, 60, 167) !important;
+                    display: block !important;
+                }
+
+                .error {
+                    border: 1px solid rgb(163, 40, 40) !important;
+                    display: block !important;
+                }
+
                 #section_109244052 {
                     padding-top: 30px;
                     padding-bottom: 30px;
@@ -156,3 +166,52 @@
         </section>
     </div>
 @endsection
+
+@push('scripts')
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script> --}}
+    <script>
+        // console.log(jQuery('.js-container'));
+        jQuery(document).ready(function() {
+            jQuery('.wpcf7-form.init').on('submit', function(e) {
+                e.preventDefault();
+
+                let formData = jQuery(this).serializeArray();
+
+                jQuery('input, textarea').removeClass('error').addClass('success').siblings('span').css(
+                    'display', 'none')
+
+                jQuery.ajax({
+                    'url': jQuery(this).attr('action'),
+                    method: 'POST',
+                    data: formData,
+                    success: (response) => {
+
+                        jQuery('.wpcf7-response-output').removeClass('error').addClass(
+                            'success').html(response.message);
+
+                        jQuery(this)[0].reset();
+                    },
+                    error: (error) => {
+                        console.log(error);
+
+                        if (error.status == 422) {
+                            jQuery.each(error.responseJSON.invalid_fields, (key, value) => {
+                                jQuery(`input[name="${key}"], textarea[name="${key}"]`)
+                                    .removeClass('success')
+                                    .addClass('error').siblings('span').css('display',
+                                        'block').html(value);
+                            })
+                        }
+
+                        jQuery('.wpcf7-response-output').removeClass('success').addClass(
+                            'error').html(error
+                            .responseJSON.message)
+
+
+                    }
+                })
+
+            })
+        })
+    </script>
+@endpush

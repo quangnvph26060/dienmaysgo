@@ -28,7 +28,7 @@
     width: 30px;
 }
 .category-page-row {
-    padding-top: 30px;
+    padding-top: 20px;
 }
 .price_slider_amount input {
     display: none;
@@ -120,11 +120,11 @@ a.added_to_cart:after {
 .grid-tools .add-to-cart-grid {
     width: 0;
 }
-@media (max-width: 849px) {
+/* @media (max-width: 849px) {
     .category-filter-row {
         padding: 10px 0;
     }
-}
+} */
 .filter-button {
     display: inline-block;
     margin-top: 0.5em;
@@ -165,10 +165,7 @@ a.added_to_cart:after {
 .woocommerce-form-login .button {
     margin-bottom: 0;
 }
-.woocommerce-billing-fields {
-    border-top: 2px solid #ddd;
-    padding-top: 15px;
-}
+
 .woocommerce-billing-fields p {
     margin-bottom: 0.5em;
 }
@@ -618,9 +615,9 @@ ul.product_list_widget li .quantity {
     margin-top: 3px;
     opacity: 0.6;
 }
-.product-main {
+/* .product-main {
     padding: 40px 0;
-}
+} */
 .page-title:not(.featured-title) + main .product-main {
     padding-top: 15px;
 }
@@ -632,8 +629,8 @@ ul.product_list_widget li .quantity {
     margin-top: 0.05em;
     vertical-align: top;
 }
-.product-summary .quantity {
-    margin-bottom: 1em;
+bdi{
+    font-size: 25px;
 }
 .product-summary .variations_button {
     padding: 0.5em 0;
@@ -643,10 +640,9 @@ ul.product_list_widget li .quantity {
 }
 .product_meta {
     font-size: 0.8em;
-    margin-bottom: 1em;
+    /* margin-bottom: 10px; */
 }
 .product_meta > span {
-    border-top: 1px dotted #ddd;
     display: block;
     padding: 5px 0;
 }
@@ -820,6 +816,7 @@ p.in-stock {
     }
 }
 .product-footer .woocommerce-tabs {
+    margin-top: 15px;
     border-top: 1px solid #ececec;
     padding: 30px 0;
 }
@@ -889,9 +886,9 @@ p.in-stock {
 .woocommerce-pagination ul.links li {
     margin-left: inherit;
 }
-.has-sticky-product-cart {
+/* .has-sticky-product-cart {
     padding-bottom: 60px;
-}
+} */
 .has-sticky-product-cart .back-to-top.active {
     bottom: 10px;
 }
@@ -1010,14 +1007,10 @@ p.in-stock {
     margin-right: 0;
 }
 .quantity .button.minus {
-    border-bottom-right-radius: 0 !important;
-    border-right: 0 !important;
-    border-top-right-radius: 0 !important;
+    border-radius: 0 !important;
 }
 .quantity .button.plus {
-    border-bottom-left-radius: 0 !important;
-    border-left: 0 !important;
-    border-top-left-radius: 0 !important;
+    border-radius: 0 !important;
 }
 .quantity .minus,
 .quantity .plus {
@@ -1422,4 +1415,21 @@ dl.variation dd {
 
 .d-none {
     display: none;
+}
+
+.social-icons a.icon {
+    display: grid !important;
+    place-items: center;  /* Căn giữa cả ngang và dọc */
+    width: 20px;
+    height: 20px;
+}
+
+.social-icons a.icon:hover {
+    background-color: #165dce; /* Màu khi hover */
+}
+
+.social-icons {
+    display: flex;              /* Đặt các icon cùng một hàng */
+    gap: 10px;                  /* Khoảng cách giữa các icon */
+    align-items: center;         /* Căn giữa icon theo chiều dọc */
 }
