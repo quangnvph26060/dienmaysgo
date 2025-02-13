@@ -31,10 +31,10 @@
 
                     @if (!empty($attributes))
                         @foreach ($attributes as $attribute)
-                            <aside class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
-                                <span class="widget-title shop-sidebar">{{ $attribute->title }}</span>
-                                <div class="is-divider small"></div>
-                                @if ($attribute->attribute->attributeValues->isNotEmpty())
+                            @if ($attribute->attribute->attributeValues->isNotEmpty())
+                                <aside class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
+                                    <span class="widget-title shop-sidebar">{{ $attribute->title }}</span>
+                                    <div class="is-divider small"></div>
                                     @foreach ($attribute->attribute->attributeValues as $item)
                                         <div style="display: flex; justify-content: space-between; align-items: center;">
                                             <div class="d-flex">
@@ -45,18 +45,19 @@
                                             <small>({{ $item->products_count }})</small>
                                         </div>
                                     @endforeach
-                                @endif
-                            </aside>
+                                </aside>
+                            @endif
                         @endforeach
                     @endif
 
-                    @if (!empty($brands))
+
+                    @if (!empty($brands) && !empty($brands['data']))
                         <aside class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
                             <span class="widget-title shop-sidebar">{{ $brands['title'] }}</span>
                             <div class="is-divider small"></div>
                             @foreach ($brands['data'] as $brand)
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div>
+                                    <div class="d-flex">
                                         <input type="checkbox" name="brand[]" value="{{ $brand['id'] }}"
                                             onchange="submitFormWithDelay()">
                                         <label>{{ $brand['name'] }}</label>
@@ -67,7 +68,8 @@
                         </aside>
                     @endif
 
-                    @if (!empty($priceOptions))
+
+                    {{-- @if (!empty($priceOptions))
                         <span class="widget-title shop-sidebar">{{ $priceFilter->title }}</span>
                         <select name="price_range" id="price_range" onchange="submitFormWithDelay()">
                             <option value="">Tất cả</option>
@@ -78,8 +80,33 @@
                                 </option>
                             @endforeach
                         </select>
-                    @endif
+                    @endif --}}
 
+
+                    @if (!empty($priceOptions))
+                        <aside class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
+                            <span class="widget-title shop-sidebar">{{ $priceFilter->title }}</span>
+                            <div class="is-divider small"></div>
+                            <div>
+                                <label class="d-flex">
+                                    <input type="checkbox" name="price_range" value=""
+                                        onchange="submitFormWithDelay()"
+                                        {{ request('price_range') == '' ? 'checked' : '' }}>
+                                    Tất cả
+                                </label>
+                            </div>
+                            @foreach ($priceOptions as $priceRange)
+                                <div>
+                                    <label class="d-flex">
+                                        <input type="checkbox" name="price_range" value="{{ $priceRange }}"
+                                            onchange="submitFormWithDelay()"
+                                            {{ request('price_range') == $priceRange ? 'checked' : '' }}>
+                                        {{ $priceRange }} VNĐ
+                                    </label>
+                                </div>
+                            @endforeach
+                        </aside>
+                    @endif
 
 
                 </div>
@@ -148,6 +175,20 @@
 
 @push('scripts')
     <script>
+        document.querySelectorAll('input[type="checkbox"][name="price_range"]').forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                // Nếu checkbox này được chọn, bỏ chọn tất cả các checkbox khác
+                if (this.checked) {
+                    document.querySelectorAll('input[type="checkbox"][name="price_range"]').forEach(
+                        function(otherCheckbox) {
+                            if (otherCheckbox !== checkbox) {
+                                otherCheckbox.checked = false;
+                            }
+                        });
+                }
+            });
+        });
+
         addToCart();
 
         var loadingOverlay = document.getElementById('loading-overlay');

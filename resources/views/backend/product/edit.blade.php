@@ -112,13 +112,16 @@
                                     <div class="col-lg-12">
                                         <div class="form-group mb-3">
                                             <label for="brand" class="form-label">Thương hiệu</label>
-                                            <select id="mySelectBrand" multiple="multiple" class="form-select"
-                                                style="width: 100%;" name="brand_id[]">
+                                            <select id="mySelectBrand" class="form-select" style="width: 100%;"
+                                                name="brand_id">
+                                                <option value="" @if (empty($product->brand_id)) selected @endif>
+                                                    Chọn thương hiệu</option>
                                                 @foreach ($brands as $id => $brand)
-                                                    <option value="{{ $id }}" @selected(in_array($id, old('brand_id', $product->brands->pluck('id')->toArray())))>
+                                                    <option value="{{ $id }}" @selected($id == $product->brand_id)>
                                                         {{ $brand }}</option>
                                                 @endforeach
                                             </select>
+
                                         </div>
                                     </div>
 
@@ -136,10 +139,11 @@
 
                                             <div id="additional-selects" class="mt-3 row form-group">
                                                 @foreach ($attributes as $attribute)
-                                                    <div class="col-lg-4"
+                                                {{-- @dd($attribute) --}}
+                                                    <div class="col-lg-4 mb-3"
                                                         id="select-wrapper-{{ $attribute['attribute_id'] }}">
-                                                        <label for="value-{{ $attribute['attribute_id'] }}">Giá
-                                                            trị</label>
+                                                        <label
+                                                            for="value-{{ $attribute['attribute_id'] }}">{{ $attribute['attribute_name'] }}</label>
                                                         <select name="attribute_value_id[]"
                                                             id="value-{{ $attribute['attribute_id'] }}"
                                                             class="form-control">
@@ -442,8 +446,8 @@
                         });
 
                         const newSelectHtml = `
-                             <div class="col-lg-4" id="select-wrapper-${selectedId}">
-                                <label for="select-${selectedId}">Chọn giá trị cho: ${selectedText}</label>
+                             <div class="col-lg-4 mb-3" id="select-wrapper-${selectedId}">
+                                <label for="select-${selectedId}">${selectedText}</label>
                                 <select name="attribute_value_id[]" id="select-${selectedId}" class="form-select" style="width: 100%;">
                                     ${optionsHtml}
                                 </select>

@@ -120,15 +120,23 @@ class ProductController extends Controller
 
 
         $attributes = ProductAttributeValue::query()
+            ->join('attributes', 'product_attribute_values.attribute_id', '=', 'attributes.id')
             ->where('sgo_product_id', $id)
-            ->get(['attribute_id', 'attribute_value_id'])
+            ->get([
+                'product_attribute_values.attribute_id',
+                'product_attribute_values.attribute_value_id',
+                'attributes.name as attribute_name'
+            ])
             ->toArray();
+
+
+        // dd($attributes);
 
         $allAttributeValues = AttributeValue::get()->groupBy('attribute_id')->map(function ($values) {
             return $values->pluck('value', 'id');
         })->toArray();
 
-        $product = SgoProduct::query()->with(['attributeValues', 'brands'])->findOrFail($id);
+        $product = SgoProduct::query()->with(['attributeValues', 'brand'])->findOrFail($id);
 
 
         $images = $product->images;
@@ -157,8 +165,7 @@ class ProductController extends Controller
                 'attribute_id.*' => 'exists:attributes,id',
                 'attribute_value_id' => 'nullable|array',
                 'attribute_value_id.*' => 'exists:attribute_values,id',
-                'brand_id' => 'nullable|array',
-                'brand_id.*' => 'exists:brands,id',
+                'brand_id' => 'nullable|exists:brands,id',
                 'tags' => 'nullable',
                 'discount_type' => 'nullable|in:percentage,amount',
                 'discount_value' => $rule,
@@ -210,9 +217,9 @@ class ProductController extends Controller
                 }
             }
 
-            if ($request->has('brand_id')) {
-                $product->brands()->sync($request->brand_id);
-            }
+            // if ($request->has('brand_id')) {
+            //     $product->brands()->sync($request->brand_id);
+            // }
 
             if ($request->attribute_id) {
                 $data = [];
@@ -264,8 +271,7 @@ class ProductController extends Controller
                 'attribute_id.*' => 'exists:attributes,id',
                 'attribute_value_id' => 'nullable|array',
                 'attribute_value_id.*' => 'exists:attribute_values,id',
-                'brand_id' => 'nullable|array',
-                'brand_id.*' => 'exists:brands,id',
+                'brand_id' => 'nullable|exists:brands,id',
                 'tags' => 'nullable',
                 'discount_type' => 'nullable|in:percentage,amount',
                 'discount_value' => $rule,
@@ -339,9 +345,9 @@ class ProductController extends Controller
 
             $product->update($validated);
 
-            if ($request->has('brand_id')) {
-                $product->brands()->sync($request->brand_id);
-            }
+            // if ($request->has('brand_id')) {
+            //     $product->brands()->sync($request->brand_id);
+            // }
 
             if ($request->attribute_id) {
                 ProductAttributeValue::where('sgo_product_id', $product->id)->delete();

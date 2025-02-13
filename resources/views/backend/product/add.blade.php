@@ -381,8 +381,8 @@
                         });
 
                         const newSelectHtml = `
-                             <div class="col-lg-4" id="select-wrapper-${selectedId}">
-                                <label for="select-${selectedId}">Chọn giá trị cho: ${selectedText}</label>
+                             <div class="col-lg-4 mb-3" id="select-wrapper-${selectedId}">
+                                <label for="select-${selectedId}">${selectedText}</label>
                                 <select name="attribute_value_id[]" id="select-${selectedId}" class="form-select" style="width: 100%;">
                                     ${optionsHtml}
                                 </select>

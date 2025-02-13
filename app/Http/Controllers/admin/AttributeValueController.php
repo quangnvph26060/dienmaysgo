@@ -28,11 +28,10 @@ class AttributeValueController extends Controller
                 ->where('attribute_id', $attribute->id)
                 ->get())
                 ->addColumn('value', function ($row) {
-                    $urlEdit =  route('admin.attribute-values.edit', $row);
                     $urlDestroy = route('admin.attribute-values.destroy', $row);
                     return "
                     <strong class='text-primary'>$row->value</strong>
-                    " . view('components.action', compact('row', 'urlEdit', 'urlDestroy')) . "
+                    " . view('components.action', compact('row', 'urlDestroy')) . "
                     ";
                 })
                 ->addColumn('description', function ($row) {

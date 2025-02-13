@@ -18,7 +18,7 @@ class ProductController extends Controller
 
     public function list($slug = null)
     {
-        Cache::flush();
+        // Cache::flush();
         if (request()->ajax()) {
             return $this->filterProduct($slug);
         }
@@ -56,7 +56,20 @@ class ProductController extends Controller
                 ])->latest()->get();
         });
 
-        $attributes = $filters->where('filter_type', 'attribute');
+        $attributes = $filters->where('filter_type', 'attribute')->map(function ($attribute) {
+            $filteredValues = $attribute->attribute->attributeValues->filter(function ($value) {
+                return $value->products_count > 0; // Chỉ giữ giá trị có sản phẩm
+            });
+
+            if ($filteredValues->isNotEmpty()) {
+                $attribute->attribute->attributeValues = $filteredValues;
+                return $attribute;
+            }
+
+            return null;
+        })->filter(); // Loại bỏ null
+
+
 
         $priceFilter = $filters->where('filter_type', 'price')->first();
         $priceOptions = [];
@@ -79,24 +92,28 @@ class ProductController extends Controller
             if ($filters->contains('filter_type', 'brand')) {
                 $search = request('s'); // Lấy từ khóa tìm kiếm nếu có
 
-                return [
+                $filteredBrands = Brand::query()
+                    ->withCount(['products' => function ($q) use ($category, $search) {
+                        if ($category) {
+                            $q->where('category_id', $category->id);
+                        }
+                        if (!empty($search)) {
+                            $q->where('name', 'like', '%' . $search . '%');
+                        }
+                    }])
+                    ->having('products_count', '>', 0) // Chỉ lấy thương hiệu có sản phẩm
+                    ->latest()
+                    ->get()
+                    ->toArray();
+
+                return empty($filteredBrands) ? [] : [
                     'title' => $filters->where('filter_type', 'brand')->first()->title,
-                    'data' => Brand::query()
-                        ->withCount(['products' => function ($q) use ($category, $search) {
-                            if ($category) {
-                                $q->where('category_id', $category->id);
-                            }
-                            if (!empty($search)) {
-                                $q->where('name', 'like', '%' . $search . '%');
-                            }
-                        }])
-                        ->latest()
-                        ->get()
-                        ->toArray(),
+                    'data' => $filteredBrands
                 ];
             }
             return [];
         });
+
 
         $categoryIds = $category ? collect([$category->id])->merge($category->allChildrenIds()) : [];
 
@@ -269,7 +286,7 @@ class ProductController extends Controller
     public function detail($catalogue = null, $slug)
     {
         // Lấy sản phẩm chi tiết
-        $product = SgoProduct::with('images', 'brands', 'category.parent', 'category.childrens', 'attributes:id,name', 'attributeValues:id,value')
+        $product = SgoProduct::with('images', 'brand', 'category.parent', 'category.childrens', 'attributes:id,name', 'attributeValues:id,value')
             ->where('slug', $slug)
             ->firstOrFail();
 
