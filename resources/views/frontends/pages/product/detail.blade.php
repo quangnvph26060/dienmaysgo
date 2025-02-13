@@ -77,9 +77,9 @@
                                     </h1>
 
                                     <div class="product-details">
-                                        @if ($product->brands->isNotEmpty())
+                                        @if ($product->brand)
                                             <div class="detail-item"><span class="label">Thương hiệu:</span> <span
-                                                    class="value">{{ implode(' | ', $product->brands->pluck('name')->toArray()) }}</span>
+                                                    class="value">{{ $product->brand->name}}</span>
                                             </div>
                                         @endif
                                         @if ($product->category)
@@ -417,8 +417,7 @@
                 .then(data => {
                     if (data.success) {
                         window.location.href = "{{ route('carts.thanh-toan') }}"
-                    }
-                    else {
+                    } else {
                         if (data.message) {
                             alert(data.message)
                         } else {

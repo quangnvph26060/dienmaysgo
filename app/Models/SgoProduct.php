@@ -36,7 +36,8 @@ class SgoProduct extends Model
         'discount_type',
         'discount_value',
         'discount_end_date',
-        'discount_start_date'
+        'discount_start_date',
+        'brand_id'
     ];
 
 
@@ -94,9 +95,9 @@ class SgoProduct extends Model
         return $this->belongsToMany(AttributeValue::class, 'product_attribute_values', 'sgo_product_id', 'attribute_value_id');
     }
 
-    public function brands()
+    public function brand()
     {
-        return $this->belongsToMany(Brand::class, 'brand_product', 'product_id', 'brand_id');
+        return $this->belongsTo(Brand::class);
     }
 
     protected $casts = [
