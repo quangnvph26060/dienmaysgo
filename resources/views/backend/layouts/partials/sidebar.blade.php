@@ -25,7 +25,7 @@
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
                 <li class="nav-item {{ activeMenu('admin.dashboard') }}">
-                    <a href="{{ route('admin.dashboard') }}" class="collapsed">
+                    <a class="has-children" href="{{ route('admin.dashboard') }}" class="collapsed">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
                     </a>
@@ -54,7 +54,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#product">
+                    <a data-bs-toggle="collapse" class="has-children" href="#product">
                         <i class="fas fa-box-open"></i>
                         <p>Sản phẩm</p>
                         <span class="caret"></span>
@@ -85,8 +85,8 @@
                     </div>
                 </li>
 
-                <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#promotion">
+                <li class="nav-item ">
+                    <a data-bs-toggle="collapse" class="has-children" href="#promotion">
                         <i class="fab fa-salesforce"></i>
                         <p>Khuyến mãi</p>
                         <span class="caret"></span>
@@ -108,7 +108,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#news">
+                    <a data-bs-toggle="collapse" class="has-children" href="#news">
                         <i class="fas fa-newspaper"></i>
                         <p>Bài viết</p>
                         <span class="caret"></span>
@@ -152,7 +152,7 @@
                 </li> --}}
 
                 <li class="nav-item">
-                    <a data-bs-toggle="collapse" href="#marketing">
+                    <a data-bs-toggle="collapse" class="has-children" href="#marketing">
                         <i class="fas fa-users"></i>
                         <p>Marketing</p>
                         <span class="caret"></span>

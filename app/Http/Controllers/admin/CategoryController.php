@@ -18,12 +18,14 @@ class CategoryController extends Controller
         $title = "Danh mục";
         if ($request->ajax()) {
 
-            $data = SgoCategory::with('parent')
-                ->select('id', 'name', 'slug', 'description', 'logo', 'category_parent_id', 'title_seo', 'description_seo', 'keyword_seo')->latest();
-            return DataTables::of($data)
-                ->addColumn('parent_name', function ($row) {
+            $data = collect($this->getCategories());
 
-                    return $row->parent ? $row->parent->name : '--------';
+            return DataTables::of($data)
+                ->addColumn('name', function ($row) {
+                    return str_repeat('- ', $row->level) . $row->name;
+                })
+                ->addColumn('parent_name', function ($row) {
+                    return $row->parent_name ? $row->parent_name : '--------';
                 })
                 ->addColumn('description', function ($row) {
                     // Trả về nội dung HTML từ cột content
@@ -50,7 +52,34 @@ class CategoryController extends Controller
         return view('backend.category.index', compact('title', 'page'));
     }
 
+    public function getCategories()
+    {
+        $categories = DB::table('sgo_category as c')
+            ->leftJoin('sgo_category as p', 'c.category_parent_id', '=', 'p.id')
+            ->select('c.*', 'p.name as parent_name') // Lấy luôn tên danh mục cha
+            ->get();
 
+        return $this->sortCategories($categories);
+    }
+
+
+    private function sortCategories($categories, $parentId = null, $level = 0)
+    {
+        $result = [];
+
+        foreach ($categories as $category) {
+            if ($category->category_parent_id == $parentId) {
+                $category->level = $level;
+                $result[] = $category;
+
+                // Gọi đệ quy để lấy danh mục con
+                $children = $this->sortCategories($categories, $category->id, $level + 1);
+                $result = array_merge($result, $children);
+            }
+        }
+
+        return $result;
+    }
 
 
     public function create()
