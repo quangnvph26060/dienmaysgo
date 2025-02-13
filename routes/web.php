@@ -67,6 +67,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         Route::prefix('product')->name('product.')->group(function () {
             Route::get('categories', [ProductController::class, 'getCategories'])->name('categories.index');
+            Route::get('attributes', [ProductController::class, 'getAttributes'])->name('attributes.index');
+            Route::get('attributes/{id}/values', [ProductController::class, 'getValues'])->name('attributes.values');
             Route::get('', [ProductController::class, 'index'])->name('index');
             Route::get('add', [ProductController::class, 'add'])->name('add');
             Route::post('store', [ProductController::class, 'store'])->name('store');

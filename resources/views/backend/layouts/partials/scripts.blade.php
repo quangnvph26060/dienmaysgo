@@ -64,24 +64,24 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
-        // Lấy toàn bộ các menu có submenu
-        const menuItems = document.querySelectorAll('.nav-item > a[data-bs-toggle="collapse"]');
+        // Lấy tất cả các menu con (các thẻ <a> bên trong .nav-item)
+        let currentMenuItem = document.querySelector(".nav-item .active");
 
-        menuItems.forEach(function(menuItem) {
-            // Kiểm tra xem đường dẫn của menu có khớp với route hiện tại hay không
-            const submenuId = menuItem.getAttribute('href').substring(
-                1); // Lấy id của submenu (ví dụ: "order", "product")
-            const currentRoute = window.location.pathname;
+        if (currentMenuItem) {
+            // Tìm phần tử cha có class "has-children"
+            let parentCollapse = currentMenuItem.closest(".collapse");
 
-            // Nếu menu tương ứng với route hiện tại, mở submenu
-            if (currentRoute.includes(submenuId)) {
-                const collapseElement = document.getElementById(submenuId);
-                if (collapseElement) {
-                    // Mở submenu bằng cách thêm class 'show' vào collapse
-                    collapseElement.classList.add('show');
+            if (parentCollapse) {
+                // Mở menu cha bằng cách thêm class "show"
+                parentCollapse.classList.add("show");
+
+                // Mở mũi tên caret nếu có
+                let parentNavItem = parentCollapse.closest(".nav-item");
+                if (parentNavItem) {
+                    parentNavItem.querySelector("[data-bs-toggle='collapse']")?.classList.remove("collapsed");
                 }
             }
-        });
+        }
     });
 </script>
 
@@ -94,7 +94,8 @@
 
 
 
-    const dataTables = (api, columns, model, filterDate = false, filterCatalogue = false, sortable = false, column ='id') => {
+    const dataTables = (api, columns, model, filterDate = false, productFilter = false, sortable = false, column =
+        'id') => {
         const table = $('#myTable').DataTable({ // Định nghĩa biến table
             processing: true,
             serverSide: true,
@@ -103,7 +104,9 @@
                 data: function(d) {
                     d.startDate = $('#startDate').val() || null;
                     d.endDate = $('#endDate').val() || null;
-                    d.catalogue = $('#catalogueFilter').val() || null; // Thêm dữ liệu filter catalogue
+                    d.catalogue = $('#catalogueFilter').val() || null;
+                    d.attributeId = $('#attributeFilter').val() || null;
+                    d.attributeValueId = $('#attributeValueFilter').val() || null;
                 }
             },
             columns: columns,
@@ -211,18 +214,28 @@
             }
         }
 
-        if (filterCatalogue) {
+        if (productFilter) {
             const lengthContainer = document.querySelector('.dt-length');
 
             if (lengthContainer) {
                 const catalogueFilterHtml = `
-        <div class="catalogue-filter ms-2 d-flex align-items-center">
-            <select id="catalogueFilter" class="form-control w-auto">
-                <option value="">Chọn danh mục</option> <!-- Dữ liệu mặc định "Chọn danh mục" -->
-            </select>
-            <button id="resetCatalogueBtn" class="btn btn-secondary ms-2 btn-sm">Reset</button>
-        </div>
-    `;
+                <div class="catalogue-filter ms-2 d-flex align-items-center">
+                    <select id="catalogueFilter" class="form-control w-auto">
+                        <option value="">Chọn danh mục</option> <!-- Dữ liệu mặc định "Chọn danh mục" -->
+                    </select>
+                </div>
+
+                <div class="attribute-filter ms-2 d-flex align-items-center">
+                    <select id="attributeFilter" class="form-control w-auto">
+                        <option value="">Chọn thuộc tính</option>
+                    </select>
+                    <select id="attributeValueFilter" class="form-control w-auto d-none ms-2">
+                        <option value="">Chọn giá trị</option>
+                    </select>
+                </div>
+
+                <button id="resetCatalogueBtn" class="btn btn-secondary ms-2 btn-sm">Reset</button>
+            `;
 
                 lengthContainer.insertAdjacentHTML('afterend', catalogueFilterHtml);
 
@@ -239,37 +252,82 @@
                     dataType: 'json',
                     success: function(data) {
 
-                        console.log(data);
                         let $select = $('#catalogueFilter');
                         $select.empty(); // Xóa dữ liệu cũ
 
-                        $select.append('<option value="">Chọn danh mục</option>'); // Thêm option mặc định
-
+                        $select.append(
+                            '<option value="">Chọn danh mục</option>'); // Thêm option mặc định
 
                         data.forEach(item => {
                             let prefix = '-'.repeat(item.level);
-                            let option = `<option value="${item.id}">${prefix} ${item.name}</option>`;
+                            let option =
+                                `<option value="${item.id}">${prefix} ${item.name}</option>`;
                             $select.append(option); // Thêm từng option vào select
                         });
 
-                        // Khởi tạo lại select2 sau khi đã thêm option
-                        // $('#catalogueFilter').select2({
-                        //     placeholder: 'Chọn danh mục',
-                        //     allowClear: true
-                        // });
                     }
                 });
 
+                $.ajax({
+                    url: "{{ route('admin.product.attributes.index') }}",
+                    dataType: 'json',
+                    success: function(data) {
+                        let $select = $('#attributeFilter');
+                        $select.empty().append('<option value="">Chọn thuộc tính</option>');
+                        data.forEach(attr => {
+                            $select.append(`<option value="${attr.id}">${attr.name}</option>`);
+                        });
+                    }
+                });
+
+                $('#attributeFilter').on('change', function() {
+                    let attributeId = $(this).val();
+                    let $valueSelect = $('#attributeValueFilter');
+
+                    if (!attributeId) {
+                        $valueSelect.addClass('d-none').empty();
+                        return;
+                    }
+
+                    $.ajax({
+                        url: `{{ url('/admin/product/attributes') }}/${attributeId}/values`,
+                        dataType: 'json',
+                        success: function(data) {
+                            $valueSelect.removeClass('d-none').empty().append(
+                                '<option value="">Chọn giá trị</option>');
+                            data.forEach(value => {
+                                $valueSelect.append(
+                                    `<option value="${value.id}">${value.value}</option>`
+                                );
+                            });
+                        }
+                    });
+                });
+
                 // Khi chọn catalogue, filter bảng
-                $('#catalogueFilter').on('change', function() {
+                $('#catalogueFilter,#attributeFilter, #attributeValueFilter').on('change', function() {
                     table.draw();
                 });
 
                 // Reset filter
                 $('#resetCatalogueBtn').on('click', function() {
-                    $('#catalogueFilter').val(null).trigger('change');
+
+                    if ($('#catalogueFilter').val() == '' && $('#attributeFilter').val() == '')
+                        return false;
+
+                    // Reset các select2
+                    $('#catalogueFilter').val('').trigger(
+                    'change'); // Cập nhật lại giá trị của Select2 và trigger sự kiện
+                    $('#attributeFilter').val('').trigger(
+                    'change'); // Cập nhật lại giá trị của Select2 và trigger sự kiện
+
+                    // Ẩn ô chọn giá trị thuộc tính
+                    $('#attributeValueFilter').addClass('d-none').empty();
+
+                    // Reset bảng dữ liệu
                     table.draw();
                 });
+
             }
         }
 

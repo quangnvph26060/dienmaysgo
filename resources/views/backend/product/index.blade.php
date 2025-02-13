@@ -151,7 +151,10 @@
 
     <style>
         .select2 {
-            width: 340px !important;
+            width: 265px !important;
+        }
+        #attributeFilter, #attributeValueFilter {
+            padding: 0.3rem 1rem !important;
         }
     </style>
 @endpush

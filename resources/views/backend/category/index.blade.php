@@ -87,7 +87,8 @@
                             updateOrderInDatabase(order);
                         }
                     });
-                }
+                },
+                order: [],
             });
 
             function updateOrderInDatabase(order) {

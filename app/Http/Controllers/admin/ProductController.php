@@ -34,6 +34,18 @@ class ProductController extends Controller
         return response()->json($sortedCategories);
     }
 
+    public function getAttributes()
+    {
+        $attributes = Attribute::query()->latest()->get();
+        return response()->json($attributes);
+    }
+
+    public function getValues($id)
+    {
+        $values = AttributeValue::where('attribute_id', $id)->get();
+        return response()->json($values);
+    }
+
     private function sortCategories($categories, $parentId = null, $level = 0)
     {
         $result = [];
@@ -62,8 +74,18 @@ class ProductController extends Controller
                     // Kiểm tra xem có bộ lọc catalogue không và áp dụng điều kiện lọc
                     return $query->where('category_id', $request->catalogue);
                 })
-                ->with('category') // Quan hệ với bảng Category
-                ->latest() // Sắp xếp theo thời gian giảm dần
+                ->when($request->attributeId, function ($query) use ($request) {
+                    return $query->whereHas('attributes', function ($q) use ($request) {
+                        $q->where('attribute_id', $request->attributeId);
+                    });
+                })
+                ->when($request->attributeValueId, function ($query) use ($request) {
+                    return $query->whereHas('attributeValues', function ($q) use ($request) {
+                        $q->where('attribute_value_id', $request->attributeValueId);
+                    });
+                })
+                ->with(['category', 'attributes', 'attributeValues'])
+                ->latest()
                 ->get())
                 ->addColumn('price', function ($row) {
                     return number_format($row->price, 0, ',', '.') . ' VND' . '<i class="fas fa-pen-alt ms-2 pointer" data-id=' . $row->id . '></i>';
@@ -71,9 +93,7 @@ class ProductController extends Controller
                 ->addColumn('import_price', function ($row) {
                     return number_format($row->import_price, 0, ',', '.') . ' VND';
                 })
-                ->addColumn('quantity', function ($row) {
-                    return number_format($row->quantity, 0, ',', '.');
-                })
+
                 ->addColumn('checkbox', function ($row) {
                     return '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />';
                 })
