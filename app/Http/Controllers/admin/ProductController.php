@@ -168,6 +168,7 @@ class ProductController extends Controller
                 'discount_value' => $rule,
                 'discount_start_date' => 'nullable|date',
                 'discount_end_date' => 'nullable|date|after_or_equal:discount_start_date',
+                'module' => 'nullable'
             ],
             __('request.messages'),
             [
@@ -274,6 +275,7 @@ class ProductController extends Controller
                 'discount_value' => $rule,
                 'discount_start_date' => 'nullable|date',
                 'discount_end_date' => 'nullable|date|after_or_equal:discount_start_date',
+                'module' => 'nullable'
             ],
             __('request.messages'),
             [
