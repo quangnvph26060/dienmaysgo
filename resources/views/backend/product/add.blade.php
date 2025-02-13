@@ -75,7 +75,7 @@
 
                                     </div>
 
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-2">
                                         <div class="form-group mb-3">
                                             <label for="quantity" class="form-label">Số lượng</label>
                                             <input type="number" class="form-control" name="quantity" id="quantity"
@@ -84,7 +84,15 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-4">
+                                        <div class="form-group mb-3">
+                                            <label for="module" class="form-label">Module</label>
+                                            <input type="text" class="form-control" name="module" id="module"
+                                                placeholder="Nhập module" value="{{ old('module') }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
                                         <div class="form-group mb-3">
                                             <label for="fake_import_price" class="form-label">Giá nhập</label>
                                             <input type="text" class="form-control" id="fake_import_price"
@@ -93,12 +101,24 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-4">
                                         <div class="form-group mb-3">
                                             <label for="price" class="form-label">Giá bán</label>
                                             <input type="text" class="form-control" id="fake_price"
                                                 placeholder="Nhập giá bán sản phẩm" value="{{ old('price') }}">
                                             <input type="hidden" name="price" value="{{ old('price') }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="discount_value" class="form-label">Nhập giá trị:</label>
+                                            <input value="0"
+                                                type="text" id="fake_discount_value" class="form-control"
+                                                placeholder="Nhập số tiền hoặc %">
+
+                                            <input value="0"
+                                                type="hidden" name="discount_value">
                                         </div>
                                     </div>
 
@@ -292,11 +312,11 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        {{-- <div class="form-group">
                             <label for="discount-value" class="form-label">Nhập giá trị:</label>
                             <input value="{{ old('discount_value') }}" type="number" id="discount-value"
                                 class="form-control" name="discount_value" placeholder="Nhập số tiền hoặc %">
-                        </div>
+                        </div> --}}
 
                         <div class="form-group">
                             <label for="start-date" class="form-label">Ngày bắt đầu:</label>

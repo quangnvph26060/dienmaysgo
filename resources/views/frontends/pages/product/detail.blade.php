@@ -79,7 +79,7 @@
                                     <div class="product-details">
                                         @if ($product->brand)
                                             <div class="detail-item"><span class="label">Thương hiệu:</span> <span
-                                                    class="value">{{ $product->brand->name}}</span>
+                                                    class="value">{{ $product->brand->name }}</span>
                                             </div>
                                         @endif
                                         @if ($product->category)
@@ -183,17 +183,6 @@
 
                                     @if ($product->price)
 
-                                        <div style="margin-bottom: 10px">
-
-                                            @if ($product->tags)
-                                                <div style="display: flex; align-items: center; font-size: .8rem">
-                                                    <p class="status" style="margin: 0">Tags: </p>
-                                                    <p class="" style="margin: 0 0 0 60px">
-                                                        {{ formatString($product->tags) }}</p>
-                                                </div>
-                                            @endif
-                                        </div>
-
                                         <form class="cart" action="" method="post" enctype="multipart/form-data">
                                             <div class="sticky-add-to-cart-wrapper">
                                                 <div class="sticky-add-to-cartt">
@@ -271,13 +260,12 @@
                                             </div>
                                             <div>
                                                 @foreach ($settings->introduction['phone'] ?? [] as $key => $item)
-                                                    <p>
-                                                        <span
-                                                            class="hotline-region">{{ $settings->introduction['facility'][$key] ?? '' }}</span>
-                                                        <span class="hotline-number">{{ $item }}</span>
+                                                <p class="hotline-item">
+                                                    <span class="hotline-region">{{ $settings->introduction['facility'][$key] ?? '' }}</span>
+                                                    <span class="hotline-number">{{ $item }}</span>
+                                                </p>
+                                            @endforeach
 
-                                                    </p>
-                                                @endforeach
 
                                             </div>
 
@@ -328,7 +316,20 @@
 
 
                                 </div>
+
+                                <div style="margin-top: 10px">
+
+                                    @if ($product->tags)
+                                        <div style="display: flex; align-items: center; font-size: .8rem">
+                                            <p class="status" style="margin: 0"><strong>Tags: </strong></p>
+                                            <p class="" style="margin: 0 0 0 10px">
+                                                {{ formatString($product->tags) }}</p>
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
+
+
 
                             <div class="related related-products-wrapper product-section">
                                 <h3
@@ -561,6 +562,11 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
+        .hotline-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px; /* Khoảng cách giữa hai phần */
+}
         .lb-dataContainer {
             display: none !important;
         }
@@ -734,10 +740,13 @@
             color: red;
             font-weight: bold;
             margin-right: 10px;
+            white-space: nowrap; /* Không xuống dòng */
         }
 
         .hotline-region {
             color: #333;
+            flex: 1; /* Tự động căn chỉnh độ rộng theo nội dung dài nhất */
+    white-space: nowrap; /* Không xuống dòng */
         }
 
         .image-alt {

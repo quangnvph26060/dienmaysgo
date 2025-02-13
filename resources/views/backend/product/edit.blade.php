@@ -70,6 +70,9 @@
                                             <label for="name" class="form-label">Tên sản phẩm</label>
                                             <input type="text" class="form-control" name="name" id="name"
                                                 placeholder="Nhập tên sản phẩm" value="{{ old('name', $product->name) }}">
+                                            <a target="_bank"
+                                                href="{{ env('APP_URL') }}{{ $product->category ? '/' . $product->category->slug : '' }}/{{ $product->slug }}"
+                                                id="slug-link">{{ env('APP_URL') }}{{ $product->category ? '/' . $product->category->slug : '' }}/{{ $product->slug }}</a>
                                         </div>
                                         <!-- Giá -->
 
@@ -77,7 +80,7 @@
 
                                     </div>
 
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-2">
                                         <div class="form-group mb-3">
                                             <label for="quantity" class="form-label">Số lượng</label>
                                             <input type="number" class="form-control" name="quantity" id="quantity"
@@ -86,7 +89,16 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-4">
+                                        <div class="form-group mb-3">
+                                            <label for="module" class="form-label">Module</label>
+                                            <input type="text" class="form-control" name="module" id="module"
+                                                placeholder="Nhập module"
+                                                value="{{ old('module', $product->module) }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
                                         <div class="form-group mb-3">
                                             <label for="import_price" class="form-label">Giá nhập</label>
                                             <input type="text" class="form-control" id="fake_import_price"
@@ -98,7 +110,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-6">
+                                    <div class="col-lg-4">
                                         <div class="form-group mb-3">
                                             <label for="price" class="form-label">Giá bán</label>
                                             <input type="text" class="form-control" id="fake_price"
@@ -106,6 +118,18 @@
                                                 value="{{ old('price', number_format($product->price, 0, ',', '')) }}">
                                             <input type="hidden" name="price"
                                                 value="{{ old('price', number_format($product->price, 0, ',', '')) }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="discount_value" class="form-label">Nhập giá trị:</label>
+                                            <input value="{{ number_format($product->discount_value, 0, ',', '') }}"
+                                                type="text" id="fake_discount_value" class="form-control"
+                                                placeholder="Nhập số tiền hoặc %">
+
+                                            <input value="{{ number_format($product->discount_value, 0, ',', '') }}"
+                                                type="hidden" name="discount_value">
                                         </div>
                                     </div>
 
@@ -139,7 +163,7 @@
 
                                             <div id="additional-selects" class="mt-3 row form-group">
                                                 @foreach ($attributes as $attribute)
-                                                {{-- @dd($attribute) --}}
+                                                    {{-- @dd($attribute) --}}
                                                     <div class="col-lg-4 mb-3"
                                                         id="select-wrapper-{{ $attribute['attribute_id'] }}">
                                                         <label
@@ -352,14 +376,16 @@
                                 <option value="percentage" @selected($product->discount_type == 'percentage')>Giảm theo %</option>
                             </select>
                         </div>
-                        <div class="form-group">
+
+                        {{-- <div class="form-group">
                             <label for="discount_value" class="form-label">Nhập giá trị:</label>
                             <input value="{{ number_format($product->discount_value, 0, ',', '') }}" type="text"
                                 id="fake_discount_value" class="form-control" placeholder="Nhập số tiền hoặc %">
 
                             <input value="{{ number_format($product->discount_value, 0, ',', '') }}" type="hidden"
                                 name="discount_value">
-                        </div>
+                        </div> --}}
+
                         <div class="form-group">
                             <label for="start-date" class="form-label">Ngày bắt đầu:</label>
                             <input type="datetime-local" id="start-date" value="{{ $product->discount_start_date }}"
@@ -382,9 +408,6 @@
                 </div>
             </div>
         </div>
-
-
-
 
     </form>
 
@@ -409,6 +432,28 @@
 
     <script>
         $(document).ready(function() {
+
+            $("#name").on("input", function() {
+                let name = $(this).val();
+                let categorySlug =
+                    "{{ $product->category ? $product->category->slug : '' }}"; // Giữ nguyên slug của category
+                let baseUrl = "{{ env('APP_URL') }}"; // Lấy URL gốc
+
+                let slug = name
+                    .toLowerCase()
+                    .trim()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Loại bỏ dấu tiếng Việt
+                    .replace(/đ/g, "d").replace(/Đ/g, "D") // Chuyển đ -> d
+                    .replace(/[^a-z0-9 -]/g, "") // Xóa ký tự đặc biệt
+                    .replace(/\s+/g, "-") // Thay khoảng trắng bằng dấu -
+                    .replace(/-+/g, "-"); // Xóa dấu - dư thừa
+
+                let updatedUrl = baseUrl + (categorySlug ? '/' + categorySlug : '') + '/' + slug;
+
+                // Cập nhật nội dung & href của thẻ <a>
+                $("#slug-link").text(updatedUrl);
+                $("#slug-link").attr("href", updatedUrl);
+            });
 
             $('#price').on('change', function() {
 

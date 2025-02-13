@@ -37,7 +37,8 @@ class SgoProduct extends Model
         'discount_value',
         'discount_end_date',
         'discount_start_date',
-        'brand_id'
+        'brand_id',
+        'module'
     ];
 
 
