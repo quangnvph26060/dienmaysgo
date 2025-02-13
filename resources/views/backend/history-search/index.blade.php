@@ -29,7 +29,7 @@
         $(document).ready(function() {
             const api = '{{ route('admin.marketing.history-search') }}'
 
-            dataTables(api, columns, 'HistorySearch', true)
+            dataTables(api, columns, 'HistorySearch', true, false, false, 'keywords')
 
             handleDestroy()
 

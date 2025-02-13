@@ -29,6 +29,23 @@
             <div class="col large-3 hide-for-medium">
                 <div id="shop-sidebar" class="sidebar-inner col-inner">
 
+                    @if (!empty($brands) && !empty($brands['data']))
+                        <aside class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
+                            <span class="widget-title shop-sidebar">{{ $brands['title'] }}</span>
+                            <div class="is-divider small"></div>
+                            @foreach ($brands['data'] as $brand)
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div class="d-flex">
+                                        <input type="checkbox" name="brand[]" value="{{ $brand['id'] }}"
+                                            onchange="submitFormWithDelay()">
+                                        <label>{{ $brand['name'] }}</label>
+                                    </div>
+                                    <small>({{ $brand['products_count'] }})</small>
+                                </div>
+                            @endforeach
+                        </aside>
+                    @endif
+
                     @if (!empty($attributes))
                         @foreach ($attributes as $attribute)
                             @if ($attribute->attribute->attributeValues->isNotEmpty())
@@ -49,25 +66,6 @@
                             @endif
                         @endforeach
                     @endif
-
-
-                    @if (!empty($brands) && !empty($brands['data']))
-                        <aside class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
-                            <span class="widget-title shop-sidebar">{{ $brands['title'] }}</span>
-                            <div class="is-divider small"></div>
-                            @foreach ($brands['data'] as $brand)
-                                <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <div class="d-flex">
-                                        <input type="checkbox" name="brand[]" value="{{ $brand['id'] }}"
-                                            onchange="submitFormWithDelay()">
-                                        <label>{{ $brand['name'] }}</label>
-                                    </div>
-                                    <small>({{ $brand['products_count'] }})</small>
-                                </div>
-                            @endforeach
-                        </aside>
-                    @endif
-
 
                     {{-- @if (!empty($priceOptions))
                         <span class="widget-title shop-sidebar">{{ $priceFilter->title }}</span>

@@ -14,7 +14,8 @@ class configFilter extends Model
         'filter_type',
         'title',
         'attribute_id',
-        'option_price'
+        'option_price',
+        'location'
     ];
 
     public function attribute()

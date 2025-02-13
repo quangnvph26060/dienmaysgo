@@ -206,7 +206,7 @@ class ConfigController extends Controller
     {
         if (request()->ajax()) {
             DB::reconnect();
-            return datatables()->of(configFilter::query()->select(['id', 'filter_type', 'title', 'attribute_id', 'option_price'])->latest()
+            return datatables()->of(configFilter::query()->select(['id', 'filter_type', 'title', 'attribute_id', 'option_price'])->orderBy('location', 'ASC')
                 ->get())
                 ->addColumn('title', function ($row) {
                     // $urlDestroy = route('admin.brands.destroy', $row);

@@ -94,7 +94,7 @@
 
 
 
-    const dataTables = (api, columns, model, filterDate = false, filterCatalogue = false) => {
+    const dataTables = (api, columns, model, filterDate = false, filterCatalogue = false, sortable = false, column ='id') => {
         const table = $('#myTable').DataTable({ // Định nghĩa biến table
             processing: true,
             serverSide: true,
@@ -107,8 +107,46 @@
                 }
             },
             columns: columns,
+            "createdRow": function(row, data, dataIndex) {
+                $(row).attr('data-id', data.id); // Gán data-id bằng giá trị id của sản phẩm
+            },
+            "drawCallback": function() {
+                // Kiểm tra xem có cần khởi tạo sortable hay không
+                if (sortable) {
+                    // Khởi tạo SortableJS mỗi khi DataTables vẽ lại bảng
+                    new Sortable(document.querySelector('#myTable tbody'), {
+                        handle: 'td', // Vùng kéo thả
+                        onEnd: function(evt) {
+                            var order = [];
+                            $('#myTable tbody tr').each(function() {
+                                order.push($(this).data('id'));
+                            });
+
+                            // Gửi yêu cầu cập nhật thứ tự lên server
+                            updateOrderInDatabase(order, model);
+                        }
+                    });
+                }
+            },
             order: [],
         });
+
+        function updateOrderInDatabase(order, model) {
+            $.ajax({
+                url: '{{ route('admin.changeOrder') }}',
+                method: 'POST',
+                data: {
+                    order: order,
+                    model: model,
+                },
+                success: function(response) {
+                    console.log('Cập nhật thứ tự thành công');
+                },
+                error: function(error) {
+                    console.log('Có lỗi xảy ra:', error);
+                }
+            });
+        }
 
         $('label[for="dt-length-0"]').remove();
 
@@ -200,11 +238,13 @@
                     url: "{{ route('admin.product.categories.index') }}", // API lấy danh mục
                     dataType: 'json',
                     success: function(data) {
+
                         console.log(data);
                         let $select = $('#catalogueFilter');
                         $select.empty(); // Xóa dữ liệu cũ
 
                         $select.append('<option value="">Chọn danh mục</option>'); // Thêm option mặc định
+
 
                         data.forEach(item => {
                             let prefix = '-'.repeat(item.level);
@@ -232,7 +272,6 @@
                 });
             }
         }
-
 
 
         $('#myTable thead input[type="checkbox"]').on('click', function() {
@@ -263,7 +302,8 @@
                     method: 'POST',
                     data: {
                         ids: selectedIds,
-                        model: model
+                        model: model,
+                        column: column
                     },
                     success: function(response) {
                         alert('Xóa thành công!');

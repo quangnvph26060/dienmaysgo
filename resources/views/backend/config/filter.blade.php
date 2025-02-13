@@ -102,6 +102,7 @@
 @endsection
 
 @push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script>
         $(document).ready(function() {
@@ -133,7 +134,12 @@
             ]
 
             const api = '{{ route('admin.config.config-filter') }}'
-            dataTables(api, columns, 'ConfigFilter')
+
+            function updateOrderInDatabase(order) {
+                console.log(13);
+            }
+
+            dataTables(api, columns, 'configFilter', false, false, true)
 
             handleDestroy()
 
@@ -195,7 +201,7 @@
 
                     $(`input[name=${key}]`).val(value);
 
-                    if (key == 'filter_type' ) {
+                    if (key == 'filter_type') {
                         $(`select[name=${key}]`).val(value).trigger('change')
                     }
 
