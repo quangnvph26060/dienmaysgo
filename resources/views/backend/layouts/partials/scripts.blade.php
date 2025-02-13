@@ -200,20 +200,23 @@
                     url: "{{ route('admin.product.categories.index') }}", // API lấy danh mục
                     dataType: 'json',
                     success: function(data) {
-                        const formattedData = data.map(item => {
-                            // Thêm dấu ngạch (-) tương ứng với level của danh mục
-                            let prefix = '-'.repeat(item
-                            .level); // Tạo dấu "-" tương ứng với level
-                            return {
-                                id: item.id,
-                                text: prefix + " " + item.name // Thêm dấu "-" vào tên
-                            };
+                        console.log(data);
+                        let $select = $('#catalogueFilter');
+                        $select.empty(); // Xóa dữ liệu cũ
+
+                        $select.append('<option value="">Chọn danh mục</option>'); // Thêm option mặc định
+
+                        data.forEach(item => {
+                            let prefix = '-'.repeat(item.level);
+                            let option = `<option value="${item.id}">${prefix} ${item.name}</option>`;
+                            $select.append(option); // Thêm từng option vào select
                         });
 
-                        // Cập nhật dữ liệu vào Select2 sau khi đã có dữ liệu
-                        $('#catalogueFilter').select2({
-                            data: formattedData
-                        });
+                        // Khởi tạo lại select2 sau khi đã thêm option
+                        // $('#catalogueFilter').select2({
+                        //     placeholder: 'Chọn danh mục',
+                        //     allowClear: true
+                        // });
                     }
                 });
 
