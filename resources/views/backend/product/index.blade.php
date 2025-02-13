@@ -24,7 +24,6 @@
                         <th>GIÁ BÁN</th>
                         <th>DANH MỤC</th>
                         <th>LƯỢT XEM</th>
-                        <th>NGÀY TẠO</th>
                     </thead>
                 </table>
             </div>
@@ -67,8 +66,6 @@
             dataTables(api, columns, 'SgoProduct', false, true)
 
             handleDestroy()
-
-
 
             $(document).on('click', '.fas.fa-pen-alt', function() {
                 // Đặt lại các ô khác về trạng thái ban đầu

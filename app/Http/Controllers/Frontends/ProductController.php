@@ -18,7 +18,7 @@ class ProductController extends Controller
 
     public function list($slug = null)
     {
-        // Cache::flush();
+        Cache::flush();
         if (request()->ajax()) {
             return $this->filterProduct($slug);
         }
@@ -56,7 +56,7 @@ class ProductController extends Controller
                 ])->latest()->get();
         });
 
-        $attributes = $filters->where('filter_type', 'attribute')->map(function ($attribute) {
+        $attributes = $filters->where('filter_type', 'attribute')->sortBy('location')->map(function ($attribute) {
             $filteredValues = $attribute->attribute->attributeValues->filter(function ($value) {
                 return $value->products_count > 0; // Chỉ giữ giá trị có sản phẩm
             });

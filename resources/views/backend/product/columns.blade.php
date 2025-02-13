@@ -36,9 +36,5 @@
             name: 'view_count',
             width: '10%'
         },
-        {
-            data: 'created_at',
-            name: 'created_at'
-        },
     ];
 </script>

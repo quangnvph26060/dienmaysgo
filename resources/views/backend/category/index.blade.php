@@ -36,6 +36,8 @@
 
 @push('scripts')
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+
 
     <script type="text/javascript">
         $(document).ready(function() {
@@ -68,7 +70,30 @@
                         searchable: false
                     }
                 ],
+                "createdRow": function(row, data, dataIndex) {
+                    $(row).attr('data-id', data.id); // Gán data-id bằng giá trị id của sản phẩm
+                },
+                "drawCallback": function() {
+                    // Khởi tạo SortableJS mỗi khi DataTables vẽ lại bảng
+                    new Sortable(document.querySelector('#myTable tbody'), {
+                        handle: 'td', // Vùng kéo thả
+                        onEnd: function(evt) {
+                            var order = [];
+                            $('#myTable tbody tr').each(function() {
+                                order.push($(this).data('id'));
+                            });
+
+                            // Gửi yêu cầu cập nhật thứ tự lên server
+                            updateOrderInDatabase(order);
+                        }
+                    });
+                }
             });
+
+            function updateOrderInDatabase(order) {
+                console.log(order);
+
+            }
         });
     </script>
 @endpush

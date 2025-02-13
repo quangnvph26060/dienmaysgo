@@ -23,11 +23,27 @@ class BulkActionController extends Controller
 
         try {
             // Thực hiện xóa các bản ghi dựa trên ID
-            $modelClass::whereIn('id', $validatedData['ids'])->delete();
+            $modelClass::whereIn($request->input('column'), $validatedData['ids'])->delete();
 
             return response()->json(['message' => 'Xóa thành công!'], 200);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Có lỗi xảy ra: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function changeOrder(Request $request)
+    {
+        $order = $request->input('order');
+        $model = 'App\\Models\\' . $request->input('model'); // Tạo namespace model
+
+        if (!class_exists($model)) {
+            return response()->json(['error' => 'Model không tồn tại'], 400);
+        }
+
+        foreach ($order as $index => $id) {
+            $model::where('id', $id)->update(['location' => $index + 1]);
+        }
+
+        return response()->json(['status' => 'success']);
     }
 }
