@@ -112,6 +112,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     route::resource('attribute-values', AttributeValueController::class);
 
     Route::post('/delete-items', [BulkActionController::class, 'deleteItems'])->name('delete.items');
+    Route::post('/change-order', [BulkActionController::class, 'changeOrder'])->name('changeOrder');
 
 
     Route::prefix('origin')->name('origin.')->group(function () {

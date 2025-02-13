@@ -88,9 +88,6 @@ class ProductController extends Controller
                     " . view('components.action', compact('row', 'urlEdit', 'urlDestroy')) . "
                     ";
                 })
-                ->editColumn('created_at', function ($row) {
-                    return date('d/m/Y', $row->created_at);
-                })
                 ->rawColumns(['checkbox', 'name', 'price'])
                 ->addIndexColumn()
                 ->make(true);
