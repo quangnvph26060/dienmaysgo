@@ -65,6 +65,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('edit/{id}', [CategoryController::class, 'update'])->name('update');
             Route::post('delete/{id}', [CategoryController::class, 'delete'])->name('delete');
         });
+        
         Route::prefix('product')->name('product.')->group(function () {
             Route::get('categories', [ProductController::class, 'getCategories'])->name('categories.index');
             Route::get('attributes', [ProductController::class, 'getAttributes'])->name('attributes.index');
@@ -78,6 +79,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             route::post('change-select', [ProductController::class, 'changeSelect'])->name('changeSelect');
             route::post('update-price/{id}', [ProductController::class, 'handleChangePrice'])->name('handle-change-price');
             route::post('import-data', [ProductController::class, 'importData'])->name('import-data');
+            route::post('modify-product', [ProductController::class, 'modifyProduct'])->name('modify-product');
         });
 
         route::prefix('marketing')->name('marketing.')->controller(HistorySearchController::class)->group(function () {

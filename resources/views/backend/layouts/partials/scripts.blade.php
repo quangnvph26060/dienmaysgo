@@ -93,7 +93,6 @@
     });
 
 
-
     const dataTables = (api, columns, model, filterDate = false, productFilter = false, sortable = false, column =
         'id') => {
         const table = $('#myTable').DataTable({ // Định nghĩa biến table
@@ -132,6 +131,62 @@
                 }
             },
             order: [],
+        });
+
+        $(document).on('click', '#cancelEditBtn', function() {
+            // Đóng form mà không lưu thay đổi
+            let tr = $(this).closest('tr');
+            let row = table.row(tr);
+            row.child.hide();
+        });
+
+        $(document).on('submit', '#editProductForm', function(e) {
+            e.preventDefault();
+
+            let formDataArray = new FormData(this)
+
+            let tr = $(this).closest('tr');
+            let row = table.row(tr);
+            let productData = row.data();
+
+            formDataArray.append('id', productData.id);
+
+            $.ajax({
+                url: '{{ route('admin.product.modify-product') }}',
+                type: 'POST',
+                data: formDataArray,
+                processData: false, // Không xử lý dữ liệu (quan trọng khi gửi file)
+                contentType: false, // Không đặt Content-Type mặc định
+                success: function(response) {
+                    if (response.success) {
+                        table.draw();
+                    } else {
+                        alert(response.message)
+                    }
+                },
+                error: function(xhr) {
+                    console.log(xhr);
+                }
+            });
+
+        });
+
+
+        table.on('requestChild.dt', function(e, row) {
+            row.child(format(row.data())).show();
+        });
+
+        table.on('click', 'td.dt-control', function(e) {
+            let tr = e.target.closest('tr');
+            let row = table.row(tr);
+
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+            } else {
+                // Open this row
+                row.child(format(row.data())).show();
+            }
         });
 
         function updateOrderInDatabase(order, model) {
@@ -317,9 +372,9 @@
 
                     // Reset các select2
                     $('#catalogueFilter').val('').trigger(
-                    'change'); // Cập nhật lại giá trị của Select2 và trigger sự kiện
+                        'change'); // Cập nhật lại giá trị của Select2 và trigger sự kiện
                     $('#attributeFilter').val('').trigger(
-                    'change'); // Cập nhật lại giá trị của Select2 và trigger sự kiện
+                        'change'); // Cập nhật lại giá trị của Select2 và trigger sự kiện
 
                     // Ẩn ô chọn giá trị thuộc tính
                     $('#attributeValueFilter').addClass('d-none').empty();

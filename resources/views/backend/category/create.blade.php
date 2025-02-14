@@ -73,7 +73,6 @@
                                 style="cursor: pointer; border: 1px solid #ccc; padding: 20px; text-align: center;">
                                 <p class="text-muted">Click here to select an image</p>
                             </div>
-
                         </div>
 
                         <div class="mb-3">
