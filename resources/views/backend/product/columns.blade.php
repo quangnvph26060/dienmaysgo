@@ -1,5 +1,12 @@
 <script>
-    const columns = [{
+    const columns = [
+        {
+            className: 'dt-control',
+            orderable: false,
+            data: null,
+            defaultContent: ''
+        },
+        {
             data: "checkbox",
             name: "checkbox",
             orderable: false,

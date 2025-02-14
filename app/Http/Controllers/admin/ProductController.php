@@ -20,10 +20,58 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
+
+    public function modifyProduct(Request $request)
+    {
+        // Loại bỏ dấu chấm trong giá trị price
+        $request->merge([
+            'price' => str_replace('.', '', $request->price),
+            'discount_value' => str_replace('.', '', $request->discount_value)
+        ]);
+
+        $rule = $request->discount_type == 'amount' ? 'nullable|numeric|min:0' : 'nullable|numeric|max:100';
+
+        $credentials = Validator::make(
+            $request->all(),
+            [
+                'id' => 'required|exists:sgo_products,id',
+                'name' => 'required|string|max:255',
+                'price' => 'required|numeric',
+                'quantity' => 'required|integer',
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'discount_type' => 'nullable|in:percentage,amount',
+                'discount_value' => $rule
+            ],
+            __('request.messages')
+        );
+
+        if ($credentials->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => $credentials->errors()->first()
+            ]);
+        }
+        $credentials =  $credentials->validated();
+
+        try {
+
+            if ($request->hasFile('image')) {
+                $credentials['image'] = saveImages($request, 'image', 'products_main_images', 500, 500);
+            }
+
+            SgoProduct::find($credentials['id'])->update($credentials);
+            return response()->json(['success' => true, 'message' => 'Cập nhật thành công.']);
+        } catch (Exception $e) {
+            Log::info($e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Có lỗi xảy ra. vui lòng thử lại sau!']);
+        }
+    }
+
 
     public function getCategories()
     {
@@ -69,7 +117,7 @@ class ProductController extends Controller
         $page = 'Sản phẩm';
         $title = 'Danh sách sản phẩm';
         if ($request->ajax()) {
-            return datatables()->of(SgoProduct::select(['id', 'name', 'price', 'quantity', 'import_price', 'category_id', 'view_count'])
+            return datatables()->of(SgoProduct::select(['id', 'name', 'price', 'quantity', 'import_price', 'category_id', 'view_count', 'discount_value', 'discount_type', 'image'])
                 ->when($request->catalogue, function ($query) use ($request) {
                     // Kiểm tra xem có bộ lọc catalogue không và áp dụng điều kiện lọc
                     return $query->where('category_id', $request->catalogue);
@@ -88,12 +136,11 @@ class ProductController extends Controller
                 ->latest()
                 ->get())
                 ->addColumn('price', function ($row) {
-                    return number_format($row->price, 0, ',', '.') . ' VND' . '<i class="fas fa-pen-alt ms-2 pointer" data-id=' . $row->id . '></i>';
+                    return number_format($row->price, 0, ',', '.');
                 })
                 ->addColumn('import_price', function ($row) {
-                    return number_format($row->import_price, 0, ',', '.') . ' VND';
+                    return number_format($row->import_price, 0, ',', '.');
                 })
-
                 ->addColumn('checkbox', function ($row) {
                     return '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />';
                 })
@@ -101,12 +148,8 @@ class ProductController extends Controller
                     return $row->category->name ?? '';
                 })
                 ->addColumn('name', function ($row) {
-                    $urlEdit =  route('admin.product.detail', $row->id);
-                    $urlDestroy = route('admin.product.delete', $row->id);
                     return "
-                    <strong class='text-primary'>$row->name</strong>
-                    " . view('components.action', compact('row', 'urlEdit', 'urlDestroy')) . "
-                    ";
+                    <strong class='text-primary'>$row->name</strong>";
                 })
                 ->rawColumns(['checkbox', 'name', 'price'])
                 ->addIndexColumn()
