@@ -14,6 +14,8 @@ class HomeController extends Controller
 {
     public function home()
     {
+
+
         // Cache danh mục cha
         $categories = Cache::remember('categories', now()->addMinutes(30), function () {
             return SgoCategory::whereNull('category_parent_id')->get();
