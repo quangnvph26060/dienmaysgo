@@ -176,7 +176,7 @@
                 <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#"
                     aria-expanded="false">
                     <div class="avatar-sm">
-                        <img src="{{ showImage(Auth::guard('admin')->user()->image) }}" alt="..."
+                        <img src="{{ showImage(Auth::guard('admin')->user()->avatar) }}" alt="..."
                             class="avatar-img rounded-circle" />
                     </div>
                     <span class="profile-username">

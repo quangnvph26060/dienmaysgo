@@ -58,7 +58,6 @@ class ConfigController extends Controller
 
     public function updateSupport(Request $request)
     {
-        // dd($request->toArray());
         $credentials = $request->validate(
             [
                 'introduct_title' => 'nullable',

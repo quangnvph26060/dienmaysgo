@@ -31,29 +31,37 @@ class UserController extends Controller
     {
         try {
             if ($request->hasFile('image')) {
-                deleteImage(Auth::user()->image);
+                deleteImage(Auth::guard('admin')->user()->avatar);
             }
-            Log::info("Received requet to update user with Id: " . $id);
 
             $image = saveImage($request, 'image', 'user_images');
 
             DB::beginTransaction();
+
             $criteria = $request->all();
+
             $user = User::findOrFail($id);
 
             if ($image) {
-                $criteria['image'] = $image;
+                $criteria['avatar'] = $image;
             }
 
             $user->update($criteria);
+
+            // ✅ Cập nhật lại thông tin user trong Auth
+            Auth::guard('admin')->setUser($user);
+
             DB::commit();
+
             session()->flash('success', 'Thay đổi thông tin thành công');
             return redirect()->back();
         } catch (Exception $e) {
-            Log::error('Faile to update this user info: ' . $e->getMessage());
-            return redirect()->back()->with('Thay đổi thông tin thất bại');
+            DB::rollBack();
+            Log::error('Failed to update this user info: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Thay đổi thông tin thất bại');
         }
     }
+
 
     public function changePassword(Request $request)
     {

@@ -72,9 +72,15 @@
                                 </div>
 
                                 <div class="product-info summary entry-summary col col-fit product-summary form-flat">
-                                    <h1 class="product-title product_title entry-title" style="margin-bottom: 15px">
+                                    <h1 class="product-title product_title entry-title"
+                                        style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
                                         {{ $product->name }}
+                                        @if (auth()->guard('admin')->check())
+                                            <span class="edit-icon"> <a target="_bank"
+                                                    href="{{ route('admin.product.detail', $product->id) }}">✏️ </a></span>
+                                        @endif
                                     </h1>
+
 
                                     <div class="product-details">
                                         @if ($product->module)
@@ -260,23 +266,42 @@
                                             {{ $settings->introduct_title }}
                                         </p>
                                         <div class="hotline-content">
-                                            <div>
-                                                <i class="bi bi-telephone-fill"></i> Hotline:
+                                            <!-- Nhóm Hotline -->
+                                            <div class="hotline-group">
+                                                <div>
+                                                    <i class="bi bi-telephone-fill"></i> Hotline:
+                                                </div>
+                                                <div>
+                                                    @foreach ($settings->introduction['phone'] ?? [] as $key => $item)
+                                                        <p class="hotline-item">
+                                                            <span
+                                                                class="hotline-region">{{ $settings->introduction['facility'][$key] ?? '' }}</span>
+                                                            <a href="tel:{{ $item }}"
+                                                                class="hotline-number">{{ $item }}</a>
+                                                        </p>
+                                                    @endforeach
+                                                </div>
                                             </div>
-                                            <div>
-                                                @foreach ($settings->introduction['phone'] ?? [] as $key => $item)
-                                                    <p class="hotline-item">
-                                                        <span
-                                                            class="hotline-region">{{ $settings->introduction['facility'][$key] ?? '' }}</span>
-                                                        <a href="tel:{{ $item }}"
-                                                            class="hotline-number">{{ $item }}</a>
-                                                    </p>
-                                                @endforeach
 
-
-                                            </div>
+                                            <!-- Nhóm Địa chỉ -->
+                                            @if (count($settings->introduction['address']))
+                                                <div class="address-group">
+                                                    <div>
+                                                        <i class="bi bi-geo-alt-fill"></i> Địa chỉ:
+                                                    </div>
+                                                    <div>
+                                                        @foreach ($settings->introduction['address'] ?? [] as $address)
+                                                            <p class="address-item">
+                                                                <span class="address-detail">{{ $address }}</span>
+                                                            </p>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            @endif
 
                                         </div>
+
+
                                     </div>
 
                                     @if ($settings->support)
@@ -403,7 +428,7 @@
             alwaysShowNavOnTouchDevices: true, // Hiển thị nút điều hướng trên thiết bị cảm ứng
         });
 
-        document.querySelector('#buy_now').addEventListener('click', function(e) {
+        document.querySelector('#buy_now')?.addEventListener('click', function(e) {
             e.preventDefault();
 
             let productId = "{{ $product->id }}";
@@ -569,6 +594,20 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
+        .edit-icon {
+            font-size: 18px;
+            color: gray;
+            cursor: pointer;
+            transition: color 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
+
+        }
+
+        .edit-icon:hover {
+            transform: scale(1.2);
+            transition: all 0.3s ease-in-out;
+        }
+
         .hotline-item {
             display: flex;
             justify-content: space-between;
@@ -741,14 +780,24 @@
 
         .hotline-content {
             display: flex;
+            flex-direction: column;
+            /* Chuyển về hiển thị dọc */
             gap: 10px;
         }
 
-        .hotline-content p {
+        .hotline-group,
+        .address-group {
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .hotline-group p,
+        .address-group p {
             margin: 0;
             font-size: .8rem;
             color: #333;
-            line-height: 2
+            line-height: 2;
         }
 
         .hotline-number {
@@ -762,10 +811,14 @@
         .hotline-region {
             color: #333;
             flex: 1;
-            /* Tự động căn chỉnh độ rộng theo nội dung dài nhất */
             white-space: nowrap;
-            /* Không xuống dòng */
         }
+
+        .address-item {
+            margin-left: 25px;
+            /* Canh lề đồng bộ với hotline */
+        }
+
 
         .image-alt {
             text-align: center;

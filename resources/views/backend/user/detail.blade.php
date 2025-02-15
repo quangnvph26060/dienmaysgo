@@ -223,7 +223,7 @@
                                     </div>
                                     <div class="form-group">
                                         <img id="profileImage"
-                                            src="{{ isset($user->image) ? asset('storage/' . $user->image) : asset('images/avatar2.jpg') }}"
+                                            src="{{ showImage(auth()->guard('admin')->user()->avatar) }}"
                                             alt="image profile" class="avatar">
                                     </div>
                                 </div>
@@ -312,6 +312,28 @@
     <!-- Include jQuery -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <!-- SweetAlert2 JS -->
+
+    @if (session('success'))
+        <script>
+            $(document).ready(function() {
+                $.notify({
+                    icon: 'icon-bell',
+                    title: 'Thông báo',
+                    message: '{{ session('success') }}',
+                }, {
+                    type: 'secondary',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                    time: 1000,
+                });
+            });
+        </script>
+    @endif
+@endsection
+
+@push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function() {
@@ -364,24 +386,7 @@
             });
         });
     </script>
-    @if (session('success'))
-        <script>
-            $(document).ready(function() {
-                $.notify({
-                    icon: 'icon-bell',
-                    title: 'Thông báo',
-                    message: '{{ session('success') }}',
-                }, {
-                    type: 'secondary',
-                    placement: {
-                        from: "bottom",
-                        align: "right"
-                    },
-                    time: 1000,
-                });
-            });
-        </script>
-    @endif
+
     <script>
         document.getElementById('image').addEventListener('change', function(event) {
             const input = event.target;
@@ -396,4 +401,4 @@
             }
         });
     </script>
-@endsection
+@endpush
