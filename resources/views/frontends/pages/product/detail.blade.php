@@ -284,7 +284,7 @@
                                             </div>
 
                                             <!-- Nhóm Địa chỉ -->
-                                            @if (count($settings->introduction['address']))
+                                            @if (count($settings->introduction['address'] ?? []) > 0)
                                                 <div class="address-group">
                                                     <div>
                                                         <i class="bi bi-geo-alt-fill"></i> Địa chỉ:
