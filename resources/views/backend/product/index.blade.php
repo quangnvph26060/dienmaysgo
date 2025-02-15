@@ -73,8 +73,8 @@
 
         function format(d) {
             // Tạo một thẻ div tạm để xử lý chuỗi HTML
-            var tempDiv = $('<div>').html(d.name);
-            var nameText = tempDiv.find('strong').text(); // Lấy nội dung text bên trong strong
+            // var tempDiv = $('<div>').html(d.name);
+            // var nameText = tempDiv.find('strong').text();
             let price = extractPrice(d.price);
             let imgae = "{{ env('APP_URL') }}" + '/storage/' + d.image
 
@@ -96,7 +96,7 @@
                             <div class="row">
                                 <div class="mb-3 col-12">
                                     <label for="name" class="form-label">Tên sản phẩm</label>
-                                    <input type="text" name="name" class="form-control" id="name" value="${nameText}">
+                                    <input type="text" name="name" class="form-control" id="name" value="${d.name}">
                                 </div>
                                 <div class="mb-3 col-3">
                                     <label for="price" class="form-label">Giá</label>

@@ -9,7 +9,7 @@
             <div class="category">
                 <h3> <img width="22" src="{{ showImage($catalogue->logo) }}" alt="{{ $catalogue->name }}"
                         style="margin-right: 5px"><a
-                        href="{{ route('products.list', $catalogue->slug) }}">{{ $catalogue->name }}</a></h3>
+                        href="{{ route('products.detail', $catalogue->slug) }}">{{ $catalogue->name }}</a></h3>
                 @if ($catalogue->childrens->isNotEmpty())
                     @foreach ($catalogue->childrens as $child)
                         <ul class="sub-category">
@@ -17,14 +17,14 @@
                                 <img width="22" src="{{ showImage($child->logo) }}" alt="{{ $child->name }}"
                                     style="margin-right: 5px">
                                 <a class="main-category"
-                                    href="{{ route('products.list', $child->slug) }}">{{ $child->name }}</a>
+                                    href="{{ route('products.detail', $child->slug) }}">{{ $child->name }}</a>
                                 <ul class="sub-category-level">
                                     @if ($child->childrens->isNotEmpty())
                                         @foreach ($child->childrens as $c)
                                             <li style="display: flex; align-items: center">
                                                 <img width="22" src="{{ showImage($c->logo) }}"
                                                     alt="{{ $c->name }}" style="margin-right: 5px">
-                                                <a href="{{ route('products.list', $c->slug) }}">{{ $c->name }}</a>
+                                                <a href="{{ route('products.detail', $c->slug) }}">{{ $c->name }}</a>
                                             </li>
                                         @endforeach
                                     @endif

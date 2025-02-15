@@ -15,14 +15,12 @@
                 <table id="myTable" class="display" style="width:100%">
                     <thead>
                         <tr>
+                            <th><input type="checkbox" id="selectAll" /></th>
                             <th>Tên danh mục</th>
-                            <th>Mô tả</th>
                             <th>Danh mục cha</th>
-                            <th>Hành động</th>
+                            <th>Mô tả</th>
                         </tr>
                     </thead>
-
-
                 </table>
             </div>
         </div>
@@ -32,69 +30,60 @@
 
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+
+    <style>
+        #attributeFilter,
+        #attributeValueFilter {
+            display: none !important
+        }
+
+        .select2 {
+            width: 265px !important;
+        }
+    </style>
 @endpush
 
 @push('scripts')
     <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#myTable').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route('admin.category.index') }}',
-                columns: [{
-                        data: 'name',
-                        name: 'name'
-                    },
-                    {
-                        data: 'description',
-                        name: 'description',
-                        render: function(data, type, row) {
-                            return data;
-                        },
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'parent_name',
-                        name: 'parent_name',
-                        title: 'Danh mục cha'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    }
-                ],
-                "createdRow": function(row, data, dataIndex) {
-                    $(row).attr('data-id', data.id); // Gán data-id bằng giá trị id của sản phẩm
+            const api = '{{ route('admin.category.index') }}'
+
+            const columns = [{
+                    data: "checkbox",
+                    name: "checkbox",
+                    orderable: false,
+                    searchable: false,
+                    width: "5px",
+                    className: "text-center"
                 },
-                "drawCallback": function() {
-                    // Khởi tạo SortableJS mỗi khi DataTables vẽ lại bảng
-                    new Sortable(document.querySelector('#myTable tbody'), {
-                        handle: 'td', // Vùng kéo thả
-                        onEnd: function(evt) {
-                            var order = [];
-                            $('#myTable tbody tr').each(function() {
-                                order.push($(this).data('id'));
-                            });
-
-                            // Gửi yêu cầu cập nhật thứ tự lên server
-                            updateOrderInDatabase(order);
-                        }
-                    });
+                {
+                    data: 'name',
+                    name: 'name'
                 },
-                order: [],
-            });
 
-            function updateOrderInDatabase(order) {
-                console.log(order);
+                {
+                    data: 'parent_name',
+                    name: 'parent_name',
+                    title: 'Danh mục cha'
+                },
+                {
+                    data: 'description',
+                    name: 'description',
+                    render: function(data, type, row) {
+                        return data;
+                    },
+                    orderable: false,
+                    searchable: false
+                },
+            ];
 
-            }
+            dataTables(api, columns, 'SgoProduct', false, false)
+
+            handleDestroy()
         });
     </script>
 @endpush

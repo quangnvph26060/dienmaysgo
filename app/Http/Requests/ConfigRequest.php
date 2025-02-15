@@ -36,6 +36,7 @@ class ConfigRequest extends FormRequest
             'title_seo' => 'nullable|string|max:255',
             'description_seo' => 'nullable|string',
             'keywords_seo' => 'nullable|string',
+            'copyright' => 'nullable|string',
         ];
     }
     public function messages()

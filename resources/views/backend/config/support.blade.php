@@ -11,7 +11,7 @@
             <a class="nav-link" href="{{ route('admin.config.config-payment') }}">Cấu hình thanh toán</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.config.config-slider') }}">Cấu hình trình chiếu</a>
+            <a class="nav-link" href="{{ route('admin.config.config-slider') }}">Cấu hình slider</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('admin.config.config-filter') }}">Cấu hình bộ lọc</a>

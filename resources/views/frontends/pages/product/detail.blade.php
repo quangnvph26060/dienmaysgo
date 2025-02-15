@@ -77,6 +77,11 @@
                                     </h1>
 
                                     <div class="product-details">
+                                        @if ($product->module)
+                                            <div class="detail-item"><span class="label">Module:</span> <span
+                                                    class="value">{{ $product->module }}</span>
+                                            </div>
+                                        @endif
                                         @if ($product->brand)
                                             <div class="detail-item"><span class="label">Thương hiệu:</span> <span
                                                     class="value">{{ $product->brand->name }}</span>
@@ -85,7 +90,7 @@
                                         @if ($product->category)
                                             <div class="detail-item"><span class="label">Danh mục:</span>
                                                 <span class="value">
-                                                    <a href="{{ route('products.list', $product->category->slug) }}"
+                                                    <a href="{{ route('products.detail', $product->category->slug) }}"
                                                         rel="tag">{{ $product->category->name }}</a>
                                                 </span>
                                             </div>
@@ -260,11 +265,13 @@
                                             </div>
                                             <div>
                                                 @foreach ($settings->introduction['phone'] ?? [] as $key => $item)
-                                                <p class="hotline-item">
-                                                    <span class="hotline-region">{{ $settings->introduction['facility'][$key] ?? '' }}</span>
-                                                    <span class="hotline-number">{{ $item }}</span>
-                                                </p>
-                                            @endforeach
+                                                    <p class="hotline-item">
+                                                        <span
+                                                            class="hotline-region">{{ $settings->introduction['facility'][$key] ?? '' }}</span>
+                                                        <a href="tel:{{ $item }}"
+                                                            class="hotline-number">{{ $item }}</a>
+                                                    </p>
+                                                @endforeach
 
 
                                             </div>
@@ -563,10 +570,12 @@
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <style>
         .hotline-item {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px; /* Khoảng cách giữa hai phần */
-}
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            /* Khoảng cách giữa hai phần */
+        }
+
         .lb-dataContainer {
             display: none !important;
         }
@@ -685,13 +694,19 @@
 
         .Service-freeship p {
             margin: 0;
-            font-size: .8rem;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
         }
 
         .Service-freeship p i {
             color: #ec1c24;
             margin-right: 10px;
+            min-width: 20px;
+            /* Đảm bảo icon có độ rộng cố định */
+            text-align: center;
         }
+
 
         form.cart {
             margin-top: 15px;
@@ -740,13 +755,16 @@
             color: red;
             font-weight: bold;
             margin-right: 10px;
-            white-space: nowrap; /* Không xuống dòng */
+            white-space: nowrap;
+            /* Không xuống dòng */
         }
 
         .hotline-region {
             color: #333;
-            flex: 1; /* Tự động căn chỉnh độ rộng theo nội dung dài nhất */
-    white-space: nowrap; /* Không xuống dòng */
+            flex: 1;
+            /* Tự động căn chỉnh độ rộng theo nội dung dài nhất */
+            white-space: nowrap;
+            /* Không xuống dòng */
         }
 
         .image-alt {

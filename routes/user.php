@@ -66,19 +66,11 @@ route::controller(CartController::class)->name('carts.')->group(function () {
     Route::get('/wards', [CartController::class, 'getWards'])->name('api.wards');
 });
 
-Route::controller(ProductController::class)->name('products.')->group(function () {
-    Route::get('danh-muc/{slug?}', 'list')->name('list');
-    Route::get('filter-product/{slug?}', 'filterProduct')->name('filter-product');
-    Route::get('danh-muc', 'listCategory')->name('list-category');
-    Route::post('end-view', 'endView')->name('end-view'); // Đảm bảo rằng bạn có tên route đúng ở đây
-    Route::get('{catalogue?}/{slug}', 'detail')->name('detail');
-});
 
 
 
-Route::prefix('home')->group(function () {
-    route::get('{slug}', [IntroduceController::class, 'introduce'])->name('introduce');
-});
+
+
 
 
 route::controller(NewsController::class)->name('news.')->group(function () {
@@ -90,3 +82,17 @@ route::get('contact', [ContactController::class, 'contact'])->name('contact');
 route::post('lien-he', [ContactController::class, 'postContact'])->name('post-contact');
 
 Route::post('/payment/create', [PaymentController::class, 'createPaymentRequest'])->name('payment.create');
+
+
+Route::controller(ProductController::class)->name('products.')->group(function () {
+    // Route::get('danh-muc/{slug?}', 'list')->name('list');
+    Route::get('tim-kiem', 'list')->name('search');
+    Route::get('filter-product/{slug?}', 'filterProduct')->name('filter-product');
+    Route::get('danh-muc', 'listCategory')->name('list-category');
+    Route::post('end-view', 'endView')->name('end-view'); // Đảm bảo rằng bạn có tên route đúng ở đây
+    Route::get('{catalogue?}/{slug?}', 'detail')->name('detail');
+});
+
+Route::prefix('home')->group(function () {
+    route::get('{slug}', [IntroduceController::class, 'introduce'])->name('introduce');
+});

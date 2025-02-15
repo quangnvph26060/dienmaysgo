@@ -6,7 +6,7 @@
 
 
 
-            <li> <a href="{{ route('products.list', $child->slug) }}"> {{ $child->name }}</a></li>
-      
+            <li> <a href="{{ route('products.detail', $child->slug) }}"> {{ $child->name }}</a></li>
+
     @endforeach
 @endif

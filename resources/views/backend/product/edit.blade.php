@@ -80,7 +80,7 @@
 
                                     </div>
 
-                                    <div class="col-lg-2">
+                                    <div class="col-lg-3">
                                         <div class="form-group mb-3">
                                             <label for="quantity" class="form-label">Số lượng</label>
                                             <input type="number" class="form-control" name="quantity" id="quantity"
@@ -89,16 +89,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-4">
-                                        <div class="form-group mb-3">
-                                            <label for="module" class="form-label">Module</label>
-                                            <input type="text" class="form-control" name="module" id="module"
-                                                placeholder="Nhập module"
-                                                value="{{ old('module', $product->module) }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <div class="form-group mb-3">
                                             <label for="import_price" class="form-label">Giá nhập</label>
                                             <input type="text" class="form-control" id="fake_import_price"
@@ -110,7 +101,15 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
+                                        <div class="form-group mb-3">
+                                            <label for="module" class="form-label">Module</label>
+                                            <input type="text" class="form-control" name="module" id="module"
+                                                placeholder="Nhập module" value="{{ old('module', $product->module) }}">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
                                         <div class="form-group mb-3">
                                             <label for="price" class="form-label">Giá bán</label>
                                             <input type="text" class="form-control" id="fake_price"
@@ -121,9 +120,22 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-3">
                                         <div class="form-group">
-                                            <label for="discount_value" class="form-label">Nhập giá trị:</label>
+                                            <label for="discount-type" class="form-label">Chọn loại giảm giá:</label>
+                                            <select id="discount-type" class="form-select" name="discount_type">
+                                                <option value="amount" @selected($product->discount_type == 'amount')>Giảm tiền</option>
+                                                <option value="percentage" @selected($product->discount_type == 'percentage')>Giảm theo %
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="col-lg-3">
+                                        <div class="form-group">
+                                            <label for="discount_value" class="form-label">Nhập giá trị giảm:</label>
                                             <input value="{{ number_format($product->discount_value, 0, ',', '') }}"
                                                 type="text" id="fake_discount_value" class="form-control"
                                                 placeholder="Nhập số tiền hoặc %">
@@ -133,7 +145,25 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-12">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="start-date" class="form-label">Ngày bắt đầu:</label>
+                                            <input type="datetime-local" id="start-date"
+                                                value="{{ $product->discount_start_date }}" class="form-control"
+                                                name="discount_start_date">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label for="end-date" class="form-label">Ngày kết thúc:</label>
+                                            <input type="datetime-local" value="{{ $product->discount_end_date }}"
+                                                id="end-date" class="form-control" name="discount_end_date">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
                                         <div class="form-group mb-3">
                                             <label for="brand" class="form-label">Thương hiệu</label>
                                             <select id="mySelectBrand" class="form-select" style="width: 100%;"
@@ -161,7 +191,7 @@
                                                 @endforeach
                                             </select>
 
-                                            <div id="additional-selects" class="mt-3 row form-group">
+                                            <div id="additional-selects" class="mt-3 row">
                                                 @foreach ($attributes as $attribute)
                                                     {{-- @dd($attribute) --}}
                                                     <div class="col-lg-4 mb-3"
@@ -363,43 +393,7 @@
                     </div>
                 </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Tự đặt khuyến mãi</h3>
-                    </div>
 
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label for="discount-type" class="form-label">Chọn loại giảm giá:</label>
-                            <select id="discount-type" class="form-select" name="discount_type">
-                                <option value="amount" @selected($product->discount_type == 'amount')>Giảm tiền</option>
-                                <option value="percentage" @selected($product->discount_type == 'percentage')>Giảm theo %</option>
-                            </select>
-                        </div>
-
-                        {{-- <div class="form-group">
-                            <label for="discount_value" class="form-label">Nhập giá trị:</label>
-                            <input value="{{ number_format($product->discount_value, 0, ',', '') }}" type="text"
-                                id="fake_discount_value" class="form-control" placeholder="Nhập số tiền hoặc %">
-
-                            <input value="{{ number_format($product->discount_value, 0, ',', '') }}" type="hidden"
-                                name="discount_value">
-                        </div> --}}
-
-                        <div class="form-group">
-                            <label for="start-date" class="form-label">Ngày bắt đầu:</label>
-                            <input type="datetime-local" id="start-date" value="{{ $product->discount_start_date }}"
-                                class="form-control" name="discount_start_date">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="end-date" class="form-label">Ngày kết thúc:</label>
-                            <input type="datetime-local" value="{{ $product->discount_end_date }}" id="end-date"
-                                class="form-control" name="discount_end_date">
-
-                        </div>
-                    </div>
-                </div>
 
                 <div class="">
                     <div class="form-group">

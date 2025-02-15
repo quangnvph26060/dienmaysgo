@@ -19,7 +19,7 @@
             name: 'name',
             render: function(data, type, row) {
                 return '<a href="' + '{{ route('admin.product.detail', '__id__') }}'
-                    .replace('__id__', row.id) + '">' + data + '</a>';
+                    .replace('__id__', row.id) + '"><strong>' + data + '</strong></a>';
             }
         },
         {

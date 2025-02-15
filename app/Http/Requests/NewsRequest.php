@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class NewsRequest extends FormRequest
 {
-     /**
+    /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
@@ -26,9 +26,9 @@ class NewsRequest extends FormRequest
             'content' => 'required|string',
             'image' => isset($newsId) ? 'nullable' : 'required',
             'is_published' => 'required|boolean',
-            'title_seo' => 'required|string|max:255',
-            'description_seo' => 'required|string',
-            'keyword_seo' => 'required|string',
+            'title_seo' => 'nullable|string|max:255',
+            'description_seo' => 'nullable|string',
+            'keyword_seo' => 'nullable|string',
         ];
     }
 

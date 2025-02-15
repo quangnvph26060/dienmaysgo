@@ -15,8 +15,12 @@ class Brand extends Model
         'description',
     ];
 
+    // public function products()
+    // {
+    //     return $this->belongsToMany(SgoProduct::class, 'brand_product', 'brand_id', 'product_id');
+    // }
     public function products()
     {
-        return $this->belongsToMany(SgoProduct::class, 'brand_product', 'brand_id', 'product_id');
+        return $this->hasMany(SgoProduct::class);
     }
 }
