@@ -68,6 +68,8 @@
                                             <label for="name" class="form-label">Tên sản phẩm</label>
                                             <input type="text" class="form-control" name="name" id="name"
                                                 placeholder="Nhập tên sản phẩm" value="{{ old('name') }}">
+
+                                            <b id="slug-link" class="text-primary"><small>{{ env('APP_URL') }}/</small></b>
                                         </div>
                                         <!-- Giá -->
 
@@ -154,8 +156,8 @@
                                     <div class="col-lg-4">
                                         <div class="form-group mb-3">
                                             <label for="brand" class="form-label">Thương hiệu</label>
-                                            <select id="mySelectBrand" class="form-select"
-                                                style="width: 100%;" name="brand_id">
+                                            <select id="mySelectBrand" class="form-select" style="width: 100%;"
+                                                name="brand_id">
                                                 @foreach ($brands as $id => $brand)
                                                     <option value="{{ $id }}" @selected($id == old('brand_id', 23))>
                                                         {{ $brand }}</option>
@@ -363,6 +365,35 @@
 
     <script>
         $(document).ready(function() {
+            $("#name, #category_id").on("input change", function() {
+                let name = $("#name").val().trim();
+                let category = $('#category_id').find(':selected').val() !== "" ? $('#category_id').find(
+                    ':selected').text().trim().replace(/^[-\s]+/, "") : ""; // Xóa "-" đầu tiên
+                updateSlug(name, category);
+            });
+
+            function generateSlug(text) {
+                return text.toLowerCase()
+                    .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Loại bỏ dấu tiếng Việt
+                    .replace(/đ/g, "d").replace(/Đ/g, "D") // Chuyển `đ` -> `d`
+                    .replace(/[^a-z0-9 -]/g, "") // Xóa ký tự đặc biệt
+                    .replace(/\s+/g, "-") // Thay khoảng trắng bằng dấu `-`
+                    .replace(/-+/g, "-") // Xóa dấu `-` dư thừa
+                    .trim(); // Xóa khoảng trắng đầu cuối
+            }
+
+            function updateSlug(name, category) {
+                if (!name) return;
+
+                let baseUrl = "{{ env('APP_URL') }}";
+                let categorySlug = category ? generateSlug(category) + "/" : "";
+                let productSlug = generateSlug(name);
+
+                $("#slug-link small").text(`${baseUrl}/${categorySlug}${productSlug}`);
+            }
+        });
+
+        $(document).ready(function() {
 
             $('#fake_price').on('change', function() {
 
@@ -499,6 +530,7 @@
 
             formatDataInput('fake_price');
             formatDataInput('fake_import_price');
+            formatDataInput('fake_discount_value');
         });
     </script>
 @endpush

@@ -284,18 +284,21 @@
                                             </div>
 
                                             <!-- Nhóm Địa chỉ -->
-                                            <div class="address-group">
-                                                <div>
-                                                    <i class="bi bi-geo-alt-fill"></i> Địa chỉ:
+                                            @if (count($settings->introduction['address']))
+                                                <div class="address-group">
+                                                    <div>
+                                                        <i class="bi bi-geo-alt-fill"></i> Địa chỉ:
+                                                    </div>
+                                                    <div>
+                                                        @foreach ($settings->introduction['address'] ?? [] as $address)
+                                                            <p class="address-item">
+                                                                <span class="address-detail">{{ $address }}</span>
+                                                            </p>
+                                                        @endforeach
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    @foreach ($settings->introduction['address'] ?? [] as $address)
-                                                        <p class="address-item">
-                                                            <span class="address-detail">{{ $address }}</span>
-                                                        </p>
-                                                    @endforeach
-                                                </div>
-                                            </div>
+                                            @endif
+
                                         </div>
 
 
