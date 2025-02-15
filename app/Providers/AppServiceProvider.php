@@ -31,8 +31,16 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer(['frontends.layouts.master', 'frontends.pages.home', 'frontends.pages.category'], function ($view) {
 
+            $categories = SgoCategory::with('childrens')->whereNull('category_parent_id')->get();
+
+            // Load tất cả danh mục con của các danh mục cha
+            $categories->each(function ($category) {
+                $category->load('childrens.childrens'); // Load sâu hơn nếu cần
+            });
+
+            // Truyền vào view
             $view->with([
-                'cataloguesMenu' => SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->get(),
+                'cataloguesMenu' => $categories,
             ]);
         });
 

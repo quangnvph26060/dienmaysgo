@@ -14,30 +14,6 @@ class HomeController extends Controller
 {
     public function home()
     {
-        // $categories = SgoCategory::all();
-        // $products = SgoProduct::all();
-
-        // foreach ($products as $product) {
-        //     $bestMatch = null;
-        //     $bestScore = 0;
-
-        //     foreach ($categories as $category) {
-        //         similar_text($product->name, $category->name, $percent);
-
-        //         if ($percent > $bestScore) { // Nếu mức độ giống cao hơn mức trước đó
-        //             $bestScore = $percent;
-        //             $bestMatch = $category->id;
-        //         }
-        //     }
-
-        //     if ($bestMatch) {
-        //         $product->category_id = $bestMatch;
-        //         $product->save();
-        //     }
-        // }
-
-        // echo "Đã gán category_id dựa trên mức độ giống nhau!";
-
         // Cache danh mục cha
         $categories = Cache::remember('categories', now()->addMinutes(30), function () {
             return SgoCategory::whereNull('category_parent_id')->get();
@@ -83,14 +59,19 @@ class HomeController extends Controller
     private function getAllProducts($category)
     {
         // Lấy sản phẩm của danh mục hiện tại, giới hạn 15 sản phẩm
-        $products = $category->products()->take(15)->get();
+        $products = $category->products()->with('category')->limit(15)->get();
 
-        // Lấy sản phẩm của tất cả các danh mục con, giới hạn 15 sản phẩm cho mỗi danh mục con
+        // Lấy sản phẩm của tất cả các danh mục con
         foreach ($category->childrens as $child) {
-            $products = $products->merge($this->getAllProducts($child)); // Đệ quy lấy sản phẩm của các danh mục con
+            $childProducts = $this->getAllProducts($child);
+            $products = $products->merge($childProducts);
+
+            // Nếu đã đủ 15 sản phẩm thì dừng
+            if ($products->count() >= 15) {
+                return $products->take(15);
+            }
         }
 
-        // Giới hạn tổng số sản phẩm không vượt quá 15
-        return $products->take(15);
+        return $products;
     }
 }
