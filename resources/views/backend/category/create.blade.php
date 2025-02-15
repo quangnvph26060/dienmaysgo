@@ -34,6 +34,8 @@
                                 @if ($parentCategories->isNotEmpty())
                                     @foreach ($parentCategories as $parentCategory)
                                         <option @selected($parentCategory->id == old('category_parent_id', $category->category_parent_id ?? '')) value="{{ $parentCategory->id }}">
+                                            {{ str_repeat('-', $parentCategory->level) . $parentCategory->name }}</option>
+                                        {{-- <option @selected($parentCategory->id == old('category_parent_id', $category->category_parent_id ?? '')) value="{{ $parentCategory->id }}">
                                             {{ $parentCategory->name }}</option>
                                         @if ($parentCategory->childrens->isNotEmpty())
                                             @foreach ($parentCategory->childrens as $children)
@@ -47,7 +49,7 @@
                                                     @endforeach
                                                 @endif
                                             @endforeach
-                                        @endif
+                                        @endif --}}
                                     @endforeach
                                 @endif
                             </select>
@@ -213,12 +215,18 @@
     <script>
         const BASE_URL = "{{ url('/') }}";
     </script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
     <script src="{{ asset('ckeditor/ckeditor.js') }}"></script>
 
     <script src="{{ asset('ckfinder_php_3.7.0/ckfinder/ckfinder.js') }}"></script>
     <script>
+        $('#category_parent_id').select2({
+            placeholder: 'Chọn danh mục',
+            allowClear: true,
+            minimumInputLength: 0 // Không cần nhập ký tự để hiển thị dữ liệu
+        });
+
         document.addEventListener("DOMContentLoaded", function() {
             const imageInput = document.getElementById('image');
             const previewFrame = document.getElementById('preview-frame');

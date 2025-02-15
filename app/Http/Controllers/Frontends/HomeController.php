@@ -61,7 +61,7 @@ class HomeController extends Controller
 
         if (request('s')) {
             HistorySearch::insert(request('s'));
-            return redirect()->route('products.list', ['s' => request('s')]);
+            return redirect()->route('products.search', ['s' => request('s')]);
         }
 
         return view('frontends.pages.home', compact('data', 'images'));

@@ -304,7 +304,7 @@ object {
         padding-left: 10px !important;
         padding-right: 10px !important;
     }
-    .buttons_added.form-flat{
+    .buttons_added.form-flat {
         margin-bottom: 5px;
     }
 }
@@ -5241,14 +5241,28 @@ ul li.bullet-arrow:before {
 ul li.bullet-star:before {
     content: "" !important;
 }
-.button,
+/* .button,
 button,
 fieldset,
 input,
 select,
 textarea {
-    /* margin-bottom: 1em; */
+    margin-bottom: 1em;
+} */
+
+.info-list li {
+    display: grid;
+    grid-template-columns: 10px auto; /* Cột đầu cho icon, cột sau cho nội dung */
+    gap: 5px; /* Khoảng cách giữa icon và text */
+    margin-bottom: 6px; /* Khoảng cách giữa các dòng */
 }
+
+.info-list i {
+    color: #ec1c24; /* Màu đỏ nổi bật cho icon */
+    font-size: 14px;
+    margin-top: 4px; /* Cân bằng với text */
+}
+
 blockquote,
 dl,
 figure,
@@ -5257,6 +5271,7 @@ ol,
 p,
 pre,
 ul {
+    list-style: none;
     margin-bottom: 1.3em;
 }
 form p {

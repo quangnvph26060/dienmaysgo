@@ -147,11 +147,11 @@ class ProductController extends Controller
                 ->addColumn('category_id', function ($row) {
                     return $row->category->name ?? '';
                 })
-                ->addColumn('name', function ($row) {
-                    return "
-                    <strong class='text-primary'>$row->name</strong>";
-                })
-                ->rawColumns(['checkbox', 'name', 'price'])
+                // ->addColumn('name', function ($row) {
+                //     return "
+                //     <strong class='text-primary'>$row->name</strong>";
+                // })
+                ->rawColumns(['checkbox', 'price'])
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -205,7 +205,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $rule = $request->discount_type == 'amount' ? 'nullable|numeric|min:0|lt:price' : 'nullable|numeric|max:100';
+        $rule = $request->discount_type == 'amount' ? 'nullable|numeric|min:0' : 'nullable|numeric|max:100';
         // lt:price
         $validated  = $request->validate(
             [
@@ -261,7 +261,6 @@ class ProductController extends Controller
                 $validated['image'] = saveImages($request, 'image', 'products_main_images', 500, 500);
             }
 
-
             $product = SgoProduct::create($validated);
 
             if ($request->hasFile('images')) {
@@ -278,10 +277,6 @@ class ProductController extends Controller
                 }
             }
 
-            // if ($request->has('brand_id')) {
-            //     $product->brands()->sync($request->brand_id);
-            // }
-
             if ($request->attribute_id) {
                 $data = [];
                 foreach ($request->attribute_id as $key => $attributeId) {
@@ -291,8 +286,22 @@ class ProductController extends Controller
                         'attribute_value_id' => $request->attribute_value_id[$key]
                     ];
                 }
-
                 ProductAttributeValue::insert($data);
+            } else {
+                // Nếu không có thuộc tính nào được chọn, thêm các thuộc tính mặc định
+                $defaultAttributes = [
+                    ['attribute_id' => 26, 'attribute_value_id' => 44], // Nguồn điện 220V
+                    ['attribute_id' => 23, 'attribute_value_id' => 45], // Bảo hành 6 tháng
+                    ['attribute_id' => 21, 'attribute_value_id' => 28], // Xuất xứ Trung Quốc
+                ];
+
+                foreach ($defaultAttributes as $default) {
+                    ProductAttributeValue::create([
+                        'sgo_product_id' => $product->id,
+                        'attribute_id' => $default['attribute_id'],
+                        'attribute_value_id' => $default['attribute_value_id']
+                    ]);
+                }
             }
 
             toastr()->success('Thêm sản phẩm mới thành công');
@@ -301,9 +310,15 @@ class ProductController extends Controller
 
             return redirect()->route('admin.product.index');
         } catch (Exception $e) {
+            if (isset($validated['image']))  deleteImage($validated['image']);
+
             DB::rollBack();
+
+            toastr()->error('Đã có lỗi xảy ra. Vui lòng thử lại sau!');
+
             Log::error('Failed to create new product: ' . $e->getMessage());
-            return back();
+
+            return back()->withInput();
         }
     }
     public function update(Request $request, $id)

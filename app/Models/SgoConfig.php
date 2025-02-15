@@ -28,7 +28,8 @@ class SgoConfig extends Model
         'introduct_title',
         'introduction',
         'icon',
-        'support'
+        'support',
+        'copyright'
     ];
 
     protected $casts = [
@@ -38,13 +39,12 @@ class SgoConfig extends Model
 
     public $timestamps = true;
 
-    // public static function boot()
-    // {
-    //     parent::boot();
+    public static function boot()
+    {
+        parent::boot();
 
-    //     static::saved(function () {
-    //         \Log::info('clear cache');
-    //         Cache::forget('site_settings');
-    //     });
-    // }
+        static::saved(function () {
+            Cache::forget('site_settings');
+        });
+    }
 }

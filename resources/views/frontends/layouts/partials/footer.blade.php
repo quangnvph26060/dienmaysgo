@@ -8,24 +8,30 @@
             <div id="col-88304985" class="col medium-5 small-12 large-5">
                 <div class="col-inner">
                     <h3>LIÊN HỆ VỚI CHÚNG TÔI</h3>
-                    <ul>
+                    <ul class="info-list">
                         <li>
+                            <i class="fa fa-angle-right"></i>
                             <span style="font-size: 90%"><strong>{{ $settings->company_name ?? '' }}</strong></span>
                         </li>
                         <li>
+                            <i class="fa fa-angle-right"></i>
                             <span style="font-size: 90%">Địa chỉ: {{ $settings->address ?? '' }}</span>
                         </li>
                         <li>
+                            <i class="fa fa-angle-right"></i>
                             <span style="font-size: 90%">Kho hàng: {{ $settings->warehouse ?? '' }}</span>
                         </li>
                         <li>
+                            <i class="fa fa-angle-right"></i>
                             <span style="font-size: 90%">Điện thoại: {{ $settings->phone ?? '' }}
                             </span>
                         </li>
                         <li>
+                            <i class="fa fa-angle-right"></i>
                             <span style="font-size: 90%">MST: {{ $settings->tax_code ?? '' }}</span>
                         </li>
                         <li>
+                            <i class="fa fa-angle-right"></i>
                             <span style="font-size: 90%">Email: {{ $settings->email ?? '' }}</span>
                         </li>
                     </ul>
@@ -79,8 +85,9 @@
                             <i class="fas fa-envelope"></i>
                         </a>
 
-                        <a href="tel:{{ $settings->phone }}" target="_blank" data-label="Phone" rel="noopener noreferrer nofollow"
-                            class="icon primary button circle phone tooltip" title="Call us" aria-label="Call us">
+                        <a href="tel:{{ $settings->phone }}" target="_blank" data-label="Phone"
+                            rel="noopener noreferrer nofollow" class="icon primary button circle phone tooltip"
+                            title="Call us" aria-label="Call us">
                             <i class="fas fa-phone-square-alt"></i>
                         </a>
 

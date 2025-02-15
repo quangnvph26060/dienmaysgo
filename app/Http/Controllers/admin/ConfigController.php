@@ -31,7 +31,6 @@ class ConfigController extends Controller
 
     public function update(ConfigRequest $request)
     {
-        // dd($request->toArray());
         try {
             $credentials = $request->validated();
 

@@ -16,32 +16,25 @@ class NewsController extends Controller
     {
 
         if ($request->ajax()) {
-            $data = SgoNews::select('id', 'title', 'slug', 'image', 'content');
+            $data = SgoNews::select(
+                'id',
+                'title',
+                'slug',
+                'is_published',
+                'published_at',
+            );
 
             return DataTables::of($data)
-                ->addColumn('image', function ($row) {
-                    // Kiểm tra nếu có ảnh và hiển thị ảnh, nếu không thì hiển thị thông báo không có ảnh
-                    return $row->image ? '<img src="' . asset('storage/' . $row->image) . '" alt="Image" style="width: 100px; height: auto;">' : '<p>No image</p>';
+                ->addColumn('title', function ($row) {
+                    return "<a href=" . route('admin.news.update', $row->id) . "><strong class='text-primary'>$row->title</strong></a>";
                 })
-                ->addColumn('content', function ($row) {
-                    // Trả về nội dung HTML từ cột content
-                    return $row->content;
+                ->addColumn('slug', function ($row) {
+                    return "<a target='_bank' href=" . route('news.list', $row->slug) . ">" . route('news.list', $row->slug) . "</a>";
                 })
-                ->addColumn('action', function ($row) {
-                    return '<div style="display: flex;">
-                            <a href="' . route('admin.news.edit', $row->id) . '" class="btn btn-primary btn-sm edit">
-                                <i class="fas fa-edit btn-edit" title="Sửa"></i>
-                            </a>
-                            <a href="#" class="btn btn-danger btn-sm delete"
-                                onclick="event.preventDefault(); document.getElementById(\'delete-form-' . $row->id . '\').submit();">
-                                <i class="fas fa-trash btn-delete" title="Xóa"></i>
-                            </a>
-                            <form id="delete-form-' . $row->id . '" action="' . route('admin.news.delete', $row->id) . '" method="POST" style="display:none;">
-                                ' . csrf_field() . '
-                            </form>
-                        </div>';
+                ->addColumn('checkbox', function ($row) {
+                    return '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />';
                 })
-                ->rawColumns(['image', 'content', 'action'])
+                ->rawColumns(['title', 'checkbox', 'slug'])
                 ->make(true);
         }
 
@@ -66,25 +59,36 @@ class NewsController extends Controller
 
     public function store(NewsRequest $request)
     {
+        $credentials = $request->validated();
+
         try {
             // dd($request->all());
             // Tạo danh mục mới
-            $new = SgoNews::create([
-                'title' => $request->input('title'),
-                'slug' => Str::slug($request->input('title')),  // Tạo slug từ title
-                'content' => $request->input('content'),
-                'image' => saveImage($request, 'image', 'new_images'),
-                'is_published' => $request->input('is_published'),
-                'title_seo' => $request->input('title_seo'),
-                'description_seo' => $request->input('description_seo'),
-                'keyword_seo' => $request->input('keyword_seo'),
-            ]);
+            // $new = SgoNews::create([
+            //     'title' => $request->input('title'),
+            //     'slug' => Str::slug($request->input('title')),  // Tạo slug từ title
+            //     'content' => $request->input('content'),
+            //     'image' => saveImage($request, 'image', 'new_images'),
+            //     'is_published' => $request->input('is_published'),
+            //     'title_seo' => $request->input('title_seo'),
+            //     'description_seo' => $request->input('description_seo'),
+            //     'keyword_seo' => $request->input('keyword_seo'),
+            // ]);
 
+            if ($request->hasFile('image')) {
+                $credentials['image'] = saveImage($request, 'image', 'new_images');
+            }
+
+            if (empty($credentials['slug'])) {
+                $credentials['slug'] = Str::slug($credentials['title']);
+            }
+
+            SgoNews::create($credentials);
             // Trả về thông báo thành công
             return redirect()->route('admin.news.index')->with('success', 'Bài viết đã được thêm thành công');
         } catch (\Exception $e) {
             // Nếu có lỗi, bắt và hiển thị thông báo lỗi
-            return redirect()->route('admin.news.index')->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+            return back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }
 

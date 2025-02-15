@@ -9,7 +9,7 @@
                     @if (isset($category) && !is_null($category))
                         @if ($category->parent)
                             <a
-                                href="{{ route('products.list', $category->parent->slug) }}">{{ convertToSentenceCase($category->parent->name) }}</a>
+                                href="{{ route('products.detail', $category->parent->slug) }}">{{ convertToSentenceCase($category->parent->name) }}</a>
                             <span class="divider">&#47;</span>
                         @endif
 
@@ -19,7 +19,7 @@
                     @isset($product)
                         @if ($product->category)
                             <a
-                                href="{{ route('products.list', $product->category->slug) }}">{{ convertToSentenceCase($product->category->name) }}</a>
+                                href="{{ route('products.detail', $product->category->slug) }}">{{ convertToSentenceCase($product->category->name) }}</a>
                             <span class="divider">&#47;</span>
                         @endif
 

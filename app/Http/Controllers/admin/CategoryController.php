@@ -22,7 +22,7 @@ class CategoryController extends Controller
 
             return DataTables::of($data)
                 ->addColumn('name', function ($row) {
-                    return str_repeat('- ', $row->level) . $row->name;
+                    return str_repeat('- ', $row->level) . '<a href="' . route('admin.category.update', $row->id) . '"><strong>' . $row->name . '</strong></a>';
                 })
                 ->addColumn('parent_name', function ($row) {
                     return $row->parent_name ? $row->parent_name : '--------';
@@ -31,21 +31,10 @@ class CategoryController extends Controller
                     // Trả về nội dung HTML từ cột content
                     return $row->description;
                 })
-                ->addColumn('action', function ($row) {
-                    return '<div style="display: flex;">
-                                <a href="' . route('admin.category.edit', $row->id) . '" class="btn btn-primary btn-sm edit me-2">
-                                    <i class="fas fa-edit btn-edit" title="Sửa"></i>
-                                </a>
-                                <a href="#" class="btn btn-danger btn-sm delete"
-                                    onclick="event.preventDefault(); document.getElementById(\'delete-form-' . $row->id . '\').submit();">
-                                    <i class="fas fa-trash btn-delete" title="Xóa"></i>
-                                </a>
-                                <form id="delete-form-' . $row->id . '" action="' . route('admin.category.delete', $row->id) . '" method="POST" style="display:none;">
-                                    ' . csrf_field() . '
-
-                                </form>
-                            </div>';
-                })->rawColumns(['action', 'description'])
+                ->addColumn('checkbox', function ($row) {
+                    return '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />';
+                })
+                ->rawColumns(['description', 'checkbox', 'name'])
                 ->make(true);
         }
         $page = 'Danh mục';
@@ -86,7 +75,8 @@ class CategoryController extends Controller
     {
         $page = 'Danh mục';
         $title = 'Thêm danh mục';
-        $parentCategories = SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->get();
+        $parentCategories = collect($this->getCategories());
+
         return view('backend.category.create', compact('parentCategories', 'title', 'page'));
     }
 
@@ -102,24 +92,17 @@ class CategoryController extends Controller
     public function store(CategoryRequest $request)
     {
         try {
+            $credentials = $request->validated();
+
+            if ($request->hasFile('logo')) $credentials['logo'] =  saveImage($request, 'logo', 'category_images');
             // Tạo danh mục mới
-            $category = SgoCategory::create([
-                'name' => $request->input('name'),
-                'slug' => Str::slug($request->input('name')),
-                'category_parent_id' => $request->input('category_parent_id'),
-                'logo' => saveImage($request, 'logo', 'category_images'),
-                'description_short' => $request->input('description_short'),
-                'description' => $request->input('description'),
-                'title_seo' => $request->input('title_seo'),
-                'description_seo' => $request->input('description_seo'),
-                'keyword_seo' => $request->input('keyword_seo'),
-            ]);
+            SgoCategory::create($credentials);
 
             // Trả về thông báo thành công
             return redirect()->route('admin.category.index')->with('success', 'Danh mục đã được thêm thành công');
         } catch (\Exception $e) {
             // Nếu có lỗi, bắt và hiển thị thông báo lỗi
-            return redirect()->route('admin.category.index')->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
         }
     }
 
@@ -132,6 +115,7 @@ class CategoryController extends Controller
             $credentials = $request->validated();
 
             if ($request->hasFile('logo')) $credentials['logo'] =  saveImage($request, 'logo', 'category_images');
+
             $category->update($credentials);
 
             // Trả về thông báo thành công

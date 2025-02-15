@@ -49,21 +49,26 @@ function calculateAmount($amount, $discount, $isPercentage = true)
         $finalAmount = $amount - $discountAmount;
     } else {
         // Tính toán giảm giá theo số tiền cố định
-        $finalAmount = $amount - $discount;
+        $finalAmount = $discount;
     }
 
     return $finalAmount;
 }
 
-function calculateDiscountPercentage($originalPrice, $discountAmount, $type)
+function calculateDiscountPercentage($originalPrice, $discountedPrice, $type)
 {
-    if ($type == 'percentage') return $discountAmount;
-    if ($originalPrice == 0) {
-        return 0; // Tránh chia cho 0
+    if ($type == 'percentage') {
+        return $discountedPrice; // Nếu đã là % thì trả về luôn
     }
-    $discountPercentage = ($discountAmount / $originalPrice) * 100;
-    return $discountPercentage;
+
+    if ($originalPrice == 0 || $discountedPrice > $originalPrice) {
+        return 0; // Tránh lỗi chia cho 0 hoặc giá giảm cao hơn giá gốc
+    }
+
+    $discountPercentage = (1 - ($discountedPrice / $originalPrice)) * 100;
+    return round($discountPercentage, 2); // Làm tròn 2 chữ số thập phân
 }
+
 
 
 function formatAmount($amount)

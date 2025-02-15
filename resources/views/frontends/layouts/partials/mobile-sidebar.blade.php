@@ -33,7 +33,7 @@
         @foreach ($cataloguesMenu as $item)
             <li
                 class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1606">
-                <a href="{{ route('products.list', $item->slug) }}">{{ $item->name }}</a>
+                <a href="{{ route('products.detail', $item->slug) }}">{{ $item->name }}</a>
                 <ul class="sub-menu nav-sidebar-ul children">
 
                     @if ($item->childrens->isNotEmpty())
@@ -41,7 +41,7 @@
                             <li
                                 class="menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-has-children menu-item-1607">
                                 <div class="menu-header">
-                                    <a href="{{ route('products.list', $child->slug) }}">{{ $child->name }}</a>
+                                    <a href="{{ route('products.detail', $child->slug) }}">{{ $child->name }}</a>
                                     <!-- Dấu cộng -->
                                     @if ($child->childrens->isNotEmpty())
                                     <button class="toggle-submenu-item">+</button>

@@ -1,6 +1,6 @@
 @extends('frontends.layouts.master')
 
-@section('title', 'Trang chủ')
+@section('title', $settings->title_seo)
 @section('description', $settings->description_seo)
 @section('keywords', $settings->keywords_seo)
 @section('og_title', $settings->title_seo ?? env('APP_NAME'))
@@ -18,7 +18,7 @@
                         <div class="menu-item @if ($item->childrens->isNotEmpty()) has-child @endif">
                             {{-- <i class="fas fa-home" style="margin-right: 5px"></i> --}}
                             <img width="22" src="{{ showImage($item->logo) }}" alt="">
-                            <a style="text-transform: uppercase;" href="{{ route('products.list', $item->slug) }}">
+                            <a style="text-transform: uppercase;" href="{{ route('products.detail', $item->slug) }}">
                                 {{ $item->name }}</a>
                             <!-- Mũi tên cấp 1 -->
                             <div class="popup">
@@ -26,7 +26,7 @@
                                     @if ($item->childrens->isNotEmpty())
                                         @foreach ($item->childrens as $child)
                                             <div class="submenu-item">
-                                                <a href="{{ route('products.list', $child->slug) }}">
+                                                <a href="{{ route('products.detail', $child->slug) }}">
                                                     {{ $child->name }}
                                                 </a>
                                                 <!-- Mũi tên cấp 2 -->
@@ -91,11 +91,11 @@
                                                 @foreach ($catalogue['childrens']->take(5) as $child)
                                                     <li class="hdevvn_cats">
                                                         <a
-                                                            href="{{ route('products.list', $child->slug) }}">{{ $child->name }}</a>
+                                                            href="{{ route('products.detail', $child->slug) }}">{{ $child->name }}</a>
                                                     </li>
                                                 @endforeach
                                             @endif
-                                        </span><b></b><a href="{{ route('products.list', $catalogue['parent']->slug) }}"
+                                        </span><b></b><a href="{{ route('products.detail', $catalogue['parent']->slug) }}"
                                             target="">Xem
                                             thêm<i class="fas fa-angle-right" style="margin-left: 5px"></i>
                                     </h2>

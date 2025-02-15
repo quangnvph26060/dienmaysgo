@@ -11,7 +11,7 @@
             <a class="nav-link" href="{{ route('admin.config.config-payment') }}">Cấu hình thanh toán</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{{ route('admin.config.config-slider') }}">Cấu hình trình chiếu</a>
+            <a class="nav-link" href="{{ route('admin.config.config-slider') }}">Cấu hình slider</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="{{ route('admin.config.config-filter') }}">Cấu hình bộ lọc</a>
@@ -106,6 +106,17 @@
                                     placeholder="Enter Zalo number"
                                     value="{{ old('zalo_number', $config->zalo_number ?? '') }}">
                                 @error('zalo_number')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <label for="copyright" class="form-label">Copyright</label>
+                                <input type="text" id="copyright" name="copyright"
+                                    class="form-control @error('copyright') is-invalid @enderror"
+                                    placeholder="Enter Zalo number"
+                                    value="{{ old('copyright', $config->copyright ?? '') }}">
+                                @error('copyright')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -254,8 +265,6 @@
 @push('scripts')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.min.js"></script>
     <script>
-
-
         $(document).ready(function() {
 
             $('#keywords_seo').selectize({

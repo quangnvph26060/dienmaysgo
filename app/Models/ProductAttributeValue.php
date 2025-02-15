@@ -9,6 +9,8 @@ class ProductAttributeValue extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'sgo_product_id',
         'attribute_id',
@@ -24,5 +26,4 @@ class ProductAttributeValue extends Model
     {
         return $this->belongsTo(AttributeValue::class);
     }
-
 }
