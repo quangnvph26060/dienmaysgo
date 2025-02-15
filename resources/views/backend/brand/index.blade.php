@@ -42,15 +42,23 @@
             </div>
 
             <div class="col-md-7">
-                <div class="table-responsive">
-                    <table id="myTable" class="display" style="width:100%">
-                        <thead>
-                            <th><input type="checkbox" id="selectAll" /></th>
-                            <th>Tên</th>
-                            <th>Slug</th>
-                            <th>Mô tả</th>
-                        </thead>
-                    </table>
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Danh sách thương hiệu</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="myTable" class="display" style="width:100%">
+                                <thead>
+                                    <th><input type="checkbox" id="selectAll" /></th>
+                                    <th>Tên</th>
+                                    <th>Slug</th>
+                                    <th>Mô tả</th>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

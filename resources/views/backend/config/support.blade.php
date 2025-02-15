@@ -26,7 +26,6 @@
         <div class="card">
             <div class="card-body">
                 <div id="icon-container">
-
                     @forelse ($config->support['icon'] ?? [] as $key => $icon)
                         <div class="row form-group">
                             <div class="col-4">
@@ -46,8 +45,8 @@
                     @empty
                         <div class="row form-group">
                             <div class="col-4">
-                                <input type="text" class="form-control icon-picker"
-                                    name="support[icon][]" placeholder="Chọn icon" />
+                                <input type="text" class="form-control icon-picker" name="support[icon][]"
+                                    placeholder="Chọn icon" />
                             </div>
                             <div class="col-7">
                                 <input type="text" class="form-control" name="support[content][]"
@@ -65,15 +64,15 @@
 
         <div class="card">
             <div class="card-body">
-
                 <div class="mb-3">
                     <label for="">Tiêu đề</label>
                     <input type="text" name="introduct_title" class="form-control"
                         value="{{ $config->introduct_title }}">
                 </div>
 
-                <div id="input-container">
-
+                <!-- Phần Điện thoại -->
+                <label for="">Điện thoại</label>
+                <div class="phone-container">
                     @forelse ($config->introduction['phone'] ?? [] as $key => $phone)
                         <div class="row">
                             <div class="col-lg-6 mb-3">
@@ -88,9 +87,9 @@
 
                             <div class="col-lg-1 mb-3">
                                 @if ($key > 0)
-                                    <button type="button" class="btn  btn-danger remove-row btn-sm">-</button>
+                                    <button type="button" class="btn btn-danger btn-sm remove-row">-</button>
                                 @else
-                                    <button type="button" class="btn  btn-success add-row btn-sm">+</button>
+                                    <button type="button" class="btn btn-success btn-sm add-phone">+</button>
                                 @endif
                             </div>
                         </div>
@@ -107,13 +106,46 @@
                             </div>
 
                             <div class="col-lg-1 mb-3">
-                                <button type="button" class="btn btn-sm btn-success add-row">+</button>
+                                <button type="button" class="btn btn-success btn-sm add-phone">+</button>
+                            </div>
+                        </div>
+                    @endforelse
+                </div>
+
+                <!-- Phần Địa chỉ -->
+                <label for="">Địa chỉ</label>
+                <div class="address-container">
+                    @forelse ($config->introduction['address'] ?? [] as $keyS => $address)
+                        <div class="row">
+                            <div class="col-lg-11 mb-3">
+                                <input type="text" name="introduction[address][]" class="form-control"
+                                    value="{{ $address }}" placeholder="Địa chỉ">
+                            </div>
+
+                            <div class="col-lg-1 mb-3">
+                                @if ($keyS > 0)
+                                    <button type="button" class="btn btn-danger btn-sm remove-row">-</button>
+                                @else
+                                    <button type="button" class="btn btn-success btn-sm add-address">+</button>
+                                @endif
+                            </div>
+                        </div>
+                    @empty
+                        <div class="row">
+                            <div class="col-lg-11 mb-3">
+                                <input type="text" name="introduction[address][]" class="form-control" value=""
+                                    placeholder="Địa chỉ">
+                            </div>
+
+                            <div class="col-lg-1 mb-3">
+                                <button type="button" class="btn btn-success btn-sm add-address">+</button>
                             </div>
                         </div>
                     @endforelse
                 </div>
             </div>
         </div>
+
 
 
         <button class="btn btn-primary">Lưu thay đổi</button>
@@ -125,27 +157,46 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fontawesome-iconpicker/3.2.0/js/fontawesome-iconpicker.min.js">
     </script>
     <script>
-        $('.add-row').click(function() {
-            var newRow = `
+        $(document).ready(function() {
+            // Thêm dòng mới cho Điện thoại
+            $(document).on('click', '.add-phone', function() {
+                var newRow = `
             <div class="row">
                 <div class="col-lg-6 mb-3">
-                        <input type="text" name="introduction[phone][]" class="form-control" value="" placeholder="Số điện thoại">
+                    <input type="text" name="introduction[phone][]" class="form-control" value="" placeholder="Số điện thoại">
                 </div>
                 <div class="col-lg-5 mb-3">
-                        <input type="text" name="introduction[facility][]" class="form-control" value="" placeholder="Cơ sở">
+                    <input type="text" name="introduction[facility][]" class="form-control" value="" placeholder="Cơ sở">
                 </div>
                 <div class="col-lg-1 mb-3">
-                        <button type="button" class="btn btn-sm btn-danger remove-row">-</button>
+                    <button type="button" class="btn btn-sm btn-danger remove-row">-</button>
                 </div>
             </div>
         `;
-            $('#input-container').append(newRow);
+                $(this).closest('.phone-container').append(newRow);
+            });
+
+            // Thêm dòng mới cho Địa chỉ
+            $(document).on('click', '.add-address', function() {
+                var newRow = `
+            <div class="row">
+                <div class="col-lg-11 mb-3">
+                    <input type="text" name="introduction[address][]" class="form-control" value="" placeholder="Địa chỉ">
+                </div>
+                <div class="col-lg-1 mb-3">
+                    <button type="button" class="btn btn-sm btn-danger remove-row">-</button>
+                </div>
+            </div>
+        `;
+                $(this).closest('.address-container').append(newRow);
+            });
+
+            // Xóa dòng input (Điện thoại & Địa chỉ)
+            $(document).on('click', '.remove-row', function() {
+                $(this).closest('.row').remove();
+            });
         });
 
-        // Xử lý nút "-" để xóa dòng input
-        $(document).on('click', '.remove-row', function() {
-            $(this).closest('.row').remove();
-        });
 
         $(".icon-picker").iconpicker();
 
