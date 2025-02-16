@@ -182,29 +182,41 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label for="">Thuộc tính</label>
+                                            @php
+                                                $selectedAttributes = collect($attributes)
+                                                    ->pluck('attribute_id')
+                                                    ->toArray();
+                                            @endphp
+
                                             <select name="attribute_id[]" id="mySelect" multiple="multiple"
                                                 class="form-select" style="width: 100%">
+                                                @foreach ($selectedAttributes as $id)
+                                                    @if (isset($allAttributes[$id]))
+                                                        <option value="{{ $id }}" selected>
+                                                            {{ $allAttributes[$id] }}</option>
+                                                    @endif
+                                                @endforeach
                                                 @foreach ($allAttributes as $id => $name)
-                                                    <option @selected(in_array($id, array_column($attributes, 'attribute_id'))) value="{{ $id }}">
-                                                        {{ $name }}
-                                                    </option>
+                                                    @if (!in_array($id, $selectedAttributes))
+                                                        <option value="{{ $id }}">{{ $name }}</option>
+                                                    @endif
                                                 @endforeach
                                             </select>
 
                                             <div id="additional-selects" class="mt-3 row">
                                                 @foreach ($attributes as $attribute)
-                                                    {{-- @dd($attribute) --}}
                                                     <div class="col-lg-4 mb-3"
                                                         id="select-wrapper-{{ $attribute['attribute_id'] }}">
                                                         <label
                                                             for="value-{{ $attribute['attribute_id'] }}">{{ $attribute['attribute_name'] }}</label>
-                                                        <select name="attribute_value_id[]"
+                                                        <select
+                                                            name="attribute_value_id[{{ $attribute['attribute_id'] }}]"
                                                             id="value-{{ $attribute['attribute_id'] }}"
                                                             class="form-control">
                                                             <option value="">Chọn giá trị</option>
                                                             @foreach ($allAttributeValues[$attribute['attribute_id']] ?? [] as $id => $value)
                                                                 <option value="{{ $id }}"
-                                                                    @selected($id == $attribute['attribute_value_id'])>
+                                                                    @if ($id == $attribute['attribute_value_id']) selected @endif>
                                                                     {{ $value }}
                                                                 </option>
                                                             @endforeach
@@ -468,9 +480,17 @@
                 allowClear: true
             });
 
-            $('#mySelect').on('select2:select', function(e) {
-                const selectedId = e.params.data.id;
-                const selectedText = e.params.data.text;
+            $('#mySelect').select2({
+                placeholder: 'Chọn một tùy chọn',
+                allowClear: true
+            }).on("select2:select", function(evt) {
+                let element = evt.params.data.element;
+                let $element = $(element);
+                $element.detach();
+                $(this).append($element).trigger("change");
+
+                const selectedId = evt.params.data.id;
+                const selectedText = evt.params.data.text;
 
                 $.ajax({
                     url: "{{ route('admin.product.changeSelect') }}",
@@ -485,22 +505,17 @@
                         });
 
                         const newSelectHtml = `
-                             <div class="col-lg-4 mb-3" id="select-wrapper-${selectedId}">
-                                <label for="select-${selectedId}">${selectedText}</label>
-                                <select name="attribute_value_id[]" id="select-${selectedId}" class="form-select" style="width: 100%;">
-                                    ${optionsHtml}
-                                </select>
-                            </div>
-                        `;
+                        <div class="col-lg-4 mb-3" id="select-wrapper-${selectedId}">
+                            <label for="select-${selectedId}">${selectedText}</label>
+                            <select name="attribute_value_id[${selectedId}]" id="select-${selectedId}" class="form-select" style="width: 100%;">
+                                ${optionsHtml}
+                            </select>
+                        </div>
+                    `;
 
                         $('#additional-selects').append(newSelectHtml);
                     }
                 })
-            })
-
-            $('#mySelect').select2({
-                placeholder: 'Chọn một tùy chọn',
-                allowClear: true
             });
 
             $('#mySelect').on('select2:unselect', function(e) {

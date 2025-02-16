@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 function hasDiscount($discount)
 {
@@ -137,6 +138,15 @@ function showImage($path, $default = 'image-default.jpg')
     }
 
     return asset('backend/assets/img/' . $default);
+}
+
+function logInfo($message)
+{
+    Log::info($message);
+}
+
+function capitalizeWords($string) {
+    return mb_convert_case($string, MB_CASE_TITLE, "UTF-8");
 }
 
 function deleteImage($path)

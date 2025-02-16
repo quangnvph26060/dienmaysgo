@@ -15,7 +15,28 @@ class HomeController extends Controller
     public function home()
     {
 
+        // $categories = SgoCategory::all();
+        // $products = SgoProduct::all();
 
+        // foreach ($products as $product) {
+        //     $bestMatch = null;
+        //     $bestScore = 0;
+
+        //     foreach ($categories as $category) {
+        //         similar_text($product->name, $category->name, $percent);
+
+        //         if ($percent > $bestScore) { // Nếu mức độ giống cao hơn mức trước đó
+        //             $bestScore = $percent;
+        //             $bestMatch = $category->id;
+        //         }
+        //     }
+
+        //     if ($bestMatch) {
+        //         $product->category_id = $bestMatch;
+        //         $product->save();
+        //     }
+        // }
+        
         // Cache danh mục cha
         $categories = Cache::remember('categories', now()->addMinutes(30), function () {
             return SgoCategory::whereNull('category_parent_id')->get();

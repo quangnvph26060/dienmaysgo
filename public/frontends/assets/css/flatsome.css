@@ -2680,7 +2680,7 @@ input[type="submit"] {
     font-weight: bolder;
     letter-spacing: 0.03em;
     line-height: 2.4em;
-    margin-right: 1em;
+    /* margin-right: 1em; */
     margin-top: 0;
     max-width: 100%;
     min-height: 2.5em;
@@ -4940,6 +4940,21 @@ button.flickity-prev-next-button[disabled] {
 }
 .justify-around {
     justify-content: space-around;
+}
+
+@media (max-width: 400px) {
+    #buy_now {
+        padding-left: 25px !important;
+        padding-right: 25px !important;
+    }
+
+    .address-group div:first-child {
+        width: 25%;
+    }
+
+    .hotline-group div:first-child{
+        width: 18%;
+    }
 }
 
 @media (max-width: 549px) {
