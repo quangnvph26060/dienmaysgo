@@ -28,6 +28,26 @@
         <div class="row category-page-row">
             <div class="col large-3 hide-for-medium">
                 <div id="shop-sidebar" class="sidebar-inner col-inner">
+                    @if ($category)
+                        <span class="widget-title shop-sidebar">DANH MỤC SẢN PHẨM</span>
+
+                        <div class="custom-menu">
+                            <ul>
+                                <li>
+                                    <a href="javascript:void(0)">{{ mb_strtoupper($category->name, 'UTF-8') }}<span
+                                            class="custom-arrow">▶</span></a>
+                                    @if ($category->childrens->isNotEmpty())
+                                        <ul class="custom-submenu">
+                                            @foreach ($category->childrens as $item)
+                                                <li><a href="{{ route('products.detail', $item->slug,) }}">{{ capitalizeWords($item->name) }}</a></li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
+                                </li>
+                            </ul>
+                        </div>
+                    @endif
+
 
                     @if (!empty($brands) && !empty($brands['data']))
                         <aside class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
@@ -298,11 +318,102 @@
                     });
             }, 500);
         }
+
+        document.querySelectorAll(".custom-menu li > a").forEach((menu) => {
+            menu.addEventListener("click", function(event) {
+                let parent = this.parentElement;
+                let submenu = parent.querySelector(".custom-submenu");
+
+                if (submenu) {
+                    event.preventDefault(); // Ngăn chặn chuyển trang
+
+                    if (parent.classList.contains("custom-open")) {
+                        submenu.style.maxHeight = "0";
+                    } else {
+                        submenu.style.maxHeight =
+                            submenu.scrollHeight + "px";
+                    }
+
+                    parent.classList.toggle("custom-open");
+                }
+            });
+        });
     </script>
 @endpush
 
 @push('styles')
     <style>
+        .custom-menu {
+            width: 250px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            margin-top: 15px;
+        }
+
+        .custom-menu ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .custom-menu li {
+            position: relative;
+            margin-bottom: 0;
+        }
+
+        .custom-menu li>a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 15px;
+            text-decoration: none;
+            color: #333;
+            font-size: .9em;
+            transition: background 0.3s;
+            cursor: pointer;
+            border-bottom: 1px solid #ddd;
+            font-weight: bold;
+        }
+
+        .custom-menu li a:hover {
+            background: #f4f4f4;
+        }
+
+        /* Khi menu cha được mở, thay đổi nền */
+        .custom-menu li.custom-open>a {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+
+        .custom-submenu li a {
+            padding: 5px 15px 5px 25px;
+            font-size: .9em;
+            color: #555;
+            display: block;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .custom-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .custom-open .custom-arrow {
+            transform: rotate(90deg);
+        }
+
+        /* Hiệu ứng khi submenu mở */
+        .custom-open .custom-submenu {
+            max-height: 200px;
+            transition: max-height 0.4s ease-in;
+        }
+
         .d-flex {
             display: flex;
             align-items: center;

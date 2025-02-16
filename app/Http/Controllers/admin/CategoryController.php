@@ -94,6 +94,12 @@ class CategoryController extends Controller
         try {
             $credentials = $request->validated();
 
+            $credentials['name'] = capitalizeWords($credentials['name']);
+
+            if (!isset($credentials['slug'])) {
+                $credentials['slug'] = Str::slug($credentials['name']);
+            }
+
             if ($request->hasFile('logo')) $credentials['logo'] =  saveImage($request, 'logo', 'category_images');
             // Tạo danh mục mới
             SgoCategory::create($credentials);
@@ -101,8 +107,9 @@ class CategoryController extends Controller
             // Trả về thông báo thành công
             return redirect()->route('admin.category.index')->with('success', 'Danh mục đã được thêm thành công');
         } catch (\Exception $e) {
+            logInfo($e->getMessage());
             // Nếu có lỗi, bắt và hiển thị thông báo lỗi
-            return redirect()->back()->with('error', 'Có lỗi xảy ra: ' . $e->getMessage());
+            return redirect()->back()->withInput();
         }
     }
 
@@ -114,7 +121,13 @@ class CategoryController extends Controller
 
             $credentials = $request->validated();
 
-            if ($request->hasFile('logo')) $credentials['logo'] =  saveImage($request, 'logo', 'category_images');
+            $credentials['name'] = capitalizeWords($credentials['name']);
+
+            if (!isset($credentials['slug'])) {
+                $credentials['slug'] = Str::slug($credentials['name']);
+            }
+
+            if ($request->hasFile('logo')) $credentials['logo'] = saveImage($request, 'logo', 'category_images');
 
             $category->update($credentials);
 

@@ -173,7 +173,7 @@ class ProductController extends Controller
     {
         $page = 'Sản phẩm';
         $title = 'Sửa sản phẩm';
-        $categories = SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->get();
+        $categories = SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->latest()->get();
         $promotions = SgoPromotion::pluck('name', 'id');
         $allAttributes = Attribute::pluck('name', 'id')->all();
         $brands = Brand::query()->pluck('name', 'id');
@@ -187,10 +187,8 @@ class ProductController extends Controller
                 'product_attribute_values.attribute_value_id',
                 'attributes.name as attribute_name'
             ])
+            ->keyBy('attribute_id') // <-- Chuyển về dạng key-value
             ->toArray();
-
-
-        // dd($attributes);
 
         $allAttributeValues = AttributeValue::get()->groupBy('attribute_id')->map(function ($values) {
             return $values->pluck('value', 'id');
@@ -286,6 +284,7 @@ class ProductController extends Controller
                         'attribute_value_id' => $request->attribute_value_id[$key]
                     ];
                 }
+
                 ProductAttributeValue::insert($data);
             } else {
                 // Nếu không có thuộc tính nào được chọn, thêm các thuộc tính mặc định
@@ -323,7 +322,7 @@ class ProductController extends Controller
     }
     public function update(Request $request, $id)
     {
-        // dd($request->toArray());
+        // dd($request->attribute_id);
 
         $product = SgoProduct::findOrFail($id);
         // lt:price
@@ -427,15 +426,16 @@ class ProductController extends Controller
             // }
 
             if ($request->attribute_id) {
+
                 ProductAttributeValue::where('sgo_product_id', $product->id)->delete();
 
                 $data = [];
-                foreach ($request->attribute_id as $key => $attributeId) {
+                foreach ($request->attribute_value_id as $key => $attributeValueId) {
                     if (isset($request->attribute_value_id[$key])) {
                         $data[] = [
                             'sgo_product_id' => $product->id,
-                            'attribute_id' => $attributeId,
-                            'attribute_value_id' => $request->attribute_value_id[$key],
+                            'attribute_id' => $key,
+                            'attribute_value_id' => $attributeValueId,
                         ];
                     }
                 }

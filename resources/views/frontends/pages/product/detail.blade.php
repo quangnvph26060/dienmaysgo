@@ -268,7 +268,7 @@
                                         <div class="hotline-content">
                                             <!-- Nhóm Hotline -->
                                             <div class="hotline-group">
-                                                <div>
+                                                <div style="font-size: .8rem">
                                                     <i class="bi bi-telephone-fill"></i> Hotline:
                                                 </div>
                                                 <div>
@@ -286,7 +286,7 @@
                                             <!-- Nhóm Địa chỉ -->
                                             @if (count($settings->introduction['address'] ?? []) > 0)
                                                 <div class="address-group">
-                                                    <div>
+                                                    <div style="font-size: .8rem">
                                                         <i class="bi bi-geo-alt-fill"></i> Địa chỉ:
                                                     </div>
                                                     <div>
@@ -797,7 +797,7 @@
             margin: 0;
             font-size: .8rem;
             color: #333;
-            line-height: 2;
+            /* line-height: 2; */
         }
 
         .hotline-number {

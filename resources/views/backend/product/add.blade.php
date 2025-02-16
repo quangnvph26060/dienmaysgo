@@ -415,9 +415,21 @@
                 allowClear: true
             });
 
-            $('#mySelect').on('select2:select', function(e) {
-                const selectedId = e.params.data.id;
-                const selectedText = e.params.data.text;
+            // $('#mySelect').on('select2:select', function(e) {
+
+            // })
+
+            $('#mySelect').select2({
+                placeholder: 'Chọn một tùy chọn',
+                allowClear: true
+            }).on("select2:select", function(evt) {
+                let element = evt.params.data.element;
+                let $element = $(element);
+                $element.detach();
+                $(this).append($element).trigger("change");
+
+                const selectedId = evt.params.data.id;
+                const selectedText = evt.params.data.text;
 
                 $.ajax({
                     url: "{{ route('admin.product.changeSelect') }}",
@@ -432,23 +444,19 @@
                         });
 
                         const newSelectHtml = `
-                             <div class="col-lg-4 mb-3" id="select-wrapper-${selectedId}">
-                                <label for="select-${selectedId}">${selectedText}</label>
-                                <select name="attribute_value_id[]" id="select-${selectedId}" class="form-select" style="width: 100%;">
-                                    ${optionsHtml}
-                                </select>
-                            </div>
-                        `;
+                         <div class="col-lg-4 mb-3" id="select-wrapper-${selectedId}">
+                            <label for="select-${selectedId}">${selectedText}</label>
+                            <select name="attribute_value_id[]" id="select-${selectedId}" class="form-select" style="width: 100%;">
+                                ${optionsHtml}
+                            </select>
+                        </div>
+                    `;
 
                         $('#additional-selects').append(newSelectHtml);
                     }
                 })
-            })
-
-            $('#mySelect').select2({
-                placeholder: 'Chọn một tùy chọn',
-                allowClear: true
             });
+
 
             $('#mySelect').on('select2:unselect', function(e) {
                 const unselectedId = e.params.data.id;
