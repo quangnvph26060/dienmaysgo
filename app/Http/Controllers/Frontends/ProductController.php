@@ -18,7 +18,7 @@ class ProductController extends Controller
 
     public function list($slug = null)
     {
-        Cache::flush();
+        // Cache::flush();
         if (request()->ajax()) {
             return $this->filterProduct($slug);
         }
