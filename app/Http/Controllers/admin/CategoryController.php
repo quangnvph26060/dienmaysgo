@@ -38,7 +38,10 @@ class CategoryController extends Controller
                 ->make(true);
         }
         $page = 'Danh mục';
-        return view('backend.category.index', compact('title', 'page'));
+
+        $parents = SgoCategory::query()->select('name', 'location', 'id')->whereNull('category_parent_id')->orderBy('location', 'asc')->get()->toArray();
+
+        return view('backend.category.index', compact('title', 'page', 'parents'));
     }
 
     public function getCategories()
