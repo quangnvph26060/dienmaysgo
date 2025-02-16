@@ -19,7 +19,8 @@ class SgoCategory extends Model
         'category_parent_id',
         'title_seo',
         'description_seo',
-        'keyword_seo'
+        'keyword_seo',
+        'location'
     ];
 
     public $timestamps = true;

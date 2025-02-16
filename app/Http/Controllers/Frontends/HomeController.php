@@ -36,10 +36,10 @@ class HomeController extends Controller
         //         $product->save();
         //     }
         // }
-        
+
         // Cache danh mục cha
         $categories = Cache::remember('categories', now()->addMinutes(30), function () {
-            return SgoCategory::whereNull('category_parent_id')->get();
+            return SgoCategory::whereNull('category_parent_id')->orderBy('location', 'asc')->get();
         });
 
         // Cache dữ liệu của trang chủ (danh mục cha, con và sản phẩm)
