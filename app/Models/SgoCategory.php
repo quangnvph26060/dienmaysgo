@@ -55,13 +55,4 @@ class SgoCategory extends Model
         }, collect());
     }
 
-    public static function boot()
-    {
-        parent::boot();
-
-        static::saved(function () {
-            Cache::forget('home_data');
-            Cache::forget('categories');
-        });
-    }
 }

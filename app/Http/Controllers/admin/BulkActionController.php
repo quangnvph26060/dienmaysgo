@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class BulkActionController extends Controller
 {
@@ -43,6 +44,9 @@ class BulkActionController extends Controller
         foreach ($order as $index => $id) {
             $model::where('id', $id)->update(['location' => $index + 1]);
         }
+
+        Cache::forget('home_data');
+        Cache::forget('categories');
 
         return response()->json(['status' => 'success']);
     }
