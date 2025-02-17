@@ -139,7 +139,7 @@
                 console.log(13);
             }
 
-            dataTables(api, columns, 'configFilter', false, false, Z)
+            dataTables(api, columns, 'configFilter', false, false)
 
             handleDestroy()
 

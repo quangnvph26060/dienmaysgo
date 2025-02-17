@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
@@ -75,11 +76,16 @@ class ProductController extends Controller
 
     public function getCategories()
     {
-        $categories = DB::table('sgo_category')->get();
+        // Kiểm tra cache trước
+        $categories = Cache::remember('sorted_categories', now()->addMinutes(30), function () {
+            // Lấy tất cả các danh mục từ cơ sở dữ liệu
+            $categories = DB::table('sgo_category')->get();
 
-        $sortedCategories = $this->sortCategories($categories);
+            // Sắp xếp danh mục
+            return $this->sortCategories($categories);
+        });
 
-        return response()->json($sortedCategories);
+        return response()->json($categories);
     }
 
     public function getAttributes()
@@ -114,6 +120,31 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
+        // $dbImages = SgoProduct::pluck('image')->toArray(); // Giả sử cột ảnh là 'image'
+
+        // // Bước 2: Lấy danh sách ảnh từ thư mục
+        // $directory = public_path('storage/products');
+        // $folderImages = [];
+
+        // if (File::exists($directory)) {
+        //     $files = File::files($directory);
+        //     foreach ($files as $file) {
+        //         if (in_array($file->getExtension(), ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+        //             $folderImages[] = 'products/' . $file->getFilename(); // Thêm prefix để so sánh
+        //         }
+        //     }
+        // }
+
+        // // Bước 3: So sánh và xóa ảnh không có trong DB
+        // foreach ($folderImages as $image) {
+        //     if (!in_array($image, $dbImages)) {
+        //         // Bước 4: Xóa ảnh khỏi thư mục
+        //         File::delete($directory . '/' . basename($image)); // Chỉ lấy tên file để xóa
+        //     }
+        // }
+
+        // return 'Cleanup completed!';
+
         $page = 'Sản phẩm';
         $title = 'Danh sách sản phẩm';
         if ($request->ajax()) {
