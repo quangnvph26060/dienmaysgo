@@ -29,7 +29,7 @@ class CategoryController extends Controller
                     return $row->parent_name ? $row->parent_name : '--------';
                 })
                 ->addColumn('product_count', function ($row) { // Thêm số lượng sản phẩm
-                    return "<a href='" . route('admin.product.index', ['params'=> $row->id]) . "'>$row->product_count</a>";
+                    return "<a href='" . route('admin.product.index', ['params' => $row->id]) . "'>$row->product_count</a>";
                 })
                 ->addColumn('checkbox', function ($row) {
                     return '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />';
@@ -48,17 +48,20 @@ class CategoryController extends Controller
     {
         $categories = DB::table('sgo_category as c')
             ->leftJoin('sgo_category as p', 'c.category_parent_id', '=', 'p.id')
-            ->leftJoin('sgo_products', 'c.id', '=', 'sgo_products.category_id') // Join bảng sản phẩm
+            ->leftJoin('sgo_products', 'c.id', '=', 'sgo_products.category_id')
             ->select(
-                'c.*',
+                'c.id',
+                'c.name',
+                'c.category_parent_id',  // Thêm trường category_parent_id vào SELECT
                 'p.name as parent_name',
-                DB::raw('COUNT(sgo_products.id) as product_count') // Đếm số sản phẩm
+                DB::raw('COUNT(sgo_products.id) as product_count')
             )
-            ->groupBy('c.id', 'p.name') // Nhóm theo ID danh mục
+            ->groupBy('c.id', 'c.name', 'c.category_parent_id', 'p.name')  // Thêm vào GROUP BY
             ->get();
 
         return $this->sortCategories($categories);
     }
+
 
 
 
