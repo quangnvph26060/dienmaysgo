@@ -145,7 +145,8 @@ function logInfo($message)
     Log::info($message);
 }
 
-function capitalizeWords($string) {
+function capitalizeWords($string)
+{
     return mb_convert_case($string, MB_CASE_TITLE, "UTF-8");
 }
 
@@ -333,10 +334,12 @@ if (!function_exists('formatName')) {
 if (!function_exists('convertToSentenceCase')) {
     function convertToSentenceCase($string)
     {
-        $string = mb_strtolower(trim(preg_replace('/\s+/', ' ', $string))); // Chuyển thành chữ thường và loại bỏ khoảng trắng thừa
-        return ucfirst($string); // Viết hoa chữ cái đầu tiên
+        $string = trim(preg_replace('/\s+/', ' ', $string)); // Loại bỏ khoảng trắng thừa
+        $string = mb_strtolower($string, 'UTF-8'); // Chuyển toàn bộ chuỗi về chữ thường
+        return mb_strtoupper(mb_substr($string, 0, 1, 'UTF-8'), 'UTF-8') . mb_substr($string, 1, null, 'UTF-8'); // Viết hoa chữ cái đầu tiên
     }
 }
+
 
 if (!function_exists('activeMenu')) {
     function activeMenu($url)

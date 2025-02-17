@@ -29,7 +29,7 @@ class NewsController extends Controller
                     return "<a href=" . route('admin.news.update', $row->id) . "><strong class='text-primary'>$row->title</strong></a>";
                 })
                 ->addColumn('slug', function ($row) {
-                    return "<a target='_bank' href=" . route('news.list', $row->slug) . ">" . route('news.list', $row->slug) . "</a>";
+                    return "<a target='_blank' href=" . route('news.list', $row->slug) . ">" . route('news.list', $row->slug) . "</a>";
                 })
                 ->addColumn('checkbox', function ($row) {
                     return '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />';

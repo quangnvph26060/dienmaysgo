@@ -28,14 +28,13 @@ class CategoryController extends Controller
                 ->addColumn('parent_name', function ($row) {
                     return $row->parent_name ? $row->parent_name : '--------';
                 })
-                ->addColumn('description', function ($row) {
-                    // Trả về nội dung HTML từ cột content
-                    return $row->description;
+                ->addColumn('product_count', function ($row) { // Thêm số lượng sản phẩm
+                    return "<a href='" . route('admin.product.index', ['params'=> $row->id]) . "'>$row->product_count</a>";
                 })
                 ->addColumn('checkbox', function ($row) {
                     return '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />';
                 })
-                ->rawColumns(['description', 'checkbox', 'name'])
+                ->rawColumns(['checkbox', 'name', 'product_count'])
                 ->make(true);
         }
         $page = 'Danh mục';
@@ -49,11 +48,18 @@ class CategoryController extends Controller
     {
         $categories = DB::table('sgo_category as c')
             ->leftJoin('sgo_category as p', 'c.category_parent_id', '=', 'p.id')
-            ->select('c.*', 'p.name as parent_name') // Lấy luôn tên danh mục cha
+            ->leftJoin('sgo_products', 'c.id', '=', 'sgo_products.category_id') // Join bảng sản phẩm
+            ->select(
+                'c.*',
+                'p.name as parent_name',
+                DB::raw('COUNT(sgo_products.id) as product_count') // Đếm số sản phẩm
+            )
+            ->groupBy('c.id', 'p.name') // Nhóm theo ID danh mục
             ->get();
 
         return $this->sortCategories($categories);
     }
+
 
 
     private function sortCategories($categories, $parentId = null, $level = 0)
@@ -89,7 +95,7 @@ class CategoryController extends Controller
         $page = 'Danh mục';
         $title = 'Sửa danh mục';
         $category = SgoCategory::find($id);
-        $parentCategories = SgoCategory::query()->whereNull('category_parent_id')->with('childrens')->get();
+        $parentCategories = collect($this->getCategories());
         return view('backend.category.create', compact('category', 'parentCategories', 'title', 'page'));
     }
 

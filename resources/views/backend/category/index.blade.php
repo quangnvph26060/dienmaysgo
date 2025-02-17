@@ -21,7 +21,7 @@
                             <th><input type="checkbox" id="selectAll" /></th>
                             <th>Tên danh mục</th>
                             <th>Danh mục cha</th>
-                            <th>Mô tả</th>
+                            <th>Số lượng sản phẩm</th>
                         </tr>
                     </thead>
                 </table>
@@ -135,13 +135,8 @@
                     title: 'Danh mục cha'
                 },
                 {
-                    data: 'description',
-                    name: 'description',
-                    render: function(data, type, row) {
-                        return data;
-                    },
-                    orderable: false,
-                    searchable: false
+                    data: 'product_count',
+                    name: 'product_count',
                 },
             ];
 
