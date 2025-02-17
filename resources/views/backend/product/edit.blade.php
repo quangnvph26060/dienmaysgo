@@ -229,12 +229,7 @@
 
                                     </div>
 
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <label for="" class="form-label">Album ảnh</label>
-                                            <div class="input-images pb-3"></div>
-                                        </div>
-                                    </div>
+
 
                                     <div class="col-lg-12">
                                         <div class="form-group">
@@ -405,6 +400,18 @@
                     </div>
                 </div>
 
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Album ảnh</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="input-images pb-3"></div>
+                        </div>
+                    </div>
+                </div>
+
 
 
                 <div class="">
@@ -540,6 +547,8 @@
                 maxFiles: 15,
             });
 
+            $(".upload-text").find("span").remove();
+
             CKEDITOR.replace('description', {
                 filebrowserImageUploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
                 filebrowserUploadMethod: 'form',
@@ -618,6 +627,11 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/css/image-uploader.min.css') }}">
 
     <style>
+        .image-uploader .uploaded .uploaded-image {
+            width: calc(49.666667% - 1rem);
+            padding-bottom: calc(49.666667% - 1rem);
+        }
+
         .tagify {
             height: auto !important;
         }
