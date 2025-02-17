@@ -113,7 +113,6 @@ class ProductController extends Controller
             return [];
         });
 
-
         $categoryIds = $category ? collect([$category->id])->merge($category->allChildrenIds()) : [];
 
         // Query sản phẩm

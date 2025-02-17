@@ -88,7 +88,7 @@
                                         <b></b><span class="section-title-main">{{ $catalogue['parent']->name }}</span>
                                         <span class="hdevvn-show-cats">
                                             @if ($catalogue['childrens']->isNotEmpty())
-                                                @foreach ($catalogue['childrens']->take(5) as $child)
+                                                @foreach ($catalogue['childrens']->take(4) as $child)
                                                     <li class="hdevvn_cats">
                                                         <a
                                                             href="{{ route('products.detail', $child->slug) }}">{{ $child->name }}</a>
@@ -156,11 +156,6 @@
             /* Bóng ở bên trái */
         }
 
-        /* .home-nav {
-                                                                                                                        display: flex;
-                                                                                                                        margin: 0;
-                                                                                                                    } */
-
         .menu {
 
             padding: 10px 0 10px 10px;
@@ -191,6 +186,11 @@
 
         .submenu-item ul li {
             margin-bottom: 0;
+        }
+
+        .submenu-item ul{
+            list-style-type: disc; /* Kiểu dấu chấm */
+            color: rgba(0, 0, 0, 0.5); /* Màu sắc nhạt (điều chỉnh giá trị alpha để làm nhạt) */
         }
 
         .menu .menu-item a {

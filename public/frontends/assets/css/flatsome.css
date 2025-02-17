@@ -4957,6 +4957,21 @@ button.flickity-prev-next-button[disabled] {
     }
 }
 
+@media (max-width: 360px) {
+    #buy_now {
+        padding-left: 14px !important;
+        padding-right: 14px !important;
+    }
+
+    .address-group div:first-child {
+        width: 30%;
+    }
+
+    .hotline-group div:first-child{
+        width: 20%;
+    }
+}
+
 @media (max-width: 549px) {
     .sm\:stack-row {
         flex-direction: row;

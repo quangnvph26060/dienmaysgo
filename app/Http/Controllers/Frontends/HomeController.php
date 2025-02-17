@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontends;
 
+use App\Models\ProductAttributeValue;
 use App\Models\SgoProduct;
 use App\Models\SgoCategory;
 use App\Models\Slider;
@@ -9,14 +10,71 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\HistorySearch;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
 
 class HomeController extends Controller
 {
+
+    // private function isImageValid($path)
+    // {
+    //     return @getimagesize($path) !== false; // Sử dụng @ để ngăn lỗi hiển thị
+    // }
     public function home()
     {
+        // Cache::flush();
+        // $directory = public_path('storage/products');
+        // $corruptedImages = []; // Mảng để lưu danh sách ảnh bị hỏng
 
-        // $categories = SgoCategory::all();
-        // $products = SgoProduct::all();
+        // // Bước 1: Lấy danh sách ảnh bị hỏng
+        // if (File::exists($directory)) {
+        //     $files = File::files($directory);
+        //     foreach ($files as $file) {
+        //         if (in_array($file->getExtension(), ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+        //             if (!$this->isImageValid($file->getRealPath())) {
+        //                 logInfo($file->getFilename());
+        //                 $corruptedImages[] = $file->getFilename();
+        //             }
+        //         }
+        //     }
+        // }
+
+        // // Bước 2: Xóa sản phẩm có ảnh bị lỗi
+        // foreach ($corruptedImages as $image) {
+        //     // Lấy tên sản phẩm tương ứng từ tên file ảnh
+        //     $product = SgoProduct::where('image', 'products/' . $image)->first();
+
+        //     if ($product) {
+        //         // Xóa sản phẩm
+        //         $product->delete();
+        //         deleteImage('products/' . $image);
+        //     }
+        // }
+
+        // dd($corruptedImages);
+
+        // $productsWithoutAttributes = SgoProduct::whereNotIn('id', function ($query) {
+        //     $query->select('sgo_product_id')->from('product_attribute_values');
+        // })->get();
+
+        // $defaultAttributes = [
+        //     ['attribute_id' => 26, 'attribute_value_id' => 44], // Nguồn điện 220V
+        //     ['attribute_id' => 23, 'attribute_value_id' => 45], // Bảo hành 6 tháng
+        //     ['attribute_id' => 21, 'attribute_value_id' => 28], // Xuất xứ Trung Quốc
+        // ];
+
+        // // Duyệt qua danh sách sản phẩm chưa có thuộc tính và thêm thuộc tính mặc định
+        // foreach ($productsWithoutAttributes as $product) {
+        //     foreach ($defaultAttributes as $default) {
+        //         ProductAttributeValue::create([
+        //             'sgo_product_id' => $product->id,
+        //             'attribute_id' => $default['attribute_id'],
+        //             'attribute_value_id' => $default['attribute_value_id']
+        //         ]);
+        //     }
+        // }
+
+        // $categories = SgoCategory::all()->keyBy('id'); // Chuyển đổi thành mảng với key là id
+        // $products = SgoProduct::whereNull('category_id')->get(); // Lấy ra sản phẩm chưa có danh mục
 
         // foreach ($products as $product) {
         //     $bestMatch = null;
@@ -36,6 +94,8 @@ class HomeController extends Controller
         //         $product->save();
         //     }
         // }
+
+        // return 'Danh mục đã được gán cho các sản phẩm.';
 
         // Cache danh mục cha
         $categories = Cache::remember('categories', now()->addMinutes(30), function () {
