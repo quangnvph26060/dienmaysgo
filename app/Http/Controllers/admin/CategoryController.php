@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\SgoCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Yajra\DataTables\DataTables;
@@ -107,6 +108,8 @@ class CategoryController extends Controller
             // Tạo danh mục mới
             SgoCategory::create($credentials);
 
+            Cache::forget('sorted_categories');
+
             // Trả về thông báo thành công
             return redirect()->route('admin.category.index')->with('success', 'Danh mục đã được thêm thành công');
         } catch (\Exception $e) {
@@ -133,6 +136,8 @@ class CategoryController extends Controller
             if ($request->hasFile('logo')) $credentials['logo'] = saveImage($request, 'logo', 'category_images');
 
             $category->update($credentials);
+
+            Cache::forget('sorted_categories');
 
             // Trả về thông báo thành công
             return redirect()->route('admin.category.index')->with('success', 'Danh mục đã được sửa thành công');

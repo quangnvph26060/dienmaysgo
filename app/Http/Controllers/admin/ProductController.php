@@ -147,45 +147,36 @@ class ProductController extends Controller
 
         $page = 'Sản phẩm';
         $title = 'Danh sách sản phẩm';
+
         if ($request->ajax()) {
-            return datatables()->of(SgoProduct::select(['id', 'name', 'price', 'quantity', 'import_price', 'category_id', 'view_count', 'discount_value', 'discount_type', 'image'])
-                ->when($request->catalogue, function ($query) use ($request) {
-                    // Kiểm tra xem có bộ lọc catalogue không và áp dụng điều kiện lọc
-                    return $query->where('category_id', $request->catalogue);
-                })
-                ->when($request->attributeId, function ($query) use ($request) {
-                    return $query->whereHas('attributes', function ($q) use ($request) {
-                        $q->where('attribute_id', $request->attributeId);
-                    });
-                })
-                ->when($request->attributeValueId, function ($query) use ($request) {
-                    return $query->whereHas('attributeValues', function ($q) use ($request) {
-                        $q->where('attribute_value_id', $request->attributeValueId);
-                    });
-                })
+            $query = SgoProduct::select([
+                'id',
+                'name',
+                'price',
+                'quantity',
+                'import_price',
+                'category_id',
+                'view_count',
+                'discount_value',
+                'discount_type',
+                'image'
+            ])
+                ->when($request->catalogue, fn($q) => $q->where('category_id', $request->catalogue))
+                ->when($request->attributeId, fn($q) => $q->whereHas('attributes', fn($q) => $q->where('attribute_id', $request->attributeId)))
+                ->when($request->attributeValueId, fn($q) => $q->whereHas('attributeValues', fn($q) => $q->where('attribute_value_id', $request->attributeValueId)))
                 ->with(['category', 'attributes', 'attributeValues'])
-                ->latest()
-                ->get())
-                ->addColumn('price', function ($row) {
-                    return number_format($row->price, 0, ',', '.');
-                })
-                ->addColumn('import_price', function ($row) {
-                    return number_format($row->import_price, 0, ',', '.');
-                })
-                ->addColumn('checkbox', function ($row) {
-                    return '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />';
-                })
-                ->addColumn('category_id', function ($row) {
-                    return $row->category->name ?? '';
-                })
-                // ->addColumn('name', function ($row) {
-                //     return "
-                //     <strong class='text-primary'>$row->name</strong>";
-                // })
-                ->rawColumns(['checkbox', 'price'])
+                ->latest();
+
+            return datatables()->eloquent($query) 
+                ->addColumn('price', fn($row) => number_format($row->price, 0, ',', '.'))
+                ->addColumn('import_price', fn($row) => number_format($row->import_price, 0, ',', '.'))
+                ->addColumn('checkbox', fn($row) => '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />')
+                ->addColumn('category_id', fn($row) => $row->category->name ?? '')
+                ->rawColumns(['checkbox'])
                 ->addIndexColumn()
                 ->make(true);
         }
+
         return view('backend.product.index', compact('page', 'title'));
     }
 
