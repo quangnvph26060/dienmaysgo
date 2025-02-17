@@ -261,9 +261,9 @@
         });
     </script>
     <script>
-        var $jq = jQuery.noConflict();
-        $jq(document).ready(function() {
-            $jq('#keyword_seo').selectize({
+
+        $(document).ready(function() {
+            $('#keyword_seo').selectize({
                 delimiter: ',',
                 persist: false,
                 create: function(input) {

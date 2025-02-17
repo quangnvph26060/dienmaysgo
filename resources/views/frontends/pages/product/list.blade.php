@@ -29,23 +29,31 @@
             <div class="col large-3 hide-for-medium">
                 <div id="shop-sidebar" class="sidebar-inner col-inner">
                     @if ($category)
-                        <span class="widget-title shop-sidebar">DANH MỤC SẢN PHẨM</span>
-
+                        <span class="widget-title shop-sidebar">Danh mục sản phẩm</span>
                         <div class="custom-menu">
                             <ul>
                                 <li>
-                                    <a href="javascript:void(0)">{{ mb_strtoupper($category->name, 'UTF-8') }}<span
-                                            class="custom-arrow">▶</span></a>
+                                    <a href="javascript:void(0)">{{ mb_strtoupper($category->name, 'UTF-8') }}
+                                        <span class="custom-arrow"><i class="fa fa-angle-right"></i></span>
+                                    </a>
                                     @if ($category->childrens->isNotEmpty())
                                         <ul class="custom-submenu">
-                                            @foreach ($category->childrens as $item)
-                                                <li><a href="{{ route('products.detail', $item->slug,) }}">{{ capitalizeWords($item->name) }}</a></li>
+                                            @foreach ($category->childrens as $index => $item)
+                                                <li class="submenu-item" data-index="{{ $index }}"
+                                                    style="{{ $index >= 5 ? 'display: none;' : '' }}">
+                                                    <a
+                                                        href="{{ route('products.detail', $item->slug) }}">{{ ucfirst($item->name) }}</a>
+                                                </li>
                                             @endforeach
+                                            @if ($category->childrens->count() > 5)
+                                                <li class="view-more"><a style="font-weight: 500" href="javascript:void(0)">Xem thêm</a></li>
+                                            @endif
                                         </ul>
                                     @endif
                                 </li>
                             </ul>
                         </div>
+
                     @endif
 
 
@@ -193,6 +201,31 @@
 
 @push('scripts')
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.querySelectorAll(".custom-submenu").forEach(function(submenu) {
+                let hiddenItems = submenu.querySelectorAll(".submenu-item[data-index]");
+                let viewMore = submenu.querySelector(".view-more");
+
+                if (viewMore) {
+                    let index = 5; // Ban đầu hiển thị 5 mục
+                    viewMore.addEventListener("click", function() {
+                        let nextItems = Array.from(hiddenItems).slice(index, index +
+                        5); // Hiển thị 5 mục tiếp theo
+                        nextItems.forEach(item => item.style.display = "block");
+                        index += 5;
+
+                        // Cập nhật chiều cao submenu dựa vào số lượng mục con
+                        submenu.style.maxHeight = submenu.scrollHeight + "px";
+
+                        if (index >= hiddenItems.length) {
+                            viewMore.style.display = "none"; // Ẩn "Xem thêm" nếu hết danh mục
+                        }
+                    });
+                }
+            });
+        });
+
+
         document.querySelectorAll('input[type="checkbox"][name="price_range"]').forEach(function(checkbox) {
             checkbox.addEventListener('change', function() {
                 // Nếu checkbox này được chọn, bỏ chọn tất cả các checkbox khác
@@ -367,13 +400,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 15px;
+            padding: 10px 15px;
             text-decoration: none;
             color: #333;
             font-size: .9em;
             transition: background 0.3s;
             cursor: pointer;
-            border-bottom: 1px solid #ddd;
+            /* border-bottom: 1px solid #ddd; */
             font-weight: bold;
         }
 
@@ -393,11 +426,11 @@
         }
 
         .custom-submenu li a {
-            padding: 5px 15px 5px 25px;
+            padding: 10px 15px 10px 25px;
             font-size: .9em;
             color: #555;
             display: block;
-            border-bottom: 1px solid #ddd;
+            /* border-bottom: 1px solid #ddd; */
         }
 
         .custom-arrow {
@@ -410,7 +443,7 @@
 
         /* Hiệu ứng khi submenu mở */
         .custom-open .custom-submenu {
-            max-height: 200px;
+            max-height: none;
             transition: max-height 0.4s ease-in;
         }
 

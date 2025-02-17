@@ -10,28 +10,28 @@
                     <h3>LIÊN HỆ VỚI CHÚNG TÔI</h3>
                     <ul class="info-list">
                         <li>
-                            <i class="fa fa-angle-right"></i>
+                            <i class="fa fa-angle-right" style="font-size: .9em"></i>
                             <span style="font-size: 90%"><strong>{{ $settings->company_name ?? '' }}</strong></span>
                         </li>
                         <li>
-                            <i class="fa fa-angle-right"></i>
+                            <i class="fa fa-angle-right" style="font-size: .9em"></i>
                             <span style="font-size: 90%">Địa chỉ: {{ $settings->address ?? '' }}</span>
                         </li>
                         <li>
-                            <i class="fa fa-angle-right"></i>
+                            <i class="fa fa-angle-right" style="font-size: .9em"></i>
                             <span style="font-size: 90%">Kho hàng: {{ $settings->warehouse ?? '' }}</span>
                         </li>
                         <li>
-                            <i class="fa fa-angle-right"></i>
+                            <i class="fa fa-angle-right" style="font-size: .9em"></i>
                             <span style="font-size: 90%">Điện thoại: {{ $settings->phone ?? '' }}
                             </span>
                         </li>
                         <li>
-                            <i class="fa fa-angle-right"></i>
+                            <i class="fa fa-angle-right" style="font-size: .9em"></i>
                             <span style="font-size: 90%">MST: {{ $settings->tax_code ?? '' }}</span>
                         </li>
                         <li>
-                            <i class="fa fa-angle-right"></i>
+                            <i class="fa fa-angle-right" style="font-size: .9em"></i>
                             <span style="font-size: 90%">Email: {{ $settings->email ?? '' }}</span>
                         </li>
                     </ul>

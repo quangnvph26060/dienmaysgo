@@ -20,7 +20,7 @@
                     <div class="large-12">
                         <div class="product-main">
                             <div class="row">
-                                <div class="large-6 col">
+                                <div class="large-5 col">
                                     <div class="product-images relative mb-half has-hover woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images"
                                         data-columns="4">
                                         <!-- Badge container -->
@@ -73,11 +73,10 @@
 
                                 <div class="product-info summary entry-summary col col-fit product-summary form-flat">
                                     <h1 class="product-title product_title entry-title"
-                                        style="margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+                                        style="margin-bottom: 15px; ">
                                         {{ $product->name }}
                                         @if (auth()->guard('admin')->check())
-                                            <span class="edit-icon"> <a target="_bank"
-                                                    href="{{ route('admin.product.detail', $product->id) }}">✏️ </a></span>
+                                            <span class="edit-icon"> <a target="_blank" href="{{ route('admin.product.detail', $product->id) }}">✏️</a></span>
                                         @endif
                                     </h1>
 

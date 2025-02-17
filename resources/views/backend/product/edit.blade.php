@@ -70,7 +70,7 @@
                                             <label for="name" class="form-label">Tên sản phẩm</label>
                                             <input type="text" class="form-control" name="name" id="name"
                                                 placeholder="Nhập tên sản phẩm" value="{{ old('name', $product->name) }}">
-                                            <a target="_bank"
+                                            <a target="_blank"
                                                 href="{{ env('APP_URL') }}{{ $product->category ? '/' . $product->category->slug : '' }}/{{ $product->slug }}"
                                                 id="slug-link">{{ env('APP_URL') }}{{ $product->category ? '/' . $product->category->slug : '' }}/{{ $product->slug }}</a>
                                         </div>

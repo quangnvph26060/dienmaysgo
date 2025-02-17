@@ -95,6 +95,11 @@
 
     const dataTables = (api, columns, model, filterDate = false, productFilter = false, sortable = false, column =
         'id') => {
+
+
+        let urlParams = new URLSearchParams(window.location.search);
+        let params = urlParams.get('params') || null; // Lấy giá trị của 'params'
+
         const table = $('#myTable').DataTable({ // Định nghĩa biến table
             processing: true,
             serverSide: true,
@@ -103,7 +108,7 @@
                 data: function(d) {
                     d.startDate = $('#startDate').val() || null;
                     d.endDate = $('#endDate').val() || null;
-                    d.catalogue = $('#catalogueFilter').val() || null;
+                    d.catalogue = $('#catalogueFilter').val() || params;
                     d.attributeId = $('#attributeFilter').val() || null;
                     d.attributeValueId = $('#attributeValueFilter').val() || null;
                 }
@@ -205,6 +210,7 @@
                 }
             });
         }
+
 
         $('label[for="dt-length-0"]').remove();
 
@@ -316,12 +322,13 @@
                         data.forEach(item => {
                             let prefix = '-'.repeat(item.level);
                             let option =
-                                `<option value="${item.id}">${prefix} ${item.name}</option>`;
+                                `<option ${item.id == params ? 'selected' : ''} value="${item.id}">${prefix} ${item.name}</option>`;
                             $select.append(option); // Thêm từng option vào select
                         });
 
                     }
                 });
+
 
                 $.ajax({
                     url: "{{ route('admin.product.attributes.index') }}",
@@ -358,6 +365,25 @@
                         }
                     });
                 });
+
+                function removeQueryParam(param) {
+                    let url = new URL(window.location.href);
+                    url.searchParams.delete(param);
+
+                    // Cập nhật URL mà không load lại trang
+                    window.history.replaceState({}, document.title, url.pathname + url.search);
+
+                    // Cập nhật lại giá trị params
+                    let urlParams = new URLSearchParams(window.location.search);
+                    params = urlParams.get('params') || null;
+
+                }
+
+
+                $('#catalogueFilter').on('change', function() {
+                    removeQueryParam('params');
+                });
+
 
                 // Khi chọn catalogue, filter bảng
                 $('#catalogueFilter,#attributeFilter, #attributeValueFilter').on('change', function() {
