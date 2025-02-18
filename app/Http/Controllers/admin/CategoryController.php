@@ -29,7 +29,7 @@ class CategoryController extends Controller
                     return $row->parent_name ? $row->parent_name : '--------';
                 })
                 ->addColumn('product_count', function ($row) { // Thêm số lượng sản phẩm
-                    return "<a onclick=\"localStorage.setItem('params', '" . $row->id . "')\" href='" . route('admin.product.index') . "'>$row->product_count</a>";
+                    return "<a onclick=\"localStorage.setItem('params', '" . $row->id . "')\" href='" . route('admin.product.index'HomeHome) . "'>$row->product_count</a>";
                 })
                 ->addColumn('checkbox', function ($row) {
                     return '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />';

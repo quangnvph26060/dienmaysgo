@@ -11,7 +11,7 @@
     <div class="shop-page-title category-page-title page-title" style="display: none">
         <div class="page-title-inner flex-row medium-flex-wrap container">
             <div class="flex-col flex-grow medium-text-center">
-                <h1 class="shop-page-title is-xlarge">{{ $category->name }}</h1>
+                <h1 class="shop-page-title is-xlarge">{{ $category->name ?? request('s') }}</h1>
                 <div class="category-filtering category-filter-row show-for-medium">
                     <a href="#" data-open="#shop-sidebar" data-visible-after="true" data-pos="left"
                         class="filter-button uppercase plain">
@@ -25,8 +25,6 @@
         </div>
     </div>
 
-    <div id="popup"></div>
-
     <form id="filterForm">
         <div class="row category-page-row">
             <div class="col large-3 hide-for-medium">
@@ -37,7 +35,7 @@
                             <ul>
                                 <li>
                                     <a href="javascript:void(0)">{{ mb_strtoupper($category->name, 'UTF-8') }}
-                                        <span class="custom-arrow"><i class="fa fa-angle-right"></i></span>
+                                        @if ($category->childrens->isNotEmpty()) <span class="custom-arrow"><i class="fa fa-angle-right"></i></span>@endif
                                     </a>
                                     @if ($category->childrens->isNotEmpty())
                                         <ul class="custom-submenu">
@@ -368,7 +366,7 @@
     <style>
         .custom-menu {
             width: 250px;
-            border: 1px solid #ddd;
+            /* border: 1px solid #ddd; */
             border-radius: 5px;
             overflow: hidden;
             margin-bottom: 25px;
@@ -390,24 +388,24 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 15px;
+            padding: 10px 3px 3px 0px;
             text-decoration: none;
             color: #333;
-            font-size: .9em;
+            font-size: 1.1em;
             transition: background 0.3s;
             cursor: pointer;
             /* border-bottom: 1px solid #ddd; */
             font-weight: bold;
         }
 
-        .custom-menu li a:hover {
+        /* .custom-menu li a:hover {
             background: #f4f4f4;
-        }
+        } */
 
         /* Khi menu cha được mở, thay đổi nền */
-        .custom-menu li.custom-open>a {
+        /* .custom-menu li.custom-open>a {
             background: rgba(0, 0, 0, 0.1);
-        }
+        } */
 
         .custom-submenu {
             max-height: 0;
@@ -416,7 +414,7 @@
         }
 
         .custom-submenu li a {
-            padding: 10px 15px 10px 25px;
+            padding: 10px 15px 10px 8px;
             font-size: .9em;
             color: #555;
             display: block;
