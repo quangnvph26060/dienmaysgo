@@ -11,7 +11,7 @@
     <div class="shop-page-title category-page-title page-title" style="display: none">
         <div class="page-title-inner flex-row medium-flex-wrap container">
             <div class="flex-col flex-grow medium-text-center">
-                <h1 class="shop-page-title is-xlarge">Máy phát điện</h1>
+                <h1 class="shop-page-title is-xlarge">{{ $category->name }}</h1>
                 <div class="category-filtering category-filter-row show-for-medium">
                     <a href="#" data-open="#shop-sidebar" data-visible-after="true" data-pos="left"
                         class="filter-button uppercase plain">
@@ -24,6 +24,9 @@
             <div class="flex-col medium-text-center"></div>
         </div>
     </div>
+
+    <div id="popup"></div>
+
     <form id="filterForm">
         <div class="row category-page-row">
             <div class="col large-3 hide-for-medium">
@@ -46,7 +49,8 @@
                                                 </li>
                                             @endforeach
                                             @if ($category->childrens->count() > 5)
-                                                <li class="view-more"><a style="font-weight: 500" href="javascript:void(0)">Xem thêm</a></li>
+                                                <li class="view-more"><a style="font-weight: 500"
+                                                        href="javascript:void(0)">Xem thêm</a></li>
                                             @endif
                                         </ul>
                                     @endif
@@ -95,38 +99,15 @@
                         @endforeach
                     @endif
 
-                    {{-- @if (!empty($priceOptions))
-                        <span class="widget-title shop-sidebar">{{ $priceFilter->title }}</span>
-                        <select name="price_range" id="price_range" onchange="submitFormWithDelay()">
-                            <option value="">Tất cả</option>
-                            @foreach ($priceOptions as $priceRange)
-                                <option value="{{ $priceRange }}"
-                                    {{ request('price_range') == $priceRange ? 'selected' : '' }}>
-                                    {{ $priceRange }} VNĐ
-                                </option>
-                            @endforeach
-                        </select>
-                    @endif --}}
-
-
                     @if (!empty($priceOptions))
                         <aside class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav">
                             <span class="widget-title shop-sidebar">{{ $priceFilter->title }}</span>
                             <div class="is-divider small"></div>
-                            <div>
-                                <label class="d-flex">
-                                    <input type="checkbox" name="price_range" value=""
-                                        onchange="submitFormWithDelay()"
-                                        {{ request('price_range') == '' ? 'checked' : '' }}>
-                                    Tất cả
-                                </label>
-                            </div>
                             @foreach ($priceOptions as $priceRange)
                                 <div>
                                     <label class="d-flex">
                                         <input type="checkbox" name="price_range" value="{{ $priceRange }}"
-                                            onchange="submitFormWithDelay()"
-                                            {{ request('price_range') == $priceRange ? 'checked' : '' }}>
+                                            onchange="submitFormWithDelay()">
                                         {{ $priceRange }} VNĐ
                                     </label>
                                 </div>
@@ -210,7 +191,7 @@
                     let index = 5; // Ban đầu hiển thị 5 mục
                     viewMore.addEventListener("click", function() {
                         let nextItems = Array.from(hiddenItems).slice(index, index +
-                        5); // Hiển thị 5 mục tiếp theo
+                            5); // Hiển thị 5 mục tiếp theo
                         nextItems.forEach(item => item.style.display = "block");
                         index += 5;
 
@@ -316,14 +297,23 @@
             clearTimeout(timeout);
 
             timeout = setTimeout(() => {
-                const form = document.getElementById('filterForm');
-                const formData = new FormData(form);
+                // const form = document.getElementById('filterForm');
+                // const formData = new FormData(form);
+                // const params = new URLSearchParams();
                 const params = new URLSearchParams();
+                const formInputs = document.querySelectorAll('#filterForm input, #filterForm select');
+                const popupInputs = document.querySelectorAll('#shop-sidebar input, #shop-sidebar select');
+
+                const allInputs = [...formInputs, ...popupInputs];
 
                 // Chuyển FormData thành query string
-                for (const [key, value] of formData.entries()) {
-                    params.append(key, value);
-                }
+                allInputs.forEach(input => {
+                    if ((input.type === 'checkbox' || input.type === 'radio') && !input.checked) return;
+                    params.append(input.name, input.value);
+                });
+
+                console.log(params.toString());
+
 
                 // Lấy giá trị của 's' từ URL hiện tại
                 const urlParams = new URLSearchParams(window.location.search);

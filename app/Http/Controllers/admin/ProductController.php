@@ -66,6 +66,8 @@ class ProductController extends Controller
             }
 
             SgoProduct::find($credentials['id'])->update($credentials);
+            Cache::flush();
+
             return response()->json(['success' => true, 'message' => 'Cập nhật thành công.']);
         } catch (Exception $e) {
             Log::info($e->getMessage());
@@ -167,7 +169,7 @@ class ProductController extends Controller
                 ->with(['category', 'attributes', 'attributeValues'])
                 ->latest();
 
-            return datatables()->eloquent($query) 
+            return datatables()->eloquent($query)
                 ->addColumn('price', fn($row) => number_format($row->price, 0, ',', '.'))
                 ->addColumn('import_price', fn($row) => number_format($row->import_price, 0, ',', '.'))
                 ->addColumn('checkbox', fn($row) => '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />')
