@@ -178,7 +178,7 @@ class HomeController extends Controller
     private function getAllProducts($category)
     {
         // Lấy sản phẩm của danh mục hiện tại, giới hạn 15 sản phẩm
-        $products = $category->products()->with('category')->limit(15)->get();
+        $products = $category->products()->with('category')->limit(10)->get();
 
         // Lấy sản phẩm của tất cả các danh mục con
         foreach ($category->childrens as $child) {
@@ -186,8 +186,8 @@ class HomeController extends Controller
             $products = $products->merge($childProducts);
 
             // Nếu đã đủ 15 sản phẩm thì dừng
-            if ($products->count() >= 15) {
-                return $products->take(15);
+            if ($products->count() >= 10) {
+                return $products->take(10);
             }
         }
 

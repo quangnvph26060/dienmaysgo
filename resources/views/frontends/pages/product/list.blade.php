@@ -34,9 +34,11 @@
                         <div class="custom-menu">
                             <ul>
                                 <li>
-                                    <a href="javascript:void(0)">{{ mb_strtoupper($category->name, 'UTF-8') }}
-                                        @if ($category->childrens->isNotEmpty()) <span class="custom-arrow"><i class="fa fa-angle-right"></i></span>@endif
-                                    </a>
+                                    {{-- <a href="javascript:void(0)">{{ mb_strtoupper($category->name, 'UTF-8') }}
+                                        @if ($category->childrens->isNotEmpty())
+                                            <span class="custom-arrow"><i class="fa fa-angle-right"></i></span>
+                                        @endif
+                                    </a> --}}
                                     @if ($category->childrens->isNotEmpty())
                                         <ul class="custom-submenu">
                                             @foreach ($category->childrens as $index => $item)
@@ -340,25 +342,26 @@
             }, 500);
         }
 
-        document.querySelectorAll(".custom-menu li > a").forEach((menu) => {
-            menu.addEventListener("click", function(event) {
-                let parent = this.parentElement;
-                let submenu = parent.querySelector(".custom-submenu");
+        /* document.querySelectorAll(".custom-menu li > a").forEach((menu) => {
+             menu.addEventListener("click", function(event) {
+                 let parent = this.parentElement;
+                 let submenu = parent.querySelector(".custom-submenu");
 
-                if (submenu) {
-                    event.preventDefault(); // Ngăn chặn chuyển trang
+                 if (submenu) {
+                     event.preventDefault(); // Ngăn chặn chuyển trang
 
-                    if (parent.classList.contains("custom-open")) {
-                        submenu.style.maxHeight = "0";
-                    } else {
-                        submenu.style.maxHeight =
-                            submenu.scrollHeight + "px";
-                    }
+                     if (parent.classList.contains("custom-open")) {
+                         submenu.style.maxHeight = "0";
+                     } else {
+                         submenu.style.maxHeight =
+                             submenu.scrollHeight + "px";
+                     }
 
-                    parent.classList.toggle("custom-open");
-                }
-            });
-        });
+                     parent.classList.toggle("custom-open");
+                 }
+             });
+         });
+         */
     </script>
 @endpush
 
@@ -369,8 +372,7 @@
             /* border: 1px solid #ddd; */
             border-radius: 5px;
             overflow: hidden;
-            margin-bottom: 25px;
-            margin-top: 15px;
+            margin-bottom: 15px;
         }
 
         .custom-menu ul {
@@ -399,22 +401,26 @@
         }
 
         /* .custom-menu li a:hover {
-            background: #f4f4f4;
-        } */
+                    background: #f4f4f4;
+                } */
 
         /* Khi menu cha được mở, thay đổi nền */
         /* .custom-menu li.custom-open>a {
-            background: rgba(0, 0, 0, 0.1);
-        } */
+                    background: rgba(0, 0, 0, 0.1);
+                } */
+
+        .custom-submenu .submenu-item:first-child a {
+            padding-top: 0 !important;
+        }
 
         .custom-submenu {
-            max-height: 0;
+            /* max-height: 0; */
             overflow: hidden;
             transition: max-height 0.4s ease-out;
         }
 
         .custom-submenu li a {
-            padding: 10px 15px 10px 8px;
+            padding: 10px 15px 5px 5px;
             font-size: .9em;
             color: #555;
             display: block;
