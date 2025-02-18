@@ -1,79 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Font Awesome Icon Picker Demo</title>
-        <link
-            href="https://cdnjs.cloudflare.com/ajax/libs/fontawesome-iconpicker/3.2.0/css/fontawesome-iconpicker.min.css"
-            rel="stylesheet"
-        />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-        />
-        <style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
 
-            /* .remove-btn {
-                background-color: red;
-                color: white;
-                border: none;
-                cursor: pointer;
-                padding: 5px 10px;
-                font-size: 16px;
-            } */
-        </style>
-    </head>
-    <body>
-        <a href="https://vietqr.net/?number=6100205592682&bank=970425&amount=120300&note=CASSO100002&accountName=CTY TNHH CASSO"
-        target="_blank"
-        class="btn btn-success">
-        Thanh toán qua VietQR
-     </a>
-
-        <div id="icon-container">
-            <div class="input-group">
-                <input
-                    type="text"
-                    class="form-control icon-picker"
-                    placeholder="Choose an icon"
-                />
-                <input type="text" placeholder="Nội dung" />
-                <button class="remove-btn">-</button>
-            </div>
-        </div>
-
-        <button id="add-btn">Thêm</button>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/fontawesome-iconpicker/3.2.0/js/fontawesome-iconpicker.min.js"></script>
-
-        <script>
-            $(document).ready(function () {
-                // Khởi tạo Icon Picker cho input đầu tiên
-                $(".icon-picker").iconpicker();
-
-                // Khi bấm "Thêm"
-                $("#add-btn").click(function () {
-                    let newRow = `
-                        <div class="input-group">
-                            <input type="text" class="form-control icon-picker" placeholder="Choose an icon" />
-                            <input type="text" placeholder="Nội dung" />
-                            <button class="remove-btn">-</button>
-                        </div>
-                    `;
-
-                    $("#icon-container").append(newRow);
-
-                    // Khởi tạo Icon Picker cho input mới
-                    $(".icon-picker").iconpicker();
-                });
-
-                // Khi bấm "-" để xóa
-                $(document).on("click", ".remove-btn", function () {
-                    $(this).closest(".input-group").remove();
-                });
-            });
-        </script>
-    </body>
+</body>
 </html>

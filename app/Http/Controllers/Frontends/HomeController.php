@@ -8,9 +8,12 @@ use App\Models\SgoCategory;
 use App\Models\Slider;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\HistorySearch;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+
 
 class HomeController extends Controller
 {
@@ -21,6 +24,39 @@ class HomeController extends Controller
     // }
     public function home()
     {
+
+        // $brands = Brand::pluck('id', 'name')->mapWithKeys(function ($id, $name) {
+        //     return [Str::lower($name) => $id]; // Chuyển thương hiệu về chữ thường
+        // })->toArray(); // Chuyển sang mảng
+
+        // // Danh sách các từ khóa thương hiệu (dạng chữ thường)
+        // $brandNames = array_keys($brands);
+
+        // SgoProduct::chunk(500, function ($products) use ($brands, $brandNames) {
+        //     foreach ($products as $product) {
+        //         $productName = Str::lower($product->name);
+
+        //         // Kiểm tra xem sản phẩm có chứa thương hiệu nào không
+        //         if (!Str::contains($productName, $brandNames)) {
+        //             continue; // Nếu không có thương hiệu nào, bỏ qua sản phẩm này
+        //         }
+
+        //         // Kiểm tra và cập nhật thương hiệu phù hợp
+        //         foreach ($brands as $brandName => $brandId) {
+        //             if (Str::contains($productName, $brandName)) {
+        //                 if ($product->brand_id !== $brandId) {
+        //                     $oldBrand = $product->brand_id ? "({$product->brand_id})" : '(null)';
+        //                     $product->update(['brand_id' => $brandId]);
+        //                     logInfo("Cập nhật: {$product->name} từ $oldBrand -> ($brandId)");
+        //                 }
+        //                 break; // Dừng sau khi tìm thấy thương hiệu phù hợp
+        //             }
+        //         }
+        //     }
+        // });
+
+        // logInfo("Hoàn thành cập nhật thương hiệu cho sản phẩm!");
+
         // Cache::flush();
         // $directory = public_path('storage/products');
         // $corruptedImages = []; // Mảng để lưu danh sách ảnh bị hỏng
