@@ -97,8 +97,10 @@
         'id') => {
 
 
-        let urlParams = new URLSearchParams(window.location.search);
-        let params = urlParams.get('params') || null; // Lấy giá trị của 'params'
+        let params = localStorage.getItem("params") || null; // Lấy giá trị của 'params'
+
+        console.log(params);
+
 
         const table = $('#myTable').DataTable({ // Định nghĩa biến table
             processing: true,
@@ -366,22 +368,23 @@
                     });
                 });
 
-                function removeQueryParam(param) {
-                    let url = new URL(window.location.href);
-                    url.searchParams.delete(param);
+                // function removeQueryParam(param) {
+                //     let url = new URL(window.location.href);
+                //     url.searchParams.delete(param);
 
-                    // Cập nhật URL mà không load lại trang
-                    window.history.replaceState({}, document.title, url.pathname + url.search);
+                //     // Cập nhật URL mà không load lại trang
+                //     window.history.replaceState({}, document.title, url.pathname + url.search);
 
-                    // Cập nhật lại giá trị params
-                    let urlParams = new URLSearchParams(window.location.search);
-                    params = urlParams.get('params') || null;
+                //     // Cập nhật lại giá trị params
+                //     let urlParams = new URLSearchParams(window.location.search);
+                //     params = urlParams.get('params') || null;
 
-                }
+                // }
 
 
                 $('#catalogueFilter').on('change', function() {
-                    removeQueryParam('params');
+                    localStorage.removeItem("params");
+                    params = null;
                 });
 
 
