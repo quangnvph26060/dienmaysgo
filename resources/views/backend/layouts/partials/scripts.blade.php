@@ -99,7 +99,9 @@
 
         let params = localStorage.getItem("params") || null; // Lấy giá trị của 'params'
 
-        console.log(params);
+        if (params && window.location.href !== "{{ env('APP_URL') }}/admin/product") {
+            localStorage.removeItem("params"); // Xóa params khỏi localStorage
+        }
 
 
         const table = $('#myTable').DataTable({ // Định nghĩa biến table

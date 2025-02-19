@@ -29,33 +29,32 @@
         <div class="row category-page-row">
             <div class="col large-3 hide-for-medium">
                 <div id="shop-sidebar" class="sidebar-inner col-inner">
-                    @if ($category)
+                    @if ($category && $category->childrens->isNotEmpty())
                         <span class="widget-title shop-sidebar">Danh mục sản phẩm</span>
                         <div class="custom-menu">
-                            <ul>
-                                <li>
-                                    {{-- <a href="javascript:void(0)">{{ mb_strtoupper($category->name, 'UTF-8') }}
+                            {{-- <ul>
+                                <li> --}}
+                            {{-- <a href="javascript:void(0)">{{ mb_strtoupper($category->name, 'UTF-8') }}
                                         @if ($category->childrens->isNotEmpty())
                                             <span class="custom-arrow"><i class="fa fa-angle-right"></i></span>
                                         @endif
                                     </a> --}}
-                                    @if ($category->childrens->isNotEmpty())
-                                        <ul class="custom-submenu">
-                                            @foreach ($category->childrens as $index => $item)
-                                                <li class="submenu-item" data-index="{{ $index }}"
-                                                    style="{{ $index >= 5 ? 'display: none;' : '' }}">
-                                                    <a
-                                                        href="{{ route('products.detail', $item->slug) }}">{{ ucfirst($item->name) }}</a>
-                                                </li>
-                                            @endforeach
-                                            @if ($category->childrens->count() > 5)
-                                                <li class="view-more"><a style="font-weight: 500"
-                                                        href="javascript:void(0)">Xem thêm</a></li>
-                                            @endif
-                                        </ul>
-                                    @endif
-                                </li>
+
+                            <ul class="custom-submenu">
+                                @foreach ($category->childrens as $index => $item)
+                                    <li class="submenu-item" data-index="{{ $index }}"
+                                        style="{{ $index >= 5 ? 'display: none;' : '' }}">
+                                        <a href="{{ route('products.detail', $item->slug) }}"><i class="fa fa-angle-right"></i> {{ ucfirst($item->name) }}</a>
+                                    </li>
+                                @endforeach
+                                @if ($category->childrens->count() > 5)
+                                    <li class="view-more"><a style="font-weight: 500" href="javascript:void(0)">Xem thêm</a>
+                                    </li>
+                                @endif
                             </ul>
+
+                            {{-- </li>
+                            </ul> --}}
                         </div>
 
                     @endif
@@ -367,6 +366,10 @@
 
 @push('styles')
     <style>
+        .fa-angle-right{
+            color: #919191;
+            font-size: .9em;
+        }
         .custom-menu {
             width: 250px;
             /* border: 1px solid #ddd; */
@@ -401,13 +404,13 @@
         }
 
         /* .custom-menu li a:hover {
-                    background: #f4f4f4;
-                } */
+                        background: #f4f4f4;
+                    } */
 
         /* Khi menu cha được mở, thay đổi nền */
         /* .custom-menu li.custom-open>a {
-                    background: rgba(0, 0, 0, 0.1);
-                } */
+                        background: rgba(0, 0, 0, 0.1);
+                    } */
 
         .custom-submenu .submenu-item:first-child a {
             padding-top: 0 !important;
@@ -420,9 +423,9 @@
         }
 
         .custom-submenu li a {
-            padding: 10px 15px 5px 5px;
+            padding: 10px 15px 5px 0px;
             font-size: .9em;
-            color: #555;
+            /* color: #555; */
             display: block;
             /* border-bottom: 1px solid #ddd; */
         }

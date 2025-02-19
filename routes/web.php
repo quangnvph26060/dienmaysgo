@@ -65,7 +65,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('edit/{id}', [CategoryController::class, 'update'])->name('update');
             Route::post('delete/{id}', [CategoryController::class, 'delete'])->name('delete');
         });
-        
+
         Route::prefix('product')->name('product.')->group(function () {
             Route::get('categories', [ProductController::class, 'getCategories'])->name('categories.index');
             Route::get('attributes', [ProductController::class, 'getAttributes'])->name('attributes.index');
@@ -117,6 +117,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::post('/delete-items', [BulkActionController::class, 'deleteItems'])->name('delete.items');
     Route::post('/change-order', [BulkActionController::class, 'changeOrder'])->name('changeOrder');
+    Route::post('/gemini/ask', [BulkActionController::class, 'askGemini'])->name('gemini.ask');
 
 
     Route::prefix('origin')->name('origin.')->group(function () {

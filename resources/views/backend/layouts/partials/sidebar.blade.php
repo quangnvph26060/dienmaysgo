@@ -25,9 +25,16 @@
         <div class="sidebar-content">
             <ul class="nav nav-secondary">
                 <li class="nav-item {{ activeMenu('admin.dashboard') }}">
-                    <a class="has-children" href="{{ route('admin.dashboard') }}" class="collapsed">
-                        <i class="fas fa-home"></i>
+                    <a href="{{ route('admin.dashboard') }}" class="collapsed">
+                        <i class="fas fa-chart-line"></i>
                         <p>Dashboard</p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a target="_blank" href="{{ url('/') }}" class="collapsed">
+                        <i class="fas fa-home"></i>
+                        <p>Quay lại trang chủ</p>
                     </a>
                 </li>
 

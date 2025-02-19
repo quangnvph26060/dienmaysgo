@@ -5,9 +5,20 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
 
 class BulkActionController extends Controller
 {
+
+    protected $apiKey;
+    protected $url;
+
+    public function __construct()
+    {
+        $this->apiKey = env('GEMINI_API_KEY');
+        $this->url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key={$this->apiKey}";
+    }
+
     public function deleteItems(Request $request)
     {
         $validatedData = $request->validate([
@@ -52,5 +63,38 @@ class BulkActionController extends Controller
         Cache::forget('categories');
 
         return response()->json(['status' => 'success']);
+    }
+
+    public function askGemini(Request $request)
+    {
+        $prompt = $request->input('prompt');
+
+        if (!$prompt) {
+            return response()->json(["error" => "Prompt không được để trống!"], 400);
+        }
+
+        $response = Http::post($this->url, [
+            "contents" => [
+                [
+                    "parts" => [
+                        ["text" => $prompt]
+                    ]
+                ]
+            ]
+        ]);
+
+        if ($response->failed()) {
+            return response()->json(["error" => "Lỗi khi gọi API Gemini!", "details" => $response->body()], $response->status());
+        }
+
+        $data = $response->json();
+
+        if (!isset($data['candidates'][0]['content']['parts'][0]['text'])) {
+            return response()->json(["error" => "Không có kết quả từ API!"], 200);
+        }
+
+        return response()->json([
+            "candidates" => $data['candidates']
+        ]);
     }
 }
