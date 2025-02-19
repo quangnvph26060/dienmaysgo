@@ -101,6 +101,9 @@
                                                 value="{{ request()->s }}" name="s" />
                                         </div>
                                         <div class="flex-col">
+                                            <button id="voiceSearchBtn">
+                                                🎤
+                                            </button>
                                             <button type="submit" value="Search"
                                                 class="ux-search-submit submit-button secondary button icon mb-0"
                                                 aria-label="Submit">
@@ -115,6 +118,47 @@
                     </li>
                 </ul>
             </div>
+
+            <script>
+                document.getElementById("voiceSearchBtn").addEventListener("click", function(e) {
+                    e.preventDefault();
+                    const searchInput = document.getElementById("woocommerce-product-search-field-0");
+
+                    if ("webkitSpeechRecognition" in window) {
+                        let recognition = new webkitSpeechRecognition();
+                        recognition.lang = "vi-VN"; // Ngôn ngữ tiếng Việt
+                        recognition.continuous = false;
+                        recognition.interimResults = false;
+
+                        recognition.onstart = function() {
+                            console.log("Bắt đầu nghe...");
+                        };
+
+                        recognition.onspeechend = function() {
+                            console.log("Ngừng nghe, đang xử lý...");
+                            recognition.stop();
+                        };
+
+                        recognition.onresult = function(event) {
+                            let transcript = event.results[0][0].transcript;
+                            searchInput.value = transcript;
+
+                            // console.log("Kết quả:", transcript);
+
+                            // Gửi dữ liệu đến server Laravel
+                            // window.location.href = `/search?query=${encodeURIComponent(transcript)}`;
+                        };
+
+                        recognition.onerror = function(event) {
+                            console.log("Lỗi nhận diện giọng nói:", event.error);
+                        };
+
+                        recognition.start();
+                    } else {
+                        alert("Trình duyệt của bạn không hỗ trợ tìm kiếm bằng giọng nói.");
+                    }
+                });
+            </script>
 
             <!-- Right Elements -->
             <div class="flex-col hide-for-medium flex-right">
@@ -162,7 +206,8 @@
                                                 @endif
 
 
-                                                <a href="{{ route('products.detail', [$cart->options->catalogue, $cart->options->slug]) }}">
+                                                <a
+                                                    href="{{ route('products.detail', [$cart->options->catalogue, $cart->options->slug]) }}">
                                                     <img width="300" height="300"
                                                         src="{{ showImage($cart->options->image) }}"
                                                         data-src="{{ showImage($cart->options->image) }}"
@@ -217,14 +262,12 @@
                         <div class="flex-col flex-grow">
                             <label class="screen-reader-text" for="woocommerce-product-search-field-0">Search
                                 for:</label>
-                            <input type="search" id="woocommerce-product-search-field-0"
-                                class="search-field mb-0" placeholder="Nhập từ khóa tìm kiếm..."
-                                value="{{ request()->s }}" name="s" />
+                            <input type="search" id="woocommerce-product-search-field-0" class="search-field mb-0"
+                                placeholder="Nhập từ khóa tìm kiếm..." value="{{ request()->s }}" name="s" />
                         </div>
                         <div class="flex-col">
                             <button type="submit" value="Search"
-                                class="ux-search-submit submit-button secondary button icon mb-0"
-                                aria-label="Submit">
+                                class="ux-search-submit submit-button secondary button icon mb-0" aria-label="Submit">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>

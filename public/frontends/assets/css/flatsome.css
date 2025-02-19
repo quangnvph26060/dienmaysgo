@@ -8640,7 +8640,12 @@ html {
     border-color: currentColor;
 }
 .searchform-wrapper.form-flat .flex-col:last-of-type {
-    margin-left: -2.9em;
+    margin-left: -6.5em;
+}
+#voiceSearchBtn{
+    padding: 0 10px;
+    border-left: 1px solid #acacac;
+
 }
 .searchform-wrapper .autocomplete-suggestions {
     -webkit-overflow-scrolling: touch;
