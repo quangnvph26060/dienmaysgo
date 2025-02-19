@@ -1,29 +1,28 @@
-<script src="{{ asset('frontends/assets/js/chunk.countup.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/chunk.sticky-sidebar.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/chunk.tooltips.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/chunk.vendors-popups.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/chunk.vendors-slider.js') }}"></script>
 <script src="{{ asset('frontends/assets/js/jquery.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/jquery.blockUI.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/add-to-cart.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/js.cookie.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/woocommerce.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/hooks.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/i18n.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/contact-form-7.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/wp-polyfill.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/hoverIntent.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/flatsome.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/flatsome-instant-page.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/sourcebuster.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/order-attribution.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/flatsome-lazy-load.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/woocommerce.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/jquery.selectBox.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/jquery.prettyPhoto.min.js') }}"></script>
-<script src="{{ asset('frontends/assets/js/jquery.yith-wcwl.min.js') }}"></script>
-{{-- <script src="{{ asset('frontends/assets/js/custom.js') }}"></script> --}}
-<script src="{{ asset('frontends/assets/js/toastr.min.js') }}"></script>
+<script src="{{ asset('frontends/assets/js/chunk.countup.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/chunk.sticky-sidebar.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/chunk.tooltips.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/chunk.vendors-popups.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/chunk.vendors-slider.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/jquery.blockUI.min.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/add-to-cart.min.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/js.cookie.min.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/woocommerce.min.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/hooks.min.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/i18n.min.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/contact-form-7.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/wp-polyfill.min.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/hoverIntent.min.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/flatsome.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/flatsome-instant-page.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/sourcebuster.min.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/order-attribution.min.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/flatsome-lazy-load.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/woocommerce.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/jquery.selectBox.min.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/jquery.prettyPhoto.min.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/jquery.yith-wcwl.min.js') }}" defer></script>
+<script src="{{ asset('frontends/assets/js/toastr.min.js') }}" defer></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -62,6 +61,25 @@
     });
 </script>
 <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let lazyImages = document.querySelectorAll(".lazyload");
+
+        let observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    let img = entry.target;
+                    img.src = img.dataset.src; // Lấy ảnh từ data-src và gán vào src
+                    img.classList.remove("lazyload");
+                    observer.unobserve(img);
+                }
+            });
+        });
+
+        lazyImages.forEach(img => observer.observe(img));
+    });
+
+
+
     const BASE_URL = "{{ url('/') }}";
 
     jQuery.ajaxSetup({

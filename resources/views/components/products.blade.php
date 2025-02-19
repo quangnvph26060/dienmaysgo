@@ -18,12 +18,20 @@
                         <div class="image-zoom image-cover" style="padding-top: 100%">
                             <a href="{{ route('products.detail', [$product->category->slug, $product->slug]) }}"
                                 aria-label="{{ $product->name }}">
-                                <img fetchpriority="high" decoding="async" width="680" height="680"
-                                    src="{{ showImage($product->image) }}" data-src="{{ showImage($product->image) }}"
-                                    class="lazy-load attachment-original size-original"
-                                    alt="{{ showImage($product->image) }}" sizes="(max-width: 680px) 100vw, 680px" />
+                                <picture>
+                                    <!-- Nếu trình duyệt hỗ trợ WebP, nó sẽ tải WebP -->
+                                    <source srcset="{{ showImage($product->image, 'webp') }}" type="image/webp">
+                                    <!-- Nếu trình duyệt không hỗ trợ WebP, nó sẽ tải ảnh chuẩn -->
+                                    <img fetchpriority="high" decoding="async" width="680" height="680"
+                                        src="{{ showImage($product->image) }}"
+                                        data-src="{{ showImage($product->image) }}"
+                                        class="lazy-load lazyload attachment-original size-original"
+                                        alt="{{ $product->name }}" loading="lazy"
+                                        sizes="(max-width: 680px) 100vw, 680px">
+                                </picture>
                             </a>
                         </div>
+
 
 
                         @if ($product->price > 0)

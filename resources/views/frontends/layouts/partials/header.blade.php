@@ -64,7 +64,7 @@
                 <!-- Header logo -->
                 <a href="{{ url('/') }}" title="{{ request()->getHost() }}" rel="home">
                     <img width="820" height="222" src="{{ showImage($settings->path) }}"
-                        class="header_logo header-logo" alt="" />
+                        class="header_logo header-logo" alt="{{ request()->getHost() }}" />
                     <img width="820" height="222" src="{{ showImage($settings->path) }}" class="header-logo-dark"
                         alt="{{ request()->getHost() }}" />
                 </a>

@@ -1,20 +1,41 @@
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+</noscript>
+
 <link rel="icon" href="{{ showImage($settings->icon) }}" sizes="32x32" />
 <link rel="icon" href="{{ showImage($settings->icon) }}" sizes="192x192" />
-<link rel="stylesheet" href="{{ asset('frontends/assets/css/styles.css') }}" />
-<link rel="stylesheet" href="{{ asset('frontends/assets/css/cookieblocker.min.css') }}" />
-<link rel="stylesheet" href="{{ asset('frontends/assets/css/plugins/style.css') }}" />
-{{-- <link rel="stylesheet" href="{{ asset('frontends/assets/css/wishlist.css') }}" /> --}}
-<link rel="stylesheet" href="{{ asset('frontends/assets/css/flatsome.css') }}" />
-<link rel="stylesheet" href="{{ asset('frontends/assets/css/flatsome-shop.css') }}" />
-<link rel="stylesheet" href="{{ asset('frontends/assets/css/themes/style.css') }}" />
-<link rel="stylesheet" href="{{ asset('frontends/assets/css/wc-blocks.css') }}" />
-<link rel="stylesheet" href="{{ asset('frontends/assets/css/main.css') }}" />
-<link rel="stylesheet" href="{{ asset('frontends/assets/css/toastr.min.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="{{ asset('frontends/assets/css/styles.css') }}" media="print" onload="this.media='all'">
 
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+<link rel="stylesheet" href="{{ asset('frontends/assets/css/cookieblocker.min.css') }}" media="print"
+    onload="this.media='all'" />
+<link rel="stylesheet" href="{{ asset('frontends/assets/css/plugins/style.css') }}" media="print"
+    onload="this.media='all'" />
+<link rel="stylesheet" href="{{ asset('frontends/assets/css/flatsome.css') }}" media="print"
+    onload="this.media='all'" />
+<link rel="stylesheet" href="{{ asset('frontends/assets/css/flatsome-shop.css') }}" media="print"
+    onload="this.media='all'" />
+<link rel="stylesheet" href="{{ asset('frontends/assets/css/themes/style.css') }}" media="print"
+    onload="this.media='all'" />
+<link rel="stylesheet" href="{{ asset('frontends/assets/css/wc-blocks.css') }}" media="print"
+    onload="this.media='all'" />
+<link rel="stylesheet" href="{{ asset('frontends/assets/css/main.css') }}" media="print" onload="this.media='all'" />
+<link rel="stylesheet" href="{{ asset('frontends/assets/css/toastr.min.css') }}" media="print"
+    onload="this.media='all'">
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" as="style"
+    onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</noscript>
+
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"
+    as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css">
+</noscript>
+
 
 <style>
     #toast-container>div {
@@ -93,15 +114,16 @@
     }
 
     /* @if (url()->current() === route('carts.list'))
-        .button.icon.is-small i {
-            top: 7px;
-        }
+    .button.icon.is-small i {
+        top: 7px;
+    }
 
     @else
         .button.icon.is-small i {
             top: 0px;
         }
-    @endif */
+    @endif
+    */
 </style>
 
 @stack('styles')
