@@ -77,6 +77,47 @@ function formatAmount($amount)
     return number_format($amount, 0, ',', '.');
 }
 
+// function saveImages($request, string $inputName, string $directory = 'images', $width = 150, $height = 150, $isArray = false)
+// {
+//     $paths = [];
+
+//     // Kiểm tra xem có file không
+//     if ($request->hasFile($inputName)) {
+//         // Lấy tất cả các file hình ảnh
+//         $images = $request->file($inputName);
+
+//         if (!is_array($images)) {
+//             $images = [$images]; // Đưa vào mảng nếu chỉ có 1 ảnh
+//         }
+
+//         // Tạo instance của ImageManager
+//         $manager = new ImageManager(new Driver());
+
+//         foreach ($images as $key => $image) {
+//             // Đọc hình ảnh từ đường dẫn thực
+//             $img = $manager->read($image->getPathName());
+
+//             // Thay đổi kích thước
+//             $img->resize($width, $height);
+
+//             // Tạo tên file duy nhất
+//             $filename = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+
+//             // Lưu hình ảnh đã được thay đổi kích thước vào storage
+//             Storage::disk('public')->put($directory . '/' . $filename, $img->encode());
+
+//             // Lưu đường dẫn vào mảng
+//             $paths[$key] = $directory . '/' . $filename;
+//         }
+
+//         // Trả về danh sách các đường dẫn
+//         return $isArray ? $paths : $paths[0];
+//     }
+
+//     return null;
+// }
+
+
 function saveImages($request, string $inputName, string $directory = 'images', $width = 150, $height = 150, $isArray = false)
 {
     $paths = [];
@@ -101,7 +142,7 @@ function saveImages($request, string $inputName, string $directory = 'images', $
             $img->resize($width, $height);
 
             // Tạo tên file duy nhất
-            $filename = time() . uniqid() . '.' . $image->getClientOriginalExtension();
+            $filename = time() . uniqid() . '.' . 'webp';
 
             // Lưu hình ảnh đã được thay đổi kích thước vào storage
             Storage::disk('public')->put($directory . '/' . $filename, $img->encode());
@@ -115,6 +156,29 @@ function saveImages($request, string $inputName, string $directory = 'images', $
     }
 
     return null;
+}
+
+function resizeImage($image, $width = null, $height = null)
+{
+    if (!$image) {
+        return $image;
+    }
+
+    $params = [];
+
+    if ($width) {
+        $params[] = 'w=' . $width;
+    }
+    if ($height) {
+        $params[] = 'h=' . $height;
+    }
+
+    if (count($params) > 0) {
+        $separator = strpos($image, '?') !== false ? '&' : '?';
+        $image .= $separator . implode('&', $params);
+    }
+
+    return $image;
 }
 
 

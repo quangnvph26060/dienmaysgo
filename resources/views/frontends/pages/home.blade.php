@@ -60,9 +60,9 @@
                                 <source srcset="{{ showImage($image, 'webp') }}" type="image/webp">
                                 <!-- Nếu trình duyệt không hỗ trợ WebP, nó sẽ tải ảnh chuẩn -->
                                 <img class="lazyload" data-src="{{ showImage($image) }}" src="{{ asset('backend/assets/img/image-default.jpg') }}"
-                                    srcset="{{ showImage($image) }} 480w,
-                                        {{ showImage($image) }} 768w,
-                                        {{ showImage($image) }} 1200w"
+                                    srcset="{{ resizeImage(showImage($image), 480) }} 480w,
+                                        {{ resizeImage(showImage($image), 768) }} 768w,
+                                        {{ resizeImage(showImage($image), 1200) }} 1200w"
                                     sizes="(max-width: 600px) 480px, (max-width: 1200px) 768px, 1200px" alt="Mô tả hình ảnh"
                                     loading="lazy">
                             </picture>
