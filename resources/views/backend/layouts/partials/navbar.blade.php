@@ -202,9 +202,7 @@
                             </div>
                         </li>
                         <li>
-
                             <a class="dropdown-item" href="{{ route('admin.logout') }}"><i class="fas fa-sign-out-alt me-2"></i> Logout</a>
-                            <a target="_blank" class="dropdown-item" href="{{ url('/') }}"><i class="fas fa-home me-2"></i>Quay lại trang chủ</a>
                         </li>
                     </div>
                 </ul>

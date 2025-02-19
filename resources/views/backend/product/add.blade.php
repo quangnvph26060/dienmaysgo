@@ -185,6 +185,7 @@
                                     <div class="col-lg-12">
                                         <div class="form-group">
                                             <label for="description" class="form-label">Mô tả chi tiết</label>
+                                            <code data-bs-toggle="modal" data-bs-target="#gemniAi">Chat bot AI</code>
                                             <textarea id="description" class="form-control" name="description" rows="10">{!! old('description') !!}</textarea>
                                         </div>
                                     </div>
@@ -344,6 +345,8 @@
 
     </form>
 
+    <x-gemini />
+
 @endsection
 
 @push('scripts')
@@ -476,9 +479,23 @@
 
             $(".upload-text").find("span").remove();
 
-            CKEDITOR.replace('description', {
+            let editor = CKEDITOR.replace('description', {
                 filebrowserImageUploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
                 filebrowserUploadMethod: 'form',
+            });
+
+            $('#applyButton').click(function() {
+                let responseDiv = $('#response');
+                let content = responseDiv.html().replace(/<br\s*\/?>/g, '\n');
+
+                // Kiểm tra nếu CKEditor đã được khởi tạo
+                if (editor) {
+                    editor.setData(content.replace(/\n/g, '<br>'));
+                } else {
+                    alert("CKEditor chưa được khởi tạo!");
+                }
+
+                $(this).addClass('d-none');
             });
 
             CKEDITOR.replace('description_short', {
@@ -555,6 +572,10 @@
     <link rel="stylesheet" href="{{ asset('backend/assets/css/image-uploader.min.css') }}">
 
     <style>
+        code:hover {
+            cursor: pointer;
+        }
+
         .image-uploader .uploaded .uploaded-image {
             width: calc(49.666667% - 1rem);
             padding-bottom: calc(49.666667% - 1rem);

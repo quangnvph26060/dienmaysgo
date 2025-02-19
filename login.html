@@ -1,11 +1,197 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Popup Danh Mục</title>
+        <style>
+            /* CSS cho popup */
+            .popup {
+                position: absolute;
+                top: 50px;
+                left: 50px;
+                width: 600px;
+                max-height: 400px;
+                background: white;
+                border: 1px solid #ccc;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                padding: 20px;
+                overflow: hidden;
+                display: none;
+            }
 
-</body>
+            .category-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr); /* Sử dụng 2 cột */
+                gap: 10px; /* Khoảng cách giữa các mục */
+                max-height: 350px;
+                overflow-y: auto;
+            }
+
+            /* CSS cho từng danh mục */
+            .category {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .category-title {
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+            .sub-category {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .sub-category li {
+                padding: 5px 0;
+            }
+
+            /* Nút mở popup */
+            .open-popup {
+                padding: 10px 20px;
+                background: #007bff;
+                color: white;
+                border: none;
+                cursor: pointer;
+                margin-bottom: 20px;
+            }
+
+            /* Hiệu ứng hiển thị */
+            .popup.show {
+                display: block;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Nút mở popup -->
+        <button class="open-popup">Mở Danh Mục</button>
+
+        <!-- Popup danh mục -->
+        <div class="popup">
+            <div class="category-container">
+                <!-- Danh mục sẽ được render ở đây -->
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const categories = [
+                    {
+                        name: "Máy đầm thước",
+                        sub: [
+                            "Máy đầm thước Honda chạy xăng",
+                            "Máy đầm thước chạy điện",
+                        ],
+                    },
+                    {
+                        name: "Máy đầm bàn",
+                        sub: [
+                            "Máy đầm bàn Honda",
+                            "Máy đầm bàn Jinlong",
+                            "Máy đầm bàn Chady",
+                            "Máy đầm bàn Mikasa",
+                            "Đầm Bàn Chạy Xăng",
+                            "Đầm Bàn Chạy Điện",
+                        ],
+                    },
+                    {
+                        name: "Máy đầm dùi",
+                        sub: [
+                            "Máy đầm dùi Honda",
+                            "Máy đầm dùi Jinlong",
+                            "Máy đầm dùi Chady",
+                            "Đầm Dùi Chạy Xăng",
+                            "Đầm Dùi Chạy Điện",
+                        ],
+                    },
+                    {
+                        name: "Dây chạy",
+                        sub: [
+                            "Dây chạy Jinlong",
+                            "Dây chạy Chady",
+                            "Dây chạy Fuji",
+                            "Dây chạy Fureki",
+                        ],
+                    },
+                    {
+                        name: "Máy cắt sắt",
+                        sub: [
+                            "Máy Cắt Sắt Thủy Lực",
+                            "Máy Cắt Sắt Công Nghiệp",
+                        ],
+                    },
+                    {
+                        name: "Máy uốn sắt",
+                        sub: ["Máy uốn sắt thủy lực", "Máy uốn đai sắt"],
+                    },
+                    {
+                        name: "Máy cắt bê tông",
+                        sub: [
+                            "Máy cắt bê Tông Chạy Xăng",
+                            "Máy Cắt bê Tông Chạy Dầu Diesel",
+                        ],
+                    },
+                ];
+
+                const categoryContainer = document.querySelector(
+                    ".category-container"
+                );
+
+                // Render danh mục vào popup
+                categories.forEach((category) => {
+                    let categoryDiv = document.createElement("div");
+                    categoryDiv.classList.add("category");
+
+                    let title = document.createElement("div");
+                    title.classList.add("category-title");
+                    title.textContent = category.name;
+                    categoryDiv.appendChild(title);
+
+                    // Tạo 2 cột cho sub-categories
+                    const firstColumn = document.createElement("div");
+                    const secondColumn = document.createElement("div");
+
+                    // Tính toán chia các mục con thành 2 nhóm
+                    const halfLength = Math.ceil(category.sub.length / 2);
+                    const firstHalf = category.sub.slice(0, halfLength);
+                    const secondHalf = category.sub.slice(halfLength);
+
+                    // Hàm để tạo các mục con vào danh sách
+                    const createListItems = (subItems, column) => {
+                        const subCategoryList = document.createElement("ul");
+                        subCategoryList.classList.add("sub-category");
+
+                        subItems.forEach((subItem) => {
+                            let listItem = document.createElement("li");
+                            listItem.textContent = subItem;
+                            subCategoryList.appendChild(listItem);
+                        });
+
+                        column.appendChild(subCategoryList);
+                    };
+
+                    // Tạo các mục con cho từng cột
+                    createListItems(firstHalf, firstColumn);
+                    createListItems(secondHalf, secondColumn);
+
+                    // Thêm các cột vào categoryDiv
+                    categoryDiv.appendChild(firstColumn);
+                    categoryDiv.appendChild(secondColumn);
+
+                    categoryContainer.appendChild(categoryDiv);
+                });
+
+                // Hiển thị và ẩn popup
+                const popup = document.querySelector(".popup");
+                document
+                    .querySelector(".open-popup")
+                    .addEventListener("click", () => {
+                        popup.classList.toggle("show");
+                    });
+            });
+        </script>
+    </body>
 </html>

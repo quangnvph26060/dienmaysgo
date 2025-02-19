@@ -72,11 +72,11 @@
                                 </div>
 
                                 <div class="product-info summary entry-summary col col-fit product-summary form-flat">
-                                    <h1 class="product-title product_title entry-title"
-                                        style="margin-bottom: 15px; ">
+                                    <h1 class="product-title product_title entry-title" style="margin-bottom: 15px; ">
                                         {{ $product->name }}
                                         @if (auth()->guard('admin')->check())
-                                            <span class="edit-icon"> <a target="_blank" href="{{ route('admin.product.detail', $product->id) }}">✏️</a></span>
+                                            <span class="edit-icon"> <a target="_blank"
+                                                    href="{{ route('admin.product.detail', $product->id) }}">✏️</a></span>
                                         @endif
                                     </h1>
 
@@ -379,6 +379,7 @@
                         </div>
                     </div>
                 </div>
+                <x-schema-product :product="$product" />
             </div>
         </div>
         <!-- shop container -->
