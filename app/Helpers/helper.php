@@ -128,6 +128,7 @@ function saveImage($request, string $inputName, string $directory = 'images')
     }
 }
 
+
 function showImage($path, $default = 'image-default.jpg')
 {
     /** @var FilesystemAdapter $storage */

@@ -10,8 +10,8 @@
 @section('content')
     <div class="row container">
         <nav class="large-2">
-            <p class="block button-home-nav"><i class="fas fa-bars"
-                    style="color: #EC1C24; font-size: 20px"></i>DANH MỤC SẢN PHẨM</p>
+            <p class="block button-home-nav"><i class="fas fa-bars" style="color: #EC1C24; font-size: 20px"></i>DANH MỤC SẢN
+                PHẨM</p>
             <div class="home-nav">
                 <div class="menu">
                     @foreach ($cataloguesMenu->take(6) as $item)
@@ -55,11 +55,22 @@
 
                     @foreach ($images as $image)
                         <div class="swiper-slide">
-                            <img src="{{ showImage($image) }}" alt="{{ showImage($image) }}">
+                            <picture>
+                                <!-- Nếu trình duyệt hỗ trợ WebP, nó sẽ tải ảnh WebP -->
+                                <source srcset="{{ showImage($image, 'webp') }}" type="image/webp">
+                                <!-- Nếu trình duyệt không hỗ trợ WebP, nó sẽ tải ảnh chuẩn -->
+                                <img class="lazyload" data-src="{{ showImage($image) }}" src="{{ asset('backend/assets/img/image-default.jpg') }}"
+                                    srcset="{{ showImage($image) }} 480w,
+                                        {{ showImage($image) }} 768w,
+                                        {{ showImage($image) }} 1200w"
+                                    sizes="(max-width: 600px) 480px, (max-width: 1200px) 768px, 1200px" alt="Mô tả hình ảnh"
+                                    loading="lazy">
+                            </picture>
                         </div>
                     @endforeach
                     <!-- Thêm nhiều slide nếu cần -->
                 </div>
+
                 <!-- Thêm phân trang (nếu cần) -->
                 <div class="swiper-pagination"></div>
             </div>
@@ -188,9 +199,11 @@
             margin-bottom: 0;
         }
 
-        .submenu-item ul{
-            list-style-type: disc; /* Kiểu dấu chấm */
-            color: rgba(0, 0, 0, 0.5); /* Màu sắc nhạt (điều chỉnh giá trị alpha để làm nhạt) */
+        .submenu-item ul {
+            list-style-type: disc;
+            /* Kiểu dấu chấm */
+            color: rgba(0, 0, 0, 0.5);
+            /* Màu sắc nhạt (điều chỉnh giá trị alpha để làm nhạt) */
         }
 
         .menu .menu-item a {

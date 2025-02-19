@@ -324,14 +324,18 @@
                                         role="presentation">
                                         <a href="#tab-additional_information" role="tab" aria-selected="false"
                                             aria-controls="tab-additional_information" tabindex="-1">
-                                            Thông số kỹ thuật
+                                            <h3 style="margin-bottom: 0"> Thông số kỹ thuật</h3>
                                         </a>
+
                                     </li>
                                     <li class="description_tab" id="tab-title-description" role="presentation">
+
                                         <a href="#tab-description" role="tab" aria-selected="true"
                                             aria-controls="tab-description">
-                                            Mô tả chi tiết
+                                            <h3 style="margin-bottom: 0"> Mô tả chi tiết </h3>
                                         </a>
+
+
                                     </li>
                                 </ul>
                                 <div class="tab-panels">
@@ -363,10 +367,10 @@
 
 
                             <div class="related related-products-wrapper product-section">
-                                <h3
+                                <h2
                                     class="product-section-title container-width product-section-title-related pt-half pb-half uppercase">
                                     Sản phẩm liên quan
-                                </h3>
+                                </h2>
 
                                 <div class="row has-equal-box-heights equalize-box large-columns-5 medium-columns-4 small-columns-2 row-small slider row-slider slider-nav-reveal slider-nav-push"
                                     data-flickity-options='{"imagesLoaded": true, "groupCells": "100%", "dragThreshold" : 5, "cellAlign": "left","wrapAround": true,"prevNextButtons": false,"percentPosition": true,"pageDots": false, "rightToLeft": false, "autoPlay" : true}'>

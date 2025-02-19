@@ -9,6 +9,7 @@
     <title>@yield('title')</title>
     <meta name="description" content="@yield('description')">
     <meta name="keywords" content="@yield('keywords')">
+    <link rel="canonical" href="{{ url()->current() }}">
 
     <meta property="fb:app_id" content="1234567890" />
     <meta property="og:url" content="{{ url()->current() }}" />
