@@ -55,7 +55,7 @@
 
                     @foreach ($images as $image)
                         <div class="swiper-slide">
-                            <picture>
+                            <picture style="height: 100%">
                                 <!-- Nếu trình duyệt hỗ trợ WebP, nó sẽ tải ảnh WebP -->
                                 <source srcset="{{ showImage($image, 'webp') }}" type="image/webp">
                                 <!-- Nếu trình duyệt không hỗ trợ WebP, nó sẽ tải ảnh chuẩn -->
