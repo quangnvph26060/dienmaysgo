@@ -4,6 +4,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Imports\ProductsImport;
+use App\Jobs\GenerateProductDescription;
 use App\Models\Attribute;
 use App\Models\AttributeValue;
 use App\Models\Brand;
@@ -151,6 +152,8 @@ class ProductController extends Controller
         $title = 'Danh sách sản phẩm';
 
         if ($request->ajax()) {
+            // if (isset($request->order)) dd($request->order[0]);
+
             $query = SgoProduct::select([
                 'id',
                 'name',
@@ -161,19 +164,25 @@ class ProductController extends Controller
                 'view_count',
                 'discount_value',
                 'discount_type',
-                'image'
+                'image',
             ])
+                ->when(!empty($request->order), function ($q) use ($request) {
+                    // Sắp xếp theo yêu cầu từ DataTables
+                    return $q->orderBy($request->order[0]['name'], $request->order[0]['dir']);
+                }, function ($q) {
+                    // Nếu không có yêu cầu order từ DataTables, mặc định lấy mới nhất
+                    return $q->latest();
+                })
                 ->when($request->catalogue, fn($q) => $q->where('category_id', $request->catalogue))
                 ->when($request->attributeId, fn($q) => $q->whereHas('attributes', fn($q) => $q->where('attribute_id', $request->attributeId)))
                 ->when($request->attributeValueId, fn($q) => $q->whereHas('attributeValues', fn($q) => $q->where('attribute_value_id', $request->attributeValueId)))
-                ->with(['category', 'attributes', 'attributeValues'])
-                ->latest();
+                ->with(['category', 'attributes', 'attributeValues'])->latest();
 
-            return datatables()->eloquent($query)
-                ->addColumn('price', fn($row) => number_format($row->price, 0, ',', '.'))
-                ->addColumn('import_price', fn($row) => number_format($row->import_price, 0, ',', '.'))
-                ->addColumn('checkbox', fn($row) => '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />')
+            return datatables()->eloquent($query) // Thay vì of($query)
+                ->editColumn('price', fn($row) => number_format($row->price, 0, ',', '.'))
+                ->editColumn('import_price', fn($row) => number_format($row->import_price, 0, ',', '.'))
                 ->addColumn('category_id', fn($row) => $row->category->name ?? '')
+                ->addColumn('checkbox', fn($row) => '<input type="checkbox" class="row-checkbox" value="' . $row->id . '" />')
                 ->rawColumns(['checkbox'])
                 ->addIndexColumn()
                 ->make(true);
@@ -227,6 +236,8 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+
+
         $rule = $request->discount_type == 'amount' ? 'nullable|numeric|min:0' : 'nullable|numeric|max:100';
         // lt:price
         $validated  = $request->validate(
@@ -275,6 +286,18 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
 
+            $prompt = "Viết nội dung chuẩn SEO cho sản phẩm '" . $validated['name'] . "' có độ dài từ 1500-3000 từ với các heading:
+            - Thông số kỹ thuật
+            - Ưu nhược điểm sản phẩm
+            - Ứng dụng trong công việc
+            - Đánh giá sản phẩm
+            - Nơi mua hàng uy tín
+        ";
+
+            $request->merge([
+                'prompt' => $prompt
+            ]);
+
             if ($validated['discount_end_date'] && is_null($validated['discount_start_date'])) {
                 $validated['discount_start_date'] = now();
             }
@@ -284,6 +307,8 @@ class ProductController extends Controller
             }
 
             $product = SgoProduct::create($validated);
+
+            GenerateProductDescription::dispatch($product, $request->prompt);
 
             if ($request->hasFile('images')) {
                 $images = $request->file('images');

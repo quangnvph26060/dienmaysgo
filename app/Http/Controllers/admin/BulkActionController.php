@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use League\CommonMark\CommonMarkConverter;
 
 class BulkActionController extends Controller
 {
@@ -65,10 +66,8 @@ class BulkActionController extends Controller
         return response()->json(['status' => 'success']);
     }
 
-    public function askGemini(Request $request)
+    public function generatePrompt($prompt)
     {
-        $prompt = $request->input('prompt');
-
         if (!$prompt) {
             return response()->json(["error" => "Prompt không được để trống!"], 400);
         }
@@ -89,12 +88,29 @@ class BulkActionController extends Controller
 
         $data = $response->json();
 
+        // Kiểm tra dữ liệu trả về
         if (!isset($data['candidates'][0]['content']['parts'][0]['text'])) {
             return response()->json(["error" => "Không có kết quả từ API!"], 200);
         }
 
-        return response()->json([
-            "candidates" => $data['candidates']
-        ]);
+        // Lấy nội dung Markdown từ Gemini
+        $markdownText = $data['candidates'][0]['content']['parts'][0]['text'];
+
+        // Chuyển Markdown thành HTML
+        $converter = new CommonMarkConverter();
+        $htmlContent = $converter->convert($markdownText)->getContent(); // Fix lỗi trả về object
+
+        if (request()->ajax()) {
+            return response()->json([
+                "html" => $htmlContent // Trả về HTML đúng
+            ]);
+        }
+
+        return $htmlContent;
+    }
+
+    public function askGemini(Request $request)
+    {
+        return $this->generatePrompt($request->prompt);
     }
 }

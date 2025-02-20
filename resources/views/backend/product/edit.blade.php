@@ -553,15 +553,17 @@
             let editor = CKEDITOR.replace('description', {
                 filebrowserImageUploadUrl: "{{ route('ckeditor.upload', ['_token' => csrf_token()]) }}",
                 filebrowserUploadMethod: 'form',
+                enterMode: CKEDITOR.ENTER_BR, // Xuống dòng chỉ dùng <br>, không tạo <p>
+                shiftEnterMode: CKEDITOR.ENTER_P // Shift + Enter sẽ tạo <p>
             });
 
             $('#applyButton').click(function() {
                 let responseDiv = $('#response');
-                let content = responseDiv.html().replace(/<br\s*\/?>/g, '\n');
+                let content = responseDiv.html();
 
                 // Kiểm tra nếu CKEditor đã được khởi tạo
                 if (editor) {
-                    editor.setData(content.replace(/\n/g, '<br>'));
+                    editor.setData(content);
                 } else {
                     alert("CKEditor chưa được khởi tạo!");
                 }
