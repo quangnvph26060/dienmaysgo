@@ -4,7 +4,7 @@
         "@type": "Product",
         "name": "{{ $product['name'] }}",
         "image": "{{ $product['image'] }}",
-        "description": "{{ $product['description'] }}",
+        "description": "{!! $product['description'] !!}",
         "brand": {
             "@type": "Brand",
             "name": "{{ $product['brand']['name'] ?? '' }}"
