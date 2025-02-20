@@ -1,13 +1,14 @@
 @extends('frontends.layouts.master')
 
 @section('title', $product->name)
-@section('description', $product->description_seo)
+@section('description', $product->description_seo ?? getTextAfterFirstHeading($product->description))
 @section('keywords', formatString($product->keyword_seo))
 @section('og_title', $product->name)
-@section('og_description', $product->description_seo)
+@section('og_description', $product->description_seo ?? getTextAfterFirstHeading($product->description))
 
 @section('content')
     @include('components.breadcrumb_V2', compact('product'))
+
     <main id="main" class="">
         <div class="shop-container">
             <div class="container">
@@ -72,7 +73,7 @@
                                 </div>
 
                                 <div class="product-info summary entry-summary col col-fit product-summary form-flat">
-                                    <h1 class="product-title product_title entry-title" style="margin-bottom: 15px; ">
+                                    <h1 class="product-title product_title entry-title" style="margin-bottom: 0px; ">
                                         {{ $product->name }}
                                         @if (auth()->guard('admin')->check())
                                             <span class="edit-icon"> <a target="_blank"
@@ -80,6 +81,7 @@
                                         @endif
                                     </h1>
 
+                                    <div class="star"><span id="star-rating"></span><small id="count-star"></small> </div>
 
                                     <div class="product-details">
                                         @if ($product->module)
@@ -228,7 +230,8 @@
 
                                                     @if ($product->price > 0)
                                                         <div class="quantity buttons_added form-flat">
-                                                            <label class="screen-reader-text" for="quantity_674f195d66f6f">
+                                                            <label class="screen-reader-text"
+                                                                for="quantity_674f195d66f6f">
                                                                 {{ $product->name }}
                                                             </label>
 
@@ -420,11 +423,20 @@
         addToCart();
 
         jQuery(document).ready(function($) {
+            // Sinh ra một giá trị ngẫu nhiên từ 4.5 đến 5
+            var productRating = (Math.random() * (5 - 4.5) + 4.5).toFixed(
+                1); // Tạo số ngẫu nhiên trong khoảng 4.5 và 5, làm tròn 1 chữ số
+
+            document.getElementById("count-star").innerHTML = "(" + productRating + ")";
+
+            // Khởi tạo đánh giá sao với giá trị điểm ngẫu nhiên
             $("#star-rating").raty({
-                starType: "i",
-                scoreName: "rating",
+                starType: "i", // Sử dụng thẻ <i> cho mỗi sao
+                score: productRating, // Điểm sao của sản phẩm
+                readOnly: true, // Chế độ chỉ đọc (không cho phép thay đổi)
             });
         });
+
 
         lightbox.option({
             resizeDuration: 200, // Thời gian chuyển đổi
@@ -467,7 +479,7 @@
 
         document.addEventListener("DOMContentLoaded", () => {
             const swiper = new Swiper(".swiper-container", {
-                slidesPerView: 4, // Hiển thị 4 ảnh
+                slidesPerView: 3, // Hiển thị 4 ảnh
                 spaceBetween: 10, // Khoảng cách giữa các ảnh
                 navigation: {
                     nextEl: ".swiper-button-next",
@@ -484,7 +496,7 @@
                         spaceBetween: 15,
                     },
                     1024: {
-                        slidesPerView: 5,
+                        slidesPerView: 4,
                         spaceBetween: 20,
                     },
                 },
@@ -836,21 +848,27 @@
             padding-top: 10% !important;
         }
 
-        div#star-rating i {
-            font-size: 2rem;
+        div.star {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        div #star-rating i {
+            font-size: .9em;
             /* Kích thước sao */
             color: #ccc;
             /* Màu sao mặc định */
         }
 
-        div#star-rating i {
+        div #star-rating i {
             color: #f5c518;
             /* Màu sao khi được chọn */
 
             cursor: pointer;
         }
 
-        div#star-rating i.hover {
+        div #star-rating i.hover {
             color: #ffa726;
             /* Màu sao khi hover */
         }

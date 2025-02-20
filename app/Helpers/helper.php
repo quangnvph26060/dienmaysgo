@@ -158,6 +158,51 @@ function saveImages($request, string $inputName, string $directory = 'images', $
     return null;
 }
 
+function getTextAfterFirstHeading($htmlContent  = null) {
+
+    if (empty($htmlContent)) {
+        return '';
+    }
+    // Tạo đối tượng DOMDocument
+    $dom = new DOMDocument();
+    // Đảm bảo HTML được tải với encoding UTF-8
+    $dom->encoding = 'UTF-8';
+
+    // Tắt cảnh báo khi tải HTML không hợp lệ (vì có thể chứa ký tự đặc biệt)
+    @$dom->loadHTML(mb_convert_encoding($htmlContent, 'HTML-ENTITIES', 'UTF-8'));
+
+    // Tìm tất cả các thẻ heading (h1 đến h6)
+    $headings = $dom->getElementsByTagName('*');
+
+    // Lọc ra tất cả các thẻ h1, h2, ..., h6
+    $headingsArray = [];
+    foreach ($headings as $heading) {
+        if (preg_match('/^h[1-6]$/', $heading->nodeName)) {
+            $headingsArray[] = $heading;
+        }
+    }
+
+    // Nếu tìm thấy thẻ heading, lấy thẻ đầu tiên sau thẻ heading đầu tiên
+    if (count($headingsArray) > 0) {
+        $firstHeading = $headingsArray[0];
+        $nextSibling = $firstHeading->nextSibling;
+
+        // Duyệt qua các sibling và tìm thẻ đầu tiên là phần tử HTML
+        while ($nextSibling) {
+            if ($nextSibling->nodeType === XML_ELEMENT_NODE) {
+                // Lấy văn bản trong thẻ đầu tiên sau thẻ heading
+                return strip_tags($dom->saveHTML($nextSibling));
+            }
+            $nextSibling = $nextSibling->nextSibling;
+        }
+    }
+
+    return ''; // Nếu không có heading hoặc không có thẻ nào sau heading
+}
+
+
+
+
 function resizeImage($image, $width = null, $height = null)
 {
     if (!$image) {
