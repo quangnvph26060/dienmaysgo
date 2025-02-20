@@ -32,7 +32,7 @@
         },
         {
             data: 'price',
-            name: 'price'
+            name: 'price',
         },
         {
             data: 'category_id',
@@ -41,7 +41,7 @@
         {
             data: 'view_count',
             name: 'view_count',
-            width: '10%'
+            width: '10%',
         },
     ];
 </script>

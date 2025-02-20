@@ -22,6 +22,7 @@
 
 
 @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script>
         $(document).ready(function() {
             $('#sendButton').click(function() {
@@ -41,13 +42,14 @@
                 $.post("{{ route('admin.gemini.ask') }}", {
                     prompt: prompt
                 }, function(response) {
-                    if (response && response.candidates && response.candidates.length > 0) {
-                        let text = response.candidates[0].content.parts[0].text;
-                        let formattedText = text.replace(/\n/g, "<br>");
+                    console.log(response);
+
+                    if (response && response.html) {
+                        let htmlContent = response.html; // Dữ liệu đã là HTML
 
                         $('#prompt').val("");
 
-                        typeEffect(responseDiv, text, 20, function() {
+                        typeEffect(responseDiv, htmlContent, 20, function() {
                             sendButton.prop('disabled', false).removeClass('disabled');
                             applyButton.removeClass('d-none');
                         });
@@ -62,20 +64,26 @@
                 });
             });
 
-            function typeEffect(element, text, speed = 30, callback) {
-                element.text("");
-                let index = 0;
+            function typeEffect(element, htmlContent, speed = 30, callback) {
+                element.html(""); // Xóa nội dung cũ
 
-                function typeChar() {
-                    if (index < text.length) {
-                        element.append(text.charAt(index));
+                let words = htmlContent.split(" "); // Chia thành từng từ để đảm bảo HTML không bị cắt
+                let index = 0;
+                let output = "";
+
+                function typeWord() {
+                    if (index < words.length) {
+                        output += words[index] + " "; // Thêm từng từ
+                        element.html(output + "<span>|</span>"); // Hiển thị hiệu ứng con trỏ
                         index++;
-                        setTimeout(typeChar, speed);
-                    } else if (callback) {
-                        callback();
+                        setTimeout(typeWord, speed);
+                    } else {
+                        element.html(output); // Xóa con trỏ sau khi hoàn thành
+                        if (callback) callback();
                     }
                 }
-                typeChar();
+
+                typeWord();
             }
         });
     </script>
@@ -83,9 +91,9 @@
 
 
 @push('styles')
-    <style>
+    {{-- <style>
         #response {
             white-space: pre-line;
         }
-    </style>
+    </style> --}}
 @endpush

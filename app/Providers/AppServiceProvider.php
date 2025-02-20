@@ -5,7 +5,9 @@ namespace App\Providers;
 use App\Models\SgoCategory;
 use App\Models\SgoConfig;
 use App\Models\SgoOrder;
+use App\Models\SgoProduct;
 use App\Models\TransactionHistory;
+use App\Observers\ProductObserver;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
@@ -27,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        SgoProduct::observe(ProductObserver::class);
+
         Paginator::defaultView('vendor.pagination.custom');
 
         View::composer(['frontends.layouts.master', 'frontends.pages.home', 'frontends.pages.category'], function ($view) {
