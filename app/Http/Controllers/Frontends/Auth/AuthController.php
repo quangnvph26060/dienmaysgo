@@ -125,26 +125,35 @@ class AuthController extends Controller
         try {
             $google_user = Socialite::driver('google')->user();
 
-            $user = User::where('google_id', $google_user->getId())->first();
+            // Tìm user theo google_id hoặc email
+            $user = User::where('google_id', $google_user->getId())
+                ->orWhere('email', $google_user->getEmail())
+                ->first();
 
             if (!$user) {
                 $new_user = User::create([
                     'name' => $google_user->getName(),
                     'email' => $google_user->getEmail(),
                     'google_id' => $google_user->getId(),
-                    'password' => Hash::make($google_user->getEmail()),
+                    'password' => Hash::make($google_user->getEmail()), // Random password
                 ]);
 
                 auth()->login($new_user);
             } else {
+                // Nếu user tồn tại nhưng chưa có google_id, cập nhật nó
+                if (!$user->google_id) {
+                    $user->update(['google_id' => $google_user->getId()]);
+                }
                 auth()->login($user);
             }
+
             return redirect()->intended('/');
         } catch (\Exception $e) {
-            Log::info($e->getMessage());
-            dd('something went wrong' . $e->getMessage());
+            Log::error('Google Login Error: ' . $e->getMessage());
+            return redirect('/dang-nhap')->with('error', 'Đăng nhập thất bại. Vui lòng thử lại!');
         }
     }
+
 
     public function profile()
     {
