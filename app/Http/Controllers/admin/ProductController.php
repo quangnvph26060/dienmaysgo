@@ -176,7 +176,7 @@ class ProductController extends Controller
                 ->when($request->catalogue, fn($q) => $q->where('category_id', $request->catalogue))
                 ->when($request->attributeId, fn($q) => $q->whereHas('attributes', fn($q) => $q->where('attribute_id', $request->attributeId)))
                 ->when($request->attributeValueId, fn($q) => $q->whereHas('attributeValues', fn($q) => $q->where('attribute_value_id', $request->attributeValueId)))
-                ->with(['category', 'attributes', 'attributeValues'])->latest();
+                ->with(['category', 'attributes', 'attributeValues']);
 
             return datatables()->eloquent($query) // Thay vì of($query)
                 ->editColumn('price', fn($row) => number_format($row->price, 0, ',', '.'))
