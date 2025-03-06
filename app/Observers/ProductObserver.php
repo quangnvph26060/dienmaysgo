@@ -20,8 +20,14 @@ class ProductObserver
      */
     public function updated(SgoProduct $product)
     {
+        $changes = $product->getChanges();
+
+        // Kiểm tra nếu chỉ có view_count thay đổi, thì không chạy Artisan
+        if (count($changes) === 1 && array_key_exists('view_count', $changes)) {
+            return;
+        }
         Artisan::call('sitemap:generate');
-    }
+    }   
 
     /**
      * Gọi lệnh cập nhật sitemap khi sản phẩm bị xóa.
@@ -31,5 +37,3 @@ class ProductObserver
         Artisan::call('sitemap:generate');
     }
 }
-
-
