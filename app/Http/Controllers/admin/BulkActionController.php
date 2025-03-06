@@ -57,9 +57,6 @@ class BulkActionController extends Controller
             $model::where('id', $id)->update(['location' => $index + 1]);
         }
 
-        logInfo(Cache::has('home_data') ? '1' : '2');
-        logInfo(Cache::has('categories') ? '3' : '3');
-
         Cache::forget('home_data');
         Cache::forget('categories');
 
