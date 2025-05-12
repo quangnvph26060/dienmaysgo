@@ -40,18 +40,8 @@
                 </button>
             </li>
 
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="seo-tab" data-bs-toggle="tab" data-bs-target="#seo" type="button"
-                    role="tab" aria-controls="seo" aria-selected="false">
-                    Cấu hình SEO
-                </button>
+
             </li>
-            {{-- <li class="nav-item" role="presentation">
-                <button class="nav-link" id="attribute-tab" data-bs-toggle="tab" data-bs-target="#attribute" type="button"
-                    role="tab" aria-controls="attribute" aria-selected="false">
-                    Thuộc tính
-                </button>
-            </li> --}}
         </ul>
 
         <div class="row">
@@ -64,7 +54,7 @@
                                     <!-- Cột bên trái -->
                                     <div class="col-lg-6 add_product">
                                         <!-- Tên sản phẩm -->
-                                        <div class="form-group mb-3">
+                                        <div class="mb-3">
                                             <label for="name" class="form-label">Tên sản phẩm</label>
                                             <input type="text" class="form-control" name="name" id="name"
                                                 placeholder="Nhập tên sản phẩm" value="{{ old('name') }}">
@@ -77,34 +67,27 @@
 
                                     </div>
 
-                                    <div class="col-lg-3">
-                                        <div class="form-group mb-3">
-                                            <label for="quantity" class="form-label">Số lượng</label>
-                                            <input type="number" class="form-control" name="quantity" id="quantity"
-                                                placeholder="Nhập số lượng" value="{{ old('quantity') }}">
+                                    <div class="col-lg-3 mb-3">
+                                        <label for="quantity" class="form-label">Số lượng</label>
+                                        <input type="number" class="form-control" name="quantity" id="quantity"
+                                            placeholder="Nhập số lượng" value="{{ old('quantity') }}">
+                                    </div>
 
-                                        </div>
+                                    <div class="col-lg-3 mb-3">
+                                        <label for="fake_import_price" class="form-label">Giá nhập</label>
+                                        <input type="text" class="form-control" id="fake_import_price"
+                                            placeholder="Giá nhập sản phẩm" value="{{ old('import_price') }}">
+                                        <input type="hidden" name="import_price" value="{{ old('import_price') }}">
+                                    </div>
+
+                                    <div class="col-lg-3 mb-3">
+                                        <label for="module" class="form-label">Module</label>
+                                        <input type="text" class="form-control" name="module" id="module"
+                                            placeholder="Nhập module" value="{{ old('module') }}">
                                     </div>
 
                                     <div class="col-lg-3">
-                                        <div class="form-group mb-3">
-                                            <label for="fake_import_price" class="form-label">Giá nhập</label>
-                                            <input type="text" class="form-control" id="fake_import_price"
-                                                placeholder="Giá nhập sản phẩm" value="{{ old('import_price') }}">
-                                            <input type="hidden" name="import_price" value="{{ old('import_price') }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        <div class="form-group mb-3">
-                                            <label for="module" class="form-label">Module</label>
-                                            <input type="text" class="form-control" name="module" id="module"
-                                                placeholder="Nhập module" value="{{ old('module') }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-3">
-                                        <div class="form-group mb-3">
+                                        <div class="mb-3">
                                             <label for="price" class="form-label">Giá bán</label>
                                             <input type="text" class="form-control" id="fake_price"
                                                 placeholder="Giá bán sản phẩm" value="{{ old('price') }}">
@@ -113,119 +96,120 @@
                                     </div>
 
 
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label for="discount-type" class="form-label">Chọn loại giảm giá:</label>
-                                            <select id="discount-type" class="form-select" name="discount_type">
-                                                <option value="amount" @selected(old('discount_type') == 'amount')>Giảm tiền</option>
-                                                <option value="percentage" @selected(old('discount_type') == 'percentage')>Giảm theo %
-                                                </option>
-                                            </select>
-                                        </div>
+                                    <div class="col-lg-3 mb-3">
+                                        <label for="discount-type" class="form-label">Chọn loại giảm giá:</label>
+                                        <select id="discount-type" class="form-select" name="discount_type">
+                                            <option value="amount" @selected(old('discount_type') == 'amount')>Giảm tiền</option>
+                                            <option value="percentage" @selected(old('discount_type') == 'percentage')>Giảm theo %
+                                            </option>
+                                        </select>
                                     </div>
 
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <label for="discount_value" class="form-label">Nhập giá trị giảm:</label>
-                                            <input value="0" type="text" id="fake_discount_value"
-                                                class="form-control" placeholder="Nhập số tiền hoặc %">
-
-                                            <input value="0" type="hidden" name="discount_value">
-                                        </div>
+                                    <div class="col-lg-3 mb-3">
+                                        <label for="discount_value" class="form-label">Nhập giá trị giảm:</label>
+                                        <input value="0" type="text" id="fake_discount_value"
+                                            class="form-control" placeholder="Nhập số tiền hoặc %">
+                                        <input value="0" type="hidden" name="discount_value">
                                     </div>
 
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="start-date" class="form-label">Ngày bắt đầu:</label>
-                                            <input type="date" id="start-date"
-                                                value="{{ old('discount_start_date') }}" class="form-control"
-                                                name="discount_start_date">
-                                        </div>
+                                    <div class="col-lg-4 mb-3">
+                                        <label for="start-date" class="form-label">Ngày bắt đầu:</label>
+                                        <input type="date" id="start-date" value="{{ old('discount_start_date') }}"
+                                            class="form-control" name="discount_start_date">
                                     </div>
 
 
-                                    <div class="col-lg-4">
-                                        <div class="form-group">
-                                            <label for="end-date" class="form-label">Ngày kết thúc:</label>
-                                            <input type="date" value="{{ old('discount_end_date') }}" id="end-date"
-                                                class="form-control" name="discount_end_date">
-                                        </div>
+                                    <div class="col-lg-4 mb-3">
+                                        <label for="end-date" class="form-label">Ngày kết thúc:</label>
+                                        <input type="date" value="{{ old('discount_end_date') }}" id="end-date"
+                                            class="form-control" name="discount_end_date">
                                     </div>
 
 
-                                    <div class="col-lg-4">
-                                        <div class="form-group mb-3">
-                                            <label for="brand" class="form-label">Thương hiệu</label>
-                                            <select id="mySelectBrand" class="form-select" style="width: 100%;"
-                                                name="brand_id">
-                                                @foreach ($brands as $id => $brand)
-                                                    <option value="{{ $id }}" @selected($id == old('brand_id', 23))>
-                                                        {{ $brand }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                    <div class="col-lg-4 mb-3">
+                                        <label for="brand" class="form-label">Thương hiệu</label>
+                                        <select id="mySelectBrand" class="form-select" style="width: 100%;"
+                                            name="brand_id">
+                                            @foreach ($brands as $id => $brand)
+                                                <option value="{{ $id }}" @selected($id == old('brand_id', 23))>
+                                                    {{ $brand }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
-                                    <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <label for="">Thuộc tính</label>
-                                            <select id="mySelect" multiple="multiple" class="form-select"
-                                                style="width: 100%;" name="attribute_id[]">
-                                                @foreach ($attributes as $id => $name)
-                                                    <option value="{{ $id }}">{{ $name }}</option>
-                                                @endforeach
-                                            </select>
+                                    <div class="col-lg-12 mb-3">
+                                        <label for="">Thuộc tính</label>
+                                        <select id="mySelect" multiple="multiple" class="form-select"
+                                            style="width: 100%;" name="attribute_id[]">
+                                            @foreach ($attributes as $id => $name)
+                                                <option value="{{ $id }}">{{ $name }}</option>
+                                            @endforeach
+                                        </select>
 
-                                            <div id="additional-selects" class="mt-3 row">
+                                        <div id="additional-selects" class="row">
 
-                                            </div>
                                         </div>
                                     </div>
 
                                     <div class="col-lg-12">
-                                        <div class="form-group">
-                                            <label for="description" class="form-label">Mô tả chi tiết</label>
-                                            <code data-bs-toggle="modal" data-bs-target="#gemniAi">Chat bot AI</code>
-                                            <textarea id="description" class="form-control" name="description" rows="10">{!! old('description') !!}</textarea>
-                                        </div>
+                                        <label for="description" class="form-label">Mô tả chi tiết</label>
+                                        <code data-bs-toggle="modal" data-bs-target="#gemniAi">Chat bot AI</code>
+                                        <textarea id="description" class="form-control" name="description" rows="10">{!! old('description') !!}</textarea>
                                     </div>
-
-                                    <div class="col-lg-12">
-                                        <div class="form-group mb-3">
-                                            <label for="tags" class="form-label">Tags</label>
-                                            <input type="text" class="form-control" name="tags" id="tags"
-                                                placeholder="tags sản phẩm" value="{{ old('tags') }}">
-                                        </div>
-                                    </div>
-
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="tab-pane fade" id="seo" role="tabpanel" aria-labelledby="seo-tab">
                         <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4 class="card-title">Tối ưu hóa công cụ tìm kiếm</h4>
+                                <p id="toggle-seo-fields" class="text-primary mb-0">Ẩn/Hiện SEO Fields</p>
+                            </div>
+
                             <div class="card-body">
-                                <div class="form-group mb-3">
-                                    <label for="title_seo" class="form-label">Tiêu đề SEO</label>
-                                    <input type="text" class="form-control" name="title_seo" id="title_seo"
-                                        placeholder="Nhập tiêu đề SEO" value="{{ old('title_seo') }}">
+                                <div class="seo-preview">
+                                    <p class="default-seo-description"
+                                        style="{{ old('title_seo') ? 'display: none;' : '' }}">
+                                        Thiết lập tiêu đề và mô tả meta để trang web của bạn dễ dàng được phát hiện trên
+                                        các công cụ tìm kiếm như Google
+                                    </p>
+                                    <div class="existed-seo-meta"
+                                        style="{{ old('title_seo') ? 'display: block;' : '' }}">
+
+                                        <h4 class="page-title-seo text-truncate">
+                                            {{ old('title_seo') ?? old('name') }}
+                                        </h4>
+
+                                        <div class="page-url-seo">
+                                            <p>
+                                                {{ config('app.url') . '/' }}
+                                            </p>
+                                        </div>
+
+                                        <div>
+                                            <span style="color: #70757a;">{{ now()->format('M d, Y') }}
+                                                - </span>
+                                            <span class="page-description-seo">
+
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="form-group mb-3">
-                                    <label for="description_seo" class="form-label">Mô tả SEO</label>
-
-                                    <textarea style="resize: vertical;" name="description_seo" id="description_seo" cols="30" rows="6"
-                                        placeholder="Nhập mô tả SEO" class="form-control"> {{ old('description_seo') }}
-                                    </textarea>
+                                <hr class="my-4">
+                                <div class="seo-edit-section">
+                                    <div class="row">
+                                        <div class="mb-3 position-relative col-lg-12">
+                                            <label for="title_seo" class="form-label">Tiêu đề SEO</label>
+                                            <input type="text" placeholder="Tiêu đề SEO" class="form-control"
+                                                name="title_seo" id="title_seo" value="{{ old('title_seo') }}">
+                                        </div>
+                                        <div class="mb-3 position-relative col-lg-12">
+                                            <label for="description_seo" class="form-label">Mô tả SEO</label>
+                                            <textarea placeholder="Mô tả SEO" class="form-control" name="description_seo" id="description_seo" rows="3">{{ old('description_seo') }}</textarea>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="form-group mb-3">
-                                    <label for="keyword_seo" class="form-label">Từ khóa SEO</label>
-                                    <input type="text" name="keyword_seo" id="keyword_seo" class="form-control"
-                                        value="{{ old('keyword_seo') }}" placeholder="Nhập từ khóa SEO">
-                                </div>
-
                             </div>
                         </div>
                     </div>
@@ -240,13 +224,6 @@
                         </div>
                     </div>
 
-                    {{-- <div class="tab-pane fade" id="attribute" role="tabpanel" aria-labelledby="attribute-tab">
-                        <div class="card">
-                            <div class="card-body">
-
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
             </div>
 
@@ -257,31 +234,29 @@
                         <h3 class="card-title">Danh mục</h3>
                     </div>
 
-                    <div class="card-body">
-                        <div class="form-group">
-                            <select class="form-select" name="category_id" id="category_id">
-                                <option value="">--- Chọn danh mục ---</option>
-                                @if ($categories->isNotEmpty())
-                                    @foreach ($categories as $category)
-                                        <option @selected($category->id == old('category_id', $category->category_parent_id ?? '')) value="{{ $category->id }}">
-                                            {{ $category->name }}</option>
-                                        @if ($category->childrens->isNotEmpty())
-                                            @foreach ($category->childrens as $children)
-                                                <option @selected($children->id == old('category_id', $category->category_parent_id ?? '')) value="{{ $children->id }}">-
-                                                    {{ $children->name }}</option>
-                                                @if ($children->childrens->isNotEmpty())
-                                                    @foreach ($children->childrens as $item)
-                                                        <option @selected($item->id == old('category_id', $category->category_parent_id ?? '')) value="{{ $item->id }}">
-                                                            -- {{ $item->name }}
-                                                        </option>
-                                                    @endforeach
-                                                @endif
-                                            @endforeach
-                                        @endif
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
+                    <div class="form-group">
+                        <select class="form-select" name="category_id" id="category_id">
+                            <option value="">--- Chọn danh mục ---</option>
+                            @if ($categories->isNotEmpty())
+                                @foreach ($categories as $category)
+                                    <option @selected($category->id == old('category_id', $category->category_parent_id ?? '')) value="{{ $category->id }}">
+                                        {{ $category->name }}</option>
+                                    @if ($category->childrens->isNotEmpty())
+                                        @foreach ($category->childrens as $children)
+                                            <option @selected($children->id == old('category_id', $category->category_parent_id ?? '')) value="{{ $children->id }}">-
+                                                {{ $children->name }}</option>
+                                            @if ($children->childrens->isNotEmpty())
+                                                @foreach ($children->childrens as $item)
+                                                    <option @selected($item->id == old('category_id', $category->category_parent_id ?? '')) value="{{ $item->id }}">
+                                                        -- {{ $item->name }}
+                                                    </option>
+                                                @endforeach
+                                            @endif
+                                        @endforeach
+                                    @endif
+                                @endforeach
+                            @endif
+                        </select>
                     </div>
                 </div>
 
@@ -290,17 +265,14 @@
                         <h3 class="card-title">Khuyến mãi</h3>
                     </div>
 
-                    <div class="card-body">
-                        <div class="form-group mb-3">
-                            <select class="form-select" name="promotions_id" id="promotions_id" disabled>
-                                <option value="">Chọn chương trình</option>
-                                @foreach ($promotions as $id => $name)
-                                    <option value="{{ $id }}" @selected($id == old('promotions_id'))>{{ $name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
+                    <div class="mb-3 form-group">
+                        <select class="form-select" name="promotions_id" id="promotions_id" disabled>
+                            <option value="">Chọn chương trình</option>
+                            @foreach ($promotions as $id => $name)
+                                <option value="{{ $id }}" @selected($id == old('promotions_id'))>{{ $name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
@@ -309,15 +281,12 @@
                         <h3 class="card-title">Ảnh đại diện</h3>
                     </div>
 
-                    <div class="card-body">
-                        <div class="form-group mb-0">
-                            <img src="" alt="" id="image_main" class="img-fluid w-100 mb-3">
-                            <a href="#" id="select_main_image" style="text-decoration: underline">Chọn ảnh
-                                tiêu biểu</a>
+                    <div class="form-group">
+                        <img src="" alt="" id="image_main" class="img-fluid w-100 mb-3">
+                        <a href="#" id="select_main_image" style="text-decoration: underline">Chọn ảnh
+                            tiêu biểu</a>
 
-                            <input type="file" name="image" id="image" class="form-control"
-                                style="display: none">
-                        </div>
+                        <input type="file" name="image" id="image" class="form-control" style="display: none">
                     </div>
                 </div>
 
@@ -326,10 +295,19 @@
                         <h3 class="card-title">Album ảnh</h3>
                     </div>
 
-                    <div class="card-body">
-                        <div class="form-group">
-                            <div class="input-images pb-3"></div>
-                        </div>
+                    <div class="form-group">
+                        <div class="input-images pb-3"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Tags</h3>
+                    </div>
+
+                    <div class="mb-3 form-group">
+                        <input type="text" class="form-control" name="tags" id="tags"
+                            placeholder="tags sản phẩm" value="{{ old('tags') }}">
                     </div>
                 </div>
 
@@ -344,7 +322,8 @@
         </div>
 
     </form>
-  <x-gemini />
+
+    <x-gemini />
 
 
 @endsection
@@ -368,6 +347,14 @@
 
     <script>
         $(document).ready(function() {
+
+            $(".seo-edit-section").hide();
+            // Toggle khi bấm vào Edit SEO meta
+            $("#toggle-seo-fields").click(function(e) {
+                e.preventDefault();
+                $(".seo-edit-section").slideToggle();
+            });
+
             $("#name, #category_id").on("input change", function() {
                 let name = $("#name").val().trim();
                 let category = $('#category_id').find(':selected').val() !== "" ? $('#category_id').find(
@@ -418,10 +405,6 @@
                 allowClear: true
             });
 
-            // $('#mySelect').on('select2:select', function(e) {
-
-            // })
-
             $('#mySelect').select2({
                 placeholder: 'Chọn một tùy chọn',
                 allowClear: true
@@ -447,7 +430,7 @@
                         });
 
                         const newSelectHtml = `
-                         <div class="col-lg-4 mb-3" id="select-wrapper-${selectedId}">
+                         <div class="col-lg-4 my-3" id="select-wrapper-${selectedId}">
                             <label for="select-${selectedId}">${selectedText}</label>
                             <select name="attribute_value_id[]" id="select-${selectedId}" class="form-select" style="width: 100%;">
                                 ${optionsHtml}
@@ -589,6 +572,40 @@
 
         .upload-text:hover {
             cursor: pointer;
+        }
+
+        .card-title {
+            margin-bottom: 0;
+        }
+
+        #toggle-seo-fields {
+            font-size: 1rem !important;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .existed-seo-meta {
+            display: none;
+        }
+
+        .seo-preview * {
+            word-break: break-all;
+        }
+
+        .seo-preview .page-title-seo {
+            color: #1a0dab;
+            font-size: 18px;
+            font-weight: 400;
+            margin-bottom: 2px;
+        }
+
+        .seo-preview .page-url-seo p {
+            word-wrap: break-word;
+            color: #006621;
+            display: block;
+            font-size: 13px;
+            line-height: 16px;
+            margin-bottom: 2px;
         }
     </style>
 @endpush

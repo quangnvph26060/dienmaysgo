@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
@@ -57,7 +58,7 @@ class ProcessProductImport implements ShouldQueue
 
             try {
                 $imageContents = file_get_contents($imageUrl);
-                $imageName = 'products/' . Str::random(10) . '.' . pathinfo($imageUrl, PATHINFO_EXTENSION);
+                $imageName = 'products_copy/' . Str::random(10) . '.' . pathinfo($imageUrl, PATHINFO_EXTENSION);
                 Storage::put($imageName, $imageContents);
                 $imagePath = $imageName;
                 Log::info('Successfully downloaded image for product: ' . $row['ten']);
@@ -68,13 +69,14 @@ class ProcessProductImport implements ShouldQueue
             }
 
             $data[] = [
+                'code'           => generateProductCode(),
+                'category_id'    => rand(2, 11),
                 'name'           => $row['ten'],
                 'slug'           => Str::slug($row['ten']),
+                'brand_id'       => $row['thuong_hieu'],
                 'image'          => $imagePath,
                 'price'          => $row['gia_goc'],
                 'discount_value' => $row['gia_giam'],
-                'import_price'   => 100000,
-                'brand_id'       => 23,
                 'created_at'     => now(),
                 'updated_at'     => now(),
             ];
@@ -83,7 +85,8 @@ class ProcessProductImport implements ShouldQueue
         }
 
         if (!empty($data)) {
-            SgoProduct::insert($data); // Chèn hàng loạt để tối ưu
+            DB::table('products')->insert($data);
+            // SgoProduct::insert($data);
             Log::info('Inserted ' . count($data) . ' products into the database.');
         }
 

@@ -106,6 +106,7 @@ class CartController extends Controller
     {
         if ($request->ajax()) {
             $product = SgoProduct::with('promotion')->find($request->productId);
+
             $cartItem = Cart::instance('shopping')->search(function ($data) use ($product) {
                 return $data->id === $product->id;
             })->first();

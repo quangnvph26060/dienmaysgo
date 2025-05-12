@@ -120,7 +120,8 @@ function saveImages($request, string $inputName, string $directory = 'images', $
 
 
 
-function getTextAfterFirstHeading($htmlContent  = null) {
+function getTextAfterFirstHeading($htmlContent  = null)
+{
 
     if (empty($htmlContent)) {
         return '';
@@ -232,7 +233,7 @@ function deleteImage($path)
 if (!function_exists('generateRandomString')) {
     function generateRandomString()
     {
-        $prefix = "ODR"; // 3 ký tự đầu cố định
+        $prefix = "ODR";
         $fourthChar = rand(1, 9); // Ký tự thứ 4 là số lớn hơn 0
         $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // Bảng ký tự cho phần còn lại
         $remainingLength = 7; // Tổng độ dài là 11, trừ 4 ký tự đầu
@@ -245,6 +246,21 @@ if (!function_exists('generateRandomString')) {
         return $prefix . $fourthChar . $randomString;
     }
 }
+
+function generateProductCode()
+{
+    $letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // Chỉ chứa chữ cái viết hoa
+    $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Chữ cái + số
+
+    $code = $letters[rand(0, strlen($letters) - 1)]; // Ký tự đầu tiên là chữ cái in hoa
+    for ($i = 1; $i < 11; $i++) {
+        $code .= $characters[rand(0, strlen($characters) - 1)];
+    }
+
+    return $code;
+}
+
+
 
 function saveImageNew($image, string $inputName, string $directory = 'images')
 {
@@ -418,4 +434,12 @@ if (!function_exists('activeMenu')) {
     {
         return request()->routeIs($url) ? 'active' : '';
     }
+}
+
+
+function genQrCode()
+{
+    $qrCodeData = 'https://www.facebook.com/nguyen.tien.at.971127';
+
+    return \SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(300)->generate($qrCodeData);
 }
