@@ -264,10 +264,6 @@ class ProductController extends Controller
         });
     }
 
-
-
-
-
     public function detail($catalogue = null, $slug = null)
     {
 

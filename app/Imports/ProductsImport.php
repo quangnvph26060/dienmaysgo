@@ -11,11 +11,11 @@ class ProductsImport implements ToCollection, WithHeadingRow
 {
     public function collection(Collection $rows)
     {
-        $batchSize = 100; // Số lượng sản phẩm mỗi batch
+        $batchSize = 10; // Tăng batch size để giảm số lượng job
         $chunks = $rows->chunk($batchSize);
 
         foreach ($chunks as $chunk) {
-            ProcessProductImport::dispatch($chunk->toArray());
+            ProcessProductImport::dispatch($chunk->toArray())->onQueue('high'); 
         }
     }
 }
