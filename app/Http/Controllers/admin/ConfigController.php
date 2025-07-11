@@ -47,6 +47,8 @@ class ConfigController extends Controller
                     $credentials['icon'] = saveImage($request, 'icon', 'icon');
                 }
 
+                $credentials['maintenance_mode'] = !empty($credentials['maintenance_mode']) && $credentials['maintenance_mode'] == 1 ? true : false;
+
                 $config->update($credentials);
             }
 

@@ -29,12 +29,14 @@ class SgoConfig extends Model
         'introduction',
         'icon',
         'support',
-        'copyright'
+        'copyright',
+        'maintenance_mode'
     ];
 
     protected $casts = [
         'introduction' => 'array',
-        'support' => 'array'
+        'support' => 'array',
+        'maintenance_mode' => 'boolean'
     ];
 
     public $timestamps = true;
